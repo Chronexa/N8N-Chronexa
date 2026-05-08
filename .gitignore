@@ -1,0 +1,7 @@
+.env
+node_modules/
+n8n-mcp-repo/
+*.log
+dist/
+.cursor/
+.gemini/

@@ -1,0 +1,831 @@
+{
+  "updatedAt": "2025-12-01T04:49:21.000Z",
+  "createdAt": "2025-11-27T07:20:43.273Z",
+  "id": "0crMC9jUqaZ2t4L3",
+  "name": "[AR Demo-2] Photo Auto-Categorization",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Property Photo Categorization",
+        "formDescription": "Select a property to categorize its photos",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Property Name",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "appendAttribution": false,
+          "ignoreBots": true
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -416,
+        -64
+      ],
+      "id": "3c77cdbc-5472-44f2-8893-ca5e13320448",
+      "name": "On form submission",
+      "webhookId": "c0ea0535-5ca9-49ab-898a-87032823c1b6"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "apphLhm6RVMNWsxMz",
+          "mode": "list",
+          "cachedResultName": "[AR Demo] Photo Auto-Categorization",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblM6guvqZWnt23px",
+          "mode": "list",
+          "cachedResultName": "Properties",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz/tblM6guvqZWnt23px"
+        },
+        "filterByFormula": "={Property Name} = '{{ $json['Property Name'] }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        -64
+      ],
+      "id": "0b89578f-78ae-44e9-b7ce-cc83e37f7280",
+      "name": "Get Property Info",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "apphLhm6RVMNWsxMz",
+          "mode": "list",
+          "cachedResultName": "[AR Demo] Photo Auto-Categorization",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblMsgMoO3SvqQN8S",
+          "mode": "list",
+          "cachedResultName": "Property Photos",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz/tblMsgMoO3SvqQN8S"
+        },
+        "filterByFormula": "=AND(\n  {Property Name Text} = '{{ $json[\"Property Name\"] }}',\n  OR(\n    {Status} = 'Uncategorized',\n    {Status} = 'Uncategorized ',\n    {Status} = BLANK()\n  )\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        -64
+      ],
+      "id": "ffe478c9-0f25-4f4c-bee5-87d2859987f7",
+      "name": "List Uncategorized Photos",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "4db4da97-d897-4087-be3e-465a39ba18b5",
+      "name": "Loop Over Photos"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this property inspection photo and categorize it precisely.\n     \n     Identify:\n     1. The main component category (e.g., Roofing, Pool/Spa, HVAC, Plumbing, Electrical, Flooring, Exterior, Elevator/Lift, Parking, Common Areas, Landscaping, Structural, Windows/Doors, Fire Safety, or Other)\n     2. A specific subcategory that describes the exact type or feature\n     3. Any notable observations about condition or characteristics\n     \n     Be specific and accurate in your categorization.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageBinary",
+              "imageDetail": "high"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        656,
+        -48
+      ],
+      "id": "3d4d8ec3-1fa5-49d8-b303-e9e5bde6a8af",
+      "name": "Categorize Photo with AI"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        656,
+        304
+      ],
+      "id": "50af0c22-e417-47de-a009-7255da21d636",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KFjnfrUHI8lHbnFA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={\n  \"type\": \"object\",\n  \"properties\": {\n    \"category\": {\n      \"type\": \"string\",\n      \"description\": \"Main component category\",\n      \"enum\": [\n        \"Roofing\",\n        \"Pool/Spa\",\n        \"Elevator/Lift\",\n        \"Flooring\",\n        \"Exterior\",\n        \"HVAC\",\n        \"Plumbing\",\n        \"Electrical\",\n        \"Parking\",\n        \"Common Areas\",\n        \"Landscaping\",\n        \"Structural\",\n        \"Windows/Doors\",\n        \"Fire Safety\",\n        \"Other\"\n      ]\n    },\n    \"subcategory\": {\n      \"type\": \"string\",\n      \"description\": \"Specific type or feature within the category\"\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"description\": \"Confidence score between 0 and 1\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"notes\": {\n      \"type\": \"string\",\n      \"description\": \"Notable observations about condition or characteristics\"\n    }\n  },\n  \"required\": [\"category\", \"subcategory\", \"confidence\", \"notes\"],\n  \"additionalProperties\": false\n}",
+        "autoFix": true,
+        "customizeRetryPrompt": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        144
+      ],
+      "id": "607ccbc0-fc5e-4648-8876-26a79705d24a",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "apphLhm6RVMNWsxMz",
+          "mode": "list",
+          "cachedResultName": "[AR Demo] Photo Auto-Categorization",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblMsgMoO3SvqQN8S",
+          "mode": "list",
+          "cachedResultName": "Property Photos",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz/tblMsgMoO3SvqQN8S"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Loop Over Photos').item.json.id }}",
+            "Category": "={{ $('Categorize Photo with AI').item.json.output.category }}",
+            "Subcategory": "={{ $('Categorize Photo with AI').item.json.output.subcategory }}",
+            "Confidence Score": "={{ $('Categorize Photo with AI').item.json.output.confidence }}",
+            "Status": "={{ $('Categorize Photo with AI').item.json.confidence >= 0.7 ? 'Categorized' : 'Review Needed' }}",
+            "AI Notes": "={{ $('Categorize Photo with AI').item.json.output.notes }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Photo ID",
+              "displayName": "Photo ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Property",
+              "displayName": "Property",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Property Name Text",
+              "displayName": "Property Name Text",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Original Photo",
+              "displayName": "Original Photo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Roofing",
+                  "value": "Roofing"
+                },
+                {
+                  "name": "Pool/Spa",
+                  "value": "Pool/Spa"
+                },
+                {
+                  "name": "Elevator/Lift",
+                  "value": "Elevator/Lift"
+                },
+                {
+                  "name": "Flooring",
+                  "value": "Flooring"
+                },
+                {
+                  "name": "Exterior",
+                  "value": "Exterior"
+                },
+                {
+                  "name": "HVAC",
+                  "value": "HVAC"
+                },
+                {
+                  "name": "Plumbing",
+                  "value": "Plumbing"
+                },
+                {
+                  "name": "Electrical",
+                  "value": "Electrical"
+                },
+                {
+                  "name": "Parking",
+                  "value": "Parking"
+                },
+                {
+                  "name": "Common Areas",
+                  "value": "Common Areas"
+                },
+                {
+                  "name": "Landscaping",
+                  "value": "Landscaping"
+                },
+                {
+                  "name": "Structural",
+                  "value": "Structural"
+                },
+                {
+                  "name": "Windows/Doors",
+                  "value": "Windows/Doors"
+                },
+                {
+                  "name": "Fire Safety",
+                  "value": "Fire Safety"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subcategory",
+              "displayName": "Subcategory",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence Score",
+              "displayName": "Confidence Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Uncategorized",
+                  "value": "Uncategorized"
+                },
+                {
+                  "name": "Categorized",
+                  "value": "Categorized"
+                },
+                {
+                  "name": "Review Needed",
+                  "value": "Review Needed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Notes",
+              "displayName": "AI Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Upload Date",
+              "displayName": "Upload Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Categorization Date",
+              "displayName": "Categorization Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1008,
+        -48
+      ],
+      "id": "0c16ed3d-b437-41a8-aaf0-f3e56c6c7e72",
+      "name": "Update Photo Record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get property info from earlier node\nconst propertyInfo = $('Get Property Info').first().json;\nconst propertyRecordId = propertyInfo.id;\n\n// Get all photos for this property to count categorized ones\nconst allPhotos = $('Update Photo Record').all();\n\n// Count categorized photos\nconst categorizedCount = allPhotos.filter(photo => \n  photo.json.fields.Status === 'Categorized' || \n  photo.json.fields.Status === 'Review Needed'\n).length;\n\n// Total photos is the count of all photos processed\nconst totalPhotos = allPhotos.length;\n\n// Determine status\nlet status;\nif (categorizedCount === 0) {\n  status = 'Not Started';\n} else if (categorizedCount < totalPhotos) {\n  status = 'In Progress';\n} else {\n  status = 'Completed';\n}\n\nreturn [{\n  json: {\n    propertyRecordId: propertyRecordId,\n    totalPhotos: totalPhotos,\n    categorizedPhotos: categorizedCount,\n    status: status\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -272
+      ],
+      "id": "c12d6491-1d34-43cb-8794-139321275be3",
+      "name": "Calculate Property Stats"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "apphLhm6RVMNWsxMz",
+          "mode": "list",
+          "cachedResultName": "[AR Demo] Photo Auto-Categorization",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblM6guvqZWnt23px",
+          "mode": "list",
+          "cachedResultName": "Properties",
+          "cachedResultUrl": "https://airtable.com/apphLhm6RVMNWsxMz/tblM6guvqZWnt23px"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Calculate Property Stats').item.json.propertyRecordId }}",
+            "Total Photos": "={{ $('Calculate Property Stats').item.json.totalPhotos }}",
+            "Categorized Photos": "={{ $('Calculate Property Stats').item.json.categorizedPhotos }}",
+            "Status": "={{ $('Calculate Property Stats').item.json.status }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Property ID",
+              "displayName": "Property ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Property Name",
+              "displayName": "Property Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Total Photos",
+              "displayName": "Total Photos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categorized Photos",
+              "displayName": "Categorized Photos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Uncategorized Photos",
+              "displayName": "Uncategorized Photos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Not Started",
+                  "value": "Not Started"
+                },
+                {
+                  "name": "In Progress",
+                  "value": "In Progress"
+                },
+                {
+                  "name": "Completed",
+                  "value": "Completed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Progress",
+              "displayName": "Progress",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "View Photos",
+              "displayName": "View Photos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Upload Date",
+              "displayName": "Upload Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Last Updated",
+              "displayName": "Last Updated",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Property Photos",
+              "displayName": "Property Photos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        -272
+      ],
+      "id": "d8d3d449-926e-4e6e-b845-b80963b4e252",
+      "name": "Update Property Stats",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"Original Photo\"][0].url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "260f4a69-be01-4676-924f-342acf6d77f3",
+      "name": "Download Image"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get Property Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Property Info": {
+      "main": [
+        [
+          {
+            "node": "List Uncategorized Photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Uncategorized Photos": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Photos": {
+      "main": [
+        [
+          {
+            "node": "Calculate Property Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Categorize Photo with AI",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Categorize Photo with AI",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Categorize Photo with AI": {
+      "main": [
+        [
+          {
+            "node": "Update Photo Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Photo Record": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Property Stats": {
+      "main": [
+        [
+          {
+            "node": "Update Property Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image": {
+      "main": [
+        [
+          {
+            "node": "Categorize Photo with AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "5e15f55a-d69c-4ef2-9a87-f608dedbb607",
+  "activeVersionId": null,
+  "versionCounter": 17,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-27T07:20:43.621Z",
+      "createdAt": "2025-11-27T07:20:43.621Z",
+      "role": "workflow:owner",
+      "workflowId": "0crMC9jUqaZ2t4L3",
+      "projectId": "zwGBHHmTpCheyBqS",
+      "project": {
+        "updatedAt": "2025-09-10T05:23:58.533Z",
+        "createdAt": "2025-09-10T05:21:16.802Z",
+        "id": "zwGBHHmTpCheyBqS",
+        "name": "Omkar Magar <omkar@chronexa.io>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "005e1f78-7565-405a-a62d-852826751c2c"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}

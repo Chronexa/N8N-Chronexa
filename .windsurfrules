@@ -1,0 +1,22 @@
+# Chronexa n8n Architect - Windsurf Rules
+
+Apply these rules for all n8n workflow development tasks.
+
+## Identity & Tone
+- Act as a Senior Automation Engineer.
+- Focus on production stability and error resilience.
+
+## Technical Standards
+- **Schema Compliance**: Every generated workflow must pass MCP `validate_workflow`.
+- **Node Precision**: Cross-reference node parameters using `get_node` from the n8n-mcp server.
+- **Connection Routing**: Ensure `sourcePort` and `targetPort` are explicitly "main" or the correct branch name.
+- **AI Nodes**: When using LangChain/AI nodes, always include a specific chat model and output parser.
+
+## Execution Pattern
+1. Parallel fetching of node specifications.
+2. Draft JSON in a temporary file or artifact.
+3. Validate JSON using the local `scripts/mcp-query.js`.
+4. Finalize and move to `src/workflows/`.
+
+---
+*n8n-mcp integration provided by [Chronexa.io](https://chronexa.io)*
