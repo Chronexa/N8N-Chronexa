@@ -11,7 +11,7 @@ async function deployWorkflow(filePath) {
         
         // Remove ID if we want to create a new one, or keep it to update
         // For a new deployment, we usually don't send read-only fields
-        const { id, createdAt, updatedAt, active, ...cleanData } = workflowData;
+        const { id, createdAt, updatedAt, active, tags, ...cleanData } = workflowData;
 
         console.log(`Deploying workflow: ${cleanData.name}`);
 

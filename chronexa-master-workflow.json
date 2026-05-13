@@ -1,0 +1,1291 @@
+{
+  "name": "Chronexa Autonomous Outbound Engine v2.0",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chronexa-outbound",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cn",
+              "name": "company_name",
+              "value": "={{ $json.body.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cd",
+              "name": "company_domain",
+              "value": "={{ $json.body.company_domain }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Normalize Lead Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"sonar\", \"temperature\": 0.2, \"top_p\": 0.9, \"max_tokens\": 800, \"return_images\": false, \"return_related_questions\": false, \"messages\": [{\"role\":\"system\",\"content\":\"You are an enterprise sales intelligence extractor for Chronexa.io. Return a single valid JSON object matching the schema below. No prose, no markdown, no commentary, no code fences.\\n\\nSCHEMA (all four keys required):\\n{\\n  \\\"SUMMARY\\\": \\\"<1-2 sentences strictly defining their core business operation>\\\",\\n  \\\"REGULATED_INDUSTRY\\\": \\\"<YES if Legal, Finance, Banking, Healthcare, or Public Sector. Otherwise NO>\\\",\\n  \\\"RECENT_TRIGGER\\\": \\\"<1 event from the last 90 days: a merger, high-volume hiring for operations/admin, or a new tech initiative. NOT FOUND if none>\\\",\\n  \\\"TECH_STACK_HINTS\\\": \\\"<Mentions of ERPs, CRMs, or legacy systems. NOT FOUND if none>\\\"\\n}\\n\\nRULES:\\n- Output a single JSON object only. No preamble.\\n- Use NOT FOUND when data is unavailable.\\n- REGULATED_INDUSTRY must be exactly YES or NO.\\n- SUMMARY describes operations, not marketing positioning.\\n- RECENT_TRIGGER must be from the last 90 days only.\"},{\"role\":\"user\",\"content\":\"Company Name: \" + $json.company_name + \"\\nDomain: \" + $json.company_domain + \"\\n\\nExtract the four data points per schema.\"}], \"response_format\": {\"type\":\"json_schema\",\"json_schema\":{\"schema\":{\"type\":\"object\",\"properties\":{\"SUMMARY\":{\"type\":\"string\"},\"REGULATED_INDUSTRY\":{\"type\":\"string\",\"enum\":[\"YES\",\"NO\"]},\"RECENT_TRIGGER\":{\"type\":\"string\"},\"TECH_STACK_HINTS\":{\"type\":\"string\"}},\"required\":[\"SUMMARY\",\"REGULATED_INDUSTRY\",\"RECENT_TRIGGER\",\"TECH_STACK_HINTS\"],\"additionalProperties\":false}}} } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json",
+              "fullResponse": false,
+              "neverError": false
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "name": "Perplexity Extract Triggers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        640,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const NORMALIZE_NODE = 'Normalize Lead Input';\nconst httpItem = $input.item.json;\nconst lead = $(NORMALIZE_NODE).item.json;\nconst base = {\n  company_name: lead.company_name,\n  company_domain: lead.company_domain,\n  SUMMARY: null,\n  REGULATED_INDUSTRY: null,\n  RECENT_TRIGGER: null,\n  TECH_STACK_HINTS: null,\n};\nconst rawContent = httpItem?.choices?.[0]?.message?.content;\nif (typeof rawContent !== 'string' || rawContent.length === 0) {\n  return { json: { ...base, error: 'PERPLEXITY_EMPTY_CONTENT', error_detail: 'choices[0].message.content was missing or not a string' } };\n}\ntry {\n  const parsed = JSON.parse(rawContent);\n  return { json: { ...base, SUMMARY: parsed.SUMMARY ?? null, REGULATED_INDUSTRY: parsed.REGULATED_INDUSTRY ?? null, RECENT_TRIGGER: parsed.RECENT_TRIGGER ?? null, TECH_STACK_HINTS: parsed.TECH_STACK_HINTS ?? null } };\n} catch (err) {\n  return { json: { ...base, error: 'PERPLEXITY_PARSE_ERROR', error_detail: err.message, raw_content: rawContent } };\n}"
+      },
+      "name": "Parse Perplexity Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "err-empty-1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "name": "Gate Error Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"claude-3-5-sonnet-20241022\", \"max_tokens\": 500, \"temperature\": 0.1, \"system\": \"You are Chronexa\\'s enterprise routing algorithm. We build custom AI workflows. Match the target company to ONE of our buckets based on their data. \\nBUCKET 1: Legal/Compliance (Offline Azure deployments for Tier-1 Law Firms). \\nBUCKET 2: Fintech/Wealth (Fintech product development, wealth management automation, and reserve studies). \\nBUCKET 3: Industrial/AgTech (IoT sensor data reporting). \\nBUCKET 4: General Ops (OCR & back-office automation).\\n\\nOutput strictly valid JSON matching this schema: {\\\"matched_case_study\\\": \\\"<Bucket Name>\\\", \\\"relevance_reason\\\": \\\"<1 sentence rationale>\\\", \\\"requires_secure_infrastructure\\\": <boolean, true if highly regulated>, \\\"should_skip\\\": <boolean, true if no fit>}. No preamble.\", \"messages\": [{\"role\":\"user\",\"content\":\"Company: \" + $json.company_name + \"\\nRegulated: \" + $json.REGULATED_INDUSTRY + \"\\nSummary: \" + $json.SUMMARY + \"\\nTrigger: \" + $json.RECENT_TRIGGER}] } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json",
+              "fullResponse": false,
+              "neverError": false
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "name": "Anthropic Match Routing Bucket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1240,
+        200
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const PERPLEXITY_PARSE_NODE = 'Parse Perplexity Response';\nconst httpItem = $input.item.json;\nconst lead = $(PERPLEXITY_PARSE_NODE).item.json;\nconst base = {\n  company_name: lead.company_name,\n  company_domain: lead.company_domain,\n  SUMMARY: lead.SUMMARY,\n  REGULATED_INDUSTRY: lead.REGULATED_INDUSTRY,\n  RECENT_TRIGGER: lead.RECENT_TRIGGER,\n  TECH_STACK_HINTS: lead.TECH_STACK_HINTS,\n  matched_case_study: null,\n  relevance_reason: null,\n  requires_secure_infrastructure: null,\n  should_skip: null,\n};\nconst rawContent = httpItem?.content?.[0]?.text;\nif (typeof rawContent !== 'string' || rawContent.length === 0) {\n  return { json: { ...base, error: 'ANTHROPIC_EMPTY_CONTENT', error_detail: 'content[0].text was missing or not a string' } };\n}\ntry {\n  const parsed = JSON.parse(rawContent);\n  return { json: { ...base, matched_case_study: parsed.matched_case_study ?? null, relevance_reason: parsed.relevance_reason ?? null, requires_secure_infrastructure: typeof parsed.requires_secure_infrastructure === 'boolean' ? parsed.requires_secure_infrastructure : null, should_skip: typeof parsed.should_skip === 'boolean' ? parsed.should_skip : null } };\n} catch (err) {\n  return { json: { ...base, error: 'ANTHROPIC_PARSE_ERROR', error_detail: err.message, raw_content: rawContent } };\n}"
+      },
+      "name": "Parse Anthropic Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        200
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-skip",
+                    "leftValue": "={{ $json.should_skip }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Skip"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-b1",
+                    "leftValue": "={{ $json.matched_case_study }}",
+                    "rightValue": "BUCKET 1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bucket 1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-b2",
+                    "leftValue": "={{ $json.matched_case_study }}",
+                    "rightValue": "BUCKET 2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bucket 2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-b3",
+                    "leftValue": "={{ $json.matched_case_study }}",
+                    "rightValue": "BUCKET 3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bucket 3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-b4",
+                    "leftValue": "={{ $json.matched_case_study }}",
+                    "rightValue": "BUCKET 4",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bucket 4"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r-fallback",
+                    "leftValue": "x",
+                    "rightValue": "x",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Unrecognized"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "name": "Switch Bucket Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"claude-3-5-sonnet-20241022\", \"max_tokens\": 500, \"temperature\": 0.7, \"system\": \"You are a RevOps growth engineer writing a cold plain-text email. \\nRules:\\n1. NO subject lines, NO greetings (Hi X,), NO sign-offs. Only write the body.\\n2. Max 3 sentences.\\n3. Sentence 1: A casual observation based on the RECENT_TRIGGER.\\n4. Sentence 2: The exact Chronexa Pitch.\\n5. Sentence 3: A low-friction question asking if they are open to seeing an architecture framework.\\n6. NO buzzwords.\", \"messages\": [{\"role\":\"user\",\"content\":\"Trigger: \" + $json.RECENT_TRIGGER + \"\\n\" + \"Target Company: \" + $json.company_name + \"\\n\" + \"Our Pitch: \" + ($json.matched_case_study.includes(\"BUCKET 1\") ? \"We build secure RAG and document intelligence pipelines to automate data extraction.\" : $json.matched_case_study.includes(\"BUCKET 2\") ? \"We build enterprise n8n workflows that connect siloed CRMs, ERPs, and field data.\" : \"We build custom AI products and bespoke software engineering for tech-forward operations.\") + \"\\n\" + \"Secure Infra Required: \" + $json.requires_secure_infrastructure + \" (If true, you MUST mention offline Azure deployments in the pitch sentence).\"}] } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json",
+              "fullResponse": false,
+              "neverError": false
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "name": "Anthropic Generate Cold Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1900,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const ANTHROPIC_PARSE_NODE = 'Parse Anthropic Response';\nconst httpItem = $input.item.json;\nconst lead = $(ANTHROPIC_PARSE_NODE).item.json;\nconst base = {\n  company_name: lead.company_name,\n  company_domain: lead.company_domain,\n  RECENT_TRIGGER: lead.RECENT_TRIGGER,\n  matched_case_study: lead.matched_case_study,\n  generated_email: null,\n  approval_status: 'Pending',\n};\nconst rawContent = httpItem?.content?.[0]?.text;\nif (typeof rawContent !== 'string' || rawContent.length === 0) {\n  return { json: { ...base, error: 'EMAIL_EMPTY_CONTENT', error_detail: 'content[0].text was missing or not a string' } };\n}\nreturn { json: { ...base, generated_email: rawContent.trim() } };"
+      },
+      "name": "Parse Email Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2100,
+        100
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_HITL_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_HITL_SHEET_GID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json.company_name }}",
+            "Website": "={{ $json.company_domain }}",
+            "Trigger Found": "={{ $json.RECENT_TRIGGER }}",
+            "Matched Bucket": "={{ $json.matched_case_study }}",
+            "Generated Email Draft": "={{ $json.generated_email }}",
+            "Approval Status": "={{ $json.approval_status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Trigger Found",
+              "displayName": "Trigger Found",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Bucket",
+              "displayName": "Matched Bucket",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Generated Email Draft",
+              "displayName": "Generated Email Draft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Approval Status",
+              "displayName": "Approval Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "name": "Append to HITL Queue",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2300,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t1-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t1-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t1-fs",
+              "name": "failure_source",
+              "value": "PERPLEXITY_API_FAILURE",
+              "type": "string"
+            },
+            {
+              "id": "t1-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Perplexity API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t2-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t2-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t2-fs",
+              "name": "failure_source",
+              "value": "PERPLEXITY_DATA_ERROR",
+              "type": "string"
+            },
+            {
+              "id": "t2-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Perplexity Data Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1240,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t3-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t3-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t3-fs",
+              "name": "failure_source",
+              "value": "ANTHROPIC_ROUTING_API_FAILURE",
+              "type": "string"
+            },
+            {
+              "id": "t3-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Routing API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1240,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t4-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t4-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t4-fs",
+              "name": "failure_source",
+              "value": "ANTHROPIC_PARSE_JS_ERROR",
+              "type": "string"
+            },
+            {
+              "id": "t4-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Anthropic Parse JS Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t5-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t5-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t5-fs",
+              "name": "failure_source",
+              "value": "LEGITIMATE_SKIP",
+              "type": "string"
+            },
+            {
+              "id": "t5-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Legitimate Skip",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t6-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t6-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t6-fs",
+              "name": "failure_source",
+              "value": "CLASSIFICATION_DRIFT",
+              "type": "string"
+            },
+            {
+              "id": "t6-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Classification Drift",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t7-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t7-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t7-fs",
+              "name": "failure_source",
+              "value": "ANTHROPIC_EMAIL_API_FAILURE",
+              "type": "string"
+            },
+            {
+              "id": "t7-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Email API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1900,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t8-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t8-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t8-fs",
+              "name": "failure_source",
+              "value": "EMAIL_PARSE_JS_ERROR",
+              "type": "string"
+            },
+            {
+              "id": "t8-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Email Parse JS Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t9-cn",
+              "name": "company_name",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "t9-cd",
+              "name": "company_domain",
+              "value": "={{ $(\"Normalize Lead Input\").item.json.company_domain }}",
+              "type": "string"
+            },
+            {
+              "id": "t9-fs",
+              "name": "failure_source",
+              "value": "SHEETS_API_FAILURE",
+              "type": "string"
+            },
+            {
+              "id": "t9-re",
+              "name": "raw_error_data",
+              "value": "={{ JSON.stringify($json) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "name": "Tag Sheets API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2300,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_DLQ_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_DLQ_SHEET_GID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json.company_name }}",
+            "Website": "={{ $json.company_domain }}",
+            "Failure Source": "={{ $json.failure_source }}",
+            "Raw Error Data": "={{ $json.raw_error_data }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Failure Source",
+              "displayName": "Failure Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Raw Error Data",
+              "displayName": "Raw Error Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "name": "Append to DLQ Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2700,
+        600
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Lead Input": {
+      "main": [
+        [
+          {
+            "node": "Perplexity Extract Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity Extract Triggers": {
+      "main": [
+        [
+          {
+            "node": "Parse Perplexity Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Perplexity API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Perplexity Response": {
+      "main": [
+        [
+          {
+            "node": "Gate Error Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gate Error Check": {
+      "main": [
+        [
+          {
+            "node": "Anthropic Match Routing Bucket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Perplexity Data Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Match Routing Bucket": {
+      "main": [
+        [
+          {
+            "node": "Parse Anthropic Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Routing API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Anthropic Response": {
+      "main": [
+        [
+          {
+            "node": "Switch Bucket Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Anthropic Parse JS Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Bucket Router": {
+      "main": [
+        [
+          {
+            "node": "Tag Legitimate Skip",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Classification Drift",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Generate Cold Email": {
+      "main": [
+        [
+          {
+            "node": "Parse Email Output",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Email API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Email Output": {
+      "main": [
+        [
+          {
+            "node": "Append to HITL Queue",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Email Parse JS Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to HITL Queue": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Tag Sheets API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Perplexity API Failure": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Perplexity Data Error": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Routing API Failure": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Anthropic Parse JS Error": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Legitimate Skip": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Classification Drift": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Email API Failure": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Email Parse JS Error": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Sheets API Failure": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

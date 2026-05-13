@@ -1,0 +1,113 @@
+{
+  "name": "Chronexa Feeder: Apollo CSV to V2 Engine",
+  "nodes": [
+    {
+      "id": "feeder-node-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "parameters": {}
+    },
+    {
+      "id": "feeder-node-2",
+      "name": "Read Apollo Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [460, 300],
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "getMany",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_APOLLO_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "REPLACE_WITH_TAB_NAME"
+        },
+        "filtersUI": {},
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1",
+          "name": "Google Sheets Auth"
+        }
+      }
+    },
+    {
+      "id": "feeder-node-3",
+      "name": "Loop Over Leads",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [680, 300],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "feeder-node-4",
+      "name": "Send to V2 Engine",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 180],
+      "parameters": {
+        "method": "POST",
+        "url": "REPLACE_WITH_V2_WEBHOOK_URL",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"first_name\": $json[\"First Name\"] || $json[\"first_name\"] || '', \"last_name\": $json[\"Last Name\"] || $json[\"last_name\"] || '', \"email\": $json[\"Email\"] || $json[\"email\"] || '', \"company_name\": $json[\"Company Name\"] || $json[\"Company\"] || '', \"company_domain\": $json[\"Website\"] || $json[\"Company Website\"] || '', \"title\": $json[\"Title\"] || $json[\"title\"] || '', \"industry\": $json[\"Industry\"] || $json[\"industry\"] || '', \"keywords\": $json[\"Keywords\"] || $json[\"keywords\"] || '', \"technologies\": $json[\"Technologies\"] || $json[\"technologies\"] || '', \"num_employees\": $json[\"# Employees\"] || $json[\"num_employees\"] || '', \"annual_revenue\": $json[\"Annual Revenue\"] || $json[\"annual_revenue\"] || '' } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "feeder-node-5",
+      "name": "Rate Limit Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1120, 180],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 30,
+        "unit": "seconds"
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [{ "node": "Read Apollo Sheet", "type": "main", "index": 0 }]
+      ]
+    },
+    "Read Apollo Sheet": {
+      "main": [
+        [{ "node": "Loop Over Leads", "type": "main", "index": 0 }]
+      ]
+    },
+    "Loop Over Leads": {
+      "main": [
+        [{ "node": "Send to V2 Engine", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Send to V2 Engine": {
+      "main": [
+        [{ "node": "Rate Limit Wait", "type": "main", "index": 0 }]
+      ]
+    },
+    "Rate Limit Wait": {
+      "main": [
+        [{ "node": "Loop Over Leads", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

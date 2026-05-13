@@ -1,0 +1,44 @@
+{
+  "id": "U3QxctQuEPmyeVvA",
+  "name": "Chronexa Autonomous Outbound Engine v2.0",
+  "description": "Enterprise outbound sales engine: webhook ingest → Perplexity intel → Anthropic bucket routing → bucket-targeted cold email generation → HITL Google Sheets queue. 9-feeder DLQ aggregates all data + infrastructure failure classes.",
+  "deployedAt": "2026-05-08T19:00:26.477Z",
+  "deployedUrl": "https://imates.app.n8n.cloud/workflow/U3QxctQuEPmyeVvA",
+  "webhookUrl": "https://imates.app.n8n.cloud/webhook/chronexa-outbound",
+  "nodeCount": 21,
+  "settings": { "executionOrder": "v1" },
+  "credentials": {
+    "Perplexity API": "httpHeaderAuth — Header Name: Authorization, Header Value: Bearer <PERPLEXITY_API_KEY>",
+    "Anthropic API": "httpHeaderAuth — Header Name: x-api-key, Header Value: <ANTHROPIC_API_KEY>",
+    "Google Sheets Auth": "googleSheetsOAuth2Api — auto-assigned at deploy time"
+  },
+  "replacementTokens": {
+    "REPLACE_WITH_HITL_SHEET_ID": "Document ID of the HITL approval queue spreadsheet",
+    "REPLACE_WITH_HITL_SHEET_GID": "Tab name or numeric gid of the HITL queue tab",
+    "REPLACE_WITH_DLQ_SHEET_ID": "Document ID of the DLQ failure log spreadsheet",
+    "REPLACE_WITH_DLQ_SHEET_GID": "Tab name or numeric gid of the DLQ tab"
+  },
+  "manualWiringRequired": {
+    "description": "The n8n SDK could not auto-wire 6 error-port connections during deployment. These must be drawn manually in the n8n canvas — drag from each source node's red error output port to the corresponding tag node.",
+    "connections": [
+      "Perplexity Extract Triggers (error port) → Tag Perplexity API Failure",
+      "Anthropic Match Routing Bucket (error port) → Tag Routing API Failure",
+      "Parse Anthropic Response (error port) → Tag Anthropic Parse JS Error",
+      "Anthropic Generate Cold Email (error port) → Tag Email API Failure",
+      "Parse Email Output (error port) → Tag Email Parse JS Error",
+      "Append to HITL Queue (error port) → Tag Sheets API Failure"
+    ]
+  },
+  "dlqFeeders": [
+    "PERPLEXITY_API_FAILURE — Perplexity Extract Triggers error port",
+    "PERPLEXITY_DATA_ERROR — Gate Error Check False branch (Node 2 emitted error key)",
+    "ANTHROPIC_ROUTING_API_FAILURE — Anthropic Match Routing Bucket error port",
+    "ANTHROPIC_PARSE_JS_ERROR — Parse Anthropic Response error port",
+    "LEGITIMATE_SKIP — Switch Bucket Router output 0 (should_skip=true)",
+    "CLASSIFICATION_DRIFT — Switch Bucket Router output 5 (Unrecognized fallback)",
+    "ANTHROPIC_EMAIL_API_FAILURE — Anthropic Generate Cold Email error port",
+    "EMAIL_PARSE_JS_ERROR — Parse Email Output error port",
+    "SHEETS_API_FAILURE — Append to HITL Queue error port"
+  ],
+  "attribution": "Conceived by Romuald Członkowski (n8n-mcp) — www.aiadvisors.pl/en"
+}

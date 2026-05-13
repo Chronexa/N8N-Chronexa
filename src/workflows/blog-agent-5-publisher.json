@@ -1,0 +1,320 @@
+{
+  "name": "[DRAFT] Blog Agent 5: Publisher",
+  "nodes": [
+    {
+      "id": "a5-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a5-get-ready",
+      "name": "Get Ready to Publish",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "filterByFormula": "{Status}=\"ready_to_publish\"",
+        "returnAll": false,
+        "limit": 1,
+        "sort": {
+          "property": [
+            {
+              "field": "Title",
+              "direction": "asc"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a5-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Status": "publishing"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a5-map-fields",
+      "name": "Map to Framer Schema",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-record-id",
+              "name": "record_id",
+              "value": "={{ $('Get Ready to Publish').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-slug",
+              "name": "Slug",
+              "value": "={{ $('Get Ready to Publish').first().json['Slug'] }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-title",
+              "name": "Title",
+              "value": "={{ $('Get Ready to Publish').first().json['Title'] }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-desc",
+              "name": "Short Description",
+              "value": "={{ $('Get Ready to Publish').first().json['Meta Description'] }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-content",
+              "name": "Content",
+              "value": "={{ $('Get Ready to Publish').first().json['HTML Body'] }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-hero",
+              "name": "Hero",
+              "value": "={{ $('Get Ready to Publish').first().json['Cover Image URL'] || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-featured",
+              "name": "Featured",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "assign-category",
+              "name": "Category",
+              "value": "Blog",
+              "type": "string"
+            },
+            {
+              "id": "assign-date",
+              "name": "Date",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-author-name",
+              "name": "Author Names",
+              "value": "Ankit Dhiman",
+              "type": "string"
+            },
+            {
+              "id": "assign-author-role",
+              "name": "Author Roles",
+              "value": "Head of Strategy",
+              "type": "string"
+            },
+            {
+              "id": "assign-author-about",
+              "name": "Author About",
+              "value": "Ankit is the brains behind bold business roadmaps. He loves turning \"half-baked\" ideas into fully baked success stories — with a healthy dose of chaos management along the way.",
+              "type": "string"
+            },
+            {
+              "id": "assign-author-avatar",
+              "name": "Author Avatar",
+              "value": "https://framerusercontent.com/images/LElfCqPloHvI8coMyyhlnArxdJc.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a5-create-blog-row",
+      "name": "Create Blog in Airtable CMS",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1120, 300],
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblcbyRfuFfABDmFN",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Slug": "={{ $json.Slug }}",
+            "URL Slug": "={{ $json.Slug }}",
+            "Title": "={{ $json.Title }}",
+            "Short Description": "={{ $json['Short Description'] }}",
+            "Content": "={{ $json.Content }}",
+            "Hero": "={{ $json.Hero }}",
+            "Featured": "={{ $json.Featured }}",
+            "Category": "={{ $json.Category }}",
+            "Date": "={{ $json.Date }}",
+            "Author Names": "={{ $json['Author Names'] }}",
+            "Author Roles": "={{ $json['Author Roles'] }}",
+            "Author About": "={{ $json['Author About'] }}",
+            "Author Avatar": "={{ $json['Author Avatar'] }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a5-mark-published",
+      "name": "Mark Published",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1340, 300],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Map to Framer Schema').first().json.record_id }}",
+            "Status": "published",
+            "Framer Item ID": "={{ $json.id }}"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a5-sticky-1",
+      "name": "⚙️ Agent 5: Publisher",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 160],
+      "parameters": {
+        "content": "## Blog Agent 5: Publisher\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline (status = ready_to_publish)\n**Output:** New row in Airtable 'Imported table' → Framer sync\n\n**SETUP REQUIRED (one-time):**\nIn Framer editor, connect Blog CMS collection to Airtable base appDyvRC1mKQO6mMJ, table 'Imported table' to auto-publish new rows.",
+        "height": 140,
+        "width": 300
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Get Ready to Publish", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Ready to Publish": {
+      "main": [
+        [{ "node": "Lock Record", "type": "main", "index": 0 }]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [{ "node": "Map to Framer Schema", "type": "main", "index": 0 }]
+      ]
+    },
+    "Map to Framer Schema": {
+      "main": [
+        [{ "node": "Create Blog in Airtable CMS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Blog in Airtable CMS": {
+      "main": [
+        [{ "node": "Mark Published", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "MKBhIfmRNZtPDJg0"
+  },
+  "tags": ["blog-pipeline"]
+}

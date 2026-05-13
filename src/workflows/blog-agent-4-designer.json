@@ -1,0 +1,342 @@
+{
+  "name": "[DRAFT] Blog Agent 4: Image Designer",
+  "nodes": [
+    {
+      "id": "a4-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a4-get-pending",
+      "name": "Get Pending Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "filterByFormula": "{Status}=\"copy_written\"",
+        "returnAll": false,
+        "limit": 1,
+        "sort": {
+          "property": [
+            {
+              "field": "Title",
+              "direction": "asc"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a4-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Status": "generating_image"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a4-gen-prompt",
+      "name": "Generate Image Prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "{{ANTHROPIC_API_KEY}}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 300,\n  \"system\": \"You are an AI art director for a B2B technology firm. Create precise, visual Imagen prompts for blog cover images. Style: professional, abstract, enterprise. No text in images. Think: dark minimalist backgrounds, glowing data flows, geometric patterns, cinematic lighting. Never include people's faces. Never include text or numbers. Return ONLY the prompt string, nothing else.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Create an Imagen 3 prompt for this B2B blog post cover image:\\nTitle: {{ $('Get Pending Record').first().json['Title'] }}\\nThesis: {{ $('Get Pending Record').first().json['Thesis'] }}\\n\\nReturn ONLY the image prompt string (2-3 sentences max).\"\n  }]\n}",
+        "options": { "timeout": 30000 }
+      }
+    },
+    {
+      "id": "a4-extract-prompt",
+      "name": "Extract Image Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-record-id",
+              "name": "record_id",
+              "value": "={{ $('Get Pending Record').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-image-prompt",
+              "name": "image_prompt",
+              "value": "={{ $json.content[0].text.trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a4-gen-image",
+      "name": "Generate Image with Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=AIzaSyDlVXNg54Mzoo7l4K27grJ_gKrLYG6HMFE",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"instances\": [{\n    \"prompt\": \"{{ $json.image_prompt }}. Professional enterprise B2B tech aesthetic, dark background, abstract data visualization, no text, no faces, cinematic quality\"\n  }],\n  \"parameters\": {\n    \"sampleCount\": 1,\n    \"aspectRatio\": \"16:9\",\n    \"outputMimeType\": \"image/png\",\n    \"personGeneration\": \"dont_allow\"\n  }\n}",
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "a4-upload-imgbb",
+      "name": "Upload Image to Imgbb",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 220],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.imgbb.com/1/upload?key=7356768e4502c6eec54d7228f1c0d06d&name=blog-{{ $('Extract Image Prompt').first().json.record_id }}",
+        "sendHeaders": false,
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image",
+              "value": "={{ $json.predictions[0].bytesBase64Encoded }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "a4-save-image-success",
+      "name": "Save Image URL (With Image)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1780, 220],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Extract Image Prompt').first().json.record_id }}",
+            "Cover Image URL": "={{ $json.data?.display_url || '' }}",
+            "Cover Image Prompt": "={{ $('Extract Image Prompt').first().json.image_prompt }}",
+            "Status": "ready_to_publish"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a4-save-image",
+      "name": "Save Image URL (No Image)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1560, 400],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Extract Image Prompt').first().json.record_id }}",
+            "Cover Image URL": "",
+            "Cover Image Prompt": "={{ $('Extract Image Prompt').first().json.image_prompt }}",
+            "Status": "ready_to_publish"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a4-sticky",
+      "name": "⚙️ Agent 4: Image Designer",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 160],
+      "parameters": {
+        "content": "## Blog Agent 4: Image Designer v2\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline (status = copy_written)\n**Output:** Gemini Imagen 3 → Imgbb CDN URL → status = ready_to_publish\n\n**Image Model:** Imagen 3 via Gemini API (key hardcoded)\n**Hosting:** Imgbb free CDN (accepts base64 directly — no Code node needed)\n**Fallback:** If Gemini or Imgbb fails, publishes without cover image (pipeline continues)\n\n**Flow:**\nGemini success → Upload to Imgbb → Save Image URL (With Image)\nGemini error → Save Image URL (No Image)",
+        "height": 180,
+        "width": 380
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Get Pending Record", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Pending Record": {
+      "main": [
+        [{ "node": "Lock Record", "type": "main", "index": 0 }]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [{ "node": "Generate Image Prompt", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Image Prompt": {
+      "main": [
+        [{ "node": "Extract Image Prompt", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Image Prompt": {
+      "main": [
+        [{ "node": "Generate Image with Gemini", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Image with Gemini": {
+      "main": [
+        [{ "node": "Upload Image to Imgbb", "type": "main", "index": 0 }],
+        [{ "node": "Save Image URL (No Image)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Upload Image to Imgbb": {
+      "main": [
+        [{ "node": "Save Image URL (With Image)", "type": "main", "index": 0 }],
+        [{ "node": "Save Image URL (No Image)", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "MKBhIfmRNZtPDJg0"
+  },
+  "tags": ["blog-pipeline"]
+}

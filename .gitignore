@@ -1,7 +1,10 @@
 .env
+config/
 node_modules/
 n8n-mcp-repo/
 *.log
 dist/
 .cursor/
 .gemini/
+.claude/
+.DS_Store

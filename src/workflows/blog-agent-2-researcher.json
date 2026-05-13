@@ -1,0 +1,238 @@
+{
+  "name": "[DRAFT] Blog Agent 2: Researcher",
+  "nodes": [
+    {
+      "id": "a2-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a2-get-pending",
+      "name": "Get Pending Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "filterByFormula": "{Status}=\"idea_generated\"",
+        "returnAll": false,
+        "limit": 1,
+        "sort": {
+          "property": [
+            {
+              "field": "Title",
+              "direction": "asc"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a2-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Status": "researching"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a2-perplexity",
+      "name": "Exa Deep Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300],
+      "parameters": {
+        "authentication": "none",
+        "method": "POST",
+        "url": "https://api.exa.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "{{EXA_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"{{ $('Get Pending Record').first().json['Target Keyword'] }} {{ $('Get Pending Record').first().json['Persona'].replace(/_/g, ' ') }} statistics data case study operations 2025 2026\",\n  \"numResults\": 5,\n  \"type\": \"auto\",\n  \"startPublishedDate\": \"2025-01-01\",\n  \"contents\": {\n    \"summary\": {\n      \"query\": \"Extract: (1) specific statistics and percentages with sources, (2) real company or firm examples, (3) key operational pain points for the target business persona, (4) financial or efficiency impact numbers. Context: {{ $('Get Pending Record').first().json['Thesis'] }}\"\n    }\n  }\n}",
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "id": "a2-extract-research",
+      "name": "Extract Research",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1-record-id",
+              "name": "record_id",
+              "value": "={{ $('Get Pending Record').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "r2-research",
+              "name": "research_brief",
+              "value": "={{ $json.results.map((r, i) => '## Source ' + (i + 1) + ': ' + r.title + '\\nURL: ' + r.url + '\\nPublished: ' + (r.publishedDate ? r.publishedDate.substring(0, 10) : 'N/A') + '\\n\\n' + (r.summary || 'No summary available')).join('\\n\\n---\\n\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a2-save-research",
+      "name": "Save Research",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1340, 300],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appDyvRC1mKQO6mMJ",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEKgg9T1Z8tsj55",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.record_id }}",
+            "Research Brief": "={{ $json.research_brief }}",
+            "Status": "research_complete"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "dKOWpUaGvyy1S0eM",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "id": "a2-sticky",
+      "name": "⚙️ Agent 2: Researcher",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 160],
+      "parameters": {
+        "content": "## Blog Agent 2: Researcher v3\n\n**Trigger:** Every 10 min\n**Input:** blog_pipeline (status = idea_generated)\n**Output:** Exa research brief → status = research_complete\n\n**Model:** Exa AI /search (5 results, with summaries)\n**Cost:** ~$0.011/call (neural search + per-article LLM summaries)\n**Quality:** Real sourced articles — not hallucinated stats\n\n**v3 Changes:**\n- Replaced Perplexity (expired API key) with Exa AI\n- Auth header: x-api-key (not Authorization: Bearer)\n- Response path: results[].summary (was choices[0].message.content)\n- research_brief = 5 article summaries joined with --- separators",
+        "height": 200,
+        "width": 380
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Get Pending Record", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Pending Record": {
+      "main": [
+        [{ "node": "Lock Record", "type": "main", "index": 0 }]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [{ "node": "Exa Deep Research", "type": "main", "index": 0 }]
+      ]
+    },
+    "Exa Deep Research": {
+      "main": [
+        [{ "node": "Extract Research", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Research": {
+      "main": [
+        [{ "node": "Save Research", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "MKBhIfmRNZtPDJg0"
+  },
+  "tags": ["blog-pipeline"]
+}

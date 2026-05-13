@@ -1,0 +1,250 @@
+{
+  "name": "[DRAFT] Blog Agent 3: Copywriter",
+  "nodes": [
+    {
+      "id": "a3-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "*/5 * * * *" }]
+        }
+      }
+    },
+    {
+      "id": "a3-get-pending",
+      "name": "Get Pending Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "parameters": {
+        "operation": "search",
+        "base": { "__rl": true, "value": "appDyvRC1mKQO6mMJ", "mode": "id" },
+        "table": { "__rl": true, "value": "tblEKgg9T1Z8tsj55", "mode": "id" },
+        "filterByFormula": "{Status}=\"research_complete\"",
+        "returnAll": false,
+        "limit": 1,
+        "sort": { "property": [{ "field": "Title", "direction": "asc" }] },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": { "id": "dKOWpUaGvyy1S0eM", "name": "Airtable Personal Access Token account" }
+      }
+    },
+    {
+      "id": "a3-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "parameters": {
+        "operation": "update",
+        "base": { "__rl": true, "value": "appDyvRC1mKQO6mMJ", "mode": "id" },
+        "table": { "__rl": true, "value": "tblEKgg9T1Z8tsj55", "mode": "id" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": { "id": "={{ $json.id }}", "Status": "writing" },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": { "id": "dKOWpUaGvyy1S0eM", "name": "Airtable Personal Access Token account" }
+      }
+    },
+    {
+      "id": "a3-call-claude",
+      "name": "Call Claude - Write Blog Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "{{ANTHROPIC_API_KEY}}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({model:'claude-sonnet-4-6',max_tokens:8192,system:'You are a senior B2B content strategist for Chronexa, an AI orchestration firm that helps mid-market operations teams replace fragmented SaaS with custom AI workflows built on n8n.\\n\\nBRAND VOICE: Authoritative, data-driven, B2B focused, no fluff.\\n\\nHTML FORMAT (Framer CMS — use EXACTLY this):\\n- Headings: <h2>Heading Text</h2> (no dir attribute)\\n- Paragraphs: <p>Text here.</p>\\n- Bold: <strong>text</strong>\\n- Lists: <ul><li>item</li></ul>\\n- Start with ONE <h2> as the opening heading, then 3-5 more <h2> sections\\n- NO <html>, <body>, <head>, <h1> tags\\n\\nOUTPUT FORMAT — respond with EXACTLY this structure, no other text:\\n%%TITLE%%\\n<your SEO title 60-65 chars>\\n%%SLUG%%\\n<your url-slug-hyphenated>\\n%%META%%\\n<your 155-char meta description>\\n%%WORDCOUNT%%\\n<estimated word count as integer>\\n%%HTML_START%%\\n<full html body content here>\\n%%HTML_END%%',messages:[{role:'user',content:'Write a comprehensive SEO blog post (1800-2500 words).\\n\\nTITLE DIRECTION: '+$('Get Pending Record').first().json['Title']+'\\nKEYWORD: '+$('Get Pending Record').first().json['Target Keyword']+'\\nSECONDARY KEYWORDS: '+$('Get Pending Record').first().json['Secondary Keywords']+'\\nPERSONA: '+$('Get Pending Record').first().json['Persona']+'\\nTHESIS: '+$('Get Pending Record').first().json['Thesis']+'\\n\\nRESEARCH BRIEF:\\n'+$('Get Pending Record').first().json['Research Brief']+'\\n\\nStructure: opening stat hook → 3-5 H2 sections → CTA to Chronexa. Use the delimited output format exactly.'}]}) }}",
+        "options": { "timeout": 120000 }
+      }
+    },
+    {
+      "id": "a3-parse-fields",
+      "name": "Parse Blog Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-record-id",
+              "name": "record_id",
+              "value": "={{ $('Get Pending Record').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-title",
+              "name": "title",
+              "value": "={{ $json.content[0].text.split('%%TITLE%%')[1].split('%%SLUG%%')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-slug",
+              "name": "slug",
+              "value": "={{ $json.content[0].text.split('%%SLUG%%')[1].split('%%META%%')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-meta",
+              "name": "meta_description",
+              "value": "={{ $json.content[0].text.split('%%META%%')[1].split('%%WORDCOUNT%%')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-wc",
+              "name": "word_count",
+              "value": "={{ parseInt($json.content[0].text.split('%%WORDCOUNT%%')[1].split('%%HTML_START%%')[0].trim()) || 1800 }}",
+              "type": "number"
+            },
+            {
+              "id": "assign-html",
+              "name": "html_body",
+              "value": "={{ $json.content[0].text.split('%%HTML_START%%')[1].split('%%HTML_END%%')[0].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a3-quality-gate",
+      "name": "Quality Gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 300],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "wc-check",
+              "leftValue": "={{ $json.word_count }}",
+              "rightValue": 1000,
+              "operator": { "type": "number", "operation": "gte" }
+            },
+            {
+              "id": "html-check",
+              "leftValue": "={{ $json.html_body.length }}",
+              "rightValue": 2000,
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "a3-save-content",
+      "name": "Save Content",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1560, 200],
+      "parameters": {
+        "operation": "update",
+        "base": { "__rl": true, "value": "appDyvRC1mKQO6mMJ", "mode": "id" },
+        "table": { "__rl": true, "value": "tblEKgg9T1Z8tsj55", "mode": "id" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.record_id }}",
+            "Title": "={{ $json.title }}",
+            "Slug": "={{ $json.slug }}",
+            "Meta Description": "={{ $json.meta_description }}",
+            "HTML Body": "={{ $json.html_body }}",
+            "Word Count": "={{ $json.word_count }}",
+            "Status": "copy_written"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": { "id": "dKOWpUaGvyy1S0eM", "name": "Airtable Personal Access Token account" }
+      }
+    },
+    {
+      "id": "a3-fail",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1560, 420],
+      "parameters": {
+        "operation": "update",
+        "base": { "__rl": true, "value": "appDyvRC1mKQO6mMJ", "mode": "id" },
+        "table": { "__rl": true, "value": "tblEKgg9T1Z8tsj55", "mode": "id" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.record_id }}",
+            "Status": "failed",
+            "Error Log": "={{ 'Parse failed or quality gate: wc=' + $json.word_count + ' html_len=' + $json.html_body.length }}"
+          },
+          "matchingColumns": ["id"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": { "id": "dKOWpUaGvyy1S0eM", "name": "Airtable Personal Access Token account" }
+      }
+    },
+    {
+      "id": "a3-sticky",
+      "name": "⚙️ Agent 3: Copywriter",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 160],
+      "parameters": {
+        "content": "## Blog Agent 3: Copywriter v6 — Delimiter Parsing\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline status=research_complete\n**Output:** HTML blog post → status=copy_written\n\n**Model:** claude-sonnet-4-6 (~74s)\n**Fix:** Claude returns delimited format (%%TITLE%%, %%HTML_START%%, etc.) instead of JSON. Parsed with .split() in Set node — no Code nodes, no task runner, no JSON.parse needed.",
+        "height": 160,
+        "width": 400
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": { "main": [[{ "node": "Get Pending Record", "type": "main", "index": 0 }]] },
+    "Get Pending Record": { "main": [[{ "node": "Lock Record", "type": "main", "index": 0 }]] },
+    "Lock Record": { "main": [[{ "node": "Call Claude - Write Blog Post", "type": "main", "index": 0 }]] },
+    "Call Claude - Write Blog Post": { "main": [[{ "node": "Parse Blog Fields", "type": "main", "index": 0 }]] },
+    "Parse Blog Fields": { "main": [[{ "node": "Quality Gate", "type": "main", "index": 0 }]] },
+    "Quality Gate": {
+      "main": [
+        [{ "node": "Save Content", "type": "main", "index": 0 }],
+        [{ "node": "Mark Failed", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "MKBhIfmRNZtPDJg0"
+  },
+  "tags": ["blog-pipeline"]
+}
