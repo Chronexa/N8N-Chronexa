@@ -1,5 +1,10 @@
 # Enterprise Agentic Blog Automation — Architecture Spec
-**Chronexa.io | Status: DRAFT | Date: 2026-05-09**
+**⚠️ SUPERSEDED — This document reflects pre-production design assumptions from 2026-05-09.**
+**Canonical reference: `docs/BLOG_AUTOMATION_ARCHITECTURE.md` (verified live state as of 2026-05-13)**
+
+---
+
+**Chronexa.io | Status: SUPERSEDED | Original Date: 2026-05-09**
 
 ---
 

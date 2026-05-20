@@ -9,6 +9,7 @@ You are a Senior n8n Architect. Follow these rules strictly to ensure enterprise
 4. **Validation is Mandatory**: Use the `n8n-mcp` tools (`validate_node`, `validate_workflow`) before finalizing any JSON.
 
 ## Workflow Generation Protocol
+0. **Fetch Live Truth**: Run `node scripts/fetch-live.js` to get the latest live workflow JSON. Never rely on local files for architecture assumptions.
 1. **Discover**: `search_templates` → `search_nodes` → `get_node(detail='full')`.
 2. **Architect**: Show the node structure to the user for approval.
 3. **Build**: Generate JSON with explicit `typeVersion` and connection parameters.

@@ -1,0 +1,471 @@
+{
+  "updatedAt": "2026-05-19T12:18:46.297Z",
+  "createdAt": "2026-05-19T12:18:46.297Z",
+  "id": "6SzXgyv0rMfA68l6",
+  "name": "Agent 2: Researcher (Baserow)",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "a2b-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        260
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a2b-fetch",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        260
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io/api/database/rows/table/975683/",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            },
+            {
+              "name": "filter__Status__equal",
+              "value": "idea_generated"
+            },
+            {
+              "name": "order_by",
+              "value": "id"
+            },
+            {
+              "name": "size",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a2b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        900,
+        260
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-count",
+              "leftValue": "={{ .count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-end-empty",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a2b-extract",
+      "name": "Extract Record",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        400
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "er-id",
+              "name": "record_id",
+              "value": "={{ .results[0].id }}",
+              "type": "number"
+            },
+            {
+              "id": "er-title",
+              "name": "title",
+              "value": "={{ .results[0]['Title'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-kw",
+              "name": "target_keyword",
+              "value": "={{ .results[0]['Target Keyword'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-persona",
+              "name": "persona",
+              "value": "={{ .results[0]['Persona'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-thesis",
+              "name": "thesis",
+              "value": "={{ .results[0]['Thesis'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        400
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"researching\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a2b-exa",
+      "name": "Exa Deep Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        400
+      ],
+      "parameters": {
+        "authentication": "none",
+        "method": "POST",
+        "url": "https://api.exa.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "82046c22-fa17-4074-9511-2ff1abbe63a2"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"{{ .first().json.target_keyword }} {{ .first().json.persona.replace(/_/g, ' ') }} statistics data case study operations 2025 2026\",\n  \"numResults\": 5,\n  \"type\": \"auto\",\n  \"startPublishedDate\": \"2025-01-01\",\n  \"contents\": {\n    \"summary\": {\n      \"query\": \"Extract: (1) specific statistics and percentages with sources, (2) real company or firm examples, (3) key operational pain points for the target business persona, (4) financial or efficiency impact numbers. Context: {{ .first().json.thesis }}\"\n    }\n  }\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a2b-brief",
+      "name": "Build Research Brief",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1780,
+        280
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "rb-id",
+              "name": "record_id",
+              "value": "={{ $('Extract Record').first().json.record_id }}",
+              "type": "number"
+            },
+            {
+              "id": "rb-brief",
+              "name": "research_brief",
+              "value": "={{ $json.results.map((r, i) => '## Source ' + (i + 1) + ': ' + r.title + '\nURL: ' + r.url + '\nPublished: ' + (r.publishedDate ? r.publishedDate.substring(0, 10) : 'N/A') + '\n\n' + (r.summary || 'No summary available')).join('\n\n---\n\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-save",
+      "name": "Save Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        280
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Research Brief\": $json.research_brief, \"Status\": \"research_complete\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a2b-error",
+      "name": "Handle Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        540
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"failed\", \"Error Log\": \"Exa research failed: \" + ($json.error?.message || \"API timeout or network error\") }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Pending Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
+      "main": [
+        [
+          {
+            "node": "Lock Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [
+          {
+            "node": "Exa Deep Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa Deep Research": {
+      "main": [
+        [
+          {
+            "node": "Build Research Brief",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Research Brief": {
+      "main": [
+        [
+          {
+            "node": "Save Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "MKBhIfmRNZtPDJg0",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "6e53b525-cf3b-4b2f-ada6-035af4dfe295",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-19T12:18:46.412Z",
+      "createdAt": "2026-05-19T12:18:46.412Z",
+      "role": "workflow:owner",
+      "workflowId": "6SzXgyv0rMfA68l6",
+      "projectId": "b8KOq9Xa215X1ZmL",
+      "project": {
+        "updatedAt": "2025-09-10T05:16:40.899Z",
+        "createdAt": "2025-09-10T05:14:38.849Z",
+        "id": "b8KOq9Xa215X1ZmL",
+        "name": "Team Chronexa <team@chronexa.io>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    }
+  ],
+  "tags": [],
+  "parentFolder": null,
+  "activeVersion": null
+}

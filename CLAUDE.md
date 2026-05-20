@@ -159,9 +159,15 @@ $json.content[0].text
 ```
 Then `JSON.parse()` the result. Never trust raw `content[0].text` to be fence-free.
 
+### 6. Production Resilience & Architecture
+- **Global Error Handling**: Mandate that all workflows use the centralized `errorWorkflow` (`MKBhIfmRNZtPDJg0`). Do not rely solely on node-level `onError` configurations.
+- **Exponential Backoff**: Enforce "Retry on Fail" with exponential backoff on all HTTP Request nodes to handle transient API errors.
+- **Execution Bloat Prevention**: For high-volume workflows, disable saving of successful executions to prevent database bloat.
+
 ---
 
 ## Development Workflow
+0. **Zero-Assumption Rule (Fetch Live Truth)**: Run `node scripts/fetch-live.js` to download the live deployed workflows. Never assume local `.json` or `.md` files are the ground truth—they may be stale.
 1. **Research**: Run `get_node(mode='full')` in n8n-mcp for every node you plan to use.
 2. **Spec**: Write a detailed spec in `src/specs/[feature].md`.
 3. **Build**: Generate valid JSON in `src/workflows/[feature].json`.

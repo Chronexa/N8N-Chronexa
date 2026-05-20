@@ -1,0 +1,728 @@
+{
+  "updatedAt": "2026-05-15T11:38:52.759Z",
+  "createdAt": "2026-05-15T08:06:45.471Z",
+  "id": "fPqf1XhTxhGyWVbF",
+  "name": "Agent 1: GSC Strategist (Baserow)",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "a1g-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://searchconsole.googleapis.com/webmasters/v3/sites/sc-domain%3Achronexa.io/searchAnalytics/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ startDate: $now.minus(90,'days').toFormat('yyyy-MM-dd'), endDate: $now.minus(3,'days').toFormat('yyyy-MM-dd'), dimensions: ['query'], rowLimit: 1000, dimensionFilterGroups: [{ filters: [{ dimension: 'query', operator: 'notContains', expression: 'chronexa' }] }] }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a1g-fetch-gsc",
+      "name": "Fetch GSC Striking Distance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "9EZ9v3RE5HPuq27U",
+          "name": "Google account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 5);\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
+      },
+      "id": "a1g-filter",
+      "name": "Filter Striking Distance",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "skip-check",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1g-has-keywords",
+      "name": "Has Keywords?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "REDACTED_ANTHROPIC_API_KEY"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an AI automation agency serving wealth managers, CFOs, SaaS founders, supply chain operators, and CPA firms.\\n\\nA Google Search Console keyword is in position ' + $json.position + ' with ' + $json.impressions + ' impressions over 90 days. This is a high-opportunity striking distance keyword.\\n\\nKeyword: ' + $json.query + '\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: wealth_management, supply_chain, saas_founder, agency_owner, cpa_firm]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "a1g-claude",
+      "name": "Claude Brief Generation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1136,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const results = [];\nfor (const item of items) {\n  const text = (item.json?.content?.[0]?.text) || '';\n  const extract = (tag) => {\n    const m = text.match(new RegExp('%%' + tag + '%%\\\\n([\\\\s\\\\S]*?)\\\\n%%' + tag + '%%'));\n    return m ? m[1].trim() : '';\n  };\n  const title     = extract('TITLE');\n  const keyword   = extract('KEYWORD');\n  const secondary = extract('SECONDARY');\n  const persona   = extract('PERSONA');\n  const thesis    = extract('THESIS');\n\n  if (!title || !keyword || !thesis) {\n    results.push({ json: { parse_error: true, raw_text: text.slice(0, 500) } });\n    continue;\n  }\n\n  const slug = title\n    .toLowerCase()\n    .replace(/[^a-z0-9\\s-]/g, '')\n    .replace(/\\s+/g, '-')\n    .replace(/-+/g, '-')\n    .trim();\n\n  results.push({ json: { parse_error: false, title, slug, keyword, secondary, persona, thesis } });\n}\nreturn results;"
+      },
+      "id": "a1g-parse",
+      "name": "Parse Brief Fields",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "parse-error-check",
+              "leftValue": "={{ $json.parse_error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1g-parse-ok",
+      "name": "Parse OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        400
+      ]
+    },
+    {
+      "id": "a1g-create-row",
+      "name": "Create Baserow Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1808,
+        304
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Title\": $json.title, \"Slug\": $json.slug, \"Target Keyword\": $json.keyword, \"Secondary Keywords\": $json.secondary, \"Persona\": $json.persona, \"Thesis\": $json.thesis, \"Status\": \"idea_generated\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "a1g-end-no-keywords",
+      "name": "End: No Keywords Today",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        208
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a1g-end-parse-fail",
+      "name": "End: Parse Failed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Agent 1: GSC Strategist (Baserow) v1\n\n**Trigger:** Every 6 hours\n**Input:** Google Search Console searchAnalytics (position 11-30, impressions ≥50)\n**Output:** blog_pipeline row in Baserow (status=idea_generated)\n\n**Auth:** Service account JWT (built in Code node — no n8n GSC cred needed)\n**Model:** claude-haiku-4-5-20251001\n**DB:** Baserow Blog CMS (table 975683)\n\n**Replaces:** Old Agent 1 (time-based persona rotation, no GSC)\nOld workflow ID d96au9JL4iHaFdKj is preserved but deactivated.",
+        "height": 696,
+        "width": 1808
+      },
+      "id": "a1g-sticky",
+      "name": "⚙️ Agent 1: GSC Strategist (Baserow)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch GSC Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch GSC Striking Distance": {
+      "main": [
+        [
+          {
+            "node": "Filter Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Striking Distance": {
+      "main": [
+        [
+          {
+            "node": "Has Keywords?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Keywords?": {
+      "main": [
+        [
+          {
+            "node": "End: No Keywords Today",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Claude Brief Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Brief Generation": {
+      "main": [
+        [
+          {
+            "node": "Parse Brief Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Brief Fields": {
+      "main": [
+        [
+          {
+            "node": "Parse OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse OK?": {
+      "main": [
+        [
+          {
+            "node": "End: Parse Failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Baserow Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "MKBhIfmRNZtPDJg0",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": {},
+  "versionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
+  "activeVersionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
+  "versionCounter": 55,
+  "triggerCount": 1,
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-05-15T11:38:52.761Z",
+    "createdAt": "2026-05-15T11:38:52.761Z",
+    "versionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
+    "workflowId": "fPqf1XhTxhGyWVbF",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 6
+              }
+            ]
+          }
+        },
+        "id": "a1g-trigger",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          240,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://searchconsole.googleapis.com/webmasters/v3/sites/sc-domain%3Achronexa.io/searchAnalytics/query",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ startDate: $now.minus(90,'days').toFormat('yyyy-MM-dd'), endDate: $now.minus(3,'days').toFormat('yyyy-MM-dd'), dimensions: ['query'], rowLimit: 1000, dimensionFilterGroups: [{ filters: [{ dimension: 'query', operator: 'notContains', expression: 'chronexa' }] }] }) }}",
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "id": "a1g-fetch-gsc",
+        "name": "Fetch GSC Striking Distance",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          464,
+          304
+        ],
+        "credentials": {
+          "googleOAuth2Api": {
+            "id": "9EZ9v3RE5HPuq27U",
+            "name": "Google account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 5);\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
+        },
+        "id": "a1g-filter",
+        "name": "Filter Striking Distance",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          688,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "skip-check",
+                "leftValue": "={{ $json.skip }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "a1g-has-keywords",
+        "name": "Has Keywords?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          912,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-api-key",
+                "value": "REDACTED_ANTHROPIC_API_KEY"
+              },
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an AI automation agency serving wealth managers, CFOs, SaaS founders, supply chain operators, and CPA firms.\\n\\nA Google Search Console keyword is in position ' + $json.position + ' with ' + $json.impressions + ' impressions over 90 days. This is a high-opportunity striking distance keyword.\\n\\nKeyword: ' + $json.query + '\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: wealth_management, supply_chain, saas_founder, agency_owner, cpa_firm]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
+          "options": {
+            "timeout": 60000
+          }
+        },
+        "id": "a1g-claude",
+        "name": "Claude Brief Generation",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1136,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const results = [];\nfor (const item of items) {\n  const text = (item.json?.content?.[0]?.text) || '';\n  const extract = (tag) => {\n    const m = text.match(new RegExp('%%' + tag + '%%\\\\n([\\\\s\\\\S]*?)\\\\n%%' + tag + '%%'));\n    return m ? m[1].trim() : '';\n  };\n  const title     = extract('TITLE');\n  const keyword   = extract('KEYWORD');\n  const secondary = extract('SECONDARY');\n  const persona   = extract('PERSONA');\n  const thesis    = extract('THESIS');\n\n  if (!title || !keyword || !thesis) {\n    results.push({ json: { parse_error: true, raw_text: text.slice(0, 500) } });\n    continue;\n  }\n\n  const slug = title\n    .toLowerCase()\n    .replace(/[^a-z0-9\\s-]/g, '')\n    .replace(/\\s+/g, '-')\n    .replace(/-+/g, '-')\n    .trim();\n\n  results.push({ json: { parse_error: false, title, slug, keyword, secondary, persona, thesis } });\n}\nreturn results;"
+        },
+        "id": "a1g-parse",
+        "name": "Parse Brief Fields",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1360,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "parse-error-check",
+                "leftValue": "={{ $json.parse_error }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "a1g-parse-ok",
+        "name": "Parse OK?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1584,
+          400
+        ]
+      },
+      {
+        "id": "a1g-create-row",
+        "name": "Create Baserow Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1808,
+          304
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Title\": $json.title, \"Slug\": $json.slug, \"Target Keyword\": $json.keyword, \"Secondary Keywords\": $json.secondary, \"Persona\": $json.persona, \"Thesis\": $json.thesis, \"Status\": \"idea_generated\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "id": "a1g-end-no-keywords",
+        "name": "End: No Keywords Today",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1136,
+          208
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "a1g-end-parse-fail",
+        "name": "End: Parse Failed",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1808,
+          496
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Agent 1: GSC Strategist (Baserow) v1\n\n**Trigger:** Every 6 hours\n**Input:** Google Search Console searchAnalytics (position 11-30, impressions ≥50)\n**Output:** blog_pipeline row in Baserow (status=idea_generated)\n\n**Auth:** Service account JWT (built in Code node — no n8n GSC cred needed)\n**Model:** claude-haiku-4-5-20251001\n**DB:** Baserow Blog CMS (table 975683)\n\n**Replaces:** Old Agent 1 (time-based persona rotation, no GSC)\nOld workflow ID d96au9JL4iHaFdKj is preserved but deactivated.",
+          "height": 696,
+          "width": 1808
+        },
+        "id": "a1g-sticky",
+        "name": "⚙️ Agent 1: GSC Strategist (Baserow)",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          208,
+          0
+        ]
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Fetch GSC Striking Distance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch GSC Striking Distance": {
+        "main": [
+          [
+            {
+              "node": "Filter Striking Distance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Striking Distance": {
+        "main": [
+          [
+            {
+              "node": "Has Keywords?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has Keywords?": {
+        "main": [
+          [
+            {
+              "node": "End: No Keywords Today",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Claude Brief Generation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Brief Generation": {
+        "main": [
+          [
+            {
+              "node": "Parse Brief Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Brief Fields": {
+        "main": [
+          [
+            {
+              "node": "Parse OK?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse OK?": {
+        "main": [
+          [
+            {
+              "node": "End: Parse Failed",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create Baserow Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Team Chronexa",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  }
+}

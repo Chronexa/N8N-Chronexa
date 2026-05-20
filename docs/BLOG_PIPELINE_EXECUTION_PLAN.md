@@ -1,9 +1,13 @@
 # Blog Automation Pipeline: Technical Execution Plan
 
+**⚠️ SUPERSEDED — This document reflects a pre-production state from 2026-05-12.**
+**Canonical reference: `docs/BLOG_AUTOMATION_ARCHITECTURE.md` (verified live state as of 2026-05-13)**
+
+---
+
 **Owner:** Ankit Dhiman  
-**Status:** In Progress — Agents 3/4/5 deployed but inactive; Agents 1/2 not deployed  
-**Goal:** Fully autonomous, zero-human SEO blog pipeline publishing to Chronexa.io via Framer  
-**Verified as of:** 2026-05-12
+**Status:** SUPERSEDED  
+**Verified as of:** 2026-05-12 (stale — see canonical doc)
 
 ---
 

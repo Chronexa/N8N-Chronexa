@@ -1,12 +1,21 @@
 {
+  "updatedAt": "2026-05-13T08:33:14.633Z",
+  "createdAt": "2026-05-11T04:44:44.681Z",
+  "id": "Pxyseu0euKXlTXsX",
   "name": "Blog Agent 5: Publisher",
+  "description": "Polls Airtable every 5 min for ready_to_publish posts, publishes directly to Framer CMS via the framer-bridge Railway service.",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
-      "id": "a5-trigger",
+      "id": "8fabcbb3-0521-4f51-a324-a32b86c11ba8",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [240, 300],
+      "position": [
+        0,
+        0
+      ],
       "parameters": {
         "rule": {
           "interval": [
@@ -19,11 +28,14 @@
       }
     },
     {
-      "id": "a5-get-ready",
+      "id": "b2e560dc-029f-4ab2-ad84-d3763055fbf2",
       "name": "Get Ready to Publish",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
-      "position": [460, 300],
+      "position": [
+        224,
+        0
+      ],
       "parameters": {
         "operation": "search",
         "base": {
@@ -57,11 +69,14 @@
       }
     },
     {
-      "id": "a5-lock",
+      "id": "578e8955-8cae-4c49-9a4e-540cd0acac73",
       "name": "Lock Record",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
-      "position": [680, 300],
+      "position": [
+        448,
+        0
+      ],
       "parameters": {
         "operation": "update",
         "base": {
@@ -80,7 +95,9 @@
             "id": "={{ $json.id }}",
             "Status": "publishing"
           },
-          "matchingColumns": ["id"],
+          "matchingColumns": [
+            "id"
+          ],
           "schema": []
         },
         "options": {}
@@ -93,11 +110,14 @@
       }
     },
     {
-      "id": "a5-map-fields",
+      "id": "d63d9647-6826-454d-8efa-300809ed139a",
       "name": "Map to Framer Schema",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [900, 300],
+      "position": [
+        672,
+        0
+      ],
       "parameters": {
         "mode": "manual",
         "duplicateItem": false,
@@ -151,11 +171,14 @@
       }
     },
     {
-      "id": "a5-publish-bridge",
+      "id": "451bbfcc-f7c4-4f9e-82e5-4f9bd43c0f1c",
       "name": "Publish to Framer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 300],
+      "position": [
+        896,
+        0
+      ],
       "parameters": {
         "method": "POST",
         "url": "https://framer-bridge-production-c7d8.up.railway.app/publish",
@@ -167,18 +190,24 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "X-Bridge-Secret", "value": "{{BRIDGE_SECRET}}" }
+            {
+              "name": "X-Bridge-Secret",
+              "value": "8551d38370dad766d338544779bf8bafbcdc9e582fd4590d"
+            }
           ]
         },
         "options": {}
       }
     },
     {
-      "id": "a5-mark-published",
+      "id": "26fa0a1e-4645-40cb-aa7d-6b30541d638c",
       "name": "Mark Published",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
-      "position": [1340, 300],
+      "position": [
+        1120,
+        0
+      ],
       "parameters": {
         "operation": "update",
         "base": {
@@ -198,7 +227,9 @@
             "Status": "published",
             "Framer Item ID": "={{ $json.framer_item_id }}"
           },
-          "matchingColumns": ["id"],
+          "matchingColumns": [
+            "id"
+          ],
           "schema": []
         },
         "options": {}
@@ -211,42 +242,87 @@
       }
     },
     {
-      "id": "a5-sticky-1",
-      "name": "⚙️ Agent 5: Publisher",
+      "id": "5f43872a-4d84-49e7-b30d-2630a3e5d43d",
+      "name": "Sticky Note a82e9ee7",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [200, 160],
+      "position": [
+        560,
+        64
+      ],
       "parameters": {
-        "content": "## Blog Agent 5: Publisher\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline table (status = ready_to_publish)\n**Output:** POST to Framer Bridge (Railway) → direct Framer CMS publish\n\n**Bridge:** https://framer-bridge-production-c7d8.up.railway.app\n\nReturns: { success, framer_item_id, slug }",
-        "height": 160,
-        "width": 380
+        "content": {
+          "version": 1,
+          "config": {
+            "name": "⚙️ Agent 5: Publisher",
+            "position": [
+              200,
+              160
+            ],
+            "parameters": {
+              "content": "## Blog Agent 5: Publisher\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline table (status = ready_to_publish)\n**Output:** POST to Framer Bridge (Railway) → direct Framer CMS publish\n\n**Bridge:** https://framer-bridge-production-c7d8.up.railway.app\n\nReturns: { success, framer_item_id, slug }",
+              "height": 160,
+              "width": 420
+            }
+          }
+        }
       }
     }
   ],
   "connections": {
     "Schedule Trigger": {
       "main": [
-        [{ "node": "Get Ready to Publish", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Get Ready to Publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Get Ready to Publish": {
       "main": [
-        [{ "node": "Lock Record", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Lock Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Lock Record": {
       "main": [
-        [{ "node": "Map to Framer Schema", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Map to Framer Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Map to Framer Schema": {
       "main": [
-        [{ "node": "Publish to Framer", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Publish to Framer",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Publish to Framer": {
       "main": [
-        [{ "node": "Mark Published", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Mark Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -257,5 +333,39 @@
     "errorWorkflow": "MKBhIfmRNZtPDJg0",
     "availableInMCP": true
   },
-  "tags": ["blog-pipeline"]
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "pinData": null,
+  "versionId": "7e92775b-ccfb-476a-a29f-274baa3ef42d",
+  "activeVersionId": null,
+  "versionCounter": 28,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-11T04:44:44.684Z",
+      "createdAt": "2026-05-11T04:44:44.684Z",
+      "role": "workflow:owner",
+      "workflowId": "Pxyseu0euKXlTXsX",
+      "projectId": "b8KOq9Xa215X1ZmL",
+      "project": {
+        "updatedAt": "2025-09-10T05:16:40.899Z",
+        "createdAt": "2025-09-10T05:14:38.849Z",
+        "id": "b8KOq9Xa215X1ZmL",
+        "name": "Team Chronexa <team@chronexa.io>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
 }
