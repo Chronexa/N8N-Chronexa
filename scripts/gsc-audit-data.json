@@ -1,0 +1,5529 @@
+{
+  "generated_at": "2026-05-25T07:10:31.122Z",
+  "summary": {
+    "period": "2026-02-24 to 2026-05-25",
+    "total_pages_with_data": 111,
+    "total_clicks": 168,
+    "total_impressions": 95682,
+    "avg_ctr": 0.18,
+    "blog_pages": 97,
+    "ctr_opportunity_pages": 69,
+    "positions_4_to_10": 62,
+    "positions_11_to_20": 12
+  },
+  "ctr_opportunities": [
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026",
+      "impressions": 38758,
+      "ctr": 0.01,
+      "position": 7.4,
+      "top_queries": [
+        {
+          "query": "\"ai agent\" \"openai chat model\" \"window buffer memory\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "\"ai agent\" \"tools agent\" n8n",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "\"label:inbox is:unread\" gmail search",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 12
+        },
+        {
+          "query": "\"window buffer memory\" \"openai chat model\"",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 8.4
+        },
+        {
+          "query": "2026 one person company ai agent stack n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 12.3
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/top-ai-automation-agencies-b2b-saas-2026",
+      "impressions": 7933,
+      "ctr": 0.08,
+      "position": 8.8,
+      "top_queries": [
+        {
+          "query": "\"ai workflows\" \"b2b saas\" startup",
+          "clicks": 0,
+          "impressions": 126,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "agencias que realicen arquitectura de automatización y agentes de ia",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "agencies specializing in b2b saas ai assistant recommendations",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "agency",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai agencies 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 33
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-in-2025-hype-reality-and-the-market-landscape",
+      "impressions": 4955,
+      "ctr": 0.02,
+      "position": 10.9,
+      "top_queries": [
+        {
+          "query": "ai adoption 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "ai agents hype vs reality 2025 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "ai articles 2025",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 37
+        },
+        {
+          "query": "ai buyer predictability 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 99
+        },
+        {
+          "query": "ai buzzwords hype vs reality 2024 2025",
+          "clicks": 0,
+          "impressions": 525,
+          "ctr": 0,
+          "position": 8.4
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-zapier-in-2026-cost-ai-features-and-when-to-choose-each",
+      "impressions": 4549,
+      "ctr": 0,
+      "position": 8.3,
+      "top_queries": [
+        {
+          "query": "best value zapier vs n8n",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 3.9
+        },
+        {
+          "query": "evaluate the n8n company zapier on pricing & evaluation",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 7.2
+        },
+        {
+          "query": "how does zapier compare to n8n?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "is n8n a good zapier alternative?",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 3.4
+        },
+        {
+          "query": "is n8n a more affordable option than zapier?",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 4.5
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-automation-agency-pricing-what-you-get",
+      "impressions": 3735,
+      "ctr": 0.08,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "\"ai automation agency\"",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 181.5
+        },
+        {
+          "query": "aeve ai pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "ai automation agency business model pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "ai automation agency business model revenue",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "ai automation agency cost",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 38.2
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/self-hosting-n8n-architecture-security-and-cost-breakdown",
+      "impressions": 3458,
+      "ctr": 0.03,
+      "position": 8.6,
+      "top_queries": [
+        {
+          "query": "\"helm install n8n-operator\"",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 10.7
+        },
+        {
+          "query": "\"helm install n8n-operator\" \"n8n\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" \"helm install\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" helm chart",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n/n8n-operator\" helm",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 11
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-top-automation-agencies-uae-dubai",
+      "impressions": 2893,
+      "ctr": 0.24,
+      "position": 30,
+      "top_queries": [
+        {
+          "query": "mrkhan digital",
+          "clicks": 1,
+          "impressions": 1,
+          "ctr": 100,
+          "position": 8
+        },
+        {
+          "query": "4. ai automation dubai",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 8.8
+        },
+        {
+          "query": "9. crm automation uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 88
+        },
+        {
+          "query": "abu dhabi ai automation company",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai advertising agencies in sharjah",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 65
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/fintech-automation-with-n8n-8-workflows-for-compliance-teams",
+      "impressions": 2815,
+      "ctr": 0.43,
+      "position": 7.2,
+      "top_queries": [
+        {
+          "query": "aml workflow automation for fintech",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "anymore",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "does n8n support audit logging for compliance needs?",
+          "clicks": 0,
+          "impressions": 24,
+          "ctr": 0,
+          "position": 9.1
+        },
+        {
+          "query": "evaluate the fintech company gatekeeper on accounting workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on integrations",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 47.5
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-enterprise-architecture-guide-(2026)",
+      "impressions": 2647,
+      "ctr": 0,
+      "position": 9.1,
+      "top_queries": [
+        {
+          "query": "ai agent node n8n",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 27.5
+        },
+        {
+          "query": "ai agent nodes",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "query": "n8n agent node",
+          "clicks": 0,
+          "impressions": 48,
+          "ctr": 0,
+          "position": 30.7
+        },
+        {
+          "query": "n8n agent node documentation",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "n8n ai agent 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-ai-lead-scoring-platforms-b2b-saas",
+      "impressions": 2470,
+      "ctr": 0,
+      "position": 10.5,
+      "top_queries": [
+        {
+          "query": "affordable predictive ai lead scoring services",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "ai bdr solutions for lead scoring",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai lead score calculation b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 8.8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives us",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 6.3
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-(2026)",
+      "impressions": 2449,
+      "ctr": 0.08,
+      "position": 5.2,
+      "top_queries": [
+        {
+          "query": "n8n elevenlabs integration 2026",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 2.6
+        },
+        {
+          "query": "n8n elevenlabs text to speech workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-ai-sdr-engine-automation-case-study",
+      "impressions": 1418,
+      "ctr": 0,
+      "position": 10.1,
+      "top_queries": [
+        {
+          "query": "automation tools for venture compliance documents",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "aws textract hipaa eligible service baa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best document automation software compliance legal finance healthcare",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 14.2
+        },
+        {
+          "query": "best document automation tools for regulated industries",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best knowledge management solutions for regulated industries hipaa fintech",
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 17.8
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams",
+      "impressions": 967,
+      "ctr": 0,
+      "position": 14.5,
+      "top_queries": [
+        {
+          "query": "ai workflow automation n8n zapier dify flowise comparison",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 75.8
+        },
+        {
+          "query": "automation tutorials",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "brauche technische dokumentation und api-specs für workflow-automatisierung plattformen - will evaluieren ob unsere entwickler damit klarkommen und wie flexibel wir eigene prozesslogik abbilden können. wichtig ist dass die api gut dokumentiert ist, keine lust auf trial-and-error.",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on use cases",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "how do i learn it?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-langchain-integration-complete-rag-workflow-tutorial",
+      "impressions": 879,
+      "ctr": 0.11,
+      "position": 6.8,
+      "top_queries": [
+        {
+          "query": "n8n ai features langchain rag",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "n8n langchain nodes rag",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "n8n retrieval augmented generation workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/top-n8n-automation-experts-india",
+      "impressions": 800,
+      "ctr": 0.13,
+      "position": 10.4,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "hire n8n expert",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 43.7
+        },
+        {
+          "query": "hire n8n experts",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "n8n automation company in delhi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 80
+        },
+        {
+          "query": "n8n automation experts",
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0,
+          "position": 20.4
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-n8n-consultants-by-region",
+      "impressions": 753,
+      "ctr": 0.27,
+      "position": 7.1,
+      "top_queries": [
+        {
+          "query": "\"n8n agency\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "\"n8n consultant\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 255
+        },
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9.5
+        },
+        {
+          "query": "n8n agencies",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 95
+        },
+        {
+          "query": "n8n consultants",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 40.5
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/legal-tech-automation-12-n8n-workflows-for-law-firms",
+      "impressions": 747,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [
+        {
+          "query": "subpoena workflow automation",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 57.2
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/secure-ai-workflow-automation-compliance-risks",
+      "impressions": 565,
+      "ctr": 0,
+      "position": 22.5,
+      "top_queries": [
+        {
+          "query": "ai compliance workflow",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 66.5
+        },
+        {
+          "query": "ai platforms for enterprise workflow automation with full transparency auditability compliance hipaa gdpr finance healthcare",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 12.9
+        },
+        {
+          "query": "ai platforms for enterprise workflow automation with human-in-the-loop human arbitration compliance hipaa gdpr finance healthcare",
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 7.1
+        },
+        {
+          "query": "ai remediation workflow",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 84.7
+        },
+        {
+          "query": "ai security for workflows",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 58.5
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure",
+      "impressions": 559,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "ai data extraction cost for bulk document processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "query": "ai document automation cost savings",
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "position": 13.9
+        },
+        {
+          "query": "ai document processing time reduction percentage",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "ai documentation cost savings",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "cost of ai data extraction for bulk document processing",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 11.3
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/case-studies",
+      "impressions": 535,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "ai automation case studies with roi analysis and customer success stories",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "ai automation roi case studies",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9.7
+        },
+        {
+          "query": "case studies ai data entry automation roi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "case studies sales automation roi success stories",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 7.1
+        },
+        {
+          "query": "case studies sales automation success stories roi",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-invoice-processing-cost-per-invoice-automation",
+      "impressions": 524,
+      "ctr": 0,
+      "position": 12.6,
+      "top_queries": [
+        {
+          "query": "average cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "average cost to process invoice",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "cost of invoice processing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 35.5
+        },
+        {
+          "query": "cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 20.3
+        },
+        {
+          "query": "cost of manual invoice processing per invoice",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/what-is-n8n-the-2026-guide-to-open-source-workflow-ai-automation",
+      "impressions": 486,
+      "ctr": 0,
+      "position": 9.9,
+      "top_queries": [
+        {
+          "query": "is n8n open source 2026",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 9.8
+        },
+        {
+          "query": "n8n features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 14
+        },
+        {
+          "query": "n8n features pros cons use cases pricing 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "n8n integrations number of nodes 2026",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 12.4
+        },
+        {
+          "query": "n8n latest features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 17.5
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/about",
+      "impressions": 472,
+      "ctr": 0.64,
+      "position": 5.7,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 1,
+          "impressions": 151,
+          "ctr": 0.66,
+          "position": 8.4
+        },
+        {
+          "query": "\"chronexa\"",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "yes",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-data-entry-cost-per-employee-how-to-stop",
+      "impressions": 399,
+      "ctr": 0.25,
+      "position": 8.4,
+      "top_queries": [
+        {
+          "query": "cost of manual data entry",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 27.4
+        },
+        {
+          "query": "eliminate manual data entry accounts payable",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "query": "how much does manual data entry cost hospitals annually in staff time?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "reduce manual data entry",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 83
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/top-15-n8n-use-cases-for-b2b-saas-(with-ready-to-clone-workflows)",
+      "impressions": 393,
+      "ctr": 0.25,
+      "position": 8.1,
+      "top_queries": [
+        {
+          "query": "n8n b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "n8n enterprise use cases",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 22
+        },
+        {
+          "query": "n8n use cases examples",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 26
+        },
+        {
+          "query": "saas built on n8n examples",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "saas products built on n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 4.7
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/real-estate-leads-go-cold-5-minutes-instant-response",
+      "impressions": 377,
+      "ctr": 0,
+      "position": 6.1,
+      "top_queries": [
+        {
+          "query": "how to respond to real estate leads",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 15.4
+        },
+        {
+          "query": "real estate lead response time",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/property-management-automation-playbook-portfolio-owners",
+      "impressions": 373,
+      "ctr": 0,
+      "position": 11.3,
+      "top_queries": [
+        {
+          "query": "\"portfolio automation\" revenue management",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "\"portfolio automation\" revenue management enterprise",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 4.4
+        },
+        {
+          "query": "-site:facebook.com -site:fb.me -site:youtube.com -site:youtu.be -site:youtube.be -site:twitter.com -site:instagram.com -site:tiktok.com -site:vm.tiktok.com -site:t.co -site:x.com -site:reddit.com \"property management\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "query": "automate monthly owner statements property management",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "automate monthly owner statements property management software",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 18
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-claude-api-costs-n8n-batch-api",
+      "impressions": 365,
+      "ctr": 0.27,
+      "position": 7.5,
+      "top_queries": [
+        {
+          "query": "anthropic batch api",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 21
+        },
+        {
+          "query": "anthropic batch api 50% discount",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "anthropic batch api 50% discount official docs",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api 50% discount pricing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api discount 50% pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-for-agencies-packaging-pricing-and-selling-automation-retainers",
+      "impressions": 333,
+      "ctr": 0,
+      "position": 3.8,
+      "top_queries": [
+        {
+          "query": "n8n automation agency pricing retainer",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 2
+        }
+      ]
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-kyc-processing-cost-ai-automation",
+      "impressions": 318,
+      "ctr": 0,
+      "position": 17.5,
+      "top_queries": [
+        {
+          "query": "automate kyc with agentic ai",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 48
+        },
+        {
+          "query": "cost savings from implementing automated kyb solutions.",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 41.4
+        },
+        {
+          "query": "efficient kyc management",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 96.3
+        },
+        {
+          "query": "kyc and tax compliance automation in payout workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "kyc conversion rates",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 19.7
+        }
+      ]
+    }
+  ],
+  "positions_4_to_10": [
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026",
+      "clicks": 5,
+      "impressions": 38758,
+      "ctr": 0.01,
+      "position": 7.4,
+      "top_queries": [
+        {
+          "query": "\"ai agent\" \"openai chat model\" \"window buffer memory\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "\"ai agent\" \"tools agent\" n8n",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "\"label:inbox is:unread\" gmail search",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 12
+        },
+        {
+          "query": "\"window buffer memory\" \"openai chat model\"",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 8.4
+        },
+        {
+          "query": "2026 one person company ai agent stack n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 12.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-ai-automation-agencies-b2b-saas-2026",
+      "clicks": 6,
+      "impressions": 7933,
+      "ctr": 0.08,
+      "position": 8.8,
+      "top_queries": [
+        {
+          "query": "\"ai workflows\" \"b2b saas\" startup",
+          "clicks": 0,
+          "impressions": 126,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "agencias que realicen arquitectura de automatización y agentes de ia",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "agencies specializing in b2b saas ai assistant recommendations",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "agency",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai agencies 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 33
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-zapier-in-2026-cost-ai-features-and-when-to-choose-each",
+      "clicks": 0,
+      "impressions": 4549,
+      "ctr": 0,
+      "position": 8.3,
+      "top_queries": [
+        {
+          "query": "best value zapier vs n8n",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 3.9
+        },
+        {
+          "query": "evaluate the n8n company zapier on pricing & evaluation",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 7.2
+        },
+        {
+          "query": "how does zapier compare to n8n?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "is n8n a good zapier alternative?",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 3.4
+        },
+        {
+          "query": "is n8n a more affordable option than zapier?",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 4.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-automation-agency-pricing-what-you-get",
+      "clicks": 3,
+      "impressions": 3735,
+      "ctr": 0.08,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "\"ai automation agency\"",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 181.5
+        },
+        {
+          "query": "aeve ai pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "ai automation agency business model pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "ai automation agency business model revenue",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "ai automation agency cost",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 38.2
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/self-hosting-n8n-architecture-security-and-cost-breakdown",
+      "clicks": 1,
+      "impressions": 3458,
+      "ctr": 0.03,
+      "position": 8.6,
+      "top_queries": [
+        {
+          "query": "\"helm install n8n-operator\"",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 10.7
+        },
+        {
+          "query": "\"helm install n8n-operator\" \"n8n\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" \"helm install\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" helm chart",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n/n8n-operator\" helm",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 11
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/fintech-automation-with-n8n-8-workflows-for-compliance-teams",
+      "clicks": 12,
+      "impressions": 2815,
+      "ctr": 0.43,
+      "position": 7.2,
+      "top_queries": [
+        {
+          "query": "aml workflow automation for fintech",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "anymore",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "does n8n support audit logging for compliance needs?",
+          "clicks": 0,
+          "impressions": 24,
+          "ctr": 0,
+          "position": 9.1
+        },
+        {
+          "query": "evaluate the fintech company gatekeeper on accounting workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on integrations",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 47.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-enterprise-architecture-guide-(2026)",
+      "clicks": 0,
+      "impressions": 2647,
+      "ctr": 0,
+      "position": 9.1,
+      "top_queries": [
+        {
+          "query": "ai agent node n8n",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 27.5
+        },
+        {
+          "query": "ai agent nodes",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "query": "n8n agent node",
+          "clicks": 0,
+          "impressions": 48,
+          "ctr": 0,
+          "position": 30.7
+        },
+        {
+          "query": "n8n agent node documentation",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "n8n ai agent 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-(2026)",
+      "clicks": 2,
+      "impressions": 2449,
+      "ctr": 0.08,
+      "position": 5.2,
+      "top_queries": [
+        {
+          "query": "n8n elevenlabs integration 2026",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 2.6
+        },
+        {
+          "query": "n8n elevenlabs text to speech workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-langchain-integration-complete-rag-workflow-tutorial",
+      "clicks": 1,
+      "impressions": 879,
+      "ctr": 0.11,
+      "position": 6.8,
+      "top_queries": [
+        {
+          "query": "n8n ai features langchain rag",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "n8n langchain nodes rag",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "n8n retrieval augmented generation workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-n8n-consultants-by-region",
+      "clicks": 2,
+      "impressions": 753,
+      "ctr": 0.27,
+      "position": 7.1,
+      "top_queries": [
+        {
+          "query": "\"n8n agency\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "\"n8n consultant\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 255
+        },
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9.5
+        },
+        {
+          "query": "n8n agencies",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 95
+        },
+        {
+          "query": "n8n consultants",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 40.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/legal-tech-automation-12-n8n-workflows-for-law-firms",
+      "clicks": 0,
+      "impressions": 747,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [
+        {
+          "query": "subpoena workflow automation",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 57.2
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure",
+      "clicks": 0,
+      "impressions": 559,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "ai data extraction cost for bulk document processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "query": "ai document automation cost savings",
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "position": 13.9
+        },
+        {
+          "query": "ai document processing time reduction percentage",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "ai documentation cost savings",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "cost of ai data extraction for bulk document processing",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 11.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies",
+      "clicks": 0,
+      "impressions": 535,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "ai automation case studies with roi analysis and customer success stories",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "ai automation roi case studies",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9.7
+        },
+        {
+          "query": "case studies ai data entry automation roi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "case studies sales automation roi success stories",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 7.1
+        },
+        {
+          "query": "case studies sales automation success stories roi",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/what-is-n8n-the-2026-guide-to-open-source-workflow-ai-automation",
+      "clicks": 0,
+      "impressions": 486,
+      "ctr": 0,
+      "position": 9.9,
+      "top_queries": [
+        {
+          "query": "is n8n open source 2026",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 9.8
+        },
+        {
+          "query": "n8n features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 14
+        },
+        {
+          "query": "n8n features pros cons use cases pricing 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "n8n integrations number of nodes 2026",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 12.4
+        },
+        {
+          "query": "n8n latest features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 17.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/about",
+      "clicks": 3,
+      "impressions": 472,
+      "ctr": 0.64,
+      "position": 5.7,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 1,
+          "impressions": 151,
+          "ctr": 0.66,
+          "position": 8.4
+        },
+        {
+          "query": "\"chronexa\"",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "yes",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-data-entry-cost-per-employee-how-to-stop",
+      "clicks": 1,
+      "impressions": 399,
+      "ctr": 0.25,
+      "position": 8.4,
+      "top_queries": [
+        {
+          "query": "cost of manual data entry",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 27.4
+        },
+        {
+          "query": "eliminate manual data entry accounts payable",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "query": "how much does manual data entry cost hospitals annually in staff time?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "reduce manual data entry",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 83
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-15-n8n-use-cases-for-b2b-saas-(with-ready-to-clone-workflows)",
+      "clicks": 1,
+      "impressions": 393,
+      "ctr": 0.25,
+      "position": 8.1,
+      "top_queries": [
+        {
+          "query": "n8n b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "n8n enterprise use cases",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 22
+        },
+        {
+          "query": "n8n use cases examples",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 26
+        },
+        {
+          "query": "saas built on n8n examples",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "saas products built on n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 4.7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/real-estate-leads-go-cold-5-minutes-instant-response",
+      "clicks": 0,
+      "impressions": 377,
+      "ctr": 0,
+      "position": 6.1,
+      "top_queries": [
+        {
+          "query": "how to respond to real estate leads",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 15.4
+        },
+        {
+          "query": "real estate lead response time",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-claude-api-costs-n8n-batch-api",
+      "clicks": 1,
+      "impressions": 365,
+      "ctr": 0.27,
+      "position": 7.5,
+      "top_queries": [
+        {
+          "query": "anthropic batch api",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 21
+        },
+        {
+          "query": "anthropic batch api 50% discount",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "anthropic batch api 50% discount official docs",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api 50% discount pricing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api discount 50% pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/migrate-zapier-to-n8n-enterprise-ai",
+      "clicks": 0,
+      "impressions": 265,
+      "ctr": 0,
+      "position": 6.2,
+      "top_queries": [
+        {
+          "query": "\"n8n\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "\"zapier\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "i joined as the first enterprise architect at a scale-up using zapier everywhere. should i migrate us to 'proper' enterprise tools or can zapier be hardened for our next phase?",
+          "clicks": 0,
+          "impressions": 17,
+          "ctr": 0,
+          "position": 3.5
+        },
+        {
+          "query": "migrate from zapier to n8n",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "we're at $10m arr growing 200% annually and zapier is starting to break. at what point do companies typically outgrow zapier and what are the warning signs?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/xai-funding-20b-series-e-signals-new-compute-era",
+      "clicks": 0,
+      "impressions": 247,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "xai $20b series e funding january 2026",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "xai $20b series e january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "query": "xai funding $20b january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "xai funding $20b series e january 2026",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "xai series e funding $20b january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-insurance-claims-document-processing-guide",
+      "clicks": 0,
+      "impressions": 224,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [
+        {
+          "query": "what are the key benefits of using ai-powered document processing for insurance claims handling",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/cpa-firm-client-onboarding-automation-3-days",
+      "clicks": 0,
+      "impressions": 219,
+      "ctr": 0,
+      "position": 8.7,
+      "top_queries": [
+        {
+          "query": "\"client onboarding\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "\"karbon\" accounting",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 70.5
+        },
+        {
+          "query": "client onboarding software for accountants",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 97.5
+        },
+        {
+          "query": "tax bookkeeping client onboarding automation for course creators",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 9.6
+        },
+        {
+          "query": "why does migrating accounting clients take so long",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 11.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automated-apollo-sequence-enrollment-intent-webhooks",
+      "clicks": 0,
+      "impressions": 213,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "apollo basic plan intent topics 6",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 57
+        },
+        {
+          "query": "auto-enroll contacts into sequences based on intent",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies/ai-outbound-sales-automation-personalisation-case-study",
+      "clicks": 0,
+      "impressions": 194,
+      "ctr": 0,
+      "position": 6.5,
+      "top_queries": [
+        {
+          "query": "ai marketing automation case studies -site:youtube.com -site:reddit.com -site:x.com -site:twitter.com -site:facebook.com -site:instagram.com -site:tiktok.com -site:linkedin.com -site:pinterest.com -site:nytimes.com -site:wsj.com -site:yelp.com -site:rottentomatoes.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "how squadstack helps scale outbound sales without increasing headcount",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "how to set up automated outbound sales without sacrificing personalization",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 16
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/articles/how-us-d2c-brands-cut-customer-service-response-time-from-8-hours-to-8-minutes",
+      "clicks": 0,
+      "impressions": 186,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "abandoned cart calling platform case studies d2c uplift vs email sms",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "abandoned cart calling platform case studies uplift vs email sms d2c",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 16.7
+        },
+        {
+          "query": "how d2c brands scale customer support efficiently",
+          "clicks": 0,
+          "impressions": 23,
+          "ctr": 0,
+          "position": 12.2
+        },
+        {
+          "query": "how do d2c brands scale customer support efficiently",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/how-to-build-an-ai-multi-agent-content-system-in-n8n",
+      "clicks": 0,
+      "impressions": 186,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/he-glass-box-agency-why-chronexa-is-built-on-n8n-(and-why-you-should-care)",
+      "clicks": 0,
+      "impressions": 157,
+      "ctr": 0,
+      "position": 4.5,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-that-qualifies-your-lead-for-high-ticket-clients",
+      "clicks": 0,
+      "impressions": 145,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "ai lead score calculation b2b saas",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9.5
+        },
+        {
+          "query": "ai lead score for mobility manager in unit 85",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automating-lead-degradation-scoring-unresponsive-prospects",
+      "clicks": 0,
+      "impressions": 129,
+      "ctr": 0,
+      "position": 9.9,
+      "top_queries": [
+        {
+          "query": "abandonment intent scoring software",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "conversion scoring for abandoned leads",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 5.3
+        },
+        {
+          "query": "event marketing lead follow-up statistics decay rate",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "lead scoring subtract points inactivity bounce personal email domain",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "pardot score decay",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 52
+        }
+      ],
+      "ctr_opportunity": true
+    }
+  ],
+  "positions_11_to_20": [
+    {
+      "page": "https://chronexa.io/blog/ai-in-2025-hype-reality-and-the-market-landscape",
+      "clicks": 1,
+      "impressions": 4955,
+      "ctr": 0.02,
+      "position": 10.9,
+      "top_queries": [
+        {
+          "query": "ai adoption 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "ai agents hype vs reality 2025 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "ai articles 2025",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 37
+        },
+        {
+          "query": "ai buyer predictability 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 99
+        },
+        {
+          "query": "ai buzzwords hype vs reality 2024 2025",
+          "clicks": 0,
+          "impressions": 525,
+          "ctr": 0,
+          "position": 8.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-ai-lead-scoring-platforms-b2b-saas",
+      "clicks": 0,
+      "impressions": 2470,
+      "ctr": 0,
+      "position": 10.5,
+      "top_queries": [
+        {
+          "query": "affordable predictive ai lead scoring services",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "ai bdr solutions for lead scoring",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai lead score calculation b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 8.8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives us",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 6.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-ai-sdr-engine-automation-case-study",
+      "clicks": 0,
+      "impressions": 1418,
+      "ctr": 0,
+      "position": 10.1,
+      "top_queries": [
+        {
+          "query": "automation tools for venture compliance documents",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "aws textract hipaa eligible service baa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best document automation software compliance legal finance healthcare",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 14.2
+        },
+        {
+          "query": "best document automation tools for regulated industries",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best knowledge management solutions for regulated industries hipaa fintech",
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 17.8
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams",
+      "clicks": 0,
+      "impressions": 967,
+      "ctr": 0,
+      "position": 14.5,
+      "top_queries": [
+        {
+          "query": "ai workflow automation n8n zapier dify flowise comparison",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 75.8
+        },
+        {
+          "query": "automation tutorials",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "brauche technische dokumentation und api-specs für workflow-automatisierung plattformen - will evaluieren ob unsere entwickler damit klarkommen und wie flexibel wir eigene prozesslogik abbilden können. wichtig ist dass die api gut dokumentiert ist, keine lust auf trial-and-error.",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on use cases",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "how do i learn it?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-n8n-automation-experts-india",
+      "clicks": 1,
+      "impressions": 800,
+      "ctr": 0.13,
+      "position": 10.4,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "hire n8n expert",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 43.7
+        },
+        {
+          "query": "hire n8n experts",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "n8n automation company in delhi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 80
+        },
+        {
+          "query": "n8n automation experts",
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0,
+          "position": 20.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-invoice-processing-cost-per-invoice-automation",
+      "clicks": 0,
+      "impressions": 524,
+      "ctr": 0,
+      "position": 12.6,
+      "top_queries": [
+        {
+          "query": "average cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "average cost to process invoice",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "cost of invoice processing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 35.5
+        },
+        {
+          "query": "cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 20.3
+        },
+        {
+          "query": "cost of manual invoice processing per invoice",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/property-management-automation-playbook-portfolio-owners",
+      "clicks": 0,
+      "impressions": 373,
+      "ctr": 0,
+      "position": 11.3,
+      "top_queries": [
+        {
+          "query": "\"portfolio automation\" revenue management",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "\"portfolio automation\" revenue management enterprise",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 4.4
+        },
+        {
+          "query": "-site:facebook.com -site:fb.me -site:youtube.com -site:youtu.be -site:youtube.be -site:twitter.com -site:instagram.com -site:tiktok.com -site:vm.tiktok.com -site:t.co -site:x.com -site:reddit.com \"property management\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "query": "automate monthly owner statements property management",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "automate monthly owner statements property management software",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 18
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-kyc-processing-cost-ai-automation",
+      "clicks": 0,
+      "impressions": 318,
+      "ctr": 0,
+      "position": 17.5,
+      "top_queries": [
+        {
+          "query": "automate kyc with agentic ai",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 48
+        },
+        {
+          "query": "cost savings from implementing automated kyb solutions.",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 41.4
+        },
+        {
+          "query": "efficient kyc management",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 96.3
+        },
+        {
+          "query": "kyc and tax compliance automation in payout workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "kyc conversion rates",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 19.7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-sdr-engine-lead-research-automation",
+      "clicks": 0,
+      "impressions": 172,
+      "ctr": 0,
+      "position": 20,
+      "top_queries": [
+        {
+          "query": "ai sdr solutions reduce manual prospecting time",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "query": "best ai sdr for lead generation",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 89.5
+        },
+        {
+          "query": "exa ai sdr",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "generate pipeline with ai sdr",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        },
+        {
+          "query": "how ai reduces manual research time for sales development reps",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/services/sales-operations",
+      "clicks": 0,
+      "impressions": 151,
+      "ctr": 0,
+      "position": 17.4,
+      "top_queries": [
+        {
+          "query": "automate lead qualification revenue operations",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 34.7
+        },
+        {
+          "query": "crm recommandé experts-comptables pipeline leads automatisation",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "sales execution platform",
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 58
+        },
+        {
+          "query": "sales execution solution",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 81.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-agent-platforms-uae-guide",
+      "clicks": 0,
+      "impressions": 66,
+      "ctr": 0,
+      "position": 15.8,
+      "top_queries": [
+        {
+          "query": "\"ai\" \"uae\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "ai agent platforms uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        },
+        {
+          "query": "ai agents for enterprise uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 12
+        },
+        {
+          "query": "best agentic ai providers dubai",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "query": "best agentic ai providers emirates",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 58
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-workflow-templates-for-founders-7-automations-to-ship-in-a-weekend",
+      "clicks": 0,
+      "impressions": 60,
+      "ctr": 0,
+      "position": 11.3,
+      "top_queries": [
+        {
+          "query": "automation workflow templates keywords",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": true
+    }
+  ],
+  "all_pages": [
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026",
+      "clicks": 5,
+      "impressions": 38758,
+      "ctr": 0.01,
+      "position": 7.4,
+      "top_queries": [
+        {
+          "query": "\"ai agent\" \"openai chat model\" \"window buffer memory\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "\"ai agent\" \"tools agent\" n8n",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "\"label:inbox is:unread\" gmail search",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 12
+        },
+        {
+          "query": "\"window buffer memory\" \"openai chat model\"",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 8.4
+        },
+        {
+          "query": "2026 one person company ai agent stack n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 12.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-ai-automation-agencies-b2b-saas-2026",
+      "clicks": 6,
+      "impressions": 7933,
+      "ctr": 0.08,
+      "position": 8.8,
+      "top_queries": [
+        {
+          "query": "\"ai workflows\" \"b2b saas\" startup",
+          "clicks": 0,
+          "impressions": 126,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "agencias que realicen arquitectura de automatización y agentes de ia",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "agencies specializing in b2b saas ai assistant recommendations",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "agency",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai agencies 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 33
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-in-2025-hype-reality-and-the-market-landscape",
+      "clicks": 1,
+      "impressions": 4955,
+      "ctr": 0.02,
+      "position": 10.9,
+      "top_queries": [
+        {
+          "query": "ai adoption 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "ai agents hype vs reality 2025 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "ai articles 2025",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 37
+        },
+        {
+          "query": "ai buyer predictability 2025",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 99
+        },
+        {
+          "query": "ai buzzwords hype vs reality 2024 2025",
+          "clicks": 0,
+          "impressions": 525,
+          "ctr": 0,
+          "position": 8.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-zapier-in-2026-cost-ai-features-and-when-to-choose-each",
+      "clicks": 0,
+      "impressions": 4549,
+      "ctr": 0,
+      "position": 8.3,
+      "top_queries": [
+        {
+          "query": "best value zapier vs n8n",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 3.9
+        },
+        {
+          "query": "evaluate the n8n company zapier on pricing & evaluation",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 7.2
+        },
+        {
+          "query": "how does zapier compare to n8n?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "is n8n a good zapier alternative?",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 3.4
+        },
+        {
+          "query": "is n8n a more affordable option than zapier?",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 4.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-automation-agency-pricing-what-you-get",
+      "clicks": 3,
+      "impressions": 3735,
+      "ctr": 0.08,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "\"ai automation agency\"",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 181.5
+        },
+        {
+          "query": "aeve ai pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "ai automation agency business model pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "ai automation agency business model revenue",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "ai automation agency cost",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 38.2
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/self-hosting-n8n-architecture-security-and-cost-breakdown",
+      "clicks": 1,
+      "impressions": 3458,
+      "ctr": 0.03,
+      "position": 8.6,
+      "top_queries": [
+        {
+          "query": "\"helm install n8n-operator\"",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 10.7
+        },
+        {
+          "query": "\"helm install n8n-operator\" \"n8n\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" \"helm install\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n-operator\" helm chart",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "\"n8n/n8n-operator\" helm",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 11
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-top-automation-agencies-uae-dubai",
+      "clicks": 7,
+      "impressions": 2893,
+      "ctr": 0.24,
+      "position": 30,
+      "top_queries": [
+        {
+          "query": "mrkhan digital",
+          "clicks": 1,
+          "impressions": 1,
+          "ctr": 100,
+          "position": 8
+        },
+        {
+          "query": "4. ai automation dubai",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 8.8
+        },
+        {
+          "query": "9. crm automation uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 88
+        },
+        {
+          "query": "abu dhabi ai automation company",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai advertising agencies in sharjah",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 65
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/fintech-automation-with-n8n-8-workflows-for-compliance-teams",
+      "clicks": 12,
+      "impressions": 2815,
+      "ctr": 0.43,
+      "position": 7.2,
+      "top_queries": [
+        {
+          "query": "aml workflow automation for fintech",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 5.5
+        },
+        {
+          "query": "anymore",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "does n8n support audit logging for compliance needs?",
+          "clicks": 0,
+          "impressions": 24,
+          "ctr": 0,
+          "position": 9.1
+        },
+        {
+          "query": "evaluate the fintech company gatekeeper on accounting workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on integrations",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 47.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-node-enterprise-architecture-guide-(2026)",
+      "clicks": 0,
+      "impressions": 2647,
+      "ctr": 0,
+      "position": 9.1,
+      "top_queries": [
+        {
+          "query": "ai agent node n8n",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 27.5
+        },
+        {
+          "query": "ai agent nodes",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "query": "n8n agent node",
+          "clicks": 0,
+          "impressions": 48,
+          "ctr": 0,
+          "position": 30.7
+        },
+        {
+          "query": "n8n agent node documentation",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "n8n ai agent 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-ai-lead-scoring-platforms-b2b-saas",
+      "clicks": 0,
+      "impressions": 2470,
+      "ctr": 0,
+      "position": 10.5,
+      "top_queries": [
+        {
+          "query": "affordable predictive ai lead scoring services",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "ai bdr solutions for lead scoring",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "ai lead score calculation b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 8.8
+        },
+        {
+          "query": "ai lead score calculation b2b saas executives us",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 6.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-(2026)",
+      "clicks": 2,
+      "impressions": 2449,
+      "ctr": 0.08,
+      "position": 5.2,
+      "top_queries": [
+        {
+          "query": "n8n elevenlabs integration 2026",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 2.6
+        },
+        {
+          "query": "n8n elevenlabs text to speech workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/",
+      "clicks": 121,
+      "impressions": 1876,
+      "ctr": 6.45,
+      "position": 3.6,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 99,
+          "impressions": 696,
+          "ctr": 14.22,
+          "position": 2.5
+        },
+        {
+          "query": "chronexa on time",
+          "clicks": 1,
+          "impressions": 223,
+          "ctr": 0.45,
+          "position": 4.7
+        },
+        {
+          "query": "chronexa one time",
+          "clicks": 1,
+          "impressions": 64,
+          "ctr": 1.56,
+          "position": 7.1
+        },
+        {
+          "query": "\"chronexa\"",
+          "clicks": 0,
+          "impressions": 46,
+          "ctr": 0,
+          "position": 1.2
+        },
+        {
+          "query": "best ai voice agent agency for outbound sales calls?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-ai-sdr-engine-automation-case-study",
+      "clicks": 0,
+      "impressions": 1418,
+      "ctr": 0,
+      "position": 10.1,
+      "top_queries": [
+        {
+          "query": "automation tools for venture compliance documents",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "aws textract hipaa eligible service baa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best document automation software compliance legal finance healthcare",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 14.2
+        },
+        {
+          "query": "best document automation tools for regulated industries",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "best knowledge management solutions for regulated industries hipaa fintech",
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 17.8
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams",
+      "clicks": 0,
+      "impressions": 967,
+      "ctr": 0,
+      "position": 14.5,
+      "top_queries": [
+        {
+          "query": "ai workflow automation n8n zapier dify flowise comparison",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 75.8
+        },
+        {
+          "query": "automation tutorials",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "query": "brauche technische dokumentation und api-specs für workflow-automatisierung plattformen - will evaluieren ob unsere entwickler damit klarkommen und wie flexibel wir eigene prozesslogik abbilden können. wichtig ist dass die api gut dokumentiert ist, keine lust auf trial-and-error.",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "evaluate the workflow automation software company n8n on use cases",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "how do i learn it?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-langchain-integration-complete-rag-workflow-tutorial",
+      "clicks": 1,
+      "impressions": 879,
+      "ctr": 0.11,
+      "position": 6.8,
+      "top_queries": [
+        {
+          "query": "n8n ai features langchain rag",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "n8n langchain nodes rag",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "n8n retrieval augmented generation workflow",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-n8n-automation-experts-india",
+      "clicks": 1,
+      "impressions": 800,
+      "ctr": 0.13,
+      "position": 10.4,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "hire n8n expert",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 43.7
+        },
+        {
+          "query": "hire n8n experts",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "n8n automation company in delhi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 80
+        },
+        {
+          "query": "n8n automation experts",
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0,
+          "position": 20.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-best-n8n-consultants-by-region",
+      "clicks": 2,
+      "impressions": 753,
+      "ctr": 0.27,
+      "position": 7.1,
+      "top_queries": [
+        {
+          "query": "\"n8n agency\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 47
+        },
+        {
+          "query": "\"n8n consultant\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 255
+        },
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9.5
+        },
+        {
+          "query": "n8n agencies",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 95
+        },
+        {
+          "query": "n8n consultants",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 40.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/legal-tech-automation-12-n8n-workflows-for-law-firms",
+      "clicks": 0,
+      "impressions": 747,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [
+        {
+          "query": "subpoena workflow automation",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 57.2
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/secure-ai-workflow-automation-compliance-risks",
+      "clicks": 0,
+      "impressions": 565,
+      "ctr": 0,
+      "position": 22.5,
+      "top_queries": [
+        {
+          "query": "ai compliance workflow",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 66.5
+        },
+        {
+          "query": "ai platforms for enterprise workflow automation with full transparency auditability compliance hipaa gdpr finance healthcare",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 12.9
+        },
+        {
+          "query": "ai platforms for enterprise workflow automation with human-in-the-loop human arbitration compliance hipaa gdpr finance healthcare",
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 7.1
+        },
+        {
+          "query": "ai remediation workflow",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 84.7
+        },
+        {
+          "query": "ai security for workflows",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 58.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure",
+      "clicks": 0,
+      "impressions": 559,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "ai data extraction cost for bulk document processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "query": "ai document automation cost savings",
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "position": 13.9
+        },
+        {
+          "query": "ai document processing time reduction percentage",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 2
+        },
+        {
+          "query": "ai documentation cost savings",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "cost of ai data extraction for bulk document processing",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 11.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies",
+      "clicks": 0,
+      "impressions": 535,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "ai automation case studies with roi analysis and customer success stories",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "ai automation roi case studies",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9.7
+        },
+        {
+          "query": "case studies ai data entry automation roi",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "case studies sales automation roi success stories",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 7.1
+        },
+        {
+          "query": "case studies sales automation success stories roi",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-invoice-processing-cost-per-invoice-automation",
+      "clicks": 0,
+      "impressions": 524,
+      "ctr": 0,
+      "position": 12.6,
+      "top_queries": [
+        {
+          "query": "average cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        },
+        {
+          "query": "average cost to process invoice",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "query": "cost of invoice processing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 35.5
+        },
+        {
+          "query": "cost of manual invoice processing",
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 20.3
+        },
+        {
+          "query": "cost of manual invoice processing per invoice",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/what-is-n8n-the-2026-guide-to-open-source-workflow-ai-automation",
+      "clicks": 0,
+      "impressions": 486,
+      "ctr": 0,
+      "position": 9.9,
+      "top_queries": [
+        {
+          "query": "is n8n open source 2026",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 9.8
+        },
+        {
+          "query": "n8n features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 14
+        },
+        {
+          "query": "n8n features pros cons use cases pricing 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "query": "n8n integrations number of nodes 2026",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 12.4
+        },
+        {
+          "query": "n8n latest features 2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 17.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/about",
+      "clicks": 3,
+      "impressions": 472,
+      "ctr": 0.64,
+      "position": 5.7,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 1,
+          "impressions": 151,
+          "ctr": 0.66,
+          "position": 8.4
+        },
+        {
+          "query": "\"chronexa\"",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "yes",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/manual-data-entry-cost-per-employee-how-to-stop",
+      "clicks": 1,
+      "impressions": 399,
+      "ctr": 0.25,
+      "position": 8.4,
+      "top_queries": [
+        {
+          "query": "cost of manual data entry",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 27.4
+        },
+        {
+          "query": "eliminate manual data entry accounts payable",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "query": "how much does manual data entry cost hospitals annually in staff time?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "reduce manual data entry",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 83
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/top-15-n8n-use-cases-for-b2b-saas-(with-ready-to-clone-workflows)",
+      "clicks": 1,
+      "impressions": 393,
+      "ctr": 0.25,
+      "position": 8.1,
+      "top_queries": [
+        {
+          "query": "n8n b2b saas",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "n8n enterprise use cases",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 22
+        },
+        {
+          "query": "n8n use cases examples",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 26
+        },
+        {
+          "query": "saas built on n8n examples",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "saas products built on n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 4.7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/real-estate-leads-go-cold-5-minutes-instant-response",
+      "clicks": 0,
+      "impressions": 377,
+      "ctr": 0,
+      "position": 6.1,
+      "top_queries": [
+        {
+          "query": "how to respond to real estate leads",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 15.4
+        },
+        {
+          "query": "real estate lead response time",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/property-management-automation-playbook-portfolio-owners",
+      "clicks": 0,
+      "impressions": 373,
+      "ctr": 0,
+      "position": 11.3,
+      "top_queries": [
+        {
+          "query": "\"portfolio automation\" revenue management",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 7.8
+        },
+        {
+          "query": "\"portfolio automation\" revenue management enterprise",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 4.4
+        },
+        {
+          "query": "-site:facebook.com -site:fb.me -site:youtube.com -site:youtu.be -site:youtube.be -site:twitter.com -site:instagram.com -site:tiktok.com -site:vm.tiktok.com -site:t.co -site:x.com -site:reddit.com \"property management\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "query": "automate monthly owner statements property management",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 15.3
+        },
+        {
+          "query": "automate monthly owner statements property management software",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 18
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-claude-api-costs-n8n-batch-api",
+      "clicks": 1,
+      "impressions": 365,
+      "ctr": 0.27,
+      "position": 7.5,
+      "top_queries": [
+        {
+          "query": "anthropic batch api",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 21
+        },
+        {
+          "query": "anthropic batch api 50% discount",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "anthropic batch api 50% discount official docs",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api 50% discount pricing",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "anthropic batch api discount 50% pricing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-for-agencies-packaging-pricing-and-selling-automation-retainers",
+      "clicks": 0,
+      "impressions": 333,
+      "ctr": 0,
+      "position": 3.8,
+      "top_queries": [
+        {
+          "query": "n8n automation agency pricing retainer",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 2
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/reduce-kyc-processing-cost-ai-automation",
+      "clicks": 0,
+      "impressions": 318,
+      "ctr": 0,
+      "position": 17.5,
+      "top_queries": [
+        {
+          "query": "automate kyc with agentic ai",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 48
+        },
+        {
+          "query": "cost savings from implementing automated kyb solutions.",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 41.4
+        },
+        {
+          "query": "efficient kyc management",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 96.3
+        },
+        {
+          "query": "kyc and tax compliance automation in payout workflows",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "query": "kyc conversion rates",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 19.7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/founder-bottleneck-decisions-costing-growth",
+      "clicks": 0,
+      "impressions": 270,
+      "ctr": 0,
+      "position": 21.8,
+      "top_queries": [
+        {
+          "query": "firefighter inurl:blog",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 34
+        },
+        {
+          "query": "founder bottleneck",
+          "clicks": 0,
+          "impressions": 54,
+          "ctr": 0,
+          "position": 55.4
+        },
+        {
+          "query": "founder bottleneck business",
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 58.6
+        },
+        {
+          "query": "founder decision bottleneck",
+          "clicks": 0,
+          "impressions": 46,
+          "ctr": 0,
+          "position": 19.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/migrate-zapier-to-n8n-enterprise-ai",
+      "clicks": 0,
+      "impressions": 265,
+      "ctr": 0,
+      "position": 6.2,
+      "top_queries": [
+        {
+          "query": "\"n8n\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "\"zapier\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "query": "i joined as the first enterprise architect at a scale-up using zapier everywhere. should i migrate us to 'proper' enterprise tools or can zapier be hardened for our next phase?",
+          "clicks": 0,
+          "impressions": 17,
+          "ctr": 0,
+          "position": 3.5
+        },
+        {
+          "query": "migrate from zapier to n8n",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "we're at $10m arr growing 200% annually and zapier is starting to break. at what point do companies typically outgrow zapier and what are the warning signs?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/reserve-study-automation-for-hoas-ai-powered-reserve-analysis-in-hours-not-weeks",
+      "clicks": 0,
+      "impressions": 249,
+      "ctr": 0,
+      "position": 23.1,
+      "top_queries": [
+        {
+          "query": "automated reserve tracking for condo boards",
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0,
+          "position": 23
+        },
+        {
+          "query": "capital reserve planning software for hoas",
+          "clicks": 0,
+          "impressions": 44,
+          "ctr": 0,
+          "position": 25.9
+        },
+        {
+          "query": "coa reserve fund planning software",
+          "clicks": 0,
+          "impressions": 32,
+          "ctr": 0,
+          "position": 26.6
+        },
+        {
+          "query": "hoa reserve fund planning software",
+          "clicks": 0,
+          "impressions": 37,
+          "ctr": 0,
+          "position": 24.6
+        },
+        {
+          "query": "hoa reserve fund tracking software",
+          "clicks": 0,
+          "impressions": 48,
+          "ctr": 0,
+          "position": 24.1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/xai-funding-20b-series-e-signals-new-compute-era",
+      "clicks": 0,
+      "impressions": 247,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "xai $20b series e funding january 2026",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "xai $20b series e january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "query": "xai funding $20b january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "xai funding $20b series e january 2026",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 8.3
+        },
+        {
+          "query": "xai series e funding $20b january 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-insurance-claims-document-processing-guide",
+      "clicks": 0,
+      "impressions": 224,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [
+        {
+          "query": "what are the key benefits of using ai-powered document processing for insurance claims handling",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/cpa-firm-client-onboarding-automation-3-days",
+      "clicks": 0,
+      "impressions": 219,
+      "ctr": 0,
+      "position": 8.7,
+      "top_queries": [
+        {
+          "query": "\"client onboarding\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "\"karbon\" accounting",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 70.5
+        },
+        {
+          "query": "client onboarding software for accountants",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 97.5
+        },
+        {
+          "query": "tax bookkeeping client onboarding automation for course creators",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 9.6
+        },
+        {
+          "query": "why does migrating accounting clients take so long",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 11.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automated-apollo-sequence-enrollment-intent-webhooks",
+      "clicks": 0,
+      "impressions": 213,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "apollo basic plan intent topics 6",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 57
+        },
+        {
+          "query": "auto-enroll contacts into sequences based on intent",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies/ai-outbound-sales-automation-personalisation-case-study",
+      "clicks": 0,
+      "impressions": 194,
+      "ctr": 0,
+      "position": 6.5,
+      "top_queries": [
+        {
+          "query": "ai marketing automation case studies -site:youtube.com -site:reddit.com -site:x.com -site:twitter.com -site:facebook.com -site:instagram.com -site:tiktok.com -site:linkedin.com -site:pinterest.com -site:nytimes.com -site:wsj.com -site:yelp.com -site:rottentomatoes.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "how squadstack helps scale outbound sales without increasing headcount",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "how to set up automated outbound sales without sacrificing personalization",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 16
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/articles/how-us-d2c-brands-cut-customer-service-response-time-from-8-hours-to-8-minutes",
+      "clicks": 0,
+      "impressions": 186,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "abandoned cart calling platform case studies d2c uplift vs email sms",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "abandoned cart calling platform case studies uplift vs email sms d2c",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 16.7
+        },
+        {
+          "query": "how d2c brands scale customer support efficiently",
+          "clicks": 0,
+          "impressions": 23,
+          "ctr": 0,
+          "position": 12.2
+        },
+        {
+          "query": "how do d2c brands scale customer support efficiently",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/how-to-build-an-ai-multi-agent-content-system-in-n8n",
+      "clicks": 0,
+      "impressions": 186,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-sdr-engine-lead-research-automation",
+      "clicks": 0,
+      "impressions": 172,
+      "ctr": 0,
+      "position": 20,
+      "top_queries": [
+        {
+          "query": "ai sdr solutions reduce manual prospecting time",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "query": "best ai sdr for lead generation",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 89.5
+        },
+        {
+          "query": "exa ai sdr",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "generate pipeline with ai sdr",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        },
+        {
+          "query": "how ai reduces manual research time for sales development reps",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/he-glass-box-agency-why-chronexa-is-built-on-n8n-(and-why-you-should-care)",
+      "clicks": 0,
+      "impressions": 157,
+      "ctr": 0,
+      "position": 4.5,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/services/sales-operations",
+      "clicks": 0,
+      "impressions": 151,
+      "ctr": 0,
+      "position": 17.4,
+      "top_queries": [
+        {
+          "query": "automate lead qualification revenue operations",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 34.7
+        },
+        {
+          "query": "crm recommandé experts-comptables pipeline leads automatisation",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 8.5
+        },
+        {
+          "query": "sales execution platform",
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 58
+        },
+        {
+          "query": "sales execution solution",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 81.4
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-that-qualifies-your-lead-for-high-ticket-clients",
+      "clicks": 0,
+      "impressions": 145,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [
+        {
+          "query": "ai lead score calculation b2b saas",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9.5
+        },
+        {
+          "query": "ai lead score for mobility manager in unit 85",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automating-lead-degradation-scoring-unresponsive-prospects",
+      "clicks": 0,
+      "impressions": 129,
+      "ctr": 0,
+      "position": 9.9,
+      "top_queries": [
+        {
+          "query": "abandonment intent scoring software",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "query": "conversion scoring for abandoned leads",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 5.3
+        },
+        {
+          "query": "event marketing lead follow-up statistics decay rate",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "lead scoring subtract points inactivity bounce personal email domain",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "pardot score decay",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 52
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies/ai-automation-tax-workflow-cpa-case-study",
+      "clicks": 0,
+      "impressions": 129,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [
+        {
+          "query": "i am a 35-44 or 45-54 year old chief executive officer, chief financial officer, chief technology officer, customer success manager, it manager, product manager, or chief marketing officer in the healthcare, finance, consumer goods, hospitality, technology, or pharma industry. my job seniority is at the director, vp, senior, executive, or owner level. i work at a company with 250-1k employees or 1k-10k employees. my main motivations: • maintain control over how ai automates workflows ￼ • guarantee compliance (hipaa, fca, gdpr, financial risk) ￼ • improve efficiency without adding headcount • ensure accuracy in every customer interaction • drive continuous improvement with transparent reporting my main pain points: • inconsistent agent performance, tribal knowledge, and outdated pdfs ￼ • long handle times and escalations due to manual workflows ￼ • compliance exposure from unstructured or error-prone processes ￼ • high cost of agent churn and slow onboarding ￼ • “black box” ai that can’t be trusted or audited decision automation for trial-to-paid conversion flows.",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "print automation for accounting firms",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 100
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/services/custom-workflows",
+      "clicks": 0,
+      "impressions": 129,
+      "ctr": 0,
+      "position": 21.9,
+      "top_queries": [
+        {
+          "query": "custom ai workflow automation",
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0,
+          "position": 48.9
+        },
+        {
+          "query": "custom automation workflows",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 49
+        },
+        {
+          "query": "custom workflow solutions",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 80.8
+        },
+        {
+          "query": "customizable ai workflows solutions",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 32
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/hipaa-compliant-healthcare-document-automation",
+      "clicks": 0,
+      "impressions": 125,
+      "ctr": 0,
+      "position": 6,
+      "top_queries": [
+        {
+          "query": "how do i set up document automation specifically for healthcare settings?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "query": "medical practice automation hipaa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 81
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-powered-ma-due-diligence-case-study",
+      "clicks": 0,
+      "impressions": 118,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-agency-launch-kit-client-acquisition-framework-(free)",
+      "clicks": 0,
+      "impressions": 115,
+      "ctr": 0,
+      "position": 6.7,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/how-to-build-an-ai-powered-lead-generation-machine-in-n8n",
+      "clicks": 0,
+      "impressions": 108,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "chronexa field track",
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 7.9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/real-time-inbound-lead-routing-slack-sla-notification-automation",
+      "clicks": 0,
+      "impressions": 106,
+      "ctr": 0,
+      "position": 6.8,
+      "top_queries": [
+        {
+          "query": "\"scaleops\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 4.7
+        },
+        {
+          "query": "guaranteed real-time lead routing with instant rep notification",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 16.8
+        },
+        {
+          "query": "slack alerts when lead reaches certain score or lifecycle stage",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/seo-automation-with-n8n-from-keyword-research-to-publishing",
+      "clicks": 0,
+      "impressions": 104,
+      "ctr": 0,
+      "position": 8.2,
+      "top_queries": [
+        {
+          "query": "automated keyword research with n8n",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        },
+        {
+          "query": "seo automation using n8n",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 15.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/what-is-ai-workflow-automation-definition-business-owners",
+      "clicks": 0,
+      "impressions": 102,
+      "ctr": 0,
+      "position": 46.4,
+      "top_queries": [
+        {
+          "query": "ai automation workflow",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 86.5
+        },
+        {
+          "query": "ai automation workflow business",
+          "clicks": 0,
+          "impressions": 29,
+          "ctr": 0,
+          "position": 68.3
+        },
+        {
+          "query": "ai workflow automation",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 74.5
+        },
+        {
+          "query": "ai workflow automation business",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 63
+        },
+        {
+          "query": "ai workflow automation definition",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 47
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/beyond-chatgpt-why-law-firms-are-migrating-to-private-self-hosted-ai-infrastructure-in-2026",
+      "clicks": 0,
+      "impressions": 99,
+      "ctr": 0,
+      "position": 7.5,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/legal-contract-review-automation-guide",
+      "clicks": 0,
+      "impressions": 92,
+      "ctr": 0,
+      "position": 5.8,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agent-features-2026",
+      "clicks": 0,
+      "impressions": 91,
+      "ctr": 0,
+      "position": 9.8,
+      "top_queries": [
+        {
+          "query": "\"n8n\" clients or pricing or sales or scope or creep",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 86
+        },
+        {
+          "query": "n8n ai agent capabilities 2025 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "n8n ai agent capabilities 2026",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 9.6
+        },
+        {
+          "query": "n8n ai agent features 2026",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 9.7
+        },
+        {
+          "query": "n8n ai agents capabilities 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/productized-automation-vs-custom-development-the-real-cost-breakdown",
+      "clicks": 0,
+      "impressions": 89,
+      "ctr": 0,
+      "position": 6.3,
+      "top_queries": [
+        {
+          "query": "productized automation",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 12.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automated-crm-data-hygiene-stale-opportunity-archival",
+      "clicks": 0,
+      "impressions": 88,
+      "ctr": 0,
+      "position": 6.2,
+      "top_queries": [
+        {
+          "query": "ai tools for sales pipeline hygiene stale zombie deals detection",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "stale opportunity",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        },
+        {
+          "query": "what tools help fix stale opportunities with past close dates?",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 11.3
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/healthcare-compliance-automation-pass-hipaa-audits-in-2-hours-instead-of-3-weeks",
+      "clicks": 0,
+      "impressions": 88,
+      "ctr": 0,
+      "position": 8.1,
+      "top_queries": [
+        {
+          "query": "how long does hipaa compliance automation typically take?",
+          "clicks": 0,
+          "impressions": 24,
+          "ctr": 0,
+          "position": 8
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/you-re-not-understaffed.-you-re-under-automated.",
+      "clicks": 0,
+      "impressions": 75,
+      "ctr": 0,
+      "position": 7.1,
+      "top_queries": [
+        {
+          "query": "private equity fund tax k-1 preparation manual workflow pain points buyers",
+          "clicks": 0,
+          "impressions": 67,
+          "ctr": 0,
+          "position": 7.5
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/custom-crm-lead-scoring-models-vs-n8n-workflow-orchestration",
+      "clicks": 0,
+      "impressions": 70,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [
+        {
+          "query": "\"n8n\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-agent-platforms-uae-guide",
+      "clicks": 0,
+      "impressions": 66,
+      "ctr": 0,
+      "position": 15.8,
+      "top_queries": [
+        {
+          "query": "\"ai\" \"uae\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "ai agent platforms uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        },
+        {
+          "query": "ai agents for enterprise uae",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 12
+        },
+        {
+          "query": "best agentic ai providers dubai",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "query": "best agentic ai providers emirates",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 58
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog",
+      "clicks": 0,
+      "impressions": 62,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [
+        {
+          "query": "chronexa",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-workflow-templates-for-founders-7-automations-to-ship-in-a-weekend",
+      "clicks": 0,
+      "impressions": 60,
+      "ctr": 0,
+      "position": 11.3,
+      "top_queries": [
+        {
+          "query": "automation workflow templates keywords",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/case-studies/how-leading-law-firm-automated-regulatory-intelligence",
+      "clicks": 0,
+      "impressions": 59,
+      "ctr": 0,
+      "position": 34.9,
+      "top_queries": [
+        {
+          "query": "\"regulatory changes\" and (\"whatsapp\" or \"api\")",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        },
+        {
+          "query": "automated executive reporting",
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 81.8
+        },
+        {
+          "query": "how can an llm assist in identifying regulatory requirements for human capital advisory in different jurisdictions",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/blog-ai-powered-reserve-study-platform-case-study",
+      "clicks": 0,
+      "impressions": 58,
+      "ctr": 0,
+      "position": 5.6,
+      "top_queries": [
+        {
+          "query": "\"tesseractocr\" \"n8n-nodes-base\"",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 3.9
+        }
+      ],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-invoice-processing-mid-market-guide",
+      "clicks": 0,
+      "impressions": 52,
+      "ctr": 0,
+      "position": 7.6,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/fixing-the-legal-operations-nightmare-with-ai-workflows",
+      "clicks": 0,
+      "impressions": 51,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [],
+      "ctr_opportunity": true
+    },
+    {
+      "page": "https://chronexa.io/blog/automating-out-of-office-reply-parsing-b2b-outbound",
+      "clicks": 0,
+      "impressions": 50,
+      "ctr": 0,
+      "position": 5.4,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-reserve-study-automation-propertyscope",
+      "clicks": 0,
+      "impressions": 49,
+      "ctr": 0,
+      "position": 6.3,
+      "top_queries": [
+        {
+          "query": "data entry for reserve study",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 23
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/how-to-build-a-lead-capture-system-that-doesn-t-leak-revenue",
+      "clicks": 0,
+      "impressions": 49,
+      "ctr": 0,
+      "position": 32,
+      "top_queries": [
+        {
+          "query": "what tools automatically prevent revenue leaks from post-sales teams?",
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 54.5
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/how-multi-channel-d2c-brands-eliminate-inventory-stockouts-across-shopify-amazon-and-walmart",
+      "clicks": 0,
+      "impressions": 46,
+      "ctr": 0,
+      "position": 7.2,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agents-features-2026",
+      "clicks": 0,
+      "impressions": 46,
+      "ctr": 0,
+      "position": 8.3,
+      "top_queries": [
+        {
+          "query": "n8n 2026 release",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        },
+        {
+          "query": "n8n ai agent features 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 14
+        },
+        {
+          "query": "n8n ai agents 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "n8n ai agents documentation 2026",
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 7.5
+        },
+        {
+          "query": "n8n ai agents features 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/automate-legacy-software-anthropic-computer-use",
+      "clicks": 0,
+      "impressions": 44,
+      "ctr": 0,
+      "position": 6.8,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/custom-mcp-servers-claude-private-data",
+      "clicks": 0,
+      "impressions": 42,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/autonomous-sdr-engine-b2b-pipeline-automation",
+      "clicks": 0,
+      "impressions": 38,
+      "ctr": 0,
+      "position": 8.7,
+      "top_queries": [
+        {
+          "query": "autonomous ai sdr platform",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 47
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/before-you-hire-checklist-automate-first-founder",
+      "clicks": 0,
+      "impressions": 38,
+      "ctr": 0,
+      "position": 6.5,
+      "top_queries": [
+        {
+          "query": "chronexa ontime",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 9.3
+        },
+        {
+          "query": "progress moveit automation",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 8
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-evolution-3-layers-enterprise-value",
+      "clicks": 0,
+      "impressions": 28,
+      "ctr": 0,
+      "position": 6.1,
+      "top_queries": [
+        {
+          "query": "ai bubble",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "query": "ai bubble burst",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 10
+        }
+      ],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/what-to-do-when-your-hoa-reserve-study-is-outdated-(and-how-to-update-it-fast)",
+      "clicks": 0,
+      "impressions": 28,
+      "ctr": 0,
+      "position": 8.1,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/gemini-nano-banana-ai-image-gen-automation",
+      "clicks": 0,
+      "impressions": 23,
+      "ctr": 0,
+      "position": 5.8,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/building-aisdr-autonomous-sales-agent",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 7.8,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/how-to-build-cart-abandonment-automation-that-recovers-28-of-lost-revenue",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 7,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-reserve-study-automation-usa-firms-2026",
+      "clicks": 0,
+      "impressions": 20,
+      "ctr": 0,
+      "position": 4.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-workflow-automation-agency-owners-complete-guide",
+      "clicks": 0,
+      "impressions": 20,
+      "ctr": 0,
+      "position": 5.9,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/off-the-shelf-ai-vs.-custom-workflows-the-ria-build-vs.-buy-guide",
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 3,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/case-studies/slug-ai-controlled-environment-agriculture-iot-automation",
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 6.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-vs-zapier-in-2026-an-enterprise-teardown",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 6.4,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/the-ai-content-engine-how-we-build-high-velocity-b2b-saas-pipelines-in-2026",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 6.3,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/the-death-of-the-billable-hour-how-agentic-workflows-are-driving-value-based-pricing-in-2026",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 8.6,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/multi-step-routing-workflows-complex-b2b-sales-cycles",
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 5.1,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/client-onboarding-automation-uae-wealth-managers",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 38.4,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/case-studies/how-reservestudy-automated-report-production-with-ai",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 8.1,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-automation-dubai-replace-manual-ops-30-days",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 6.6,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/saas-crm-optimisation",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 5.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/n8n-ai-agents-features-2026-complete-guide",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 6.2,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/oracle-ai-infrastructure-50b-raise-signals-new-era",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 4,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/vat-compliance-automation-saudi-arabia-n8n-workflows",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 7.4,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/legal-billing-automation-eliminate-revenue-leakage-save-20-hours-month",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 7.3,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/case-studies/how-ledgersync-eliminated-invoice-backlogs-using-ai",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6.3,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/best-ai-agent-platforms-wealth-management-uae",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 2.7,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/document-automation-tools-regulated-industries-guide",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 11,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-agent-platforms-uae-wealth-managers-cfos",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 3.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/the-silent-profit-drain-unmasking-the-hidden-costs-of-traditional-customer-support",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 2,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/when-a-5m-trust-distribution-depends-on-finding-the-right-clause-in-the-right-pdf",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 13.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/services",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1.5,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/account-reconciliation-automation-custom-ai-workflows",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/ai-agents-gcc-family-office",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 11,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/best-ai-agent-platforms-uae-wealth-managers",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 11,
+      "top_queries": [],
+      "ctr_opportunity": false
+    },
+    {
+      "page": "https://chronexa.io/blog/client-onboarding-automation-ria-custom-workflows",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8,
+      "top_queries": [],
+      "ctr_opportunity": false
+    }
+  ]
+}
