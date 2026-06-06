@@ -1,0 +1,35 @@
+.band {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  --accent-on-surface: var(--brand-green);
+  border-top: 1px solid var(--border-dark);
+  padding-block: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+}
+.band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, var(--brand-green-soft), transparent 60%);
+  pointer-events: none;
+}
+
+.vista { position: absolute; inset: 0; object-fit: cover; object-position: center; z-index: 0; opacity: 0.5; }
+.vistaOverlay {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--bg-dark) 90%, transparent),
+    color-mix(in srgb, var(--bg-dark) 78%, transparent));
+}
+.inner { position: relative; z-index: 1; text-align: center; }
+.lead { color: var(--text-muted-dark); max-width: 48ch; margin: 0 auto var(--spacing-sm); }
+.title { font-size: var(--step-5); margin-bottom: var(--spacing-md); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); justify-content: center; }
+.guarantee {
+  margin: var(--spacing-md) auto 0;
+  max-width: 56ch;
+  font-size: var(--step--1);
+  color: var(--text-muted-dark);
+}
+.guarantee span { color: var(--brand-green); font-weight: 700; margin-right: 0.4rem; }

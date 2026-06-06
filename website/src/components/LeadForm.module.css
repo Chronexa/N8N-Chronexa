@@ -1,0 +1,30 @@
+.form { display: flex; flex-direction: column; }
+.group { margin-bottom: 0.9rem; display: flex; flex-direction: column; }
+.group label { font-size: var(--step--1); margin-bottom: 0.35rem; color: var(--neutral-400); }
+.group input, .group textarea {
+  width: 100%;
+  background: var(--color-black);
+  border: 1px solid var(--neutral-700);
+  padding: 0.75rem 0.85rem;
+  color: var(--text-dark);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+}
+.group input::placeholder, .group textarea::placeholder { color: var(--neutral-500); }
+.group input:focus-visible, .group textarea:focus-visible { outline: none; border-color: var(--brand-green); }
+
+.btn { width: 100%; margin-top: 0.25rem; }
+.btn:disabled { opacity: 0.7; cursor: progress; }
+
+.note { font-size: var(--step--1); color: var(--text-muted-dark); text-align: center; margin-top: 0.75rem; }
+.error { font-size: var(--step--1); color: var(--color-error); margin-top: 0.6rem; text-align: center; }
+
+.success {
+  text-align: center;
+  padding: var(--spacing-md);
+  border: 1px solid var(--brand-green);
+  border-radius: var(--radius-md);
+  background: var(--brand-green-soft);
+}
+.success strong { display: block; font-size: var(--step-1); margin-bottom: 0.5rem; }
+.success p { color: var(--text-muted-dark); font-size: var(--step--1); }

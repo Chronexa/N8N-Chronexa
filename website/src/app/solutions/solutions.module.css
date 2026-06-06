@@ -1,0 +1,37 @@
+.hero {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  --accent-on-surface: var(--brand-green);
+  padding-top: calc(var(--nav-height) + var(--spacing-lg));
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-dark);
+}
+.h1 { font-size: var(--step-4); margin-bottom: var(--spacing-sm); max-width: 20ch; }
+.inlineLink { color: var(--brand-green); font-weight: 600; }
+.inlineLink:hover { color: var(--brand-green-hover); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.card:hover { border-color: var(--brand-green); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.cardTitle { font-size: var(--step-2); margin-bottom: 0.5rem; }
+.cardDesc { color: var(--text-muted-light); font-size: var(--step--1); margin-bottom: var(--spacing-md); flex-grow: 1; }
+.cardLink { color: var(--brand-green-ink); font-size: var(--step--1); }
+
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+}

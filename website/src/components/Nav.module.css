@@ -1,0 +1,131 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--container-pad);
+  background: color-mix(in srgb, var(--bg-card) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: var(--z-nav);
+}
+
+.logo { display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.4rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.03em; }
+.logoMark { width: 32px; height: 32px; object-fit: contain; }
+.logoText { color: var(--text-light); }
+
+.links { display: flex; gap: var(--spacing-md); align-items: center; }
+
+.link, .trigger {
+  color: var(--text-muted-light);
+  font-weight: 500;
+  font-size: var(--step--1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.link:hover, .trigger:hover { color: var(--text-light); }
+.caret { font-size: 0.7em; transition: transform var(--transition-fast); }
+
+.cta {
+  background-color: var(--brand-green);
+  color: var(--bg-dark);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: var(--step--1);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+.cta:hover { background-color: var(--brand-green-hover); transform: translateY(-1px); color: var(--bg-dark); }
+
+/* ---- Dropdown items ---- */
+.item { position: relative; display: inline-flex; align-items: center; }
+
+.panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  z-index: var(--z-nav);
+}
+.item[data-open="true"] > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .item:hover > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
+  .item:hover .caret { transform: rotate(180deg); }
+}
+
+.panelGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; min-width: 440px; }
+.panelWide { display: flex; gap: var(--spacing-md); }
+.panelCol { min-width: 210px; }
+.panelHead {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: var(--tracking-wide);
+  color: var(--brand-green-ink); font-weight: 700; padding: 0.4rem 0.6rem 0; margin: 0;
+}
+.panelSub {
+  font-size: 0.72rem; color: var(--text-muted-light); padding: 0 0.6rem 0.4rem; margin: 0 0 0.2rem;
+}
+.panelLink { display: block; padding: 0.5rem 0.6rem; border-radius: var(--radius-sm); color: var(--text-light); }
+.panelLink:hover { background: var(--neutral-100); color: var(--brand-green-ink); }
+.panelLabel { font-size: var(--step--1); font-weight: 500; }
+
+/* ---- Mobile toggle ---- */
+.toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; align-items: center; }
+.toggleBar { display: block; width: 22px; height: 2px; background: var(--text-light); transition: transform var(--transition), opacity var(--transition-fast); }
+.toggleBar[data-open="true"]:first-child { transform: translateY(3.5px) rotate(45deg); }
+.toggleBar[data-open="true"]:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+@media (max-width: 920px) {
+  .toggle { display: flex; }
+  .links {
+    position: fixed;
+    inset: var(--nav-height) 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-sm) var(--container-pad) var(--spacing-md);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-light);
+    max-height: calc(100vh - var(--nav-height));
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition), transform var(--transition);
+  }
+  .links[data-open="true"] { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  .link, .item { padding: 0.9rem 0; border-bottom: 1px solid var(--border-light); }
+  .item { flex-direction: column; align-items: stretch; }
+  .trigger { width: 100%; justify-content: space-between; padding: 0; }
+
+  /* Inline accordion panels on mobile */
+  .panel {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    display: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.5rem 0 0 0.75rem;
+  }
+  .item[data-open="true"] > .panel { display: block; }
+  .panelGrid, .panelWide { display: block; min-width: 0; }
+  .panelCol { min-width: 0; margin-top: 0.5rem; }
+
+  .cta { margin-top: var(--spacing-sm); text-align: center; }
+}
