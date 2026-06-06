@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getCaseStudyBySlug, getCaseStudySlugs, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
+import BookButton from '../../../components/BookButton';
 import styles from './case.module.css';
 
 export const revalidate = 3600;
@@ -112,7 +113,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         )}
 
         <div className={`container ${styles.cta}`}>
-          <Link href="/contact" className="btn-primary">Get results like these <span aria-hidden="true">→</span></Link>
+          <BookButton location="case-study">Get results like these <span aria-hidden="true">→</span></BookButton>
           <Link href="/case-studies" className="btn-outline">More case studies</Link>
         </div>
       </article>

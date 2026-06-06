@@ -4,6 +4,7 @@ import styles from './UseCaseArticle.module.css';
 import { site } from '../lib/site';
 import { getService, getSolutions, getPains, type ServiceContent } from '../lib/services-content';
 import { getCategoryLabel } from '../lib/taxonomy';
+import BookButton from './BookButton';
 
 // Same standard outcomes as the service template, so the brand reads consistently.
 const STANDARD_IMPACTS = [
@@ -68,7 +69,7 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
           <p className="heroDescription">{data.heroSub}</p>
           <p className={styles.answer}>{data.answer}</p>
           <div className={styles.heroActions}>
-            <Link href="/contact" className="btn-primary">Book a Free Audit <span aria-hidden="true">→</span></Link>
+            <BookButton location="usecase-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
             <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
         </div>

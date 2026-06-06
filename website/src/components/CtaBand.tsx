@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import styles from './CtaBand.module.css';
 import { site } from '../lib/site';
+import BookButton from './BookButton';
 
 export default function CtaBand() {
   return (
@@ -15,7 +15,7 @@ export default function CtaBand() {
         </p>
         <h2 id="cta-title" className={styles.title}>Let&apos;s talk today</h2>
         <div className={styles.actions}>
-          <Link href="/contact" className="btn-primary">Book a Free Audit <span aria-hidden="true">→</span></Link>
+          <BookButton location="cta-band">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
           <a href={`mailto:${site.email}`} className="btn-outline">{site.email}</a>
         </div>
         <p className={styles.guarantee}>

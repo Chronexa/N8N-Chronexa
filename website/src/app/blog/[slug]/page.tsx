@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getBlogPostBySlug, getBlogSlugs, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
+import BookButton from '../../../components/BookButton';
 import styles from './post.module.css';
 
 export const revalidate = 3600; // ISR: refresh published content hourly
@@ -132,7 +133,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         <div className={`container ${styles.cta}`}>
-          <Link href="/contact" className="btn-primary">Book a Free Audit <span aria-hidden="true">→</span></Link>
+          <BookButton location="blog-post">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
           <Link href="/blog" className="btn-outline">More articles</Link>
         </div>
       </article>

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import type { ReactNode, CSSProperties } from 'react';
 import styles from './PainPoints.module.css';
+import BookButton from './BookButton';
 
 const sv = (path: ReactNode) => (
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{path}</svg>
@@ -51,7 +51,7 @@ export default function PainPoints() {
 
       <p className={styles.closer}>
         These are the exact gaps a{' '}
-        <Link href="/contact" className={styles.closerLink}>free Chronexa audit</Link>{' '}
+        <BookButton className={styles.closerLink} location="painpoints">free Chronexa audit</BookButton>{' '}
         finds — and a roadmap to fix.
       </p>
     </>

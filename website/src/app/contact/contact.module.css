@@ -14,6 +14,8 @@
 }
 .h1 { font-size: var(--step-5); margin-bottom: var(--spacing-sm); }
 
+.bookRow { display: flex; align-items: center; gap: var(--spacing-sm); flex-wrap: wrap; margin-top: var(--spacing-md); }
+.bookNote { font-size: var(--step--1); color: var(--text-muted-dark); }
 .meta { list-style: none; margin: var(--spacing-lg) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--spacing-sm); }
 .meta li { display: flex; flex-direction: column; gap: 0.2rem; font-size: var(--step-0); }
 .meta span { font-size: var(--step--1); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-muted-dark); }

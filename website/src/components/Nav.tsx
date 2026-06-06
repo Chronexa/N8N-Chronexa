@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Nav.module.css';
 import { services, useCasesByFunction, useCasesByIndustry } from '../lib/taxonomy';
+import BookButton from './BookButton';
 
 export default function Nav() {
   const [open, setOpen] = useState(false); // mobile drawer
@@ -78,7 +79,7 @@ export default function Nav() {
         <Link href="/case-studies" className={styles.link} onClick={close}>Case Studies</Link>
         <Link href="/blog" className={styles.link} onClick={close}>Blog</Link>
         <Link href="/about" className={styles.link} onClick={close}>About</Link>
-        <Link href="/contact" className={styles.cta} onClick={close}>Book a Free Audit</Link>
+        <BookButton className={styles.cta} location="nav" onClick={close}>Book a Free Audit</BookButton>
       </nav>
     </header>
   );

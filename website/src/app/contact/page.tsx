@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { site } from '../../lib/site';
 import LeadForm from '../../components/LeadForm';
+import BookButton from '../../components/BookButton';
 import styles from './contact.module.css';
 
 const contactSchema = {
@@ -48,6 +49,10 @@ export default function ContactPage() {
             Sometimes the hardest part is reaching out — but once you do, we&apos;ll make the
             rest easy. We&apos;ll review your workflows and suggest where AI can save time &amp; cost.
           </p>
+          <div className={styles.bookRow}>
+            <BookButton location="contact-intro">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+            <span className={styles.bookNote}>Free 30-min call · pick a time that works</span>
+          </div>
           <ul className={styles.meta}>
             <li><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
             <li><span>Location</span>{site.locality}</li>

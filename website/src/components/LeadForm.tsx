@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import styles from './LeadForm.module.css';
+import { openBooking, trackBookCta } from '../lib/cal';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -9,40 +10,51 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus('submitting');
     setError('');
     const form = e.currentTarget;
     const fd = new FormData(form);
-    const payload = {
-      name: fd.get('name'),
-      email: fd.get('email'),
-      company: fd.get('company'),
-      usecase: fd.get('usecase'),
-      source,
-    };
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.ok) throw new Error(json.error || 'Something went wrong.');
-      setStatus('success');
-      form.reset();
-    } catch (err) {
+    const name = String(fd.get('name') || '').trim();
+    const email = String(fd.get('email') || '').trim();
+    const company = String(fd.get('company') || '').trim();
+    const usecase = String(fd.get('usecase') || '').trim();
+
+    if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       setStatus('error');
-      setError(err instanceof Error ? err.message : 'Something went wrong.');
+      setError('Please enter your name and a valid work email.');
+      return;
     }
+
+    setStatus('submitting');
+    trackBookCta(`form:${source}`);
+
+    // Best-effort lead record (non-blocking). Captures the moment CONTACT_WEBHOOK_URL
+    // is set; either way the visitor is handed straight to booking below.
+    const notes = [company && `Company: ${company}`, usecase && `Wants to automate: ${usecase}`]
+      .filter(Boolean)
+      .join(' · ');
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, company, usecase, source }),
+    }).catch(() => {});
+
+    // Hand off to Cal.com, prefilled, so booking is one step.
+    openBooking({ name, email, notes: notes || usecase });
+    setStatus('success');
   }
 
   if (status === 'success') {
     return (
       <div className={styles.success} role="status">
-        <strong>Thanks — we&apos;ve got it.</strong>
-        <p>We&apos;ll review your workflows and get back to you within one business day.</p>
+        <strong>Opening your booking…</strong>
+        <p>
+          Pick a time and we&apos;ll come prepped on your workflows. Didn&apos;t see it?{' '}
+          <a href="https://cal.com/chronexa/30min" target="_blank" rel="noopener noreferrer" className={styles.successLink}>
+            Open the calendar
+          </a>.
+        </p>
       </div>
     );
   }
@@ -72,10 +84,10 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
         )}
       </div>
       <button type="submit" className={`btn-primary ${styles.btn}`} disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Sending…' : <>Get My Free Audit <span aria-hidden="true">→</span></>}
+        {status === 'submitting' ? 'Opening booking…' : <>Book my free audit <span aria-hidden="true">→</span></>}
       </button>
       {status === 'error' && <p className={styles.error} role="alert">{error}</p>}
-      <p className={styles.note}>No spam. No sales pitch. Just actionable insights.</p>
+      <p className={styles.note}>Free 30-min call. No spam, no sales pitch — just actionable insights.</p>
     </form>
   );
 }

@@ -28,3 +28,4 @@
 }
 .success strong { display: block; font-size: var(--step-1); margin-bottom: 0.5rem; }
 .success p { color: var(--text-muted-dark); font-size: var(--step--1); }
+.successLink { color: var(--brand-green); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }

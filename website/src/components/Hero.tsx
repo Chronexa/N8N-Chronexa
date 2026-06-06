@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './Hero.module.css';
 import LeadForm from './LeadForm';
+import BookButton from './BookButton';
 
 export default function Hero() {
   return (
@@ -19,7 +20,7 @@ export default function Hero() {
             stack in 30–60 days.
           </p>
           <div className={styles.heroActions}>
-            <a href="#audit" className="btn-primary">Get My Free Audit <span aria-hidden="true">→</span></a>
+            <BookButton location="hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
             <a href="/solutions" className="btn-outline">Explore Solutions</a>
           </div>
         </div>

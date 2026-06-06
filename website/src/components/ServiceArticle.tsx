@@ -4,6 +4,7 @@ import styles from './ServiceArticle.module.css';
 import { site } from '../lib/site';
 import { getService, getSolutions, type ServiceContent } from '../lib/services-content';
 import { getCategoryLabel } from '../lib/taxonomy';
+import BookButton from './BookButton';
 
 // Standard outcomes true of every Chronexa engagement — appended to each page's
 // specific ROI metrics to form a 6-tile "commercial impact" grid (automaly-style).
@@ -76,7 +77,7 @@ export default function ServiceArticle({ data }: { data: ServiceContent }) {
           {/* Answer-first lead — concise, extractable (AEO) */}
           <p className={styles.answer}>{data.answer}</p>
           <div className={styles.heroActions}>
-            <Link href="/contact" className="btn-primary">Book a Free Audit <span aria-hidden="true">→</span></Link>
+            <BookButton location="service-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
             <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
         </div>
@@ -177,7 +178,7 @@ export default function ServiceArticle({ data }: { data: ServiceContent }) {
                   <li key={item}><span className={styles.check} aria-hidden="true">✓</span>{item}</li>
                 ))}
               </ul>
-              <Link href="/contact" className={`btn-primary ${styles.asideBtn}`}>Get a Quote</Link>
+              <BookButton className={`btn-primary ${styles.asideBtn}`} location="service-sidebar">Get a Quote</BookButton>
               <p className={styles.guarantee}>90-day ROI guarantee · fixed price</p>
             </div>
           </aside>
