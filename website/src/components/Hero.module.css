@@ -17,10 +17,10 @@
   object-fit: cover;
   object-position: center right;
   z-index: 0;
-  opacity: 0.6;
 }
 /* Decorative background video — fades in over .heroImg once it can play, so the
-   still image is the instant first paint / LCP and the video is pure enhancement. */
+   still image is the instant first paint / LCP and the video is pure enhancement.
+   Plays at full clarity; the scrim (not opacity) handles text contrast. */
 .heroVideo {
   position: absolute;
   inset: 0;
@@ -33,25 +33,23 @@
   transition: opacity 0.9s var(--ease-out);
   pointer-events: none;
 }
-.heroVideoReady { opacity: 0.6; }
-/* Clean, strong scrim: near-solid dark on the headline (left) so type is razor-
-   sharp, easing to ~half on the right where the cinematic footage reads; plus a
-   gentle top/bottom vignette to ground it. Keeps the message crisp, video subtle. */
+.heroVideoReady { opacity: 1; }
+/* Light, directional scrim: anchored under the left-hand text so type stays sharp,
+   easing to fully clear on the right where the cinematic footage reads; plus a soft
+   bottom vignette to ground the section. Footage stays legible — not muddied. */
 .heroOverlay {
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(100deg,
-      color-mix(in srgb, var(--bg-dark) 97%, transparent) 0%,
-      color-mix(in srgb, var(--bg-dark) 90%, transparent) 30%,
-      color-mix(in srgb, var(--bg-dark) 72%, transparent) 62%,
-      color-mix(in srgb, var(--bg-dark) 55%, transparent) 100%),
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--bg-dark) 86%, transparent) 0%,
+      color-mix(in srgb, var(--bg-dark) 66%, transparent) 30%,
+      color-mix(in srgb, var(--bg-dark) 28%, transparent) 56%,
+      transparent 82%),
     linear-gradient(to bottom,
-      color-mix(in srgb, var(--bg-dark) 55%, transparent) 0%,
-      transparent 22%,
-      transparent 70%,
-      color-mix(in srgb, var(--bg-dark) 80%, transparent) 100%);
+      transparent 58%,
+      color-mix(in srgb, var(--bg-dark) 50%, transparent) 100%);
 }
 .heroBackground {
   position: absolute;
@@ -60,22 +58,24 @@
   z-index: 0;
 }
 
+/* Single, left-anchored content column — generous negative space on the right
+   where the clear footage breathes (cinematic, Palantir-style). */
 .heroContainer {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: var(--spacing-lg);
-  align-items: center;
 }
 
-.heroContent { display: flex; flex-direction: column; }
-/* Tighter, more controlled than the global h1 — elegant, not overwhelming. */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  max-width: min(560px, 100%);
+}
+/* Restrained, elegant — not overwhelming. */
 .heroTitle {
-  font-size: clamp(2.4rem, 1.7rem + 2.9vw, 3.85rem);
-  line-height: 1.03;
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
+  line-height: 1.08;
   letter-spacing: -0.02em;
-  max-width: 13ch;
+  max-width: 15ch;
   margin-bottom: var(--spacing-md);
 }
 .heroDescription {
@@ -83,42 +83,11 @@
   line-height: 1.55;
   color: color-mix(in srgb, var(--text-dark) 88%, transparent);
   max-width: 46ch;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .heroActions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); }
 
-/* ---- Audit form card ------------------------------------------------- */
-.formCard {
-  background: color-mix(in srgb, var(--neutral-900) 96%, transparent);
-  border: 1px solid var(--border-dark-strong);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg) var(--spacing-md);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-lg);
-}
-.formTitle { font-size: var(--step-1); margin-bottom: 0.25rem; }
-.formIntro { font-size: var(--step--1); color: var(--text-muted-dark); margin-bottom: var(--spacing-sm); }
-
-.form { display: flex; flex-direction: column; }
-.formGroup { margin-bottom: 0.9rem; }
-.formGroup label { display: block; font-size: var(--step--1); margin-bottom: 0.35rem; color: var(--neutral-400); }
-.formGroup input {
-  width: 100%;
-  background: var(--color-black);
-  border: 1px solid var(--neutral-700);
-  padding: 0.75rem 0.85rem;
-  color: var(--text-dark);
-  border-radius: var(--radius-sm);
-  transition: border-color var(--transition-fast);
-}
-.formGroup input::placeholder { color: var(--neutral-500); }
-.formGroup input:focus-visible { outline: none; border-color: var(--brand-green); }
-
-.formBtn { width: 100%; margin-top: 0.25rem; }
-.formNote { font-size: var(--step--1); color: var(--text-muted-dark); text-align: center; margin-top: 0.75rem; }
-
 @media (max-width: 860px) {
-  .heroContainer { grid-template-columns: 1fr; gap: var(--spacing-md); }
   .hero { min-height: 0; }
 }

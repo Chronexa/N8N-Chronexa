@@ -1,4 +1,5 @@
 import Hero from '../components/Hero';
+import LogoMarquee from '../components/LogoMarquee';
 import QuestionTicker from '../components/QuestionTicker';
 import PainPoints from '../components/PainPoints';
 import ServiceShowcase from '../components/ServiceShowcase';
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <LogoMarquee />
       <QuestionTicker />
 
       {/* The problem */}

@@ -22,14 +22,41 @@
     color-mix(in srgb, var(--bg-dark) 90%, transparent),
     color-mix(in srgb, var(--bg-dark) 78%, transparent));
 }
-.inner { position: relative; z-index: 1; text-align: center; }
-.lead { color: var(--text-muted-dark); max-width: 48ch; margin: 0 auto var(--spacing-sm); }
+
+/* Two columns: messaging left, audit form right. */
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+.copy { max-width: 46ch; }
+.lead { color: var(--text-muted-dark); margin-bottom: var(--spacing-sm); }
 .title { font-size: var(--step-5); margin-bottom: var(--spacing-md); }
-.actions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); justify-content: center; }
 .guarantee {
-  margin: var(--spacing-md) auto 0;
   max-width: 56ch;
   font-size: var(--step--1);
   color: var(--text-muted-dark);
+  margin-bottom: var(--spacing-sm);
 }
 .guarantee span { color: var(--brand-green); font-weight: 700; margin-right: 0.4rem; }
+.mail { font-size: var(--step--1); color: var(--text-muted-dark); }
+.mail a { color: var(--brand-green); font-weight: 600; }
+
+/* Audit form card — mirrors the dark glass card language used across the site. */
+.formCard {
+  background: color-mix(in srgb, var(--neutral-900) 92%, transparent);
+  border: 1px solid var(--border-dark-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-lg);
+}
+.formTitle { font-size: var(--step-1); margin-bottom: 0.25rem; }
+.formIntro { font-size: var(--step--1); color: var(--text-muted-dark); margin-bottom: var(--spacing-sm); }
+
+@media (max-width: 860px) {
+  .inner { grid-template-columns: 1fr; gap: var(--spacing-md); text-align: left; }
+}

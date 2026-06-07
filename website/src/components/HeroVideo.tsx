@@ -20,7 +20,7 @@ export default function HeroVideo() {
     const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
     if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
     const mobile = window.matchMedia('(max-width: 768px)').matches;
-    setSrc(mobile ? '/videos/hero-mobile.mp4' : '/videos/hero-desktop.mp4');
+    setSrc(mobile ? '/videos/hero-mobile' : '/videos/hero-desktop'); // extensionless base; <source>s add .webm/.mp4
   }, []);
 
   useEffect(() => {
@@ -42,7 +42,8 @@ export default function HeroVideo() {
       tabIndex={-1}
       onCanPlay={() => setReady(true)}
     >
-      <source src={src} type="video/mp4" />
+      <source src={`${src}.webm`} type="video/webm" />
+      <source src={`${src}.mp4`} type="video/mp4" />
     </video>
   );
 }

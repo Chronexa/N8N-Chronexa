@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import styles from './Hero.module.css';
-import LeadForm from './LeadForm';
 import BookButton from './BookButton';
 import HeroVideo from './HeroVideo';
 
@@ -25,14 +24,6 @@ export default function Hero() {
             <BookButton location="hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
             <a href="/solutions" className="btn-outline">Explore Solutions</a>
           </div>
-        </div>
-
-        <div className={styles.formCard} id="audit">
-          <h2 className={styles.formTitle}>Automation Audit Request</h2>
-          <p className={styles.formIntro}>
-            We&apos;ll review your workflows and suggest where AI can save time &amp; cost.
-          </p>
-          <LeadForm source="hero" compact />
         </div>
       </div>
     </section>
