@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 
 /**
- * Lead capture endpoint. Forwards submissions to the n8n webhook in
- * CONTACT_WEBHOOK_URL (server-only env). If the var isn't set yet, the request
- * still succeeds (so the UI works) but is logged as un-forwarded — no silent
- * data loss, and it goes live the moment you paste the n8n webhook URL.
+ * Lead capture endpoint. Every form submit is written to the Baserow "Website
+ * Leads" table (system of record + quick-access grid). The visitor is then sent
+ * to Cal.com to book (handled client-side), so this is a best-effort record:
+ * a Baserow hiccup must never block the booking handoff. Optionally also mirrors
+ * to CONTACT_WEBHOOK_URL if set (e.g. an n8n fan-out).
  */
 export async function POST(req: Request) {
   let data: Record<string, unknown>;
@@ -20,30 +21,49 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'Name and a valid email are required.' }, { status: 422 });
   }
 
-  const lead = {
-    name,
-    email,
-    company: String(data.company || '').trim() || undefined,
-    usecase: String(data.usecase || '').trim() || undefined,
-    source: String(data.source || 'website'),
-    submittedAt: new Date().toISOString(),
-  };
+  const company = String(data.company || '').trim();
+  const usecase = String(data.usecase || '').trim();
+  const source = String(data.source || 'website');
+  const submittedAt = new Date().toISOString();
 
+  // --- Baserow (Website Leads table) — best-effort -------------------------
+  const baseHost = process.env.BASEROW_HOST || 'https://api.baserow.io';
+  const tableId = process.env.BASEROW_LEADS_TABLE_ID;
+  const baserowToken = process.env.BASEROW_LEADS_TOKEN || process.env.BASEROW_API_KEY;
+  if (tableId && baserowToken) {
+    try {
+      const res = await fetch(`${baseHost}/api/database/rows/table/${tableId}/?user_field_names=true`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Token ${baserowToken}` },
+        body: JSON.stringify({
+          Name: name,
+          Email: email,
+          Company: company,
+          'What to automate': usecase,
+          Source: source,
+          'Submitted At': submittedAt,
+        }),
+      });
+      if (!res.ok) console.error('[contact] Baserow write failed:', res.status, (await res.text()).slice(0, 200));
+    } catch (e) {
+      console.error('[contact] Baserow write error:', e);
+    }
+  } else {
+    console.warn('[contact] Baserow not configured — lead not stored:', email);
+  }
+
+  // --- Optional mirror to an n8n / external webhook ------------------------
   const webhook = process.env.CONTACT_WEBHOOK_URL;
   if (webhook) {
     try {
-      const res = await fetch(webhook, {
+      await fetch(webhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lead),
+        body: JSON.stringify({ name, email, company, usecase, source, submittedAt }),
       });
-      if (!res.ok) throw new Error(`webhook ${res.status}`);
     } catch (e) {
-      console.error('[contact] webhook forward failed:', e);
-      return NextResponse.json({ ok: false, error: 'Could not submit right now. Please email us.' }, { status: 502 });
+      console.error('[contact] webhook mirror failed:', e);
     }
-  } else {
-    console.warn('[contact] CONTACT_WEBHOOK_URL not set — lead accepted but not forwarded:', lead.email);
   }
 
   return NextResponse.json({ ok: true });
