@@ -2,11 +2,13 @@ import Image from 'next/image';
 import styles from './Hero.module.css';
 import LeadForm from './LeadForm';
 import BookButton from './BookButton';
+import HeroVideo from './HeroVideo';
 
 export default function Hero() {
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <Image src="/images/hero-vista.jpg" alt="" fill priority sizes="100vw" className={styles.heroImg} />
+      <HeroVideo />
       <div className={styles.heroOverlay} aria-hidden="true" />
       <div className={styles.heroBackground} aria-hidden="true" />
       <div className={`container ${styles.heroContainer}`}>
