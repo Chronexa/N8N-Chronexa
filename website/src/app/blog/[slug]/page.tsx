@@ -6,6 +6,7 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getBlogPostBySlug, getBlogSlugs, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
 import BookButton from '../../../components/BookButton';
+import RelatedServices from '../../../components/RelatedServices';
 import styles from './post.module.css';
 
 export const revalidate = 3600; // ISR: refresh published content hourly
@@ -130,6 +131,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         <div className={`container ${styles.body}`}>
           {post.body ? <PortableText value={normalizeHeadings(post.body) as never} components={components} /> : <p>Content coming soon.</p>}
+        </div>
+
+        <div className="container">
+          <RelatedServices title={post.title} category={post.category} slug={slug} />
         </div>
 
         <div className={`container ${styles.cta}`}>
