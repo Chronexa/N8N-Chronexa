@@ -17,7 +17,7 @@
   object-fit: cover;
   object-position: center right;
   z-index: 0;
-  opacity: 0.72;
+  opacity: 0.6;
 }
 /* Decorative background video — fades in over .heroImg once it can play, so the
    still image is the instant first paint / LCP and the video is pure enhancement. */
@@ -33,21 +33,25 @@
   transition: opacity 0.9s var(--ease-out);
   pointer-events: none;
 }
-.heroVideoReady { opacity: 0.72; }
-/* Two overlays: a left-weighted gradient that keeps the headline crisp, plus a
-   bottom fade that grounds the cinematic vista into the page. */
+.heroVideoReady { opacity: 0.6; }
+/* Clean, strong scrim: near-solid dark on the headline (left) so type is razor-
+   sharp, easing to ~half on the right where the cinematic footage reads; plus a
+   gentle top/bottom vignette to ground it. Keeps the message crisp, video subtle. */
 .heroOverlay {
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
     linear-gradient(100deg,
-      color-mix(in srgb, var(--bg-dark) 92%, transparent) 0%,
-      color-mix(in srgb, var(--bg-dark) 62%, transparent) 48%,
-      color-mix(in srgb, var(--bg-dark) 50%, transparent) 100%),
+      color-mix(in srgb, var(--bg-dark) 97%, transparent) 0%,
+      color-mix(in srgb, var(--bg-dark) 90%, transparent) 30%,
+      color-mix(in srgb, var(--bg-dark) 72%, transparent) 62%,
+      color-mix(in srgb, var(--bg-dark) 55%, transparent) 100%),
     linear-gradient(to bottom,
-      transparent 55%,
-      color-mix(in srgb, var(--bg-dark) 85%, transparent) 100%);
+      color-mix(in srgb, var(--bg-dark) 55%, transparent) 0%,
+      transparent 22%,
+      transparent 70%,
+      color-mix(in srgb, var(--bg-dark) 80%, transparent) 100%);
 }
 .heroBackground {
   position: absolute;
@@ -66,18 +70,31 @@
 }
 
 .heroContent { display: flex; flex-direction: column; }
-.heroTitle { margin-bottom: var(--spacing-sm); }
-.heroDescription { margin-bottom: var(--spacing-md); }
+/* Tighter, more controlled than the global h1 — elegant, not overwhelming. */
+.heroTitle {
+  font-size: clamp(2.4rem, 1.7rem + 2.9vw, 3.85rem);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  max-width: 13ch;
+  margin-bottom: var(--spacing-md);
+}
+.heroDescription {
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--text-dark) 88%, transparent);
+  max-width: 46ch;
+  margin-bottom: var(--spacing-lg);
+}
 
 .heroActions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); }
 
 /* ---- Audit form card ------------------------------------------------- */
 .formCard {
-  background: color-mix(in srgb, var(--neutral-900) 85%, transparent);
-  border: 1px solid var(--border-dark);
+  background: color-mix(in srgb, var(--neutral-900) 96%, transparent);
+  border: 1px solid var(--border-dark-strong);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  backdrop-filter: blur(12px);
+  padding: var(--spacing-lg) var(--spacing-md);
+  backdrop-filter: blur(8px);
   box-shadow: var(--shadow-lg);
 }
 .formTitle { font-size: var(--step-1); margin-bottom: 0.25rem; }
