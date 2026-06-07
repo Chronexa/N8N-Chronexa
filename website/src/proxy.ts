@@ -13,7 +13,19 @@ import type { NextRequest } from 'next/server';
  */
 const BLOG_REDIRECTS: Record<string, string> = {
   '/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-(2026)': '/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-2026',
-  '/blog/n8n-ai-agent-node-enterprise-architecture-guide-(2026)': '/blog/n8n-ai-agent-node-enterprise-architecture-guide-2026',
+
+  // ── Cannibalization consolidation (GSC-driven, 2026-06). The "n8n AI agent 2026"
+  // cluster split ~15 queries across 5 near-duplicate posts → hundreds of impressions,
+  // ~0 clicks. Merged to 2 pillars; 301 the 3 duplicates straight to a pillar (no
+  // chains) so their ranking signal consolidates. The 3 are already unpublished, so
+  // these turn their current 404s into proper redirects.
+  //   pillar A (build/technical): /blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026
+  //   pillar B (features ref):    /blog/n8n-ai-agents-features-2026-complete-guide
+  '/blog/n8n-ai-agent-node-enterprise-architecture-guide-(2026)': '/blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026',
+  '/blog/n8n-ai-agent-node-enterprise-architecture-guide-2026': '/blog/n8n-ai-agent-node-build-multi-agent-systems-in-2026',
+  '/blog/n8n-ai-agents-features-2026': '/blog/n8n-ai-agents-features-2026-complete-guide',
+  '/blog/n8n-ai-agent-features-2026': '/blog/n8n-ai-agents-features-2026-complete-guide',
+
   '/blog/top-15-n8n-use-cases-for-b2b-saas-(with-ready-to-clone-workflows)': '/blog/top-15-n8n-use-cases-for-b2b-saas',
   '/blog/he-glass-box-agency-why-chronexa-is-built-on-n8n-(and-why-you-should-care)': '/blog/the-glass-box-agency-why-chronexa-is-built-on-n8n',
   '/blog/n8n-agency-launch-kit-client-acquisition-framework-(free)': '/blog/n8n-agency-launch-kit-client-acquisition-framework',
