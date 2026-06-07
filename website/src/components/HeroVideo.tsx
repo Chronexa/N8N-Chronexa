@@ -28,6 +28,7 @@ export default function HeroVideo() {
   }, [src]);
 
   if (!src) return null;
+  const poster = src.includes('mobile') ? '/images/hero-vista-mobile.jpg' : '/images/hero-vista.jpg';
   return (
     <video
       ref={ref}
@@ -37,7 +38,7 @@ export default function HeroVideo() {
       loop
       playsInline
       preload="auto"
-      poster="/images/hero-vista.jpg"
+      poster={poster}
       aria-hidden="true"
       tabIndex={-1}
       onCanPlay={() => setReady(true)}

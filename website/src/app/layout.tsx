@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import Nav from "../components/Nav";
@@ -64,6 +64,18 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
+};
+
+// Tints the mobile browser chrome (address bar) to match each surface, and pins
+// the default device-width scaling so the layout never zooms oddly on phones.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBFAF7" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E0F0D" },
+  ],
 };
 
 // Organization + WebSite JSON-LD (homepage-level, sitewide).

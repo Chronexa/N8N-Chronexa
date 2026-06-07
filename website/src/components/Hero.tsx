@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import styles from './Hero.module.css';
 import BookButton from './BookButton';
 import HeroVideo from './HeroVideo';
@@ -6,7 +5,14 @@ import HeroVideo from './HeroVideo';
 export default function Hero() {
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
-      <Image src="/images/hero-vista.jpg" alt="" fill priority sizes="100vw" className={styles.heroImg} />
+      {/* Art-directed LCP poster: a portrait crop on phones (matches the mobile
+          video), the wide crop on desktop. Native <picture> so the browser only
+          downloads the source that matches — best mobile performance. */}
+      <picture className={styles.heroPicture}>
+        <source media="(max-width: 860px)" srcSet="/images/hero-vista-mobile.jpg" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/hero-vista.jpg" alt="" className={styles.heroImg} fetchPriority="high" decoding="async" />
+      </picture>
       <HeroVideo />
       <div className={styles.heroOverlay} aria-hidden="true" />
       <div className={styles.heroBackground} aria-hidden="true" />

@@ -11,12 +11,16 @@
   overflow: hidden;
 }
 
-.heroImg {
+.heroPicture {
   position: absolute;
   inset: 0;
+  z-index: 0;
+}
+.heroImg {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center right;
-  z-index: 0;
 }
 /* Decorative background video — fades in over .heroImg once it can play, so the
    still image is the instant first paint / LCP and the video is pure enhancement.
@@ -90,4 +94,16 @@
 
 @media (max-width: 860px) {
   .hero { min-height: 0; }
+  /* Portrait poster reads better centred than pushed right. */
+  .heroImg { object-position: center; }
+  /* Text runs near-full-width on phones, so swap the left-anchored desktop scrim
+     for a vertical one — darker at the headline + button ends, footage visible
+     through the middle. Keeps copy legible over the bright sunrise frame. */
+  .heroOverlay {
+    background: linear-gradient(to bottom,
+      color-mix(in srgb, var(--bg-dark) 72%, transparent) 0%,
+      color-mix(in srgb, var(--bg-dark) 50%, transparent) 46%,
+      color-mix(in srgb, var(--bg-dark) 44%, transparent) 70%,
+      color-mix(in srgb, var(--bg-dark) 82%, transparent) 100%);
+  }
 }
