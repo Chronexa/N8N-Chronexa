@@ -52,6 +52,35 @@ export async function POST(req: Request) {
     console.warn('[contact] Baserow not configured — lead not stored:', email);
   }
 
+  // --- Google Sheet (quick-access mirror) — best-effort -------------------
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  const gClientId = process.env.GSC_CLIENT_ID;
+  const gSecret = process.env.GSC_CLIENT_SECRET;
+  const gRefresh = process.env.GOOGLE_OAUTH_REFRESH_TOKEN;
+  if (sheetId && gClientId && gSecret && gRefresh) {
+    try {
+      const tokRes = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ client_id: gClientId, client_secret: gSecret, refresh_token: gRefresh, grant_type: 'refresh_token' }),
+      });
+      const tok = await tokRes.json();
+      if (tok.access_token) {
+        const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Leads!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
+        const res = await fetch(appendUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok.access_token}` },
+          body: JSON.stringify({ values: [[submittedAt, name, email, company, usecase, source]] }),
+        });
+        if (!res.ok) console.error('[contact] Sheets append failed:', res.status, (await res.text()).slice(0, 200));
+      } else {
+        console.error('[contact] Google token refresh failed:', JSON.stringify(tok).slice(0, 200));
+      }
+    } catch (e) {
+      console.error('[contact] Sheets write error:', e);
+    }
+  }
+
   // --- Optional mirror to an n8n / external webhook ------------------------
   const webhook = process.env.CONTACT_WEBHOOK_URL;
   if (webhook) {

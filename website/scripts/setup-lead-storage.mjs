@@ -18,16 +18,11 @@ config({ path: resolve(ROOT, '.env') });
 const HEADERS = ['Submitted At', 'Name', 'Email', 'Company', 'What to automate', 'Source'];
 const SHARE_WITH = 'team@chronexa.io';
 
-// ---------- 1. Google Sheet ----------
+// ---------- 1. Google Sheet (OAuth — created under YOUR Google account) -------
 async function setupSheet() {
-  const sa = JSON.parse(readFileSync(process.env.GSC_SERVICE_ACCOUNT_PATH, 'utf8'));
-  const auth = new google.auth.JWT({
-    email: sa.client_email,
-    key: sa.private_key,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'],
-  });
-  await auth.authorize();
-  const sheets = google.sheets({ version: 'v4', auth });
+  const oauth2 = new google.auth.OAuth2(process.env.GSC_CLIENT_ID, process.env.GSC_CLIENT_SECRET);
+  oauth2.setCredentials({ refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN });
+  const sheets = google.sheets({ version: 'v4', auth: oauth2 });
   const ss = await sheets.spreadsheets.create({
     requestBody: { properties: { title: 'Chronexa — Website Leads' }, sheets: [{ properties: { title: 'Leads' } }] },
   });
@@ -35,16 +30,13 @@ async function setupSheet() {
   await sheets.spreadsheets.values.update({
     spreadsheetId: id, range: 'Leads!A1', valueInputOption: 'RAW', requestBody: { values: [HEADERS] },
   });
-  try {
-    await google.drive({ version: 'v3', auth }).permissions.create({
-      fileId: id, sendNotificationEmail: true,
-      requestBody: { type: 'user', role: 'writer', emailAddress: SHARE_WITH },
-    });
-    console.log(`✓ Sheet shared with ${SHARE_WITH}`);
-  } catch (e) { console.log(`! Sheet created but share failed (${e.message}). Share it manually.`); }
-  console.log(`✓ GOOGLE_SHEET_ID=${id}`);
+  // The sheet is owned by your account (it's in your Drive). Save the id for the app.
+  const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.env.local');
+  let env = ''; try { env = readFileSync(envPath, 'utf8'); } catch {}
+  env = env.replace(/^GOOGLE_SHEET_ID=.*$/m, '').replace(/\n{3,}/g, '\n\n');
+  writeFileSync(envPath, env.trimEnd() + `\nGOOGLE_SHEET_ID=${id}\n`);
+  console.log(`✓ created Sheet under your Google account → website/.env.local GOOGLE_SHEET_ID written`);
   console.log(`  https://docs.google.com/spreadsheets/d/${id}`);
-  console.log(`  service account (give it Editor if you move the sheet): ${sa.client_email}`);
 }
 
 // ---------- 2. Baserow table ----------
@@ -122,7 +114,11 @@ if (process.argv.includes('--clean')) {
 
 const sheetOnly = process.argv.includes('--sheet-only');
 console.log('— Google Sheet —');
-try { await setupSheet(); } catch (e) { console.log('✗ Sheet setup error:', e.message); }
+try { await setupSheet(); } catch (e) {
+  console.log('✗ Sheet setup error:', e.message);
+  const errs = e?.response?.data?.error || e?.errors;
+  if (errs) console.log('  detail:', JSON.stringify(errs).slice(0, 500));
+}
 if (!sheetOnly) {
   console.log('\n— Baserow —');
   try { await setupBaserow(); } catch (e) { console.log('✗ Baserow setup error:', e.message); }
