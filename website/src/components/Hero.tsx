@@ -19,12 +19,13 @@ export default function Hero() {
       <div className={`container ${styles.heroContainer}`}>
         <div className={styles.heroContent}>
           <h1 id="hero-title" className={styles.heroTitle}>
-            AI Automation Built Around Your Workflows
+            Custom Enterprise AI for Regulated Industries
           </h1>
           <p className={styles.heroDescription}>
-            Not just chatbots or off-the-shelf tools. We design custom n8n AI automation
-            systems that eliminate manual ops across your team — deployed on your existing
-            stack in 30–60 days.
+            Not chatbots or off-the-shelf tools. We build bespoke AI and agentic systems —
+            RAG knowledge engines, document intelligence, secure deployments — for finance,
+            legal, tax and dealmaking teams where the data can’t leak and the work has to
+            stand up to an audit.
           </p>
           <div className={styles.heroActions}>
             <BookButton location="hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>

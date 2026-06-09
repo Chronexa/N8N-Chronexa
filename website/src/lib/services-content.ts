@@ -46,71 +46,106 @@ const GUARANTEE =
 export const SERVICES: ServiceContent[] = [
   {
     slug: 'legal-due-diligence-automation',
-    metaTitle: 'Legal Due Diligence Automation & iManage Workflow | Chronexa',
+    metaTitle: 'Legal AI Automation for Regulated Firms | Chronexa',
     metaDescription:
-      'Integrate iManage and NetDocuments with custom AI workflows to automate due diligence, contract review, and matter intake for top-tier law firms.',
-    h1: 'Legal Due Diligence Automation & iManage Workflow Integration',
+      'Custom AI for law firms: regulatory-change monitoring, legal RAG over your matters and precedents, due-diligence and contract review — deployed securely inside your own environment.',
+    h1: 'Legal AI Automation for Regulated Law Firms',
     heroSub:
-      'Integrate iManage and NetDocuments with custom AI workflows to automate due diligence, contract review, and matter intake — without disrupting your security protocols.',
+      'Regulatory intelligence, legal RAG over your own matters and precedents, and due-diligence automation — built as secure, auditable AI systems that run inside the environment your firm already controls.',
     answer:
-      'Legal due diligence automation uses AI (OCR + LLM extraction) to read contracts and filings, flag risk, and write structured data straight back into iManage or NetDocuments — so associates stop doing manual review and your firm reviews more matters in less time.',
+      'Legal AI automation puts custom AI to work on a law firm’s highest-volume manual work — monitoring regulators for relevant changes, answering questions across your matters and precedents through a private RAG system, and extracting risk from contracts and filings — all inside a deployment you control, with a full audit trail on every action.',
     callout:
-      'What works at 20 matters breaks at 200. When associates do manual review, the firm reviews fewer matters, risk clauses slip through, and realization rates fall. Automation is how you scale review capacity without scaling headcount.',
-    serviceName: 'Legal Due Diligence Automation',
-    serviceType: 'Legal document processing automation',
+      'What works at 20 matters breaks at 200. When analysts manually watch regulators and associates manually review documents, the firm covers fewer matters, a circular gets missed, and a risk clause slips through. The fix is not another SaaS login — it is AI built into your own secure environment, where the data never leaves and every action is logged.',
+    serviceName: 'Legal AI Automation',
+    serviceType: 'Custom AI systems for legal & regulatory work',
     schemaDescription:
-      'Custom AI workflows for legal due diligence, contract review, and matter intake integrated with iManage and NetDocuments.',
+      'Custom AI for law firms — regulatory-change monitoring, legal RAG over matters and precedents, due-diligence and contract review — deployed securely with full audit trails.',
     roi: [
-      { value: 'iManage', label: 'Built on your existing DMS — no rip-and-replace' },
-      { value: '100%', label: 'Audit-trail coverage on every extracted document' },
-      { value: 'Days→hours', label: 'Faster matter intake & due diligence cycles' },
+      { value: '90%', label: 'Less time on manual regulatory monitoring (litigation-firm build)' },
+      { value: '5×', label: 'Faster internal response to regulatory changes' },
+      { value: '100%', label: 'Audit-trail coverage on every AI action and extraction' },
     ],
     sections: [
       {
-        heading: 'Integrating legacy legal tech with AI',
+        heading: 'The problem: legal knowledge work doesn’t fit off-the-shelf AI',
         level: 2,
         body: [
-          "Off-the-shelf software doesn't work for top-tier law firms. You need iManage workflow automation that respects your strict security protocols while eliminating manual data entry. We specialize in connecting rigid document management systems to advanced AI pipelines — inside the environment you already control.",
+          'A regulated practice runs on two things generic AI tools cannot touch: confidential client data that legally cannot leave systems you control, and a body of knowledge — matters, precedents, regulatory positions — that no public model has ever seen. A ChatGPT subscription cannot read your matter history, and it certainly cannot be trusted with privileged documents.',
+          'So the manual work stays manual. Analysts spend their day watching regulator websites for circulars that might affect a live matter. Associates re-read the same contracts to pull the same clauses. The knowledge sits in a DMS that can store a document but cannot answer a question about it. Capacity is capped by headcount, and the firm reviews fewer matters than it could.',
         ],
       },
       {
-        heading: 'Automating due diligence & contract review',
+        heading: 'What we built for a top corporate litigation firm',
+        level: 2,
+        body: [
+          'For one of the largest corporate litigation practices in India, the bottleneck was regulatory intelligence. Analysts manually monitored a long list of government and regulator sources — SEBI, RBI, the stock exchanges, and sector circulars — then tried to connect each change back to the right live matter by hand. Slow, and easy to miss.',
+          'We built a regulatory-intelligence system that watches those sources continuously, classifies each new circular or order by relevance, maps it to the matters it actually affects, and surfaces it to the responsible team with the source attached. The matter and precedent knowledge lives in a private vector database, so the AI answers from the firm’s own context rather than guessing. The result: 90% less time spent on manual monitoring and a 5× faster internal response to regulatory change — with no document ever leaving the firm’s environment.',
+        ],
+      },
+      {
+        heading: 'The architecture: legal RAG over your own matters & precedents',
+        level: 2,
+        body: [
+          'The core is a private RAG (retrieval-augmented generation) system. We ingest your matters, precedents, contracts and filings into a vector database, so an AI can retrieve the exact passage that answers a question and cite where it came from — instead of producing a confident hallucination. As matters close and precedents are added, the index relearns, so the system gets more useful over time rather than going stale.',
+          'On top of that sit the workflows that do the work: regulatory monitoring, contract and due-diligence extraction, matter intake, and clause-level risk flagging. Low-confidence items route to a human for review (human-in-the-loop), so accuracy improves without ever taking a lawyer out of the loop on the things that matter.',
+        ],
+      },
+      {
+        heading: 'Security & compliance: the part that actually decides the deal',
+        level: 2,
+        body: [
+          'For a regulated firm, “where does the data live” is the first question, not the last. We deploy inside an environment you control — your cloud tenancy or a dedicated, isolated instance (OpenAI on Azure, a private model, or your own) — so privileged data never trains a public model and never leaves your boundary. Role-based access mirrors your matter-level permissions, and every AI action, extraction and answer is logged for a complete audit trail you can show a regulator or a client.',
+        ],
+      },
+      {
+        heading: 'Due diligence, contract review & DMS integration',
         level: 3,
         body: [
-          'Manual contract review and regulatory tracking is a massive drain on your associates. We deploy OCR and custom LLM extraction models that automatically parse contracts, flag risk and liabilities, tag metadata, and sync the structured data directly back to NetDocuments or iManage — with a full audit trail on every action.',
+          'The same foundation powers document-heavy work. We deploy OCR and LLM extraction that parses contracts and filings, flags risk and liability clauses, tags metadata, and writes the structured result straight back into iManage or NetDocuments — building on your existing document management system instead of forcing a new platform on your associates. Due-diligence cycles drop from days to hours, and matter intake stops being a re-keying exercise.',
         ],
       },
     ],
     process: [
-      { title: 'Discovery & security scoping', body: 'We map your matter-intake and review workflow and align to your DMS security model before any build.' },
-      { title: 'Build on your DMS', body: 'We connect AI extraction to iManage/NetDocuments and configure risk-flagging rules to your practice areas.' },
-      { title: 'Test against real matters', body: 'We validate accuracy on real documents with human-in-the-loop review for low-confidence items.' },
-      { title: 'Deploy & monitor', body: 'Go live with audit trails, access controls, and ongoing accuracy monitoring.' },
+      { title: 'Discovery & security scoping', body: 'We map the manual workflow — regulatory monitoring, review, intake — and agree the deployment and security model (your tenancy vs. a dedicated instance) before any build.' },
+      { title: 'Ingest & index your knowledge', body: 'We load matters, precedents and documents into a private vector database, so the AI answers from your context, with citations.' },
+      { title: 'Build the workflows', body: 'Regulatory monitoring, RAG Q&A, contract extraction and risk-flagging — tuned to your practice areas, with human-in-the-loop on low-confidence items.' },
+      { title: 'Deploy, audit & relearn', body: 'Go live inside your environment with role-based access and full audit trails; the index relearns as matters close and precedents are added.' },
+    ],
+    workflows: [
+      'Continuous regulatory-change monitoring (SEBI, RBI, exchanges, sector circulars) mapped to affected matters',
+      'Private legal RAG: ask questions across your matters, precedents and filings, with citations',
+      'Contract & due-diligence extraction — clauses, risk, liabilities — written back to iManage/NetDocuments',
+      'Automated matter intake and document classification',
+      'Precedent database with relearning as new matters close',
+      'Audit-trail and access-control layer over every AI action',
     ],
     whyCustom: [
-      'Runs inside your environment — client data never leaves systems you control.',
-      'Built on iManage/NetDocuments instead of forcing a new platform on your associates.',
-      'Risk rules tuned to your practice areas, not a generic SaaS template.',
+      'Runs inside your environment — privileged client data never leaves systems you control and never trains a public model.',
+      'Answers from your own matters and precedents (private RAG), not a generic model that has never seen your work.',
+      'Deployed on your DMS and your security model (iManage/NetDocuments, role-based access) instead of a one-size SaaS.',
+      'Every action is logged for an audit trail you can put in front of a regulator or client.',
     ],
     included: [
+      'Regulatory-change monitoring mapped to live matters',
+      'Private legal RAG over matters, precedents & filings (vector database)',
+      'AI contract review, clause extraction & risk flagging',
       'iManage & NetDocuments integration',
-      'AI contract review & clause extraction',
-      'Risk & liability flagging',
-      'Automated matter intake workflows',
-      'Metadata tagging & search',
-      'Audit trails & access controls',
-      'Regulatory change monitoring',
+      'Automated matter intake & document classification',
+      'Secure deployment in your tenancy or a dedicated instance',
+      'Role-based access & full audit trails',
+      'Human-in-the-loop review on low-confidence items',
     ],
     faqs: [
-      { q: 'Does this work with our existing iManage or NetDocuments setup?', a: 'Yes. We build directly on top of your current document management system rather than replacing it — your security model, folder structure, and access controls stay intact.' },
-      { q: 'How do you handle confidentiality and data security?', a: 'Workflows run inside your environment with role-based access, full audit trails, and no client data leaving systems you control. We scope security requirements before any build begins.' },
-      { q: 'How accurate is the AI extraction for legal documents?', a: 'We pair OCR/LLM extraction with validation rules and human-in-the-loop review for low-confidence items, so accuracy improves over time without sacrificing control.' },
-      { q: 'How long does a legal automation build take?', a: 'Most engagements go live in 4–6 weeks: week 1 discovery and mapping, weeks 2–3 build and integration, week 4 testing against real matters before go-live.' },
-      { q: 'Can it monitor regulatory changes too?', a: 'Yes. We build pipelines that watch regulatory sources and surface relevant changes into your workflow, so compliance tracking stops being a manual chore.' },
+      { q: 'Where does our data live, and could it leak into a public AI model?', a: 'It lives where you decide — your own cloud tenancy or a dedicated, isolated instance (e.g. OpenAI on Azure, a private model, or your own). Privileged data never leaves that boundary and never trains a public model. We scope this before any build.' },
+      { q: 'What is legal RAG, and why not just use ChatGPT?', a: 'RAG (retrieval-augmented generation) means the AI retrieves the exact passage from your own matters or precedents and cites it, instead of guessing. A public chatbot has never seen your work and cannot be trusted with privileged documents — a private RAG system answers from your context, with an audit trail.' },
+      { q: 'Can it really track regulatory changes like SEBI and RBI circulars?', a: 'Yes — that is exactly the system we built for a top corporate litigation firm. It monitors regulator and exchange sources continuously, classifies each change by relevance, and maps it to the matters it affects, cutting manual monitoring time by ~90%.' },
+      { q: 'Does this work with our existing iManage or NetDocuments setup?', a: 'Yes. We build on top of your current DMS rather than replacing it — your security model, folder structure and access controls stay intact.' },
+      { q: 'How accurate is AI extraction on legal documents?', a: 'We pair OCR/LLM extraction with validation rules and human-in-the-loop review for low-confidence items, so accuracy improves over time without taking a lawyer out of the loop.' },
+      { q: 'How long does a build take?', a: 'A focused workflow goes live in 4–6 weeks; a full RAG-plus-monitoring system is typically 8–12 weeks depending on the volume of matters to ingest and your security requirements.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['cpa-tax-document-automation', 'insurance-claims-triage-automation', 'n8n-automation-services'],
+    related: ['regulatory-filing-monitoring-automation', 'imanage-netdocuments-automation', 'contract-review-automation-software', 'law-firm-matter-intake-automation', 'cpa-tax-document-automation', 'document-processing-automation'],
   },
   {
     slug: 'insurance-claims-triage-automation',
@@ -180,70 +215,83 @@ export const SERVICES: ServiceContent[] = [
   },
   {
     slug: 'cpa-tax-document-automation',
-    metaTitle: 'CPA Workflow Automation & Tax Document Extraction | Chronexa',
+    metaTitle: 'AI Tax Automation for CPA & Accounting Firms | Chronexa',
     metaDescription:
-      'Automate tax document ingestion, OCR extraction, and QuickBooks/Xero reconciliation workflows for CPA firms — scale tax season without adding headcount.',
-    h1: 'CPA Workflow Automation & Tax Document Extraction',
+      'AI tax automation for CPA firms: an AI copilot that chases client documents, reads W-2s, 1099s and K-1s, runs intake, and drafts returns — so you scale tax season without adding headcount.',
+    h1: 'AI Tax Automation for CPA & Accounting Firms',
     heroSub:
-      'Automate tax document ingestion, OCR extraction, and QuickBooks reconciliation workflows for CPA firms — so accountants stop doing data entry.',
+      'An AI tax copilot that handles the document chase, intake, and extraction — reading W-2s, 1099s, K-1s and brokerage statements — so your preparers do review and advisory, not data entry.',
     answer:
-      'CPA workflow automation uses OCR and AI to ingest tax documents, categorize expenses, and reconcile statements in QuickBooks or Xero automatically — letting a firm process far more returns in tax season without hiring more preparers.',
+      'AI tax automation gives a CPA firm a copilot for the busywork of tax season: it chases clients for missing documents, runs the intake form, reads and extracts data from W-2s, 1099s, K-1s and brokerage statements, and drafts the return for a preparer to review — letting a firm process far more returns without hiring more staff.',
     callout:
-      'What works at 200 returns breaks at 2,000. In peak season, manual data entry caps how many clients a firm can serve — and burns out preparers on work that should be review and advisory, not typing.',
-    serviceName: 'CPA Workflow Automation',
-    serviceType: 'Accounting & tax document automation',
+      'The bottleneck in tax season is not preparing returns — it is chasing clients for documents and keying them in. That manual cycle caps how many clients a firm can serve and burns preparers out on work that should be review, not typing.',
+    serviceName: 'AI Tax & Accounting Automation',
+    serviceType: 'AI automation for CPA & accounting firms',
     schemaDescription:
-      'Tax document ingestion, OCR extraction, and QuickBooks/Xero reconciliation automation for CPA firms.',
+      'AI tax automation for CPA firms: client-document chasing, intake, AI extraction of W-2s/1099s/K-1s, reconciliation, and return drafting with audit-ready logging.',
     roi: [
-      { value: '10x', label: 'Throughput in tax season without adding headcount' },
-      { value: 'Hubdoc→QBO', label: 'Receipts to reconciled books, hands-off' },
+      { value: '84%', label: 'Less manual client follow-up & document chasing (CPA-firm build)' },
+      { value: '3×', label: 'More documents processed per staff member' },
       { value: 'Audit-ready', label: 'Full logging on every document processed' },
     ],
     sections: [
       {
-        heading: 'Eliminate manual data entry during tax season',
+        heading: 'The real bottleneck: chasing clients, not preparing returns',
         level: 2,
         body: [
-          'When you are processing thousands of returns, manual data entry is your biggest liability. As a specialized CPA workflow automation consultant, we build bespoke systems that use OCR to automate the intake of complex tax documents — so your preparers spend time on review and advisory, not typing.',
+          'Every CPA knows the tax-season pattern: the work is not the return, it is getting the documents. Staff spend weeks emailing clients for the missing 1099, the brokerage statement, the K-1 that hasn’t arrived — then re-keying whatever finally shows up. It’s manual, it’s repetitive, and it’s the exact thing that caps how many clients a firm can take on.',
+          'For a mid-sized accounting practice, we replaced that cycle. An AI-driven intake system chases clients automatically for outstanding documents, reads what comes back, and feeds clean data into the preparer’s workflow. The result: 84% less time spent on manual follow-up and document chasing, and 3× more documents processed per staff member — without adding headcount in peak season.',
         ],
       },
       {
-        heading: 'Hubdoc to QuickBooks automation workflow',
+        heading: 'An AI copilot for the accountant, not a replacement',
+        level: 2,
+        body: [
+          'The system reads the documents a firm actually deals with — W-2s, 1099s, K-1s, consolidated brokerage statements — and extracts the fields against the schema for each form type, not as a one-off chat. Private-equity fund K-1s, which are notoriously manual to break apart, are a strong fit: the copilot pulls the line items and routes anything ambiguous to a human.',
+          'From there it supports the rest of the engagement: running the client intake form, drafting the return for review, and surfacing tax-saving angles and compliance checks the preparer can act on. The accountant stays in control and does the high-value work; the copilot does the chasing, reading, and first-pass drafting.',
+        ],
+      },
+      {
+        heading: 'Built on your stack, with the controls finance work demands',
         level: 3,
         body: [
-          'Stop paying accountants to act as data-entry clerks. We engineer seamless Hubdoc-to-QuickBooks automation workflows that automatically ingest receipts, categorize expenses using AI, and reconcile bank statements in Xero or QBO without human intervention.',
+          'It runs behind the tools your firm already uses — QuickBooks, Xero, Hubdoc, document portals and practice-management software — so nobody has to learn a new platform. Client financial data stays inside your environment with role-based access and full audit logging on every document, because tax and financial data cannot be handed to an uncontrolled public AI tool.',
         ],
       },
     ],
     process: [
-      { title: 'Map your tax workflow', body: 'We document how documents arrive, get categorized, and flow into your accounting stack.' },
-      { title: 'Build the ingestion pipeline', body: 'OCR + AI categorization wired into QuickBooks/Xero with review queues for exceptions.' },
-      { title: 'Validate on real returns', body: 'We test against your actual documents and tune until accuracy meets your bar.' },
-      { title: 'Deploy for the season', body: 'Go live with audit-ready logging and capacity to handle peak volume.' },
+      { title: 'Map your tax workflow', body: 'We document how documents are requested, arrive, get categorized, and flow into your accounting and prep stack.' },
+      { title: 'Build intake & extraction', body: 'Automated client document-chasing plus schema-based AI extraction for W-2s, 1099s, K-1s and statements, with review queues for exceptions.' },
+      { title: 'Validate on real returns', body: 'We test against your actual documents and tune until accuracy meets your bar, with human-in-the-loop on low-confidence items.' },
+      { title: 'Deploy for the season', body: 'Go live inside your environment with audit-ready logging and the capacity to absorb peak volume.' },
     ],
     whyCustom: [
-      'Connects the specific stack your firm runs (Hubdoc, QBO, Xero, portals).',
-      'Human-in-the-loop review keeps accuracy high where it matters.',
-      'Scales for tax-season peaks — the exact moment manual entry breaks down.',
+      'Automates the real bottleneck — the document chase and intake — not just data entry.',
+      'Reads the forms a firm actually handles (W-2, 1099, K-1, brokerage statements) against a defined schema.',
+      'Runs behind QuickBooks/Xero/Hubdoc so your team keeps their tools.',
+      'Client financial data stays in your environment with audit logging — no uncontrolled public AI.',
     ],
     included: [
-      'OCR tax document ingestion',
-      'AI expense categorization',
-      'Hubdoc → QuickBooks / Xero sync',
-      'Automated bank reconciliation',
-      'Exception handling & review queues',
+      'Automated client document-chasing & intake',
+      'AI extraction of W-2s, 1099s, K-1s & brokerage statements',
+      'PE-fund K-1 line-item breakdown',
+      'Return drafting & tax-saving / compliance checks',
+      'QuickBooks / Xero / Hubdoc integration',
+      'Automated reconciliation',
+      'Exception handling & human-in-the-loop review',
       'Audit-ready logging',
     ],
     faqs: [
-      { q: 'Which accounting systems do you integrate with?', a: 'QuickBooks Online, Xero, and Hubdoc are the most common, plus document portals and practice-management tools. If your firm relies on a specific platform, we can almost always connect it.' },
-      { q: 'Is the extraction accurate enough for tax work?', a: 'We pair OCR with validation rules and human-in-the-loop review for low-confidence items, so accuracy improves over time without sacrificing control.' },
-      { q: 'Can this handle the volume of tax season?', a: 'Yes — the workflows process thousands of documents in parallel, which is exactly when manual entry becomes the bottleneck.' },
+      { q: 'What does the AI actually do during tax season?', a: 'It chases clients for missing documents, reads what comes back (W-2s, 1099s, K-1s, brokerage statements), extracts the data against each form’s schema, and drafts the return for a preparer to review. For one CPA firm this cut manual follow-up by 84% and tripled documents processed per staff member.' },
+      { q: 'Can it handle private-equity fund K-1s?', a: 'Yes — K-1s are one of the most manual documents in tax prep, so they are a strong fit. The copilot pulls the line items and routes anything ambiguous to a human.' },
+      { q: 'Which accounting systems do you integrate with?', a: 'QuickBooks Online, Xero and Hubdoc are most common, plus document portals and practice-management tools. If your firm relies on a specific platform, we can almost always connect it.' },
+      { q: 'Is our clients’ financial data secure?', a: 'Yes. The system runs inside your environment with role-based access and full audit trails; sensitive data never leaves systems you control or trains a public model. We work under NDA.' },
       { q: 'Do our accountants need to learn new software?', a: 'No. The automation runs behind the tools they already use; your team focuses on review and advisory.' },
-      { q: 'How long does it take to set up?', a: 'Most firms are live in 4–6 weeks, well ahead of peak season if you start early.' },
+      { q: 'How long does it take to set up?', a: 'Most firms are live in 4–6 weeks — well ahead of peak season if you start early.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
-    related: ['legal-due-diligence-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
+    related: ['tax-software-ai-integration', 'k1-tax-form-ocr-extraction', 'bookkeeping-automation-quickbooks-xero', 'safesend-karbon-workflow-automation', 'financial-services-automation', 'document-processing-automation'],
   },
   {
     slug: 'property-management-automation',
@@ -313,68 +361,88 @@ export const SERVICES: ServiceContent[] = [
   },
   {
     slug: 'vc-pe-crm-automation',
-    metaTitle: 'Affinity CRM Workflow Automation for VC & PE | Chronexa',
+    metaTitle: 'AI for M&A, Private Equity & Investment Banking | Chronexa',
     metaDescription:
-      'Automate portfolio monitoring and pitch deck parsing directly within Affinity CRM for venture capital and private equity firms with custom AI workflows.',
-    h1: 'Affinity CRM Workflow Automation & Deal Flow Parsing',
+      'AI for dealmaking: due-diligence automation, data-room analysis, deal-flow and pitch-deck parsing into Affinity, and portfolio monitoring — built securely for M&A, PE and investment banking.',
+    h1: 'AI for M&A, Private Equity & Investment Banking',
     heroSub:
-      'Automate portfolio monitoring and pitch deck parsing directly within Affinity CRM for venture capital and private equity firms.',
+      'Due-diligence and data-room automation, deal-flow parsing into your CRM, and portfolio monitoring — built as secure AI systems for firms where the deal data cannot leak.',
     answer:
-      'VC/PE CRM automation watches your firm’s inbox, detects incoming pitch decks, extracts the key financials and founder data with AI, and writes them straight into Affinity — and keeps monitoring your portfolio automatically, so analysts stop doing data entry and never miss a signal.',
-    serviceName: 'VC & PE CRM Deal Flow Automation',
-    serviceType: 'CRM & deal flow automation',
+      'AI for dealmaking automates the document- and research-heavy work of M&A, private equity and investment banking: reading and summarising data rooms for due diligence, parsing inbound pitch decks into your CRM, and monitoring portfolio companies — all inside a secure deployment where confidential deal data stays contained.',
+    callout:
+      'Diligence is a race against a data room full of documents, and deal data is some of the most confidential there is. Analysts reading every file by hand is slow; uploading them to a public AI tool is a non-starter. The answer is AI built inside your own environment.',
+    serviceName: 'M&A, PE & Investment Banking AI',
+    serviceType: 'AI for dealmaking, diligence & investment research',
     schemaDescription:
-      'Portfolio monitoring, pitch deck parsing, and deal-flow automation built inside Affinity CRM for VC and PE firms.',
+      'AI for M&A, private equity and investment banking: due-diligence and data-room analysis, deal-flow and pitch-deck parsing into Affinity, and portfolio monitoring with secure, controlled deployment.',
     roi: [
-      { value: 'Affinity', label: 'Built inside the CRM your firm already runs' },
-      { value: '0 manual entry', label: 'Pitch decks parsed into structured CRM fields' },
-      { value: '24/7', label: 'Automated portfolio monitoring & signals' },
+      { value: 'Secure', label: 'Confidential deal data stays in your environment, never a public model' },
+      { value: '0 manual entry', label: 'Pitch decks & filings parsed into structured CRM fields' },
+      { value: '24/7', label: 'Automated diligence support & portfolio monitoring' },
     ],
     sections: [
       {
-        heading: 'Mastering deal flow with Affinity CRM',
+        heading: 'Due diligence & data-room analysis',
         level: 2,
         body: [
-          "If your analysts are manually entering founder data and funding histories into your CRM, you are losing speed to execution. We engineer high-end Affinity CRM workflow automation that monitors your firm's inbox, automatically identifies incoming pitch decks, and extracts the core financial metrics into structured CRM fields.",
+          'A live deal means a data room full of contracts, financials and disclosures, and a deadline. Junior teams read every document to surface risks, change-of-control clauses, liabilities and inconsistencies — slow, expensive, and easy to miss something at 2am.',
+          'We build diligence copilots that ingest the data room into a private knowledge base and let the deal team ask questions across it with citations: flagging risk clauses, reconciling financials, and assembling first-draft diligence summaries. It does not replace the banker’s judgement — it gets them to the judgement faster, on documents that never leave your environment.',
         ],
       },
       {
-        heading: 'Automating portfolio company monitoring',
+        heading: 'Deal flow & pitch-deck parsing into your CRM',
+        level: 2,
+        body: [
+          'If analysts are manually entering founder data and funding histories into the CRM, the firm loses speed to execution. We engineer deal-flow automation that monitors your inbox, identifies incoming pitch decks, extracts the core financials and founder data, and writes them into Affinity (or your CRM) as structured fields — so nothing is re-keyed and nothing is missed.',
+        ],
+      },
+      {
+        heading: 'Portfolio monitoring & investment research',
         level: 3,
         body: [
-          "Monitoring your investments shouldn't require manual web scraping. We build custom systems to automate portfolio company monitoring for VC and PE firms — automatically updating Affinity with news mentions, competitor movements, and executive hires related to your portfolio.",
+          'Monitoring investments should not require manual web scraping. We track news, executive hires, competitor moves and filings for your portfolio companies and push updates into the CRM. The same research foundation supports market and equity research — ingesting filings and transcripts into a private knowledge base that answers with citations.',
+        ],
+      },
+      {
+        heading: 'Built for the confidentiality the work demands',
+        level: 3,
+        body: [
+          'Everything runs inside an environment you control — your tenancy or a dedicated, isolated instance — with role-based access and an audit trail on every action. Deal and portfolio data never leaves your boundary and never trains a public model.',
         ],
       },
     ],
     process: [
-      { title: 'Map your deal flow', body: 'We document how decks arrive, what data matters, and how your CRM is structured.' },
-      { title: 'Build inbox → CRM automation', body: 'AI detects decks, extracts metrics and founder data, and writes to Affinity automatically.' },
-      { title: 'Add portfolio monitoring', body: 'We wire up news, hiring, and competitor signal tracking for your portfolio companies.' },
-      { title: 'Deploy & refine', body: 'Go live with alerts and analytics, refining extraction to your fields.' },
+      { title: 'Map the deal workflow', body: 'Diligence, deal flow, or portfolio monitoring — we document the documents, data, CRM structure, and the security model the work requires.' },
+      { title: 'Ingest & build securely', body: 'Data room or deal data is loaded into a private knowledge base in your environment; copilots and extraction are built on top.' },
+      { title: 'Add monitoring & write-back', body: 'AI detects decks and filings, extracts data, writes to your CRM, and tracks portfolio signals — with human review on what matters.' },
+      { title: 'Deploy & refine', body: 'Go live with alerts, analytics and audit trails, refining extraction and summaries to your fields and standards.' },
     ],
     whyCustom: [
-      'Built inside Affinity (or your CRM) — analysts keep one source of truth.',
-      'Extraction tuned to the metrics your firm actually tracks.',
-      'Monitoring covers your specific portfolio, not a generic news feed.',
+      'Confidential deal and portfolio data stays in your environment and never trains a public model.',
+      'Diligence copilots answer from the actual data room, with citations — not a generic model.',
+      'Deal-flow extraction tuned to the metrics your firm tracks, written into Affinity or your CRM.',
+      'Every action is logged for an audit trail.',
     ],
     included: [
-      'Inbox monitoring & pitch deck detection',
+      'Data-room ingestion & due-diligence copilot',
+      'Risk-clause & liability flagging across deal documents',
+      'Inbox monitoring & pitch-deck parsing into the CRM',
       'AI extraction of financials & founder data',
-      'Structured write-back to Affinity CRM',
-      'Automated portfolio company monitoring',
-      'News, hiring & competitor signal tracking',
-      'Deal-flow analytics & alerts',
+      'Portfolio company monitoring (news, hiring, filings)',
+      'Market & equity research with cited answers',
+      'Secure deployment in your tenancy or a dedicated instance',
+      'Role-based access & full audit trails',
     ],
     faqs: [
-      { q: 'Does this only work with Affinity CRM?', a: 'Affinity is our most common deployment, but the same deal-flow automation patterns apply to other VC/PE CRMs. We integrate with what your firm already runs on.' },
-      { q: 'How are pitch decks parsed into the CRM?', a: 'Incoming decks are detected from your inbox, key metrics and founder details are extracted with AI, and the structured data is written straight into the right CRM fields.' },
-      { q: 'Can it monitor our existing portfolio automatically?', a: 'Yes. We track news, executive hires, and competitor moves for your portfolio companies and push updates into the CRM so nothing is missed.' },
-      { q: 'Is our deal data kept private?', a: 'Yes — workflows run in your environment with access controls; sensitive deal data stays in systems you control.' },
-      { q: 'How long does it take to deploy?', a: 'Most builds go live in 4–6 weeks depending on integrations and the depth of monitoring.' },
+      { q: 'Can AI actually help with M&A due diligence?', a: 'Yes — diligence is document-heavy review, which is exactly where a private copilot helps. We ingest the data room into a secure knowledge base so the deal team can ask questions across it with citations, flag risk clauses, and draft summaries faster, without any document leaving your environment.' },
+      { q: 'How is confidential deal data protected?', a: 'Everything runs inside your environment — your tenancy or a dedicated, isolated instance — with role-based access and full audit trails. Deal data never leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'Does the deal-flow automation only work with Affinity?', a: 'Affinity is our most common deployment, but the same patterns apply to other deal CRMs. Inbound decks are detected, key metrics and founder details extracted, and the structured data written into the right fields.' },
+      { q: 'Can you monitor our existing portfolio?', a: 'Yes — we track news, executive hires, competitor moves and filings for your portfolio companies and push updates into the CRM so nothing is missed.' },
+      { q: 'How long does it take to deploy?', a: 'A focused deal-flow or monitoring build goes live in 4–6 weeks; a full diligence copilot depends on data-room volume and security requirements.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
-    related: ['cpa-tax-document-automation', 'legal-due-diligence-automation', 'n8n-automation-services'],
+    proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
+    related: ['affinity-crm-automation', 'pitch-deck-parsing-software', 'ai-term-sheet-analysis', 'portfolio-company-monitoring-automation', 'financial-services-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'marketing-automation',
@@ -439,7 +507,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How long does it take to set up?', a: 'Most builds go live in 4–6 weeks depending on the number of channels and integrations.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'how-freshcart-boosted-lead-quality-with-ai-scoring', label: 'How FreshCart Foods boosted lead quality with AI scoring' },
+    proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
     related: ['d2c-ecommerce-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
   },
   {
@@ -506,15 +574,15 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How long does it take to set up?', a: 'Most builds go live in 4–6 weeks depending on channels and integrations.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'how-autopartsco-scaled-customer-support-with-ai', label: 'How AutoPartsCo transformed operations with AI automation' },
+    proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
     related: ['marketing-automation', 'n8n-automation-services', 'us-ai-automation-agency'],
   },
   {
     slug: 'document-processing-automation',
-    metaTitle: 'Document Processing Automation & Document Intelligence | Chronexa',
+    metaTitle: 'Document Automation for Regulated Industries (IDP) | Chronexa',
     metaDescription:
-      'Intelligent document processing built as context-aware pipelines — OCR + LLM extraction, RAG grounding, and human-in-the-loop validation. Deep experience across legal, finance, insurance, accounting, and pharma.',
-    h1: 'Document Processing Automation & Document Intelligence',
+      'Document automation built for regulated industries — OCR + LLM extraction, RAG grounding, and human-in-the-loop validation, deployed securely with full audit trails. Deep experience across legal, finance, insurance, accounting and pharma.',
+    h1: 'Document Automation & Intelligence for Regulated Industries',
     heroSub:
       'Turn high-volume documents into structured, decision-ready data — context-aware pipelines that run from client onboarding through the full data journey, not one-off AI chats.',
     answer:
@@ -663,13 +731,13 @@ export const SERVICES: ServiceContent[] = [
     slug: 'n8n-automation-services',
     metaTitle: 'n8n Automation Services & Consulting | Chronexa',
     metaDescription:
-      'An n8n-first automation agency. We design, build, and self-host custom n8n workflows and AI agents for B2B teams. Hire expert n8n consultants.',
+      'Custom n8n workflow automation and consulting — fast, lower-cost automation for ops, sales and back-office, self-hosted and owned by you. Built by an expert n8n team.',
     h1: 'n8n Automation Services & Consulting',
     answer:
-      'Chronexa is an n8n-first automation agency: we design, build, self-host, and maintain custom n8n workflows and AI agents for B2B teams — so you own portable automation assets instead of renting per-task SaaS.',
+      'Chronexa designs, builds, self-hosts and maintains custom n8n workflows and AI agents for B2B teams — fast, lower-cost automation for ops, sales and back-office work that you own outright instead of renting per-task SaaS. (For bespoke, security-sensitive enterprise AI, see our regulated-industry builds.)',
     heroSub:
-      "We're an n8n-first automation agency. Custom workflows, self-hosted deployments, and AI agents — engineered on n8n and integrated into the stack you already run.",
-    serviceName: 'n8n Automation Services',
+      'Fast, lower-cost workflow automation — custom n8n workflows and AI agents, self-hosted on your infrastructure and owned by you, integrated with the stack you already run.',
+    serviceName: 'n8n Workflow Automation',
     serviceType: 'n8n workflow automation consulting',
     schemaDescription:
       'Expert n8n automation services and consulting: custom workflow design, self-hosted n8n deployment, AI agents, and Zapier/Make migration for B2B teams.',
@@ -680,10 +748,11 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'Why work with an n8n specialist',
+        heading: 'Fast, lower-cost workflow automation',
         level: 2,
         body: [
-          'Most agencies treat n8n as one tool among many. We are n8n-first: it is the engine behind every system we ship. That means self-hostable workflows you fully own, no per-task pricing, and the freedom to run AI agents, custom code, and any API in one place — instead of being boxed in by an off-the-shelf SaaS.',
+          'Not every problem needs a bespoke enterprise build. For the high-volume, lower-risk work — internal ops, sales research and outreach, back-office process automation — n8n is the fastest, most cost-effective way to ship automation you actually own. It is our wedge: quick to stand up, self-hostable, and yours to keep.',
+          'n8n gives you self-hostable workflows you fully own, no per-task pricing, and the freedom to run AI agents, custom code, and any API in one place — instead of being boxed in by an off-the-shelf SaaS. For data-sensitive, security-critical systems in finance, legal or tax, we go beyond n8n to bespoke, contained AI deployments — but for everyday automation, this is the pragmatic, affordable engine.',
         ],
       },
       {
@@ -727,69 +796,78 @@ export const SERVICES: ServiceContent[] = [
   },
   {
     slug: 'us-ai-automation-agency',
-    metaTitle: 'US AI Automation Agency & Consultants | Chronexa',
+    metaTitle: 'AI Automation Agency for Enterprises (US) | Chronexa',
     metaDescription:
-      'AI automation agency for US B2B teams. Custom n8n & AI workflows, 30–60 day delivery, and a 90-day ROI guarantee. Document, sales, legal & finance automation.',
-    h1: 'US AI Automation Agency',
+      'A US AI automation agency for regulated enterprises — custom, secure AI systems for finance, legal, tax and dealmaking, built on your stack and backed by a 90-day ROI guarantee.',
+    h1: 'AI Automation Agency for Regulated US Enterprises',
     answer:
-      'Chronexa is an AI automation agency for US B2B teams. We build custom AI and n8n workflows on your existing stack — scoped, fixed-price, delivered in 30–60 days, and backed by a 90-day ROI guarantee.',
+      'Chronexa is an AI automation agency and consultancy for US enterprises in regulated industries. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the environment you already run, scoped and fixed-price, and backed by a 90-day ROI guarantee.',
     heroSub:
-      'Chronexa builds custom AI and n8n automation for US B2B teams — scoped, fixed-price, delivered in 30–60 days and backed by a 90-day ROI guarantee.',
-    serviceName: 'US AI Automation Agency',
-    serviceType: 'AI automation agency',
+      'A US AI automation agency for finance, legal, tax and dealmaking teams — custom, secure AI built inside your environment, scoped and fixed-price, with a 90-day ROI guarantee.',
+    serviceName: 'AI Automation Agency',
+    serviceType: 'AI automation agency & consultancy',
     schemaDescription:
-      'AI automation agency and consultants for United States B2B companies: custom AI and n8n workflow automation across document processing, sales, legal, and finance.',
+      'AI automation agency and consultants for US enterprises in regulated industries — custom, secure AI systems across legal, finance, tax, and dealmaking, deployed on the client’s own stack.',
     roi: [
-      { value: '30–60 days', label: 'From kickoff to a live automation' },
+      { value: 'Secure', label: 'Built inside your environment — data stays contained' },
       { value: '90-day', label: 'ROI guarantee — or we keep working free' },
       { value: '$12M+', label: 'ROI generated for clients to date' },
     ],
     sections: [
       {
-        heading: 'AI automation for US enterprises',
+        heading: 'What to look for in an AI automation agency',
         level: 2,
         body: [
-          'We help US B2B teams replace manual operations with custom AI and n8n automation — built on the systems you already run, not another SaaS subscription. Engagements are scoped and fixed-price, with measurable ROI targets agreed before we build.',
+          'Most AI automation agencies sell off-the-shelf workflows on a vendor’s cloud. That’s fine for low-risk ops work — but if you’re in finance, legal, tax or dealmaking, the agency that fits is the one that can build custom systems inside your own environment, with the security, auditability and domain depth your industry demands. The differentiator isn’t the tooling; it’s whether the work can stand up to a regulator and run on data that can’t leak.',
+          'That’s where Chronexa sits. We’re an engineer-led agency that builds bespoke AI — agentic systems, RAG knowledge engines, document intelligence, even quant/ML — for enterprises where the data is sensitive and the stakes are real, deployed on the stack you already run rather than another SaaS subscription.',
         ],
       },
       {
-        heading: 'What we automate',
+        heading: 'Built for regulated industries',
+        level: 2,
+        body: [
+          'Our work concentrates where generic agencies can’t go: legal AI and regulatory intelligence, AI tax automation for CPA firms, secure AI and compliance for financial services and RIAs, and AI for M&A and private equity. Each is built from real, first-hand engagements, deployed inside your environment with role-based access and full audit trails.',
+        ],
+      },
+      {
+        heading: 'Where it starts — and the quick-win wedge',
         level: 3,
         body: [
-          'Document processing and AI research, sales and revenue operations, legal due diligence, insurance claims triage, CPA and tax workflows, and bespoke processes that off-the-shelf tools cannot handle. If it is repetitive and rule-based, it is a candidate for automation.',
+          'Not every problem needs a bespoke enterprise build. For high-volume, lower-risk work — internal ops, sales research and outreach — we also ship fast, lower-cost workflow automation on n8n that you own outright. It’s the pragmatic on-ramp; the enterprise systems are the depth.',
         ],
       },
     ],
     process: [
-      { title: 'Free automation audit', body: 'We review your workflows and identify where AI saves the most time and cost.' },
+      { title: 'Free automation audit', body: 'We review your workflows and identify where AI saves the most time and cost, and the security model the work requires.' },
       { title: 'Scope & fixed price', body: 'We define deliverables, ROI targets, and a fixed price before you commit.' },
-      { title: 'Build & test', body: 'We build on your stack, integrate, and validate against real data.' },
-      { title: 'Deploy & measure', body: 'Go live with training and weekly ROI reporting against the agreed targets.' },
+      { title: 'Build securely on your stack', body: 'We build inside your environment, integrate, and validate against real data with human-in-the-loop where it matters.' },
+      { title: 'Deploy & measure', body: 'Go live with training, audit trails, and reporting against the agreed ROI targets.' },
     ],
     whyCustom: [
-      'Built on your existing stack — an asset you own, not another subscription.',
-      'Fixed-price and outcome-scoped, with ROI agreed before the build.',
-      'US-time-zone delivery with weekly reporting and a 90-day ROI guarantee.',
+      'Custom systems built inside your environment — data stays contained, never trains a public model.',
+      'Domain depth in regulated industries (legal, finance, tax, dealmaking), not generic ops automation.',
+      'Fixed-price and outcome-scoped, with ROI agreed before the build and a 90-day guarantee.',
+      'You own the assets, built on your stack — not another subscription.',
     ],
     included: [
       'Free AI workflow audit',
-      'Custom build on your existing stack',
-      'Document, sales, legal & finance automation',
-      'CRM, ERP & API integrations',
-      'Security & compliance implementation',
-      'Team training & documentation',
+      'Custom, secure build inside your environment',
+      'Legal, finance, tax & dealmaking AI',
+      'RAG / agentic systems & document intelligence',
+      'CRM, ERP, DMS & API integrations',
+      'Security, access control & audit trails',
       '90-day ROI guarantee',
       'Ongoing optimization & support',
     ],
     faqs: [
-      { q: 'Do you work with US-based teams and time zones?', a: 'Yes. We serve US B2B clients across all time zones with overlapping working hours, async updates, and weekly reporting.' },
-      { q: 'How fast can you deliver?', a: 'Most automations go live in 30–60 days from kickoff, depending on scope and integrations. You get a written scope and timeline before any build begins.' },
+      { q: 'What kind of AI automation agency is Chronexa?', a: 'An engineer-led agency and consultancy that builds custom, secure AI systems for US enterprises in regulated industries — finance, legal, tax and dealmaking — deployed inside your own environment rather than on a vendor’s cloud.' },
+      { q: 'How is this different from a typical AI automation agency?', a: 'Most agencies resell off-the-shelf workflows on their cloud. We build bespoke systems on your stack with the security, auditability and domain depth regulated industries require — and for lower-risk work we also offer fast n8n workflow automation you own.' },
+      { q: 'How fast can you deliver?', a: 'A focused workflow goes live in a few weeks; a full enterprise system (e.g. a private RAG with regulatory monitoring) is typically a couple of months. You get a written scope and timeline before any build begins.' },
       { q: 'What is the 90-day ROI guarantee?', a: "If you don't hit the agreed ROI targets within 90 days, we work for free until you do, or refund your setup costs." },
-      { q: 'What can you automate?', a: 'Document processing, sales and revenue operations, legal, insurance, finance and accounting, and custom processes unique to your business.' },
-      { q: 'Do you build on our existing tools?', a: 'Yes. We build on the stack you already run (CRM, ERP, DMS, accounting) rather than forcing a new platform on your team.' },
+      { q: 'Do you build on our existing tools, securely?', a: 'Yes. We build on the stack you already run (CRM, ERP, DMS, accounting) and deploy inside your environment with role-based access and audit trails, so sensitive data never leaves your boundary.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    related: ['n8n-automation-services', 'cpa-tax-document-automation', 'insurance-claims-triage-automation'],
+    related: ['legal-due-diligence-automation', 'financial-services-automation', 'cpa-tax-document-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
   },
 
   /* ============================ SERVICES (capabilities) ============================ */
@@ -1081,7 +1159,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How long to deploy?', a: 'Most processes go live in 4–6 weeks depending on complexity and integrations.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'how-autopartsco-scaled-customer-support-with-ai', label: 'How AutoPartsCo transformed operations with AI automation' },
+    proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
     related: ['finance-automation', 'customer-support-automation', 'n8n-automation-services'],
   },
   {
@@ -1153,7 +1231,6 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How much volume can it deflect?', a: 'It depends on your ticket mix, but routine, repetitive queries — often the majority — are strong candidates for instant resolution.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'how-autopartsco-scaled-customer-support-with-ai', label: 'How AutoPartsCo scaled customer support with AI' },
     related: ['operations-automation', 'd2c-ecommerce-automation', 'marketing-automation'],
   },
   {
@@ -1303,74 +1380,1714 @@ export const SERVICES: ServiceContent[] = [
   },
   {
     slug: 'financial-services-automation',
-    metaTitle: 'AI Automation for Financial Services | Chronexa',
+    metaTitle: 'Secure AI for Financial Services, Fintech & Quant | Chronexa',
     metaDescription:
-      'AI automation for financial services — document intelligence, onboarding/KYC workflows, reconciliation, and reporting built to your compliance and security requirements.',
-    h1: 'AI Automation for Financial Services',
+      'Secure AI for financial services: compliance & KYC automation, equity-research copilots, and quant/ML systems (XGBoost, LSTM) — deployed inside your security perimeter, fully auditable.',
+    h1: 'Secure AI for Financial Services, Fintech & Quant',
     heroSub:
-      'Automate the document-heavy, compliance-bound workflows of financial services — onboarding, reconciliation, reporting, and analysis — inside your security perimeter.',
+      'Compliance and onboarding automation, equity-research copilots, and quant/ML systems — built inside your security perimeter, where data stays contained and every action is auditable.',
     answer:
-      'AI automation for financial services applies document intelligence and workflow automation to onboarding/KYC, reconciliation, reporting, and analysis — cutting manual processing and turnaround times while running inside the compliance and security controls the sector demands.',
-    serviceName: 'Financial Services Automation',
-    serviceType: 'Financial services automation',
+      'AI for financial services spans three things Chronexa builds: compliance-bound document and KYC automation, AI copilots for equity and market research, and quantitative/ML systems for analysis and trading — all deployed inside the security and audit controls the sector demands, never on uncontrolled public tools.',
+    callout:
+      'In finance, “where does the data live and can you prove what the model did” is the first question, not the last. Generic AI tools fail that test on day one — which is why the high-value work stays manual until someone builds it inside your perimeter.',
+    serviceName: 'Financial Services & Quant AI',
+    serviceType: 'Secure AI for financial services & quantitative finance',
     schemaDescription:
-      'AI automation for financial services: KYC/onboarding document workflows, reconciliation, reporting, and analysis with compliance-grade controls.',
+      'Secure AI for financial services: compliance/KYC document automation, equity-research copilots, and quantitative/ML systems (XGBoost, LSTM) with audit trails and controlled deployment.',
     roi: [
-      { value: 'Faster', label: 'Client onboarding & document turnaround' },
-      { value: 'Fewer errors', label: 'Automated reconciliation & checks' },
-      { value: 'Compliant', label: 'Audit trails and controls built in' },
+      { value: 'Your perimeter', label: 'Deployed in your tenancy or a dedicated instance — data stays contained' },
+      { value: 'Auditable', label: 'Every AI action logged and traceable for compliance' },
+      { value: 'Compliance → quant', label: 'From KYC/reporting to ML trading systems, one partner' },
     ],
     sections: [
       {
         heading: 'Where regulation meets document volume',
         level: 2,
         body: [
-          'Financial services runs on documents and rules: onboarding and KYC packs, statements, agreements, reconciliations, and reporting — all under strict compliance. Manual processing is slow and risky, and the controls rule out generic, uncontrolled AI tools.',
+          'Financial services runs on documents and rules: onboarding and KYC packs, statements, agreements, reconciliations, and regulatory reporting — all under strict compliance. Manual processing is slow and risky, and the controls rule out generic, uncontrolled AI tools.',
+          'We automate those workflows with AI extraction grounded in source documents, validation, and human review where it matters — inside your environment, with access controls and full audit trails. For a fintech client (LedgerSync), we rebuilt invoice ingestion and validation that had become an internal backlog. Faster turnaround, fewer errors, and a clean compliance record.',
+        ],
+      },
+      {
+        heading: 'Equity & market research copilots',
+        level: 2,
+        body: [
+          'Research desks at wealth managers, investment firms and funds drown in filings, transcripts and market data. We build research copilots that ingest that material into a private knowledge base and answer questions with citations — pulling figures from 10-Ks, summarising earnings calls, and assembling first-draft research — so analysts spend their time on judgement, not gathering. Like everything we ship in finance, it runs on your data, in your environment.',
+        ],
+      },
+      {
+        heading: 'Quantitative & ML systems',
+        level: 2,
+        body: [
+          'Beyond workflows, we build genuine quantitative systems with deep machine learning and data science — feature engineering, model training and backtesting using techniques like XGBoost and LSTM networks for signal generation, forecasting and risk. This is the kind of applied ML the leading quant shops are built on, engineered for clients who need it in production rather than in a notebook. This work is almost always under strict NDA, so we lead with method and stack, not client names — talk to us about what is possible for your strategy.',
         ],
       },
       {
         heading: 'Automation that respects the controls',
         level: 3,
         body: [
-          'We automate onboarding and document workflows, reconciliation, and reporting with AI extraction grounded in source documents, validation, and human review where it matters — all inside your environment with access controls and audit trails. Faster turnaround, fewer errors, and a clean compliance record.',
+          'Across all three, the deployment model is the same: your cloud tenancy or a dedicated, isolated instance (e.g. OpenAI on Azure, a private model, or your own), role-based access, and an audit trail on every AI action. Sensitive data never leaves your boundary and never trains a public model — the requirement that decides whether a financial firm can use AI at all.',
         ],
       },
     ],
     process: [
-      { title: 'Map regulated workflows', body: 'Onboarding/KYC, reconciliation, and reporting, with their control points.' },
-      { title: 'Build compliant automation', body: 'AI extraction + validation + workflow, inside your security perimeter.' },
-      { title: 'Add controls & review', body: 'Human-in-the-loop and audit trails at every sensitive step.' },
-      { title: 'Deploy & monitor', body: 'Go live with monitoring and reporting against turnaround and accuracy.' },
+      { title: 'Map workflows & controls', body: 'Onboarding/KYC, reporting, research or modelling — with their control points, data sensitivity, and the deployment model that fits compliance.' },
+      { title: 'Build inside your perimeter', body: 'AI extraction, research copilots, or ML pipelines built in your tenancy or a dedicated instance — never on uncontrolled public tools.' },
+      { title: 'Add controls & review', body: 'Human-in-the-loop and audit trails at every sensitive step; validation and backtesting for quant work.' },
+      { title: 'Deploy & monitor', body: 'Go live with monitoring and reporting against turnaround, accuracy, and model performance.' },
     ],
     workflows: [
       'Client onboarding & KYC document workflows',
-      'Statement & agreement data extraction',
+      'Statement, agreement & invoice data extraction and validation',
       'Automated reconciliation & checks',
       'Regulatory & management reporting',
-      'Exception handling with human review',
-      'Audit-ready logging across the process',
+      'Equity / market research copilots with cited answers',
+      'Quant & ML systems: feature engineering, training & backtesting (XGBoost, LSTM)',
     ],
     whyCustom: [
-      'Runs inside your environment with access controls and audit trails.',
-      'Extraction grounded in source documents for traceability.',
-      'Tuned to your products, documents, and compliance rules.',
+      'Deployed in your tenancy or a dedicated instance — data stays contained and never trains a public model.',
+      'Extraction and research grounded in source documents for traceability.',
+      'Quant/ML engineered for production, not a notebook demo.',
+      'Tuned to your products, documents, compliance rules and strategy.',
     ],
     included: [
       'Onboarding / KYC document automation',
-      'Document extraction & validation',
+      'Document & invoice extraction & validation',
       'Reconciliation automation',
       'Regulatory & management reporting',
+      'Equity / market research copilots',
+      'Quantitative & ML systems (XGBoost, LSTM)',
+      'Human-in-the-loop review',
+      'Audit trails, access controls & contained deployment',
+    ],
+    faqs: [
+      { q: 'How do you handle compliance and data security?', a: 'Everything runs inside your environment — your tenancy or a dedicated, isolated instance — with role-based access and full audit trails. Sensitive data never leaves your boundary or trains a public model. We scope this up front and work under NDA.' },
+      { q: 'Do you actually build quant / ML trading systems?', a: 'Yes — applied machine learning with techniques like XGBoost and LSTM for signal generation, forecasting and risk, engineered for production with proper backtesting. This work is under strict NDA, so we discuss method and stack rather than naming clients.' },
+      { q: 'Can you build an equity-research copilot on our data?', a: 'Yes. We ingest filings, transcripts and market data into a private knowledge base and build a copilot that answers with citations, so analysts spend time on judgement instead of gathering.' },
+      { q: 'Can you automate KYC and onboarding?', a: 'Yes — document collection, extraction, checks and routing are strong automation candidates that cut onboarding turnaround significantly, with auditable output.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
+    related: ['ria-crm-automation', 'ria-compliance-automation', 'ai-copilot-financial-advisors', 'cpa-tax-document-automation', 'vc-pe-crm-automation'],
+  },
+
+  // ── Legal tool/integration pages (Layer-A moat keywords) ──────────────────────
+  {
+    slug: 'imanage-netdocuments-automation',
+    metaTitle: 'iManage & NetDocuments AI Workflow Automation | Chronexa',
+    metaDescription:
+      'Add AI to iManage and NetDocuments without leaving your DMS — auto-profile and classify documents, extract data, and run private search across matters, with your security model and full audit trails intact.',
+    h1: 'iManage & NetDocuments AI Workflow Automation',
+    heroSub:
+      'Add AI on top of the document management system your firm already runs — document profiling, extraction, and private RAG search — inside your security model, with an audit trail on every action.',
+    answer:
+      'iManage and NetDocuments automation adds an AI layer on top of your existing DMS: it auto-classifies and profiles incoming documents, extracts the data your matters need, and lets your team search and ask questions across filed documents — without rekeying, and without anything leaving the environment you control.',
+    callout:
+      'No top-tier firm is going to rip out iManage or NetDocuments. So generic AI tools don’t get adopted — they live outside the system of record. The only automation that sticks is AI built on top of the DMS you already trust.',
+    serviceName: 'iManage & NetDocuments AI Automation',
+    serviceType: 'DMS AI integration for law firms',
+    schemaDescription:
+      'AI workflow automation built on top of iManage and NetDocuments — document profiling, extraction, and private RAG search with audit trails and the firm’s security model intact.',
+    roi: [
+      { value: 'On your DMS', label: 'Built on iManage/NetDocuments — no rip-and-replace' },
+      { value: 'Auto-profiled', label: 'Documents classified & filed without manual data entry' },
+      { value: '100%', label: 'Audit-trail coverage on every AI action' },
+    ],
+    sections: [
+      {
+        heading: 'Why firms keep their DMS — and don’t have to choose',
+        level: 2,
+        body: [
+          'iManage and NetDocuments are the system of record for a reason: security, ethical walls, matter-centric structure. The problem is they store documents but don’t reason over them — so profiling, classification and lookup stay manual, and a standalone AI tool that lives outside the DMS never gets adopted because it breaks the firm’s workflow and security model.',
+          'We build the AI layer on top of the DMS instead of beside it. Documents are auto-classified and profiled into the right matter, data is extracted, and your team can search and ask questions across filed material — all inside iManage or NetDocuments, with the access controls and ethical walls you already enforce.',
+        ],
+      },
+      {
+        heading: 'What we automate on iManage / NetDocuments',
+        level: 2,
+        body: [
+          'Auto-profiling and classification of incoming documents to the correct client/matter; extraction of key data and metadata; and a private RAG search layer so a lawyer can ask “what does our filed work say about X” and get a cited answer from the firm’s own documents — not a public model’s guess. Low-confidence actions route to a human; everything is logged.',
+        ],
+      },
+      {
+        heading: 'Security & audit, inside your model',
+        level: 3,
+        body: [
+          'Everything runs inside your environment with role-based access that mirrors your matter permissions and ethical walls, and a full audit trail on every classification, extraction and answer. Documents never leave your boundary or train a public model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your DMS & security model', body: 'We map how matters, folders, access controls and ethical walls are structured before any build.' },
+      { title: 'Build on top of the DMS', body: 'Auto-profiling, extraction and a private search/RAG layer wired into iManage or NetDocuments via their APIs.' },
+      { title: 'Tune with human-in-the-loop', body: 'We validate classification and extraction on real documents and route low-confidence items to review.' },
+      { title: 'Deploy & audit', body: 'Go live inside your environment with role-based access and a full audit trail on every AI action.' },
+    ],
+    workflows: [
+      'Auto-classify & profile incoming documents to the right matter',
+      'Extract data and metadata from filed documents',
+      'Private RAG search across matters, with cited answers',
+      'Bulk back-classification of legacy documents',
+      'Audit-trail and access-control layer over every AI action',
+    ],
+    whyCustom: [
+      'Built on iManage/NetDocuments — no new platform for associates to learn or trust.',
+      'Respects your ethical walls and matter-level access controls.',
+      'Answers from your own filed documents (private RAG), not a generic model.',
+      'Every action is logged for an audit trail.',
+    ],
+    included: [
+      'iManage / NetDocuments API integration',
+      'Auto-classification & document profiling',
+      'Data & metadata extraction',
+      'Private RAG search across matters',
+      'Human-in-the-loop review on low-confidence items',
+      'Role-based access aligned to ethical walls',
+      'Full audit trails',
+    ],
+    faqs: [
+      { q: 'Do we have to replace iManage or NetDocuments?', a: 'No — that’s the point. We build on top of your existing DMS via its API, so your security model, folder structure, ethical walls and access controls stay exactly as they are.' },
+      { q: 'Can the AI search across our filed matters and answer questions?', a: 'Yes. We add a private RAG layer that retrieves the relevant passage from your own filed documents and cites it, so answers are grounded in the firm’s work rather than a public model’s guess.' },
+      { q: 'How is confidentiality and ethical-wall compliance handled?', a: 'Access mirrors your matter-level permissions and ethical walls, everything runs inside your environment, and every AI action is logged. Documents never leave your boundary or train a public model.' },
+      { q: 'Can it back-classify our existing document store?', a: 'Yes — bulk back-classification of legacy documents is a common first project, with human review on low-confidence items.' },
+      { q: 'How long does it take?', a: 'A focused profiling/extraction build goes live in 4–6 weeks; adding private RAG search across a large matter store is typically 8–12 weeks depending on volume.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['legal-due-diligence-automation', 'contract-review-automation-software', 'document-processing-automation'],
+  },
+  {
+    slug: 'contract-review-automation-software',
+    metaTitle: 'Contract Review Automation Software (Custom AI) | Chronexa',
+    metaDescription:
+      'Custom AI contract review built to your firm’s clause playbook — extract terms, flag risk and missing clauses, and write results back to your DMS, with human-in-the-loop accuracy and full audit trails.',
+    h1: 'Contract Review Automation — Custom AI for Your Playbook',
+    heroSub:
+      'AI that reviews contracts against your firm’s own clause playbook — extracting terms, flagging risk and missing provisions — with a lawyer in the loop and every decision logged.',
+    answer:
+      'Contract review automation uses AI to read contracts and extract the clauses, obligations and risk against your firm’s own playbook — flagging missing or non-standard provisions and routing anything ambiguous to a lawyer — so review scales without associates re-reading the same paper, and without a generic tool that doesn’t know your standards.',
+    callout:
+      'Generic contract-review tools score against a generic playbook — which is exactly why they miss what your firm cares about. The value is in your standards, your fallback positions, your risk thresholds. Off-the-shelf can’t encode that; a custom build can.',
+    serviceName: 'Contract Review Automation',
+    serviceType: 'AI contract review for legal teams',
+    schemaDescription:
+      'Custom AI contract review trained on the firm’s clause playbook — term and clause extraction, risk and missing-clause flagging, DMS write-back, with human-in-the-loop validation and audit trails.',
+    roi: [
+      { value: 'Your playbook', label: 'Reviews against your clauses & fallback positions, not a generic standard' },
+      { value: 'Risk-flagged', label: 'Non-standard & missing clauses surfaced automatically' },
+      { value: 'Auditable', label: 'Every extraction traceable to the source clause' },
+    ],
+    sections: [
+      {
+        heading: 'Why generic contract-review tools underperform',
+        level: 2,
+        body: [
+          'Manual contract review is the classic associate time-sink, but the off-the-shelf tools that promise to fix it review against a generic playbook — so they flag what a generic firm cares about, not what yours does. Your fallback positions, your risk thresholds, the clauses you never accept: that institutional knowledge is the actual value, and a SaaS template can’t hold it.',
+          'We build review tuned to your playbook. The AI extracts terms and clauses, compares them to your standards, flags non-standard language and missing provisions, and writes structured results back into your DMS — with low-confidence items routed to a lawyer so accuracy climbs without removing judgement.',
+        ],
+      },
+      {
+        heading: 'What the system does',
+        level: 2,
+        body: [
+          'Clause and term extraction against your taxonomy; risk and deviation flagging relative to your fallback positions; missing-clause detection; and a structured summary written back to iManage/NetDocuments or your contract store. It grounds every extraction in the source text, so a reviewer can click straight to the clause rather than trusting a black box.',
+        ],
+      },
+      {
+        heading: 'Accuracy with a lawyer in the loop',
+        level: 3,
+        body: [
+          'High-confidence extractions flow straight through; anything ambiguous routes to human review, and the system learns from the correction. Everything runs in your environment with audit trails, so output is defensible.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Encode your playbook', body: 'We turn your clause standards, fallback positions and risk thresholds into the schema the AI reviews against.' },
+      { title: 'Build extraction & flagging', body: 'Clause/term extraction, deviation and missing-clause detection, grounded in the source text.' },
+      { title: 'Validate with human-in-the-loop', body: 'We test on real contracts and route low-confidence items to a lawyer until accuracy meets your bar.' },
+      { title: 'Integrate & deploy', body: 'Structured results write back to your DMS/contract store, inside your environment, with audit trails.' },
+    ],
+    workflows: [
+      'Clause & term extraction against your playbook',
+      'Risk and non-standard-clause flagging',
+      'Missing-clause detection',
+      'Structured summary write-back to iManage/NetDocuments',
+      'Human-in-the-loop review with learning from corrections',
+    ],
+    whyCustom: [
+      'Reviews against your clause playbook and fallback positions — not a generic standard.',
+      'Every extraction is grounded in the source clause, so it’s traceable and defensible.',
+      'Runs in your environment; contract data never leaves or trains a public model.',
+      'Improves as lawyers correct it, instead of staying static.',
+    ],
+    included: [
+      'Playbook & clause-taxonomy encoding',
+      'AI clause & term extraction',
+      'Risk & missing-clause flagging',
+      'Source-grounded, traceable output',
+      'DMS / contract-store write-back',
       'Human-in-the-loop review',
       'Audit trails & access controls',
     ],
     faqs: [
-      { q: 'How do you handle compliance and data security?', a: 'Workflows run inside your environment with role-based access and full audit trails; we scope compliance and security requirements up front and work under NDA.' },
-      { q: 'Can you automate KYC and onboarding?', a: 'Yes — document collection, extraction, checks, and routing are strong automation candidates that cut onboarding turnaround significantly.' },
-      { q: 'Is the AI output auditable?', a: 'Yes. Extraction is grounded in source documents so every field is traceable, with human review on exceptions.' },
-      { q: 'What systems do you integrate with?', a: 'Core banking, CRM, document management, and reporting systems, plus the tools around them.' },
+      { q: 'How is this different from off-the-shelf contract-review software?', a: 'Off-the-shelf reviews against a generic playbook. We encode your firm’s clause standards, fallback positions and risk thresholds, so it flags what your firm actually cares about — and it writes back into your DMS instead of a separate silo.' },
+      { q: 'Can it detect missing clauses, not just risky ones?', a: 'Yes — missing-clause detection against your expected set is a core part of the build, alongside non-standard-language flagging.' },
+      { q: 'How accurate is it, and is it defensible?', a: 'Every extraction is grounded in the source clause so a reviewer can verify it, low-confidence items route to a lawyer, and the system learns from corrections. Output is traceable and audit-logged.' },
+      { q: 'Where does our contract data go?', a: 'It stays in your environment with role-based access and audit trails; nothing leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'How long does it take?', a: 'Most builds go live in 6–8 weeks, depending on how much of your playbook we encode up front.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    related: ['document-processing-automation', 'insurance-claims-triage-automation', 'vc-pe-crm-automation'],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'law-firm-matter-intake-automation'],
+  },
+  {
+    slug: 'law-firm-matter-intake-automation',
+    metaTitle: 'Matter Intake & Conflict-Check Automation for Law Firms | Chronexa',
+    metaDescription:
+      'Automate new-matter intake and conflict checks — capture client and matter data, run conflict searches against your systems, and open the matter in your DMS/practice-management software, with an audit trail.',
+    h1: 'Matter Intake & Conflict-Check Automation',
+    heroSub:
+      'Turn new-matter intake from a manual, multi-system chore into an automated workflow — data capture, conflict checks, and matter opening in your DMS — without the re-keying and the delay.',
+    answer:
+      'Matter intake automation captures new-client and matter details once, runs conflict checks against your existing systems, and opens the matter in your DMS or practice-management software automatically — replacing a slow, error-prone, multi-system manual process and getting work started faster, with a complete audit trail.',
+    callout:
+      'Every new matter starts with the same friction: the same data keyed into three systems, a conflict check that waits on someone, and a delay before billable work can begin. Multiply that across a firm and intake is a quiet, expensive bottleneck.',
+    serviceName: 'Matter Intake & Conflict-Check Automation',
+    serviceType: 'Legal intake & conflict-check automation',
+    schemaDescription:
+      'Automated new-matter intake and conflict checking for law firms — data capture, conflict search across firm systems, and matter opening in the DMS/practice-management software with audit trails.',
+    roi: [
+      { value: 'Capture once', label: 'Client/matter data entered once, not re-keyed across systems' },
+      { value: 'Faster start', label: 'Conflict checks and matter opening run without manual hand-offs' },
+      { value: 'Auditable', label: 'Every intake and conflict decision logged' },
+    ],
+    sections: [
+      {
+        heading: 'The intake bottleneck nobody owns',
+        level: 2,
+        body: [
+          'New-matter intake touches everyone and is owned by no one: an intake form, the same data re-keyed into the DMS and the billing system, a conflict check that sits in someone’s queue, and a delay before the matter can actually open. It’s slow, it’s error-prone, and it pushes back the moment billable work can start.',
+          'We automate the whole path. Intake data is captured once and flows to every system that needs it, conflict searches run automatically against your existing records, and the matter opens in your DMS/practice-management software — with exceptions routed to a person and everything logged.',
+        ],
+      },
+      {
+        heading: 'Automated conflict checks',
+        level: 2,
+        body: [
+          'Conflict checking is the part most worth automating and most sensitive to get right. We run searches across your existing client/matter and party data, surface potential conflicts with the context a lawyer needs to clear them, and keep a record of the check — so it’s faster without lowering the bar, and you can show the check was done.',
+        ],
+      },
+      {
+        heading: 'Into your DMS / practice-management stack',
+        level: 3,
+        body: [
+          'Once cleared, the matter opens in your systems automatically — folders provisioned in iManage/NetDocuments, the record created in your practice-management software — inside your environment, with role-based access and an audit trail.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map the intake path', body: 'We document every system a new matter touches today and where the delays and re-keying happen.' },
+      { title: 'Automate capture & conflicts', body: 'Single data capture, automated conflict search against your records, and exception routing to a person.' },
+      { title: 'Wire matter opening', body: 'Cleared matters open automatically in your DMS and practice-management software.' },
+      { title: 'Deploy & audit', body: 'Go live inside your environment with role-based access and a full audit trail on intake and conflict decisions.' },
+    ],
+    workflows: [
+      'Single-capture client & matter intake',
+      'Automated conflict search across firm records',
+      'Conflict surfacing with context for clearance',
+      'Automatic matter opening in the DMS / practice-management software',
+      'Exception routing and audit logging',
+    ],
+    whyCustom: [
+      'Connects the exact systems your firm runs — DMS, practice management, billing — not a fixed template.',
+      'Conflict logic tuned to your data and your clearance process.',
+      'Runs in your environment with audit trails on every intake and check.',
+      'Keeps a human in the loop on conflicts — faster, not looser.',
+    ],
+    included: [
+      'Single-capture intake workflow',
+      'Automated conflict checking',
+      'Conflict surfacing & clearance support',
+      'DMS & practice-management matter opening',
+      'Billing/system data sync',
+      'Exception handling & human review',
+      'Audit trails & access controls',
+    ],
+    faqs: [
+      { q: 'Can you automate conflict checks safely?', a: 'Yes — we automate the search across your existing records and surface potential conflicts with the context to clear them, keeping a lawyer in the loop on the decision and a record of the check. Faster, without lowering the bar.' },
+      { q: 'Which systems does it connect to?', a: 'Your DMS (iManage/NetDocuments), practice-management and billing software, and the intake channel you use today. We integrate with what the firm already runs.' },
+      { q: 'Does data get re-keyed across systems?', a: 'No — that’s the core fix. Intake data is captured once and flows to every system that needs it, eliminating the duplicate entry that causes errors and delay.' },
+      { q: 'Is there an audit trail?', a: 'Yes. Every intake and conflict-check decision is logged, inside your environment with role-based access, so the process is defensible.' },
+      { q: 'How long does it take?', a: 'Most intake/conflict builds go live in 4–8 weeks depending on the number of systems involved.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
+  },
+  {
+    slug: 'regulatory-filing-monitoring-automation',
+    metaTitle: 'Regulatory & SEC Filing Monitoring Automation | Chronexa',
+    metaDescription:
+      'Automate regulatory and SEC filing monitoring — continuously watch regulators and filing sources, classify changes by relevance, and map them to the matters and clients they affect, with the source attached.',
+    h1: 'Regulatory & SEC Filing Monitoring Automation',
+    heroSub:
+      'Stop watching regulator websites by hand. Continuous monitoring that classifies each change by relevance and maps it to the matters and clients it affects — the exact system we built for a top litigation firm.',
+    answer:
+      'Regulatory filing monitoring automation continuously watches regulator and filing sources — the SEC, SEBI, RBI, exchanges and sector bodies — classifies each new circular, order or filing by relevance, and maps it to the matters or clients it affects, surfacing it to the right team with the source attached. It replaces the manual daily check that is slow and easy to miss.',
+    callout:
+      'A missed circular isn’t an inconvenience — it’s a compliance and client-risk event. Yet most firms still cover it with an analyst manually refreshing regulator websites, hoping to connect each change to the right matter. That doesn’t scale and it doesn’t hold.',
+    serviceName: 'Regulatory & SEC Filing Monitoring',
+    serviceType: 'Regulatory intelligence automation',
+    schemaDescription:
+      'Automated regulatory and SEC filing monitoring — continuous source monitoring, relevance classification, and mapping of changes to affected matters and clients, with source attribution and audit trails.',
+    roi: [
+      { value: '90%', label: 'Less time on manual regulatory monitoring (litigation-firm build)' },
+      { value: '5×', label: 'Faster internal response to regulatory changes' },
+      { value: 'Mapped', label: 'Every change tied to the matters and clients it affects' },
+    ],
+    sections: [
+      {
+        heading: 'The manual-monitoring problem',
+        level: 2,
+        body: [
+          'Compliance and litigation teams burn hours watching regulator and filing sources for changes that might touch a live matter, then trying to connect each one to the right client by hand. It’s slow, it’s tedious, and the failure mode — a relevant change missed — is exactly the one that matters.',
+          'We built a regulatory-intelligence system that watches those sources continuously, classifies each new circular, order or filing by relevance, maps it to the matters it actually affects, and surfaces it to the responsible team with the source attached. For a top corporate litigation firm it cut manual monitoring time by about 90% and made internal response to regulatory change roughly 5× faster.',
+        ],
+      },
+      {
+        heading: 'Mapping changes to your matters',
+        level: 2,
+        body: [
+          'Monitoring is only useful if it reaches the right person. The system holds your matters and clients in a private knowledge base and connects each incoming change to the ones it affects, so the alert that lands is relevant — not a firehose of every filing. Source documents are attached so the team can verify in one click.',
+        ],
+      },
+      {
+        heading: 'Secure deployment',
+        level: 3,
+        body: [
+          'Runs inside your environment with role-based access and a full audit trail. Matter and client data never leaves your boundary or trains a public model — the requirement that lets a regulated firm use it at all.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map sources & matters', body: 'We identify the regulators and filing sources to watch and how your matters/clients are structured.' },
+      { title: 'Build monitoring & classification', body: 'Continuous source monitoring with relevance classification, tuned to your practice areas.' },
+      { title: 'Map to matters & route', body: 'Each change is connected to the matters it affects and routed to the right team with the source attached.' },
+      { title: 'Deploy & audit', body: 'Go live inside your environment with role-based access and a full audit trail.' },
+    ],
+    workflows: [
+      'Continuous monitoring of SEC, SEBI, RBI, exchanges & sector sources',
+      'Relevance classification of each circular, order or filing',
+      'Mapping changes to affected matters and clients',
+      'Routing to the responsible team with the source attached',
+      'Audit trail across the monitoring process',
+    ],
+    whyCustom: [
+      'Mapped to your matters and clients, so alerts are relevant — not a firehose.',
+      'Covers the specific regulators and sources your practice cares about.',
+      'Runs in your environment; matter/client data never leaves or trains a public model.',
+      'Every change and alert is logged for an audit trail.',
+    ],
+    included: [
+      'Continuous regulatory & filing source monitoring',
+      'Relevance classification',
+      'Mapping changes to affected matters/clients',
+      'Source-attached alerts to the right team',
+      'Private knowledge base of matters & clients',
+      'Secure deployment in your environment',
+      'Role-based access & full audit trails',
+    ],
+    faqs: [
+      { q: 'Which sources can you monitor?', a: 'Regulators and filing sources relevant to your practice — the SEC, SEBI, RBI, stock exchanges and sector bodies among them. We scope the exact source list to your matters.' },
+      { q: 'How does it know which changes matter to us?', a: 'It holds your matters and clients in a private knowledge base and classifies each change by relevance, mapping it to the matters it affects — so you get relevant alerts, not every filing.' },
+      { q: 'Is this proven?', a: 'Yes — it’s the system we built for one of the largest corporate litigation practices in India, which cut manual monitoring time by ~90% and made internal response ~5× faster.' },
+      { q: 'How is our data protected?', a: 'Everything runs inside your environment with role-based access and audit trails; matter and client data never leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'How long does it take?', a: 'A focused monitoring build goes live in 6–10 weeks depending on the number of sources and how your matters are mapped.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'financial-services-automation'],
+  },
+
+  // ── Tax / CPA tool/integration pages (Layer-A moat keywords) ──────────────────
+  {
+    slug: 'tax-software-ai-integration',
+    metaTitle: 'AI Integration for CCH Axcess, ProConnect, UltraTax & Drake | Chronexa',
+    metaDescription:
+      'Connect AI document extraction to the tax software your firm already runs — CCH Axcess, ProConnect, UltraTax or Drake — so data flows from source documents into your returns without manual entry.',
+    h1: 'AI Integration for Your Tax Software',
+    heroSub:
+      'Wire AI extraction into CCH Axcess, ProConnect, UltraTax or Drake — so W-2s, 1099s, K-1s and statements flow straight into the return, instead of a preparer keying them in.',
+    answer:
+      'Tax-software AI integration connects automated document extraction to the package your firm already uses — CCH Axcess, ProConnect, UltraTax or Drake — so data from W-2s, 1099s, K-1s and statements is read and pushed into the return automatically, ending the manual data entry that defines tax season.',
+    callout:
+      'Your tax software isn’t the bottleneck — getting data into it is. Preparers re-key the same forms every season because the documents and the software don’t talk. The fix is an extraction layer wired into the package you already run, not a new platform.',
+    serviceName: 'Tax Software AI Integration',
+    serviceType: 'AI integration for tax preparation software',
+    schemaDescription:
+      'AI document extraction integrated with CCH Axcess, ProConnect, UltraTax and Drake — source documents read and pushed into returns automatically, with audit logging and human review.',
+    roi: [
+      { value: 'Your software', label: 'Built on CCH Axcess / ProConnect / UltraTax / Drake — no switch' },
+      { value: '84%', label: 'Less manual follow-up & data handling (CPA-firm build)' },
+      { value: 'Audit-ready', label: 'Logging on every document and value pushed' },
+    ],
+    sections: [
+      {
+        heading: 'The data-entry tax, paid every season',
+        level: 2,
+        body: [
+          'CCH Axcess, ProConnect, UltraTax and Drake are excellent at preparing the return. None of them solve the part that actually eats the hours: reading a stack of W-2s, 1099s, K-1s and brokerage statements and getting the numbers into the software. So preparers re-key, every client, every season — and that manual handling is exactly what caps a firm’s capacity.',
+          'We build the extraction layer that sits in front of your tax software. Documents are read against the schema for each form type and the values are pushed into the right fields of the package you already run, with low-confidence items routed to a preparer. For a mid-sized firm, automating this side of the workflow cut manual follow-up and document handling by 84% and tripled documents processed per staff member.',
+        ],
+      },
+      {
+        heading: 'Built on your package, not a replacement',
+        level: 2,
+        body: [
+          'Whether you run CCH Axcess, ProConnect, UltraTax or Drake, we integrate via the supported import/API paths so nobody changes software or learns a new tool. The automation runs behind the package your preparers already know; they review and sign off instead of typing.',
+        ],
+      },
+      {
+        heading: 'Secure & auditable',
+        level: 3,
+        body: [
+          'Client financial data stays in your environment with role-based access and full logging on every document and value pushed — because tax data can’t be handed to an uncontrolled public AI tool.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your tax stack', body: 'We confirm your package (CCH Axcess/ProConnect/UltraTax/Drake) and the documents and fields that drive your returns.' },
+      { title: 'Build extraction → import', body: 'Schema-based extraction for W-2s, 1099s, K-1s and statements, pushed into your software via its supported import/API path.' },
+      { title: 'Validate on real returns', body: 'We test against your documents and route low-confidence values to a preparer until accuracy meets your bar.' },
+      { title: 'Deploy for the season', body: 'Go live inside your environment with audit logging and the capacity to absorb peak volume.' },
+    ],
+    workflows: [
+      'Extraction of W-2s, 1099s, K-1s and brokerage statements',
+      'Push of extracted values into CCH Axcess / ProConnect / UltraTax / Drake',
+      'Schema-based field mapping per form type',
+      'Human-in-the-loop review on low-confidence values',
+      'Audit logging on every document and value',
+    ],
+    whyCustom: [
+      'Built on the package you already run — no software switch, no retraining.',
+      'Extraction tuned to the forms and fields your returns actually use.',
+      'Client financial data stays in your environment with audit logging.',
+      'Improves as preparers correct it, instead of staying static.',
+    ],
+    included: [
+      'AI extraction for W-2s, 1099s, K-1s & statements',
+      'Integration with CCH Axcess / ProConnect / UltraTax / Drake',
+      'Per-form-type field mapping',
+      'Exception handling & human review',
+      'Audit logging',
+      'Secure, in-environment deployment',
+    ],
+    faqs: [
+      { q: 'Do we have to switch tax software?', a: 'No. We integrate with the package you already run — CCH Axcess, ProConnect, UltraTax or Drake — via its supported import/API path. Preparers keep their software and workflow.' },
+      { q: 'Which documents can it read?', a: 'W-2s, 1099s, K-1s and consolidated brokerage statements are the common set; we extract against the schema for each form type and can add others your firm handles.' },
+      { q: 'How accurate is it for tax data?', a: 'We extract against a defined schema, ground values in the source document, and route low-confidence items to a preparer — so accuracy climbs over time without removing review.' },
+      { q: 'Is our clients’ data secure?', a: 'Yes. It runs inside your environment with role-based access and full logging; data never leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'How long to set up?', a: 'Most firms are live in 4–6 weeks — well ahead of peak season if you start early.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    related: ['cpa-tax-document-automation', 'k1-tax-form-ocr-extraction', 'bookkeeping-automation-quickbooks-xero'],
+  },
+  {
+    slug: 'k1-tax-form-ocr-extraction',
+    metaTitle: 'K-1 Tax Form OCR & Data Extraction Software | Chronexa',
+    metaDescription:
+      'Automate K-1 extraction — AI reads partnership and PE-fund Schedule K-1s, breaks out the line items, and pushes them into your tax software, with a preparer reviewing anything ambiguous.',
+    h1: 'K-1 Tax Form OCR & Data Extraction',
+    heroSub:
+      'AI that reads Schedule K-1s — including messy partnership and private-equity fund K-1s — and breaks out the line items into your tax software, instead of a preparer keying them by hand.',
+    answer:
+      'K-1 extraction uses AI and OCR to read Schedule K-1s — including the notoriously manual partnership and private-equity fund K-1s — pull out the line items and codes, and push them into your tax software, routing anything ambiguous to a preparer for review.',
+    callout:
+      'K-1s are the single most manual document in tax prep: every fund formats them differently, the line items and codes vary, and a return can be waiting on dozens of them. It’s the form most worth automating and the one generic tools handle worst.',
+    serviceName: 'K-1 Form OCR & Extraction',
+    serviceType: 'AI K-1 extraction for tax & accounting firms',
+    schemaDescription:
+      'AI/OCR extraction for Schedule K-1s — partnership and PE-fund K-1 line-item and code extraction pushed into tax software, with human-in-the-loop review and audit logging.',
+    roi: [
+      { value: 'PE-fund K-1s', label: 'Handles the messiest partnership & fund K-1s' },
+      { value: 'Line-item', label: 'Codes and amounts broken out, not just imaged' },
+      { value: 'Reviewed', label: 'Ambiguous items routed to a preparer' },
+    ],
+    sections: [
+      {
+        heading: 'Why K-1s break manual workflows',
+        level: 2,
+        body: [
+          'A Schedule K-1 is deceptively hard: every partnership and fund lays it out differently, the box codes carry meaning, and a single high-net-worth or fund-of-funds return can hang on dozens of them arriving late. Preparers end up hand-keying line items under deadline — slow, and the exact place errors creep in. It’s also a query real buyers search for (we already rank for “private equity fund tax K-1 preparation”), because it’s a known, unsolved pain.',
+          'We build extraction tuned to K-1s specifically: OCR plus AI that recognises the layout, pulls the line items and codes, and pushes them into your tax software. Anything ambiguous — an unusual code, a low-confidence read — routes to a preparer rather than guessing.',
+        ],
+      },
+      {
+        heading: 'Built for partnership & PE-fund K-1s',
+        level: 2,
+        body: [
+          'Because fund K-1s are where the pain concentrates, the system is built to handle their variety — multiple entities, footnotes, state breakouts — and to map the codes correctly into the return. It plugs into your tax software (CCH Axcess, ProConnect, UltraTax, Drake) so extracted K-1 data lands where the preparer needs it.',
+        ],
+      },
+      {
+        heading: 'Accurate & auditable',
+        level: 3,
+        body: [
+          'Every value is grounded in the source K-1 so a preparer can verify it in a click, low-confidence items route to review, and the whole process is logged. Data stays in your environment.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your K-1 volume & software', body: 'We profile the K-1 types you handle and the tax package they feed.' },
+      { title: 'Build K-1 extraction', body: 'OCR + AI layout recognition and code mapping tuned to partnership and fund K-1s.' },
+      { title: 'Validate with review', body: 'We test on real K-1s and route ambiguous items to a preparer until accuracy meets your bar.' },
+      { title: 'Integrate & deploy', body: 'Extracted line items push into your tax software, in your environment, with audit logging.' },
+    ],
+    workflows: [
+      'OCR + AI extraction of Schedule K-1 line items and codes',
+      'Partnership and PE-fund K-1 layout recognition',
+      'Code mapping into the return',
+      'Push into CCH Axcess / ProConnect / UltraTax / Drake',
+      'Human-in-the-loop review on ambiguous items',
+    ],
+    whyCustom: [
+      'Built for the variety of partnership and fund K-1s, not a generic form reader.',
+      'Codes mapped correctly into the return, not just imaged.',
+      'Every value traceable to the source K-1; ambiguous items reviewed.',
+      'Runs in your environment with audit logging.',
+    ],
+    included: [
+      'K-1 OCR & AI extraction',
+      'Partnership & PE-fund K-1 handling',
+      'Line-item & code mapping',
+      'Push into your tax software',
+      'Human-in-the-loop review',
+      'Source-grounded, auditable output',
+    ],
+    faqs: [
+      { q: 'Can it handle private-equity and fund-of-funds K-1s?', a: 'Yes — those are the hardest and the main reason to automate K-1s. The system handles their layout variety, footnotes and state breakouts, and maps the codes into the return.' },
+      { q: 'Does it just image the K-1 or actually break out the data?', a: 'It extracts the line items and box codes as structured data and pushes them into your tax software — not just an OCR image.' },
+      { q: 'How are errors prevented?', a: 'Every value is grounded in the source K-1 for one-click verification, and low-confidence or unusual items route to a preparer rather than being guessed.' },
+      { q: 'Which tax software does it feed?', a: 'CCH Axcess, ProConnect, UltraTax and Drake via their supported import paths; we map K-1 data to the right fields.' },
+      { q: 'How long to set up?', a: 'Most K-1 builds go live in 4–6 weeks depending on the variety of K-1s you handle.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'vc-pe-crm-automation'],
+  },
+  {
+    slug: 'bookkeeping-automation-quickbooks-xero',
+    metaTitle: 'Bookkeeping Automation: Hubdoc → QuickBooks & Xero | Chronexa',
+    metaDescription:
+      'Automate bookkeeping for accounting firms — Hubdoc-to-QuickBooks receipt capture, AI categorization, and Xero bank reconciliation — so staff stop doing data entry across client books.',
+    h1: 'Bookkeeping Automation for Accounting Firms',
+    heroSub:
+      'Receipt and statement capture, AI categorization, and bank reconciliation across QuickBooks and Xero — so your team reviews the books instead of keying them.',
+    answer:
+      'Bookkeeping automation wires Hubdoc, QuickBooks and Xero into one flow: receipts and statements are captured and read, transactions are categorized with AI against each client’s chart of accounts, and bank reconciliation runs automatically — so staff review exceptions instead of doing line-by-line data entry across every client.',
+    callout:
+      'Bookkeeping doesn’t scale by hiring — it scales by removing the data entry. A firm doing books for dozens of clients is paying skilled staff to categorize receipts and tick-and-tie statements, the lowest-value, highest-volume work in the practice.',
+    serviceName: 'Bookkeeping Automation (QuickBooks & Xero)',
+    serviceType: 'Bookkeeping automation for accounting firms',
+    schemaDescription:
+      'Bookkeeping automation — Hubdoc-to-QuickBooks receipt capture, AI transaction categorization, and Xero bank reconciliation — for accounting firms, with exception review and audit logging.',
+    roi: [
+      { value: 'Hubdoc→QBO', label: 'Receipts to categorized books, hands-off' },
+      { value: 'Auto-reconciled', label: 'Bank reconciliation in Xero/QBO without line-by-line entry' },
+      { value: 'Per-client', label: 'Categorization tuned to each client’s chart of accounts' },
+    ],
+    sections: [
+      {
+        heading: 'The lowest-value work, done by your best people',
+        level: 2,
+        body: [
+          'A firm running books for dozens of clients spends its capacity on the same low-value loop: pull receipts and statements, categorize each transaction, reconcile the bank feed, repeat. It’s the work most prone to backlog and the work that most caps how many clients the firm can carry — and it’s exactly what automation removes.',
+          'We connect Hubdoc, QuickBooks and Xero into one pipeline: documents are captured and read, transactions are categorized with AI against each client’s chart of accounts, and reconciliation runs automatically. Staff move from data entry to reviewing the exceptions the system flags.',
+        ],
+      },
+      {
+        heading: 'Tuned to each client’s books',
+        level: 2,
+        body: [
+          'Categorization isn’t generic — it learns each client’s chart of accounts and recurring vendors, so the coding matches how that client’s books are actually kept. Reconciliation matches the bank feed against entries and surfaces only what needs a human decision.',
+        ],
+      },
+      {
+        heading: 'Auditable across clients',
+        level: 3,
+        body: [
+          'Everything is logged per client, runs in your environment, and routes low-confidence categorizations to review — so the books stay defensible and you keep control as volume grows.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your bookkeeping stack', body: 'We confirm Hubdoc/QBO/Xero setup and how client charts of accounts are structured.' },
+      { title: 'Build capture & categorization', body: 'Document capture, AI categorization per client chart of accounts, and exception routing.' },
+      { title: 'Automate reconciliation', body: 'Bank-feed matching in QuickBooks/Xero, surfacing only items that need a decision.' },
+      { title: 'Deploy & review', body: 'Go live with per-client audit logging; staff review exceptions instead of entering data.' },
+    ],
+    workflows: [
+      'Hubdoc receipt & statement capture',
+      'AI transaction categorization per client chart of accounts',
+      'Bank reconciliation in QuickBooks & Xero',
+      'Exception surfacing for human review',
+      'Per-client audit logging',
+    ],
+    whyCustom: [
+      'Categorization tuned to each client’s chart of accounts and vendors, not a generic ruleset.',
+      'Connects the Hubdoc/QBO/Xero stack your firm already runs.',
+      'Runs in your environment with per-client audit logging.',
+      'Improves as staff correct categorizations.',
+    ],
+    included: [
+      'Hubdoc → QuickBooks/Xero capture',
+      'AI transaction categorization',
+      'Automated bank reconciliation',
+      'Per-client chart-of-accounts tuning',
+      'Exception handling & review',
+      'Per-client audit logging',
+    ],
+    faqs: [
+      { q: 'Does it work with both QuickBooks and Xero?', a: 'Yes — Hubdoc-to-QuickBooks capture and Xero bank reconciliation are both common; we build on whichever your firm and clients use.' },
+      { q: 'How does it know how to categorize each client’s transactions?', a: 'It learns each client’s chart of accounts and recurring vendors, so coding matches how that client’s books are kept — not a generic ruleset.' },
+      { q: 'Do we lose control of the books?', a: 'No. Low-confidence categorizations route to review, reconciliation surfaces only what needs a decision, and everything is logged per client, so you keep control as volume grows.' },
+      { q: 'Is client data secure?', a: 'Yes — it runs in your environment with access controls and audit logging; data never leaves your boundary or trains a public model.' },
+      { q: 'How long to set up?', a: 'Most firms are live in 4–6 weeks depending on client count and chart-of-accounts complexity.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'safesend-karbon-workflow-automation'],
+  },
+  {
+    slug: 'safesend-karbon-workflow-automation',
+    metaTitle: 'SafeSend & Karbon Workflow Automation for CPA Firms | Chronexa',
+    metaDescription:
+      'Automate CPA practice workflows around SafeSend Returns and Karbon — return delivery and e-sign tracking, client follow-ups, and job/workflow orchestration — so engagements move without manual chasing.',
+    h1: 'SafeSend & Karbon Workflow Automation',
+    heroSub:
+      'Orchestrate the practice-management side of tax season — SafeSend Returns delivery and tracking, Karbon jobs and client follow-ups — so engagements move themselves instead of waiting on someone.',
+    answer:
+      'SafeSend and Karbon workflow automation orchestrates the practice-management layer of a CPA firm: it triggers and tracks SafeSend Returns delivery and e-signatures, drives Karbon jobs and statuses, and automates the client follow-ups in between — so engagements progress without a manager manually chasing each step.',
+    callout:
+      'Tax season stalls between the steps: a return waiting on a client signature, a job sitting because no one moved it, a follow-up nobody sent. The work isn’t the preparation — it’s the orchestration, and that’s what eats a manager’s week.',
+    serviceName: 'SafeSend & Karbon Workflow Automation',
+    serviceType: 'CPA practice-management workflow automation',
+    schemaDescription:
+      'Workflow automation around SafeSend Returns and Karbon — return delivery and e-sign tracking, automated client follow-ups, and job/status orchestration for CPA firms.',
+    roi: [
+      { value: '84%', label: 'Less manual client follow-up & chasing (CPA-firm build)' },
+      { value: 'Self-moving', label: 'Jobs and returns progress without manual hand-offs' },
+      { value: 'Tracked', label: 'Delivery, e-sign and status visible end to end' },
+    ],
+    sections: [
+      {
+        heading: 'The work between the work',
+        level: 2,
+        body: [
+          'SafeSend Returns and Karbon are good at their jobs — delivery and e-sign, and practice management. What’s missing is the connective tissue: knowing a return has been sitting unsigned for five days, nudging the client, moving the Karbon job when the signature lands, and surfacing what’s stuck. Today a manager does that by hand, and it’s where tax season quietly loses days.',
+          'We automate that orchestration. The system triggers SafeSend delivery, tracks e-sign status, fires the client follow-ups automatically, and updates Karbon jobs and statuses as steps complete — so engagements move themselves. For a CPA firm, automating the chasing side of the workflow cut manual client follow-up by 84%.',
+        ],
+      },
+      {
+        heading: 'Built on SafeSend & Karbon',
+        level: 2,
+        body: [
+          'We integrate with SafeSend Returns and Karbon directly, so the automation drives the tools your firm already runs rather than replacing them. Status is visible end to end — what’s delivered, what’s signed, what’s stuck and who owns it — without a manager assembling that picture by hand.',
+        ],
+      },
+      {
+        heading: 'In your environment, logged',
+        level: 3,
+        body: [
+          'Runs inside your environment with access controls and a log of every delivery, follow-up and status change, so the workflow is auditable and you keep control as volume scales.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your engagement workflow', body: 'We document how returns move through SafeSend and Karbon today and where they stall.' },
+      { title: 'Automate delivery & follow-up', body: 'Trigger SafeSend delivery, track e-sign, and fire client follow-ups automatically.' },
+      { title: 'Orchestrate Karbon jobs', body: 'Move jobs and statuses as steps complete; surface what’s stuck and who owns it.' },
+      { title: 'Deploy & monitor', body: 'Go live in your environment with end-to-end status visibility and audit logging.' },
+    ],
+    workflows: [
+      'SafeSend Returns delivery triggering & e-sign tracking',
+      'Automated client follow-ups on unsigned returns',
+      'Karbon job and status orchestration',
+      'End-to-end engagement status visibility',
+      'Audit logging of deliveries, follow-ups and status changes',
+    ],
+    whyCustom: [
+      'Drives SafeSend and Karbon directly — no replacing the tools your firm runs.',
+      'Follow-up cadences and job logic tuned to your engagement workflow.',
+      'Runs in your environment with audit logging.',
+      'Gives managers end-to-end visibility instead of manual status-chasing.',
+    ],
+    included: [
+      'SafeSend Returns delivery & e-sign tracking',
+      'Automated client follow-ups',
+      'Karbon job & status orchestration',
+      'End-to-end engagement visibility',
+      'Exception surfacing & ownership',
+      'Audit logging & access controls',
+    ],
+    faqs: [
+      { q: 'Does it replace SafeSend or Karbon?', a: 'No — it drives them. We integrate with SafeSend Returns and Karbon directly so the automation orchestrates the tools your firm already uses.' },
+      { q: 'What does the automation actually move?', a: 'It triggers SafeSend delivery, tracks e-signatures, fires client follow-ups on returns sitting unsigned, and updates Karbon jobs and statuses as steps complete — so engagements progress without manual hand-offs.' },
+      { q: 'Will managers still have visibility?', a: 'More than before — the system surfaces what’s delivered, signed, stuck and who owns it, end to end, instead of a manager assembling that picture by hand.' },
+      { q: 'Is it secure and auditable?', a: 'Yes — it runs in your environment with access controls and logs every delivery, follow-up and status change.' },
+      { q: 'How long to set up?', a: 'Most builds go live in 4–6 weeks depending on how your engagement workflow is structured.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'bookkeeping-automation-quickbooks-xero'],
+  },
+
+  // ── Financial / Wealth-RIA tool/integration pages (Layer-A moat keywords) ─────
+  {
+    slug: 'ria-crm-automation',
+    metaTitle: 'Redtail & Wealthbox CRM Automation for RIAs | Chronexa',
+    metaDescription:
+      'Automate the CRM busywork in Redtail and Wealthbox — client data sync, meeting prep and follow-ups, task and workflow automation — so advisors spend time with clients, inside your security model.',
+    h1: 'RIA CRM Automation — Redtail & Wealthbox',
+    heroSub:
+      'Automate the work that piles up in Redtail and Wealthbox — data sync, meeting workflows, follow-ups and tasks — so advisors and ops stop living in the CRM, with client data kept secure.',
+    answer:
+      'RIA CRM automation wires AI and workflow automation into Redtail or Wealthbox so the repetitive work runs itself: syncing client data across your custodian, planning and CRM systems, prepping meeting records, generating follow-up tasks and notes, and keeping the CRM clean — letting advisors spend time advising, not data-entering.',
+    callout:
+      'A wealth practice runs on its CRM, but the CRM runs on manual upkeep: re-keying data from the custodian and planning tools, building meeting prep by hand, chasing follow-up tasks. That upkeep scales with clients and quietly caps how many an advisor can serve well.',
+    serviceName: 'RIA CRM Automation',
+    serviceType: 'CRM automation for RIAs & wealth managers',
+    schemaDescription:
+      'Redtail and Wealthbox CRM automation for RIAs — client data sync, meeting prep and follow-ups, task and workflow automation, with secure, controlled deployment.',
+    roi: [
+      { value: 'Redtail/Wealthbox', label: 'Built on the CRM your firm already runs' },
+      { value: 'Less upkeep', label: 'Data sync, notes and tasks handled automatically' },
+      { value: 'Secure', label: 'Client data stays in your environment, fully logged' },
+    ],
+    sections: [
+      {
+        heading: 'The CRM upkeep that eats advisory time',
+        level: 2,
+        body: [
+          'In a wealth practice, the CRM is the system of record — and the source of the busywork. Client data lives in three places (custodian, planning software, CRM) and someone keeps them in sync by hand. Meeting prep is assembled manually. Follow-up tasks and notes are typed after every call. None of it is advice; all of it is time.',
+          'We automate that layer inside Redtail or Wealthbox: data flows between your systems automatically, meeting records and prep are assembled for the advisor, and follow-up tasks and notes are generated and logged — so the CRM stays current without anyone living in it.',
+        ],
+      },
+      {
+        heading: 'Built on your CRM and your stack',
+        level: 2,
+        body: [
+          'Whether you run Redtail or Wealthbox, we build on it via its API rather than replacing it, and connect the tools around it — your custodian feeds, planning software, and reporting. Advisors keep the CRM they know; the automation runs behind it.',
+        ],
+      },
+      {
+        heading: 'Secure with client financial data',
+        level: 3,
+        body: [
+          'Everything runs inside your environment with role-based access and audit logging. Client PII and financial data never leave your boundary or train a public model — the baseline for a regulated advisory firm.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your CRM workflow', body: 'We document how data moves between your custodian, planning tools and Redtail/Wealthbox, and where the manual upkeep is.' },
+      { title: 'Build the automation', body: 'Data sync, meeting prep, and task/note automation wired into your CRM via its API.' },
+      { title: 'Add review where it matters', body: 'Low-confidence items route to a person; sensitive actions are logged.' },
+      { title: 'Deploy & maintain', body: 'Go live inside your environment with audit logging and ongoing tuning as your stack changes.' },
+    ],
+    workflows: [
+      'Client data sync across custodian, planning & CRM',
+      'Automated meeting prep & record assembly',
+      'Follow-up task and note generation',
+      'CRM hygiene & data-quality automation',
+      'Audit logging across CRM actions',
+    ],
+    whyCustom: [
+      'Built on Redtail/Wealthbox via API — advisors keep their CRM.',
+      'Connects your specific custodian, planning and reporting stack, not a generic template.',
+      'Client data stays in your environment with audit logging.',
+      'Tuned to your service model and workflows.',
+    ],
+    included: [
+      'Redtail / Wealthbox API integration',
+      'Cross-system client data sync',
+      'Automated meeting prep',
+      'Follow-up task & note automation',
+      'CRM hygiene automation',
+      'Role-based access & audit logging',
+    ],
+    faqs: [
+      { q: 'Do you work with both Redtail and Wealthbox?', a: 'Yes — we build on whichever your firm runs, via its API, and connect the custodian, planning and reporting tools around it.' },
+      { q: 'Will advisors have to change CRMs?', a: 'No. The automation runs behind the CRM your team already uses; they keep their workflow and we remove the upkeep.' },
+      { q: 'How is client financial data protected?', a: 'Everything runs inside your environment with role-based access and audit trails; PII and financial data never leave your boundary or train a public model. We work under NDA.' },
+      { q: 'What can it actually automate?', a: 'Cross-system data sync, meeting prep and records, follow-up tasks and notes, and CRM data hygiene — the repetitive upkeep that otherwise eats advisory time.' },
+      { q: 'How long does it take?', a: 'Most builds go live in 4–6 weeks depending on the number of systems we connect.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['financial-services-automation', 'ria-compliance-automation', 'ai-copilot-financial-advisors'],
+  },
+  {
+    slug: 'ria-compliance-automation',
+    metaTitle: 'RIA Compliance Automation: Form ADV & SEC Marketing Rule | Chronexa',
+    metaDescription:
+      'Automate RIA compliance — Form ADV amendment tracking, SEC marketing-rule review of ads and testimonials, and books-and-records — with auditable AI deployed inside your environment.',
+    h1: 'RIA Compliance Automation',
+    heroSub:
+      'Automate the deadline-driven, high-stakes compliance work of an RIA — Form ADV amendments, SEC marketing-rule review, and books-and-records — with an audit trail on every step.',
+    answer:
+      'RIA compliance automation applies AI and workflow automation to the recurring, high-stakes compliance work of a registered investment adviser: tracking and preparing Form ADV amendments, reviewing advertising and testimonials against the SEC marketing rule, and maintaining books-and-records — auditable, on time, and inside your own environment.',
+    callout:
+      'RIA compliance is calendar-driven and unforgiving: the annual ADV amendment, ongoing marketing-rule review of every ad and testimonial, books-and-records you must be able to produce. Done manually it is slow and risky — and the risk is a deficiency letter, not an inconvenience.',
+    serviceName: 'RIA Compliance Automation',
+    serviceType: 'Compliance automation for RIAs',
+    schemaDescription:
+      'Compliance automation for RIAs — Form ADV amendment tracking, SEC marketing-rule (206(4)-1) review, and books-and-records automation, with audit trails and controlled deployment.',
+    roi: [
+      { value: 'On time', label: 'ADV amendments and reviews tracked to deadline' },
+      { value: 'Marketing rule', label: 'Ads & testimonials checked against SEC 206(4)-1' },
+      { value: 'Auditable', label: 'A defensible record on every compliance action' },
+    ],
+    sections: [
+      {
+        heading: 'Compliance that runs on deadlines and manual review',
+        level: 2,
+        body: [
+          'A registered investment adviser carries a steady compliance load: the annual Form ADV amendment (and interim updates when material things change), review of every piece of marketing against the SEC marketing rule, and books-and-records you must be able to produce on request. Most firms run this on spreadsheets, calendars and a compliance officer’s memory — workable until it isn’t.',
+          'We automate the tracking and the first-pass review. The system watches for the triggers that require an ADV amendment, manages the amendment workflow to deadline, checks advertising and testimonials against marketing-rule requirements (flagging missing disclosures and risky claims for a human), and keeps an organised, retrievable books-and-records trail.',
+        ],
+      },
+      {
+        heading: 'SEC marketing-rule review, first pass by AI',
+        level: 2,
+        body: [
+          'The marketing rule (206(4)-1) made advertising review a recurring, judgement-heavy task. We build a first-pass reviewer that checks each ad, social post or testimonial for required disclosures, fair-and-balanced presentation, and prohibited claims — surfacing issues with the rule reference, so your compliance officer reviews exceptions instead of every word. It supports the human; it does not replace the sign-off.',
+        ],
+      },
+      {
+        heading: 'Auditable, inside your environment',
+        level: 3,
+        body: [
+          'Every check and amendment is logged with its basis, inside an environment you control, so you can produce a defensible record for an examiner. Firm and client data never leaves your boundary or trains a public model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your compliance calendar', body: 'We document your ADV cycle, marketing-review process and books-and-records obligations.' },
+      { title: 'Automate tracking & first-pass review', body: 'ADV amendment triggers and workflow, marketing-rule checks, and records organisation.' },
+      { title: 'Keep the human in control', body: 'Flagged items route to your compliance officer for the decision and sign-off, with the rule basis attached.' },
+      { title: 'Deploy & audit', body: 'Go live inside your environment with a complete, retrievable audit trail.' },
+    ],
+    workflows: [
+      'Form ADV amendment trigger detection & workflow',
+      'SEC marketing-rule (206(4)-1) review of ads & testimonials',
+      'Disclosure and prohibited-claim flagging',
+      'Books-and-records organisation & retrieval',
+      'Audit logging with rule basis on every check',
+    ],
+    whyCustom: [
+      'Tuned to your ADV cycle, marketing process and record obligations — not a generic checklist.',
+      'First-pass review supports your compliance officer; the sign-off stays human.',
+      'Runs inside your environment; firm and client data never leaves or trains a public model.',
+      'Every action logged with its basis for examiner-ready defensibility.',
+    ],
+    included: [
+      'Form ADV amendment tracking & workflow',
+      'SEC marketing-rule review of advertising & testimonials',
+      'Disclosure & claim flagging',
+      'Books-and-records automation',
+      'Human-in-the-loop sign-off',
+      'Audit trails & controlled deployment',
+    ],
+    faqs: [
+      { q: 'Can AI really help with the SEC marketing rule?', a: 'Yes — as a first-pass reviewer. It checks each ad or testimonial for required disclosures, fair-and-balanced presentation and prohibited claims, flags issues with the rule reference, and routes them to your compliance officer for the decision. It supports the sign-off, it doesn’t replace it.' },
+      { q: 'Does it handle Form ADV amendments?', a: 'It detects the triggers that require an amendment, manages the amendment workflow to deadline, and keeps the record — so the annual and interim updates don’t slip.' },
+      { q: 'Is the output defensible to an examiner?', a: 'Yes — every check and amendment is logged with its basis, inside your environment, so you can produce a complete, retrievable record on request.' },
+      { q: 'Where does our data live?', a: 'Inside your environment, with role-based access. Firm and client data never leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'How long does it take?', a: 'Most compliance builds go live in 6–10 weeks depending on the scope of marketing review and your records setup.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['financial-services-automation', 'ria-crm-automation', 'ai-copilot-financial-advisors'],
+  },
+  {
+    slug: 'ai-copilot-financial-advisors',
+    metaTitle: 'AI Co-Pilot for Financial Advisors | Chronexa',
+    metaDescription:
+      'A private AI co-pilot for financial advisors — automated meeting prep, client-context answers, follow-up drafting, and Orion reporting — built securely on your data, inside your environment.',
+    h1: 'AI Co-Pilot for Financial Advisors',
+    heroSub:
+      'Give advisors a private AI co-pilot that preps every client meeting, answers from the household’s full context, drafts follow-ups, and automates reporting — built on your data, kept secure.',
+    answer:
+      'An AI co-pilot for financial advisors automates the work around client meetings: it assembles meeting prep from the household’s portfolio, plan and CRM history, answers questions from that context, drafts the post-meeting follow-up and notes, and automates recurring reporting (e.g. Orion) — all from a private knowledge base inside your environment, so advisors spend their time advising.',
+    callout:
+      'An advisor’s edge is the conversation, but the hours go to preparing for it and writing it up afterwards — pulling the portfolio, the plan, the last three meetings, then the follow-up and the report. That prep-and-admin load is exactly what a private co-pilot removes.',
+    serviceName: 'AI Co-Pilot for Financial Advisors',
+    serviceType: 'AI co-pilot for wealth advisors & RIAs',
+    schemaDescription:
+      'A private AI co-pilot for financial advisors — automated meeting prep, client-context Q&A, follow-up drafting, and Orion reporting automation, deployed securely on the firm’s data.',
+    roi: [
+      { value: 'Meeting-ready', label: 'Prep assembled from the household’s full context' },
+      { value: 'Less admin', label: 'Follow-ups, notes and reporting drafted automatically' },
+      { value: 'Private', label: 'Built on your data, inside your environment' },
+    ],
+    sections: [
+      {
+        heading: 'The prep-and-admin tax on every advisor',
+        level: 2,
+        body: [
+          'For each client meeting an advisor (or their associate) assembles the picture by hand: current portfolio, the financial plan, what was discussed last time, open items. Afterwards comes the write-up — notes, follow-up tasks, and the reporting. It’s necessary, it’s repetitive, and it scales with the book, so the best advisors end up rationed by admin.',
+          'The co-pilot does that work. It pulls the household’s full context into meeting-ready prep, answers questions across the plan and history during prep, drafts the follow-up and notes afterwards, and automates the recurring reports — so the advisor’s time goes to the relationship.',
+        ],
+      },
+      {
+        heading: 'Answers from the household’s full context',
+        level: 2,
+        body: [
+          'Built as a private RAG over your own data — portfolios, plans, CRM notes, prior meetings — the co-pilot answers an advisor’s questions from the actual household context, with the source attached, instead of a generic model guessing. It connects to your stack (CRM, planning, and reporting such as Orion) so prep and reporting reflect live data.',
+        ],
+      },
+      {
+        heading: 'Private and secure by design',
+        level: 3,
+        body: [
+          'It runs inside your environment on your data, with role-based access and audit logging. Client financial data never leaves your boundary or trains a public model — non-negotiable for a fiduciary.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map the advisor workflow', body: 'We document meeting prep, the data sources, and the follow-up and reporting steps that consume time.' },
+      { title: 'Build the private co-pilot', body: 'A RAG over your portfolios, plans and CRM history, connected to your stack (CRM, planning, Orion).' },
+      { title: 'Automate prep, follow-up & reporting', body: 'Meeting-ready prep, drafted follow-ups and notes, and recurring report generation — with advisor review.' },
+      { title: 'Deploy securely', body: 'Go live inside your environment with role-based access and audit logging.' },
+    ],
+    workflows: [
+      'Automated client meeting prep from full household context',
+      'Private RAG Q&A over portfolios, plans & CRM history',
+      'Post-meeting follow-up & note drafting',
+      'Orion / advisor reporting automation',
+      'Audit logging across co-pilot actions',
+    ],
+    whyCustom: [
+      'Answers from your households’ real context (private RAG), not a generic model.',
+      'Connects your CRM, planning and reporting (e.g. Orion) for live prep and reports.',
+      'Runs inside your environment; client data never leaves or trains a public model.',
+      'Advisor reviews drafts — the co-pilot accelerates, it doesn’t decide.',
+    ],
+    included: [
+      'Private RAG over portfolios, plans & CRM',
+      'Automated meeting prep',
+      'Client-context Q&A with citations',
+      'Follow-up & note drafting',
+      'Orion / reporting automation',
+      'Role-based access & audit logging',
+    ],
+    faqs: [
+      { q: 'What does the co-pilot do before a client meeting?', a: 'It assembles meeting-ready prep from the household’s full context — current portfolio, the financial plan, prior meetings and open items — so the advisor walks in ready instead of spending an hour gathering it.' },
+      { q: 'How is it different from ChatGPT?', a: 'It’s a private RAG built on your own data, so it answers from the actual household context with sources attached — and it runs inside your environment. A public chatbot has neither your data nor the security a fiduciary needs.' },
+      { q: 'Can it automate our Orion reporting?', a: 'Yes — recurring report generation (e.g. Orion) is part of the build, alongside meeting prep and follow-ups, with advisor review before anything goes out.' },
+      { q: 'Is client data safe?', a: 'It runs inside your environment with role-based access and audit logging; client financial data never leaves your boundary or trains a public model. We work under NDA.' },
+      { q: 'How long does it take?', a: 'Most co-pilot builds go live in 8–12 weeks depending on the data sources we ingest and your security requirements.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['financial-services-automation', 'ria-crm-automation', 'ria-compliance-automation'],
+  },
+
+  // ── M&A / PE / IB tool/integration pages (Layer-A moat keywords) ──────────────
+  {
+    slug: 'affinity-crm-automation',
+    metaTitle: 'Affinity CRM Workflow Automation for VC & PE | Chronexa',
+    metaDescription:
+      'Automate Affinity CRM for VC and PE firms — inbound deal capture, relationship and data enrichment, and pipeline workflows — so analysts stop doing data entry and the CRM stays the source of truth.',
+    h1: 'Affinity CRM Workflow Automation',
+    heroSub:
+      'Make Affinity the source of truth without the manual upkeep — automated deal capture, enrichment, and pipeline workflows, built on the relationship-intelligence CRM your firm already runs.',
+    answer:
+      'Affinity CRM automation wires AI and workflow automation into Affinity so a deal team stops maintaining the CRM by hand: inbound decks and intros are captured and structured into the right records, contacts and companies are enriched, and pipeline stages and tasks move automatically — keeping Affinity accurate as the firm’s source of truth.',
+    callout:
+      'Affinity only delivers its relationship-intelligence edge if the data is current — and keeping it current is exactly the manual work analysts resent. A CRM that’s 60% maintained gives you 60% of the intelligence, right when a deal depends on it.',
+    serviceName: 'Affinity CRM Automation',
+    serviceType: 'Affinity CRM automation for VC & PE',
+    schemaDescription:
+      'Affinity CRM workflow automation for VC and PE firms — inbound deal capture, contact/company enrichment, and pipeline automation, with secure deployment.',
+    roi: [
+      { value: 'Affinity', label: 'Built on the relationship-intelligence CRM you run' },
+      { value: 'Always current', label: 'Deals, contacts and stages updated without manual entry' },
+      { value: 'Secure', label: 'Deal data stays in your environment' },
+    ],
+    sections: [
+      {
+        heading: 'A CRM is only as good as it is current',
+        level: 2,
+        body: [
+          'Affinity’s value is relationship intelligence — who knows whom, what’s moving, what’s gone cold. But that intelligence decays the moment the data falls behind, and keeping it current means analysts hand-entering decks, intros, and stage changes. The upkeep is the tax on the tool.',
+          'We automate that upkeep. Inbound decks and intro emails are detected and structured into the right Affinity records, contacts and companies are enriched from the sources you use, and pipeline stages and tasks update as deals progress — so the CRM stays accurate without anyone babysitting it.',
+        ],
+      },
+      {
+        heading: 'Built on Affinity, tuned to your pipeline',
+        level: 2,
+        body: [
+          'We build on Affinity via its API, mapping extraction and automation to the fields and stages your firm actually tracks — not a generic CRM template. Enrichment and signals flow into the records your team already lives in, so adoption is automatic.',
+        ],
+      },
+      {
+        heading: 'Secure with deal data',
+        level: 3,
+        body: [
+          'Runs inside your environment with access controls and audit logging; confidential deal and relationship data never leaves your boundary or trains a public model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your Affinity setup', body: 'We document your fields, stages and the sources of decks, intros and signals.' },
+      { title: 'Automate capture & enrichment', body: 'Inbound deal capture, contact/company enrichment, and write-back to Affinity via its API.' },
+      { title: 'Automate the pipeline', body: 'Stage moves, tasks and reminders driven by deal activity, with review where it matters.' },
+      { title: 'Deploy securely', body: 'Go live inside your environment with access controls and audit logging.' },
+    ],
+    workflows: [
+      'Inbound deck & intro capture into Affinity',
+      'Contact & company enrichment',
+      'Pipeline stage and task automation',
+      'Data-quality and hygiene automation',
+      'Audit logging across CRM actions',
+    ],
+    whyCustom: [
+      'Built on Affinity via API — analysts keep one source of truth.',
+      'Mapped to the fields and stages your firm actually tracks.',
+      'Deal data stays in your environment with audit logging.',
+      'Enrichment from the sources you already trust.',
+    ],
+    included: [
+      'Affinity API integration',
+      'Inbound deal capture & structuring',
+      'Contact & company enrichment',
+      'Pipeline stage & task automation',
+      'CRM hygiene automation',
+      'Access controls & audit logging',
+    ],
+    faqs: [
+      { q: 'Does this only work with Affinity?', a: 'Affinity is the focus here, built via its API. The same deal-flow automation patterns apply to other VC/PE CRMs if your firm runs something else.' },
+      { q: 'What gets automated into the CRM?', a: 'Inbound decks and intros are captured and structured into records, contacts and companies are enriched, and pipeline stages and tasks move with deal activity — so the CRM stays current without manual entry.' },
+      { q: 'Is our deal data secure?', a: 'Yes — it runs inside your environment with access controls and audit logging; confidential deal and relationship data never leaves your boundary or trains a public model.' },
+      { q: 'How long does it take?', a: 'Most Affinity automation builds go live in 4–6 weeks depending on the depth of enrichment and pipeline logic.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
+    related: ['vc-pe-crm-automation', 'pitch-deck-parsing-software', 'portfolio-company-monitoring-automation'],
+  },
+  {
+    slug: 'pitch-deck-parsing-software',
+    metaTitle: 'Pitch Deck Parsing Software (Custom AI) for VC & PE | Chronexa',
+    metaDescription:
+      'Custom AI that parses inbound pitch decks — extracting metrics, team, market and traction into structured CRM fields — so deal teams screen more, faster, without manual data entry.',
+    h1: 'Pitch Deck Parsing — Custom AI for Deal Flow',
+    heroSub:
+      'Turn the inbound deck deluge into structured, screenable data — AI that reads each pitch deck and writes the metrics, team and traction straight into your CRM.',
+    answer:
+      'Pitch-deck parsing software uses AI to read inbound decks and extract the data a deal team screens on — financials and traction, team, market, ask — into structured fields in your CRM, so partners review a consistent summary instead of opening every PDF, and nothing in the inbound flow gets missed.',
+    callout:
+      'A fund’s inbound is a firehose of decks in every format. Screened by hand, the top of funnel is rate-limited by analyst hours — and good companies slip through simply because no one got to the deck in time.',
+    serviceName: 'Pitch Deck Parsing',
+    serviceType: 'AI pitch-deck parsing for VC & PE',
+    schemaDescription:
+      'Custom AI pitch-deck parsing for VC and PE — extraction of metrics, team, market and traction from inbound decks into structured CRM fields, with human review.',
+    roi: [
+      { value: 'Structured', label: 'Decks turned into consistent, screenable fields' },
+      { value: 'Nothing missed', label: 'Every inbound deck captured and summarised' },
+      { value: 'Into your CRM', label: 'Written straight to Affinity or your deal CRM' },
+    ],
+    sections: [
+      {
+        heading: 'The inbound is bigger than the analyst hours',
+        level: 2,
+        body: [
+          'Decks arrive in every shape — slides, PDFs, links — and screening them is manual: open it, find the metrics, judge the team and market, log it. The top of the funnel is capped by how many an analyst can read, so coverage suffers and good deals get missed because the deck sat unopened.',
+          'We build parsing tuned to decks: the AI reads each one, extracts the financials, traction, team, market and ask, and writes a consistent structured summary into your CRM. Partners screen a uniform record; analysts spend their judgement on the promising ones, not on data entry.',
+        ],
+      },
+      {
+        heading: 'Consistent, structured, and into your CRM',
+        level: 2,
+        body: [
+          'The value is consistency: every deck reduced to the same fields, so screening is comparing like with like. Extraction writes straight into Affinity (or your deal CRM) against the fields your firm tracks, and low-confidence reads route to a human so the data stays trustworthy.',
+        ],
+      },
+      {
+        heading: 'Private to your firm',
+        level: 3,
+        body: [
+          'Runs inside your environment; founders’ confidential materials never leave your boundary or train a public model, with access controls and logging throughout.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Define your screening fields', body: 'We map what your firm screens on, so extraction targets the metrics and signals that matter.' },
+      { title: 'Build deck extraction', body: 'AI parsing of decks (slides, PDFs, links) into structured fields, grounded in the source.' },
+      { title: 'Write to your CRM with review', body: 'Structured summaries written to Affinity/your CRM; low-confidence reads routed to a human.' },
+      { title: 'Deploy securely', body: 'Go live inside your environment with access controls and audit logging.' },
+    ],
+    workflows: [
+      'Inbound deck detection (email, portal, links)',
+      'Extraction of metrics, team, market, traction & ask',
+      'Consistent structured summary per deck',
+      'Write-back to Affinity / deal CRM',
+      'Human review on low-confidence reads',
+    ],
+    whyCustom: [
+      'Extraction tuned to the fields your firm screens on.',
+      'Consistent summaries make screening compare like with like.',
+      'Writes into your CRM, not a separate silo.',
+      'Confidential founder materials stay in your environment.',
+    ],
+    included: [
+      'Deck detection & ingestion',
+      'AI extraction of deck data',
+      'Structured screening summaries',
+      'Affinity / CRM write-back',
+      'Human-in-the-loop review',
+      'Secure, in-environment deployment',
+    ],
+    faqs: [
+      { q: 'What does it extract from a deck?', a: 'The data you screen on — financials and traction, team, market, and the ask — into consistent structured fields, so every inbound deck becomes comparable.' },
+      { q: 'Does it write into Affinity?', a: 'Yes — extracted summaries are written straight into Affinity or your deal CRM against the fields your firm tracks, with low-confidence reads routed to a human.' },
+      { q: 'Can it handle any deck format?', a: 'Slides, PDFs and links are all in scope; the parser is built for the variety of real inbound rather than a single template.' },
+      { q: 'Is founder data kept confidential?', a: 'Yes — it runs inside your environment with access controls and logging; confidential materials never leave your boundary or train a public model.' },
+      { q: 'How long does it take?', a: 'Most deck-parsing builds go live in 4–6 weeks depending on CRM integration depth.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
+    related: ['vc-pe-crm-automation', 'affinity-crm-automation', 'ai-term-sheet-analysis'],
+  },
+  {
+    slug: 'ai-term-sheet-analysis',
+    metaTitle: 'AI Term Sheet Analysis Software for VC & PE | Chronexa',
+    metaDescription:
+      'Custom AI that reads term sheets and deal documents — extracting and comparing economic and control terms against your standards, flagging non-standard or off-market provisions for review.',
+    h1: 'AI Term Sheet Analysis',
+    heroSub:
+      'Read term sheets in minutes, not hours — AI that extracts the economic and control terms, compares them to your standards, and flags what’s off-market for a partner to review.',
+    answer:
+      'AI term-sheet analysis reads term sheets and deal documents to extract the economic and control terms — valuation, liquidation preference, anti-dilution, board, protective provisions — compare them against your firm’s standards and market norms, and flag non-standard or off-market terms for a partner, so review is faster and nothing slips through.',
+    callout:
+      'Term sheets carry the terms that decide the deal’s economics and control, buried in dense, non-standard language. Reading and comparing them by hand is slow and, under deal pressure, the place a subtle off-market provision goes unnoticed.',
+    serviceName: 'AI Term Sheet Analysis',
+    serviceType: 'AI deal-document analysis for VC & PE',
+    schemaDescription:
+      'Custom AI term-sheet analysis for VC and PE — extraction and comparison of economic and control terms against firm standards and market norms, with human review and audit trails.',
+    roi: [
+      { value: 'Minutes', label: 'Term sheets read and structured fast' },
+      { value: 'Off-market flagged', label: 'Non-standard terms surfaced against your standards' },
+      { value: 'Reviewed', label: 'A partner decides; the AI surfaces' },
+    ],
+    sections: [
+      {
+        heading: 'The terms that decide the deal, read by hand',
+        level: 2,
+        body: [
+          'Valuation, liquidation preference, anti-dilution, board composition, protective provisions — the term sheet is where a deal’s economics and control actually live, and the language is dense and rarely standard. Reading each one and comparing it to your norms is careful, slow work, and deal timelines don’t make it easier.',
+          'We build analysis that extracts the key economic and control terms, compares them to your firm’s standards and market norms, and flags anything non-standard or off-market — with the clause cited — so a partner reviews exceptions and decisions, not boilerplate. It accelerates judgement; it doesn’t replace it.',
+        ],
+      },
+      {
+        heading: 'Compared to your standards',
+        level: 2,
+        body: [
+          'The value is in the comparison: the system holds your firm’s preferred terms and fallback positions, so it doesn’t just extract a term — it tells you how this one diverges from what you’d accept. Every flag links to the source clause for verification.',
+        ],
+      },
+      {
+        heading: 'Confidential and auditable',
+        level: 3,
+        body: [
+          'Runs inside your environment with access controls and an audit trail; confidential deal documents never leave your boundary or train a public model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Encode your term standards', body: 'We capture your preferred terms, fallback positions and market norms as the basis for comparison.' },
+      { title: 'Build extraction & comparison', body: 'Economic and control terms extracted and compared, with off-market flagging, grounded in the source.' },
+      { title: 'Keep the partner deciding', body: 'Flagged terms route to a partner with the clause and the deviation; the sign-off stays human.' },
+      { title: 'Deploy securely', body: 'Go live inside your environment with access controls and audit logging.' },
+    ],
+    workflows: [
+      'Extraction of economic & control terms from term sheets',
+      'Comparison to firm standards and market norms',
+      'Off-market / non-standard term flagging',
+      'Source-clause citation on every flag',
+      'Human review and audit logging',
+    ],
+    whyCustom: [
+      'Compares to your standards and fallback positions, not a generic checklist.',
+      'Every flag is grounded in the source clause, so it’s verifiable.',
+      'Confidential deal documents stay in your environment.',
+      'Surfaces for a partner’s judgement — it doesn’t decide.',
+    ],
+    included: [
+      'Term & clause extraction',
+      'Comparison to your standards & market norms',
+      'Off-market flagging with citations',
+      'Deal-document handling beyond term sheets',
+      'Human-in-the-loop review',
+      'Audit trails & controlled deployment',
+    ],
+    faqs: [
+      { q: 'What does it extract from a term sheet?', a: 'The economic and control terms — valuation, liquidation preference, anti-dilution, board, protective provisions and more — as structured data, with each grounded in the source clause.' },
+      { q: 'How does it know what’s off-market?', a: 'It holds your firm’s preferred terms, fallback positions and market norms, and flags how each term diverges from what you’d accept — so it’s comparison, not just extraction.' },
+      { q: 'Does it replace the partner’s review?', a: 'No. It surfaces extracted terms and off-market flags with the clause cited; the partner makes the call. It accelerates judgement, it doesn’t replace it.' },
+      { q: 'Is deal data confidential?', a: 'Yes — it runs inside your environment with access controls and audit trails; documents never leave your boundary or train a public model.' },
+      { q: 'How long does it take?', a: 'Most term-sheet analysis builds go live in 6–8 weeks depending on how much of your standards we encode.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
+    related: ['vc-pe-crm-automation', 'pitch-deck-parsing-software', 'legal-due-diligence-automation'],
+  },
+  {
+    slug: 'portfolio-company-monitoring-automation',
+    metaTitle: 'Portfolio Company Monitoring Automation for VC & PE | Chronexa',
+    metaDescription:
+      'Automate portfolio monitoring — collect and normalise portfolio-company KPIs and reporting, track news and signals, and surface variances — so the fund sees what’s happening without manual chasing.',
+    h1: 'Portfolio Company Monitoring Automation',
+    heroSub:
+      'See your portfolio without the manual chase — automated KPI collection, news and signal tracking, and variance alerts across portfolio companies, in one place your team trusts.',
+    answer:
+      'Portfolio monitoring automation collects and normalises the KPIs and reporting your portfolio companies send, tracks news, hiring and competitor signals about them, and surfaces variances and risks — so the fund has a current, comparable view of the portfolio without analysts chasing spreadsheets and Google Alerts.',
+    callout:
+      'Portfolio monitoring is death by a thousand spreadsheets: every company reports differently, on its own schedule, and someone normalises it all by hand while separately watching the news. By the time the picture is assembled, it’s already stale.',
+    serviceName: 'Portfolio Company Monitoring',
+    serviceType: 'Portfolio monitoring automation for VC & PE',
+    schemaDescription:
+      'Portfolio-company monitoring automation for VC and PE — KPI collection and normalisation, news/signal tracking, and variance alerting, with secure deployment.',
+    roi: [
+      { value: 'One view', label: 'Portfolio KPIs collected and normalised automatically' },
+      { value: 'Signals tracked', label: 'News, hiring and competitor moves surfaced per company' },
+      { value: 'Variances flagged', label: 'Risks and outliers raised without manual review' },
+    ],
+    sections: [
+      {
+        heading: 'Death by a thousand spreadsheets',
+        level: 2,
+        body: [
+          'Each portfolio company reports in its own format on its own cadence, and a fund’s team stitches it into a comparable picture by hand — then separately monitors news and signals about each company. It’s slow, it’s never quite current, and risks surface late because no one had time to look.',
+          'We automate the collection and the watching. Portfolio reporting is ingested and normalised into a consistent KPI view, news, hiring and competitor signals are tracked per company, and variances or risk flags are surfaced — so the fund sees what’s happening across the portfolio without the manual assembly.',
+        ],
+      },
+      {
+        heading: 'Normalised KPIs and tracked signals, together',
+        level: 2,
+        body: [
+          'The value is one current, comparable view. Whatever format companies report in, the data is normalised to your KPI set; alongside it, external signals (news, executive moves, competitor activity) are tracked and tied to the right company — so quantitative reporting and qualitative signals live in one place.',
+        ],
+      },
+      {
+        heading: 'Secure and in your environment',
+        level: 3,
+        body: [
+          'Runs inside your environment with access controls and audit logging; portfolio data never leaves your boundary or trains a public model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Define your KPI set', body: 'We map the metrics and cadence you want across the portfolio, and the signals worth tracking.' },
+      { title: 'Automate collection & normalisation', body: 'Ingest portfolio reporting in any format and normalise it to your KPI view.' },
+      { title: 'Track signals & flag variances', body: 'News, hiring and competitor signals per company, with variance and risk alerting.' },
+      { title: 'Deploy securely', body: 'Go live inside your environment with access controls and audit logging.' },
+    ],
+    workflows: [
+      'Portfolio KPI collection & normalisation',
+      'News, hiring & competitor signal tracking per company',
+      'Variance and risk-flag alerting',
+      'A single comparable portfolio view',
+      'Audit logging across the process',
+    ],
+    whyCustom: [
+      'Normalised to your KPI set, whatever format companies report in.',
+      'Quantitative reporting and qualitative signals in one view.',
+      'Portfolio data stays in your environment with audit logging.',
+      'Tuned to your portfolio and the signals you care about.',
+    ],
+    included: [
+      'Portfolio reporting ingestion & normalisation',
+      'KPI dashboarding to your metric set',
+      'News & signal tracking per company',
+      'Variance & risk alerting',
+      'Secure, in-environment deployment',
+      'Access controls & audit logging',
+    ],
+    faqs: [
+      { q: 'Our companies all report differently — can it handle that?', a: 'Yes. We ingest portfolio reporting in whatever format companies send and normalise it to your KPI set, so you get one comparable view without manual stitching.' },
+      { q: 'Does it track news and signals too?', a: 'Yes — news, executive moves and competitor activity are tracked per portfolio company and tied to the record, alongside the quantitative KPIs.' },
+      { q: 'How are variances surfaced?', a: 'The system flags variances against your expectations and raises risk signals, so outliers come to you instead of waiting for the next manual review.' },
+      { q: 'Is portfolio data secure?', a: 'Yes — it runs inside your environment with access controls and audit logging; data never leaves your boundary or trains a public model.' },
+      { q: 'How long does it take?', a: 'Most monitoring builds go live in 6–8 weeks depending on portfolio size and reporting variety.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
+    related: ['vc-pe-crm-automation', 'affinity-crm-automation', 'financial-services-automation'],
+  },
+
+  // ── SIGNATURE CAPABILITIES (the moat — deep-research-backed) ──────────────────
+  {
+    slug: 'agentic-ai-systems',
+    metaTitle: 'Agentic AI Systems Development for Enterprises | Chronexa',
+    metaDescription:
+      'Custom agentic AI systems for regulated enterprises — orchestration, tool use, memory and guardrails, deployed in your environment. Built where autonomy earns its cost, not where a workflow would do.',
+    h1: 'Agentic AI Systems',
+    heroSub:
+      'Custom AI systems that plan, use tools, and complete multi-step work — engineered for reliability and deployed inside your environment, with autonomy reserved for the steps that actually need it.',
+    answer:
+      'An agentic AI system is software where an LLM directs its own process — planning, calling tools, and acting on results in a loop — rather than answering a single question. We build these custom for enterprises: orchestration, tool use, memory and guardrails, deployed inside your environment, and engineered for the reliability autonomous systems usually lack.',
+    callout:
+      'The honest truth most agencies won’t tell you: you often shouldn’t build an agent. Errors compound in autonomous systems, so most value is captured by deterministic workflows — we reserve true agency for the steps that are genuinely unpredictable, and engineer hard for reliability where we do.',
+    serviceName: 'Agentic AI Systems',
+    serviceType: 'Agentic AI / custom AI agent development',
+    schemaDescription:
+      'Custom agentic AI system development for enterprises — multi-agent orchestration, tool use, memory, guardrails, evaluation and human-in-the-loop, deployed securely in the client environment.',
+    roi: [
+      { value: 'Acts, not chats', label: 'Multi-step work completed, not just answered' },
+      { value: 'Reliable by design', label: 'Durable execution, checkpoints, tracing & bounded loops' },
+      { value: 'In your environment', label: 'Governed deployment with audit trails' },
+    ],
+    sections: [
+      {
+        heading: 'What an agentic system actually is (and isn’t)',
+        level: 2,
+        body: [
+          'A single LLM call answers a question. A RAG chatbot answers it grounded in your documents. An agentic system does work: it plans, decides which tools to call, acts, reads the result, and continues until the goal is met — getting "ground truth" from the environment at each step. The difference from a no-code "AI agent" is everything a technical buyer cares about: custom tool integration into your core systems, behavioural governance, deployment topology, and audit — exactly what off-the-shelf tools abstract away.',
+          'We’re deliberate about when to use one. Most business value is captured by workflows — deterministic orchestration of LLM calls — and true autonomy only earns its 4–15× token cost when the task is genuinely unpredictable. Saying that out loud is the difference between an engineering partner and a vendor selling hype.',
+        ],
+      },
+      {
+        heading: 'How we build them',
+        level: 2,
+        body: [
+          'The architecture is matched to the task: a single ReAct-style agent for bounded work; a supervisor-worker (hierarchical) pattern when subtasks parallelise — which beats free-for-all "swarms" in production almost every time; graph orchestration (LangGraph and similar) when you need explicit decision points and trace-level debugging. On top sit tool use via the Model Context Protocol (so every tool call is registered and enforceable), externalised memory, layered guardrails, and evaluation/observability built in from day one.',
+          'Multi-agent vs single-agent is decided by evidence, not fashion: multi-agent for parallelisable, high-value, large-context work; a single well-engineered agent for tightly interdependent tasks. We start simple and escalate only when a measured quality dimension caps out.',
+        ],
+      },
+      {
+        heading: 'Reliability is the hard part',
+        level: 2,
+        body: [
+          'In autonomous systems, minor errors that traditional software shrugs off can derail an agent entirely — errors compound across steps. Reliability comes from engineering, not the model: durable execution that resumes from where it failed, deterministic safeguards (retry logic, checkpoints), bounded iteration budgets to prevent runaway loops, and full trajectory-level tracing so a multi-step failure can actually be debugged. We evaluate agents on task success, trajectory and tool-selection — not just final output.',
+        ],
+      },
+      {
+        heading: 'Governed and secure for regulated work',
+        level: 3,
+        body: [
+          'Agents run inside your environment as scoped, least-privilege identities, with control-plane authorisation on every tool call (advisory guidelines don’t govern agents — enforcement does), human-approval gates for high-impact actions, and immutable audit logs of every prompt, retrieval, action and human decision. We build to the OWASP Top 10 for agentic applications.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Scope the autonomy', body: 'We map the task and decide honestly what should be a workflow vs a true agent, and the success metrics.' },
+      { title: 'Build the architecture', body: 'Orchestration, tool integration (MCP), memory and guardrails — matched to the task, not a template.' },
+      { title: 'Engineer for reliability', body: 'Durable execution, checkpoints, bounded loops, and full tracing with trajectory-level evaluation.' },
+      { title: 'Deploy & govern', body: 'Inside your environment, with least-privilege access, human approval gates, and audit trails.' },
+    ],
+    workflows: [
+      'Supervisor-worker / hierarchical multi-agent orchestration',
+      'Tool use via Model Context Protocol with control-plane authorisation',
+      'Externalised memory & context engineering for long-horizon tasks',
+      'Guardrails: input/output filtering, RBAC, human-approval gates',
+      'Trajectory-level evaluation, tracing & observability',
+    ],
+    whyCustom: [
+      'We build agents only where autonomy earns its cost — workflows everywhere else.',
+      'Engineered for reliability (durable execution, checkpoints, tracing), not a demo.',
+      'Deployed in your environment as least-privilege identities with audit trails.',
+      'Built to the OWASP agentic threat model, with human oversight on high-impact actions.',
+    ],
+    included: [
+      'Agentic architecture design (single vs multi-agent)',
+      'Tool / system integration via MCP',
+      'Memory & context engineering',
+      'Guardrails & human-in-the-loop gates',
+      'Evaluation, tracing & observability',
+      'Secure in-environment deployment',
+      'Audit logging & access control',
+    ],
+    faqs: [
+      { q: 'What’s the difference between an AI agent and a chatbot or RAG assistant?', a: 'A chatbot or RAG assistant answers a question (RAG just grounds the answer in your documents). An agent completes multi-step work — it plans, decides which tools to use, acts, and reacts to results, grounding itself with RAG along the way.' },
+      { q: 'Do we even need an agent, or would a simpler system do?', a: 'Often a workflow (deterministic orchestration of LLM calls) captures most of the value at a fraction of the cost and risk. We’ll tell you honestly when autonomy isn’t worth it — true agents are for genuinely unpredictable tasks.' },
+      { q: 'How do you keep an autonomous agent reliable and prevent runaway loops?', a: 'Reliability is engineered, not assumed: durable execution that resumes after failure, retry logic and checkpoints, bounded iteration budgets, and full trajectory tracing so multi-step failures are debuggable.' },
+      { q: 'Can it run inside our environment for compliance?', a: 'Yes — agents run inside your boundary as scoped, least-privilege identities, with control-plane authorisation on tool calls, human-approval gates, and immutable audit logs. We build to the OWASP agentic threat model.' },
+      { q: 'Single agent or multi-agent — how do you decide?', a: 'By evidence: multi-agent for parallelisable, high-value, large-context work; a single well-engineered agent for tightly interdependent tasks. We start simple and escalate only when a measured quality metric caps out.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['rag-knowledge-engines', 'secure-ai-deployment', 'legal-due-diligence-automation'],
+  },
+  {
+    slug: 'rag-knowledge-engines',
+    metaTitle: 'Enterprise RAG & Knowledge Engines (Private) | Chronexa',
+    metaDescription:
+      'Private RAG and knowledge engines over your own documents — hybrid retrieval, reranking, citations and permission-aware access, deployed in your environment. Built for accuracy you can audit.',
+    h1: 'RAG & Knowledge Engines',
+    heroSub:
+      'A private question-answering layer over your own matters, contracts, filings and research — answers grounded in your documents, with citations, permission-aware, inside your security boundary.',
+    answer:
+      'A knowledge engine is a private RAG (retrieval-augmented generation) system over your firm’s own documents: it retrieves the relevant passages at query time and answers from that evidence, with citations a human can verify — permission-aware, and deployed inside your environment so nothing leaves your boundary.',
+    callout:
+      'RAG reduces hallucination — it does not eliminate it. Even purpose-built legal RAG tools were measured hallucinating 17–33% of the time. The citation is the product: it’s what makes an answer auditable and the residual error catchable. Anyone who tells you RAG "solves" hallucination is selling.',
+    serviceName: 'RAG & Knowledge Engines',
+    serviceType: 'Enterprise RAG / knowledge engine development',
+    schemaDescription:
+      'Private enterprise RAG and knowledge-engine development — ingestion, hybrid retrieval, reranking, citations, permission-aware access and evaluation, deployed in the client environment.',
+    roi: [
+      { value: 'Grounded + cited', label: 'Answers from your documents, with verifiable sources' },
+      { value: 'Permission-aware', label: 'Retrieval respects who can see what' },
+      { value: 'In your boundary', label: 'Self-hostable; data never trains a public model' },
+    ],
+    sections: [
+      {
+        heading: 'A knowledge engine, not a chatbot',
+        level: 2,
+        body: [
+          'A raw LLM answers from frozen public training data — it has never seen your documents, can’t cite them, and confidently fabricates (general models were measured hallucinating on 58–88% of legal queries). Naive "upload a PDF and ask" tools break at scale. A real knowledge engine retrieves the right passages from your corpus and forces the model to answer from that evidence, with citations — because for a lawyer, analyst or compliance officer an answer without a verifiable source is unusable.',
+        ],
+      },
+      {
+        heading: 'The pipeline (where the accuracy actually comes from)',
+        level: 2,
+        body: [
+          'Retrieval quality — not the model — is the main lever. We build layout-aware ingestion that survives real documents (scanned PDFs, tables, filings, where naive OCR silently corrupts the data), tuned chunking, and embeddings benchmarked on your corpus. Retrieval is hybrid (dense vectors + BM25 keyword, so exact terms like case numbers and tickers aren’t missed) with cross-encoder reranking — which typically improves accuracy 15–30% and often lowers total latency by feeding the model fewer, better chunks.',
+          'On top: contextual retrieval (a recent technique that cut retrieval failures by up to 67% with reranking), citations on every answer, and evaluation that separates retrieval quality from answer quality (RAGAS-style context precision/recall + faithfulness) so we know whether a bad answer is a retrieval or a generation problem. Vector store is chosen to fit — pgvector with row-level security for most regulated mid-size corpora, Qdrant/Weaviate/Milvus when scale demands. GraphRAG only where multi-hop relationship questions justify its much higher indexing cost.',
+        ],
+      },
+      {
+        heading: 'Permission-aware by design',
+        level: 2,
+        body: [
+          'This is where 40–60% of enterprise RAG dies before production — not the algorithm, the access control. We capture permissions at ingest and enforce them at query time, built server-side from the user’s identity (never client-supplied), so the model never sees content the user couldn’t. For law firms this maps directly to ethical walls and matter-level confidentiality — no "one big bucket" vector store.',
+        ],
+      },
+      {
+        heading: 'Inside your environment',
+        level: 3,
+        body: [
+          'Self-hostable open-weight models and an in-VPC vector database mean your documents are used for retrieval only — never to train a shared model — and never leave your boundary, with audit trails throughout. A well-fed 7B model with good retrieval routinely beats a 70B model without context, so in-environment doesn’t mean sacrificing quality.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map corpus & access rules', body: 'We profile your documents and how permissions/ethical walls must be enforced before any build.' },
+      { title: 'Build the retrieval pipeline', body: 'Layout-aware ingestion, tuned chunking, hybrid retrieval + reranking, citations — benchmarked on your data.' },
+      { title: 'Enforce permissions & evaluate', body: 'Query-time access control from identity; RAGAS-style retrieval + answer evaluation on your gold questions.' },
+      { title: 'Deploy in your environment', body: 'Self-hostable models + in-VPC vector store; retrieval-only on your data, with audit trails.' },
+    ],
+    workflows: [
+      'Layout-aware ingestion (PDFs, tables, scans, filings)',
+      'Hybrid retrieval (vector + BM25) with cross-encoder reranking',
+      'Contextual retrieval & citation-grounded answers',
+      'Permission-aware retrieval (query-time, identity-based)',
+      'Retrieval + answer evaluation (RAGAS-style) on your gold set',
+    ],
+    whyCustom: [
+      'Retrieval tuned and benchmarked on your corpus — not a generic wrapper.',
+      'Permission-aware: respects ethical walls and matter-level access at query time.',
+      'Self-hostable; your documents are retrieval-only and never train a public model.',
+      'Citations + grounding + evaluation, because RAG reduces but doesn’t eliminate hallucination.',
+    ],
+    included: [
+      'Layout-aware ingestion & parsing',
+      'Hybrid retrieval + reranking',
+      'Citation-grounded generation',
+      'Permission-aware / row-level access control',
+      'Vector database selection & deployment',
+      'RAGAS-style evaluation harness',
+      'In-environment, self-hostable deployment',
+    ],
+    faqs: [
+      { q: 'Does RAG stop the AI from hallucinating?', a: 'It reduces it substantially but does not eliminate it — even purpose-built legal RAG tools were measured at 17–33% hallucination. That’s why we ground every answer in citations, run faithfulness checks, and keep a human in the loop on high-stakes use. The citation is what makes the residual error catchable.' },
+      { q: 'How is this different from just using ChatGPT?', a: 'A public model has never seen your documents, can’t cite them, and can’t respect your access rules. A knowledge engine retrieves from your own corpus, answers with verifiable citations, enforces permissions, and runs inside your environment.' },
+      { q: 'Can it respect who’s allowed to see which documents?', a: 'Yes — permission-aware retrieval is core. We capture permissions at ingest and enforce them at query time from the user’s identity, so the model never surfaces content a user couldn’t see. This maps directly to ethical walls and matter-level confidentiality.' },
+      { q: 'Can it handle our scanned PDFs, tables and filings?', a: 'Yes — layout-aware ingestion with table-structure recognition, because naive OCR silently corrupts data (associating figures with the wrong entity). Ingestion quality is where most enterprise RAG quietly fails.' },
+      { q: 'How do you measure accuracy?', a: 'We evaluate retrieval and answer quality separately (RAGAS-style context precision/recall + faithfulness) against your own gold questions, so we can tell whether a bad answer is a retrieval or a generation problem and fix the right thing.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['agentic-ai-systems', 'document-processing-automation', 'legal-due-diligence-automation'],
+  },
+  {
+    slug: 'secure-ai-deployment',
+    metaTitle: 'Secure & Compliant AI Deployment | Chronexa',
+    metaDescription:
+      'Deploy AI inside your environment — enterprise API with no-training, VPC, or self-hosted open models — for HIPAA, SOC 2, GDPR and SEC/FINRA. We match the least-isolated option that satisfies your exposure.',
+    h1: 'Secure & Compliant AI Deployment',
+    heroSub:
+      'Run AI on sensitive data without it leaking or training a public model — from enterprise APIs with no-training guarantees to fully self-hosted models, matched to your actual regulatory exposure.',
+    answer:
+      'Secure AI deployment means running AI so sensitive data never trains a third party’s model, is never retained beyond processing, and never leaves a boundary you control — with access control and audit trails. We engineer the right tier for your exposure: enterprise API with no-training guarantees, private VPC deployment, or fully self-hosted open-weight models.',
+    callout:
+      'Secure AI is a spectrum, not a binary — and the engineering job is matching the least-isolated option that still satisfies your regulatory exposure, because isolation costs money, latency and model quality. Recommending a self-hosted GPU cluster when an enterprise API with a BAA would do is over-engineering, not diligence.',
+    serviceName: 'Secure & Compliant AI Deployment',
+    serviceType: 'Secure / private AI deployment for regulated industries',
+    schemaDescription:
+      'Secure and compliant AI deployment for regulated industries — enterprise API (no-training), VPC, and self-hosted open-weight models, with KMS, RBAC, audit logging and compliance mapping (HIPAA, SOC 2, GDPR, SEC/FINRA).',
+    roi: [
+      { value: 'No training', label: 'Your data never trains a public model' },
+      { value: 'Your boundary', label: 'Deployed in your tenancy, VPC, or self-hosted' },
+      { value: 'Audit-ready', label: 'Access control + logging mapped to your obligations' },
+    ],
+    sections: [
+      {
+        heading: 'The deployment spectrum — and where each breaks',
+        level: 2,
+        body: [
+          'There are four real tiers. Public consumer tools (chatgpt.com) are off the table for regulated data — a US court found documents run through a free LLM lost attorney-client privilege. Enterprise APIs (Azure OpenAI, AWS Bedrock, Google Vertex) contractually don’t train on your data, isolate it per-customer, and carry BAAs/DPAs — this is where most regulated workloads correctly land. VPC/private-networking adds PrivateLink/Private Endpoints and customer-managed keys on top. Fully self-hosted open-weight models (Llama, Mistral, Qwen) on your own GPUs are maximum sovereignty — the only tier where no third party ever sees a token.',
+          'The nuance that separates real expertise from "we keep your data safe": the enterprise-API tier is genuinely compliant for most regulated workloads. Self-hosting is more sovereign, not automatically "more compliant" — and it carries real cost. We match the tier to your exposure and threat model.',
+        ],
+      },
+      {
+        heading: 'Compliance, precisely',
+        level: 2,
+        body: [
+          'We map deployment to the frameworks that bind you. HIPAA needs a signed BAA — but coverage is configuration-dependent: with some providers a single call made without HIPAA/zero-data-retention mode enabled falls outside the BAA even when one is signed. SOC 2 Type II is what enterprise buyers actually require, and every sub-processor is a new boundary. GDPR distinguishes data residency (where data sits) from sovereignty (whose law governs it — the US CLOUD Act reaches hyperscalers regardless of region). For finance, there’s no AI-specific SEC/FINRA rule — the binding obligation is recordkeeping (Exchange Act 17a-4, FINRA 4511): prompt/output logging, version tracking, access controls. The EU AI Act’s high-risk timeline is shifting, so we treat any extension as contingency, not baseline.',
+        ],
+      },
+      {
+        heading: 'The architecture',
+        level: 2,
+        body: [
+          'Customer-managed keys in your KMS/HSM (not provider defaults); RBAC + SSO with per-user and per-service identity; audit logging that captures who/what/when while keeping sensitive payloads out of the logs; PII/PHI detect-and-redact (e.g. Presidio + tokenisation); guardrails for prompt-injection and output safety; and pinned data residency. The dominant pattern is RAG into your approved internal source-of-truth so the model cites your data rather than relying on parametric memory.',
+        ],
+      },
+      {
+        heading: 'When self-hosting is worth it',
+        level: 3,
+        body: [
+          'Self-hosting only wins on cost at sustained high volume — raw GPU is just 30–40% of true cost; MLOps, on-call and security patching are the rest. We run open-weight models on vLLM with right-sized GPUs (e.g. ~2× A100/H100 for a 70B model), but we’ll tell you when an enterprise API is the smarter call. A well-served open model with good RAG context closes most of the quality gap.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map exposure & threat model', body: 'Your data sensitivity, regulatory obligations (HIPAA/SOC 2/GDPR/SEC-FINRA), and the deployment tier that fits.' },
+      { title: 'Architect the deployment', body: 'Enterprise API, VPC, or self-hosted — with KMS, RBAC/SSO, audit logging, PII redaction and guardrails.' },
+      { title: 'Verify compliance controls', body: 'BAA/DPA configuration, residency, recordkeeping and audit trails validated against your obligations.' },
+      { title: 'Deploy & monitor', body: 'Go live in your boundary with observability, drift monitoring, and retention controls.' },
+    ],
+    workflows: [
+      'Enterprise-API deployment with no-training & BAA configuration',
+      'VPC / private-endpoint networking with customer-managed keys',
+      'Self-hosted open-weight models on vLLM (right-sized GPUs)',
+      'RBAC + SSO, PII/PHI redaction, and audit logging',
+      'Compliance mapping (HIPAA, SOC 2, GDPR, SEC/FINRA)',
+    ],
+    whyCustom: [
+      'We match the least-isolated tier that satisfies your exposure — no over-engineering.',
+      'Compliance treated precisely (BAA config, residency vs sovereignty, recordkeeping), not hand-waved.',
+      'Customer-managed keys, RBAC, redaction and metadata-only audit logging.',
+      'Honest on self-hosting cost — we recommend an enterprise API when it’s the smarter call.',
+    ],
+    included: [
+      'Deployment-tier assessment & threat model',
+      'Enterprise-API / VPC / self-hosted architecture',
+      'KMS / customer-managed keys & network isolation',
+      'RBAC, SSO & audit logging',
+      'PII/PHI detection & redaction',
+      'Compliance mapping & documentation',
+      'Observability & drift monitoring',
+    ],
+    faqs: [
+      { q: 'Is it safe to use AI with regulated data like PHI or MNPI?', a: 'Yes, with the right tier — never on public consumer tools. Enterprise APIs with no-training guarantees and a BAA cover most regulated workloads; for maximum sovereignty we self-host open models in your environment so no third party ever sees a token.' },
+      { q: 'Do we need a self-hosted model to be compliant?', a: 'Usually not. Enterprise APIs (Azure OpenAI, Bedrock, Vertex) are genuinely compliant for most workloads with the right configuration. Self-hosting is more sovereign, not automatically more compliant — we recommend it only when your exposure or volume justifies the cost.' },
+      { q: 'Does Azure OpenAI / Bedrock / Vertex train on our data?', a: 'No — their enterprise tiers contractually don’t train on your data and isolate it per customer. The nuance is configuration: features like HIPAA mode or zero-data-retention often must be explicitly enabled, and a single mis-configured call can fall outside your BAA.' },
+      { q: 'What’s the difference between data residency and data sovereignty?', a: 'Residency is where the data physically sits; sovereignty is whose laws govern it. A hyperscaler can pin your region (residency) but the US CLOUD Act still reaches it (sovereignty). True sovereignty means provider, infrastructure and operations in one jurisdiction — which can require self-hosting.' },
+      { q: 'How do you keep an audit trail without leaking sensitive data into logs?', a: 'We log metadata — who, what, when, model version, status — and keep sensitive payloads out of the logs, with PII redaction, RBAC, and retention set to your obligations (e.g. HIPAA’s 7-year requirement).' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    related: ['rag-knowledge-engines', 'financial-services-automation', 'legal-due-diligence-automation'],
+  },
+  {
+    slug: 'applied-ml-data-science',
+    metaTitle: 'Applied ML & Data Science Development | Chronexa',
+    metaDescription:
+      'Custom machine learning beyond LLMs — forecasting, risk scoring and quant/ML systems (XGBoost, LSTM), engineered for production with rigorous validation. Built for out-of-sample, not the backtest.',
+    h1: 'Applied ML & Data Science',
+    heroSub:
+      'Bespoke machine-learning systems beyond LLMs — forecasting, risk scoring, anomaly detection and quantitative signals — engineered for production, with the validation rigour that separates a real edge from a curve-fit.',
+    answer:
+      'Applied ML means building predictive systems that learn from your own structured data — forecasting, ranking, scoring, anomaly detection, signal generation — as opposed to generative AI. On the tabular data most enterprises run on, classical ML (gradient-boosted trees) usually beats both LLMs and deep learning, at a fraction of the cost. We build these to production standard, with rigorous validation.',
+    callout:
+      'An LLM is the wrong, expensive tool for predicting churn, default, demand or a trading signal. On tabular data, XGBoost and friends were measured at roughly double the predictive quality of GPT-4 — faster, cheaper, and auditable. We pick the tool by evidence, not by what’s fashionable.',
+    serviceName: 'Applied ML & Data Science',
+    serviceType: 'Applied machine learning & data science development',
+    schemaDescription:
+      'Custom applied machine learning and data science development — forecasting, risk scoring, anomaly detection and quantitative/ML systems (XGBoost, LightGBM, LSTM, TFT), production-engineered with rigorous validation.',
+    roi: [
+      { value: 'Right tool', label: 'Classical ML for tabular — beats LLMs on accuracy & cost' },
+      { value: 'Out-of-sample', label: 'Leakage-controlled, walk-forward-validated, not curve-fit' },
+      { value: 'Production-grade', label: 'Pipelines, drift monitoring & retraining — not a notebook' },
+    ],
+    sections: [
+      {
+        heading: 'The right tool for the data',
+        level: 2,
+        body: [
+          'Generative AI is remarkable, but most enterprise data is tabular — transactions, customers, SKUs, ledgers, sensor logs — and on tabular data classical ML still wins. In head-to-head studies, gradient-boosted trees (XGBoost, LightGBM, CatBoost) consistently match or beat deep learning and roughly double the predictive quality of the best LLMs, while training in minutes and serving in milliseconds. The credible position isn’t "AI for everything"; it’s using the tool the problem demands.',
+        ],
+      },
+      {
+        heading: 'Techniques & stack — and when each fits',
+        level: 2,
+        body: [
+          'For tabular work we choose deliberately: XGBoost for maturity and robustness at scale, LightGBM for speed on large numeric data, CatBoost for categorical-heavy or smaller datasets. For genuine sequence problems we use LSTM and Temporal Fusion Transformers (which are interpretable and handle known-future covariates) — though even in forecasting, boosted trees frequently beat neural nets, and the best results are often hybrids. The real edge usually comes from feature engineering, not model choice.',
+          'Production is the other half: orchestrated, reproducible training pipelines; feature stores to kill training-serving skew; drift monitoring; and automated retraining with safe rollback. The modern stack — Python, scikit-learn, XGBoost/LightGBM/CatBoost, PyTorch, SHAP, MLflow — engineered so the model runs reliably, not just in a notebook.',
+        ],
+      },
+      {
+        heading: 'Quantitative rigour (where most ML "edges" are illusions)',
+        level: 2,
+        body: [
+          'In quantitative finance, the model is the easy 10% — rigorous validation is the 90% that separates a real edge from a curve-fit artifact. We work in the López de Prado tradition: triple-barrier labelling, meta-labelling for bet sizing, and purged/embargoed (combinatorial) cross-validation to stop leakage from overlapping labels. We correct backtest Sharpe for multiple testing (deflated Sharpe, probability of backtest overfitting) and report all trials. The sober reality we build around: live performance typically runs 30–50% worse than backtest, and most academic strategies fail with real capital — so we engineer for out-of-sample, and we never promise returns.',
+        ],
+      },
+      {
+        heading: 'Production, governance & when not to use ML',
+        level: 3,
+        body: [
+          'Data leakage is the #1 silent killer — lookahead bias, target leakage, temporal misalignment — so we audit for it explicitly. For regulated finance, SHAP turns boosted-tree models into auditable ones (supporting FCRA/ECOA adverse-action reasons and Basel III/GDPR transparency). And we’ll tell you when ML is the wrong tool: deterministic, rule-expressible logic, tiny datasets, or strict audit needs are often better served by rules or a hybrid than by a model.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Frame the problem', body: 'We confirm ML is the right tool, define the target and the metric that matters (economic, not just statistical).' },
+      { title: 'Engineer features & model', body: 'Leakage-safe feature engineering and the right technique (boosted trees, LSTM/TFT, hybrids) for your data.' },
+      { title: 'Validate rigorously', body: 'Walk-forward / purged cross-validation, multiple-testing correction, and honest out-of-sample expectations.' },
+      { title: 'Deploy & monitor', body: 'Production pipelines, feature store, drift monitoring and automated retraining — with SHAP explainability.' },
+    ],
+    workflows: [
+      'Forecasting (demand, load, volatility) with boosted trees / TFT',
+      'Risk & credit scoring (XGBoost + SHAP, audit-ready)',
+      'Fraud & anomaly detection (real-time, sub-5ms scoring)',
+      'Quant signal generation (triple-barrier, meta-labelling, purged CV)',
+      'MLOps: pipelines, feature store, drift monitoring & retraining',
+    ],
+    whyCustom: [
+      'The right tool by evidence — classical ML for tabular, not an LLM forced onto a prediction problem.',
+      'Validation rigour (purged CV, deflated Sharpe, leakage audits), engineered for out-of-sample.',
+      'Production-grade MLOps, not a notebook — feature stores, drift monitoring, retraining.',
+      'SHAP-based explainability for regulated use; honest about when ML is the wrong tool.',
+    ],
+    included: [
+      'Problem framing & feasibility',
+      'Leakage-safe feature engineering',
+      'Model development (XGBoost/LightGBM/CatBoost, LSTM/TFT)',
+      'Rigorous validation (walk-forward / purged CV)',
+      'SHAP explainability & governance docs',
+      'Production pipelines & feature store',
+      'Drift monitoring & automated retraining',
+    ],
+    faqs: [
+      { q: 'When should we use classical ML instead of an LLM?', a: 'For tabular/structured data — forecasting, ranking, scoring, anomaly detection — boosted trees like XGBoost are usually more accurate, far cheaper, and faster to train and serve than an LLM. An LLM is the wrong tool for predicting churn, default, demand or a trading signal.' },
+      { q: 'How do you prevent overfitting and data leakage?', a: 'Leakage is the #1 silent killer, so we audit for it: point-in-time features, purged and embargoed (combinatorial) cross-validation, walk-forward testing, and multiple-testing correction (deflated Sharpe, probability of backtest overfitting). We report all trials.' },
+      { q: 'Why does a backtest look better than live performance?', a: 'Because backtests are easy to overfit. Live results typically run 30–50% worse, so we validate out-of-sample with realistic costs and slippage and engineer for that — we never quote trading returns.' },
+      { q: 'XGBoost vs LightGBM vs CatBoost — which do you use?', a: 'It depends on the data: LightGBM for speed on large numeric datasets, CatBoost for categorical-heavy or smaller data, XGBoost for maturity and robustness at scale. Often the edge is in feature engineering, not the model.' },
+      { q: 'Can an ML model be explainable enough for regulators?', a: 'Yes — SHAP-based explanations make boosted-tree models auditable, supporting FCRA/ECOA adverse-action reasons and Basel III/GDPR transparency, while keeping the accuracy advantage over logistic regression.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['secure-ai-deployment', 'financial-services-automation', 'document-processing-automation'],
   },
 ];
 

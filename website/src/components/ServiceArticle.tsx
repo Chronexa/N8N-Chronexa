@@ -5,6 +5,8 @@ import { site } from '../lib/site';
 import { getService, getSolutions, type ServiceContent } from '../lib/services-content';
 import { getCategoryLabel } from '../lib/taxonomy';
 import BookButton from './BookButton';
+import TrackView from './TrackView';
+import ScrollDepth from './ScrollDepth';
 
 // Standard outcomes true of every Chronexa engagement — appended to each page's
 // specific ROI metrics to form a 6-tile "commercial impact" grid (automaly-style).
@@ -59,6 +61,8 @@ export default function ServiceArticle({ data }: { data: ServiceContent }) {
 
   return (
     <>
+      <TrackView event="service_view" props={{ slug: data.slug, name: data.serviceName, category: categoryLabel }} />
+      <ScrollDepth pageType="service" slug={data.slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />

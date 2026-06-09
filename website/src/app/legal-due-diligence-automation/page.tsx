@@ -2,16 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import UseCaseArticle from '../../components/UseCaseArticle';
 import { getService } from '../../lib/services-content';
+import { serviceMetadata } from '../../lib/seo';
 
 const SLUG = 'legal-due-diligence-automation';
 const data = getService(SLUG);
 
-export const metadata: Metadata = {
-  title: { absolute: data!.metaTitle },
-  description: data!.metaDescription,
-  alternates: { canonical: `/${SLUG}` },
-  openGraph: { title: data!.metaTitle, description: data!.metaDescription, url: `/${SLUG}`, type: 'website' },
-};
+export const metadata: Metadata = serviceMetadata(SLUG);
 
 export default function Page() {
   if (!data) notFound();

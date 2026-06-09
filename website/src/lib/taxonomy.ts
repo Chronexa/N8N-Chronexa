@@ -6,24 +6,28 @@ import { getService } from './services-content';
  * /solutions and /use-cases hubs, the homepage, and the footer.
  * URLs stay flat (keyword-first); this only groups them.
  */
-export type NavKind = 'service' | 'function' | 'industry' | 'geo';
+export type NavKind = 'service' | 'function' | 'industry' | 'geo' | 'integration';
 
 type Meta = { kind: NavKind; navLabel: string; order: number };
 
 const CLASSIFY: Record<string, Meta> = {
-  // Services — capabilities (what we build)
-  'ai-readiness-assessment': { kind: 'service', navLabel: 'AI Readiness Assessment', order: 1 },
-  'document-processing-automation': { kind: 'service', navLabel: 'Document Processing & Intelligence', order: 2 },
-  'sales-revenue-automation': { kind: 'service', navLabel: 'Sales & Revenue Operations', order: 3 },
-  'marketing-automation': { kind: 'service', navLabel: 'Marketing Automation', order: 4 },
-  'system-data-integration': { kind: 'service', navLabel: 'System & Data Integration', order: 5 },
-  'n8n-automation-services': { kind: 'service', navLabel: 'Custom AI Agents & n8n', order: 6 },
+  // Services — capabilities (what we build). Signature capabilities first, then foundational/parity.
+  'agentic-ai-systems': { kind: 'service', navLabel: 'Agentic AI Systems', order: 1 },
+  'rag-knowledge-engines': { kind: 'service', navLabel: 'RAG & Knowledge Engines', order: 2 },
+  'document-processing-automation': { kind: 'service', navLabel: 'Document Intelligence', order: 3 },
+  'secure-ai-deployment': { kind: 'service', navLabel: 'Secure & Compliant AI Deployment', order: 4 },
+  'applied-ml-data-science': { kind: 'service', navLabel: 'Applied ML & Data Science', order: 5 },
+  'system-data-integration': { kind: 'service', navLabel: 'System & Data Integration', order: 6 },
+  'n8n-automation-services': { kind: 'service', navLabel: 'Workflow Automation (n8n)', order: 7 },
+  'ai-readiness-assessment': { kind: 'service', navLabel: 'AI Readiness Assessment', order: 8 },
 
   // Use cases — by function (a department inside any company)
   'finance-automation': { kind: 'function', navLabel: 'Finance', order: 1 },
   'operations-automation': { kind: 'function', navLabel: 'Operations', order: 2 },
   'customer-support-automation': { kind: 'function', navLabel: 'Customer Support', order: 3 },
   'hr-automation': { kind: 'function', navLabel: 'HR & Recruitment', order: 4 },
+  'sales-revenue-automation': { kind: 'function', navLabel: 'Sales & Revenue', order: 5 },
+  'marketing-automation': { kind: 'function', navLabel: 'Marketing', order: 6 },
 
   // Use cases — by industry (the type of company we serve)
   'legal-due-diligence-automation': { kind: 'industry', navLabel: 'Legal & Law Firms', order: 1 },
@@ -37,6 +41,29 @@ const CLASSIFY: Record<string, Meta> = {
 
   // Geo
   'us-ai-automation-agency': { kind: 'geo', navLabel: 'US AI Automation Agency', order: 1 },
+
+  // Integrations — tool-specific landing pages (Layer-A "moat" keywords). Kept OUT of the
+  // mega-nav and /solutions on purpose; reached via their parent pillar's related[], the
+  // sitemap, and internal links. Grouped by the vertical they serve.
+  // Legal
+  'imanage-netdocuments-automation': { kind: 'integration', navLabel: 'iManage & NetDocuments Automation', order: 1 },
+  'contract-review-automation-software': { kind: 'integration', navLabel: 'Contract Review Automation', order: 2 },
+  'law-firm-matter-intake-automation': { kind: 'integration', navLabel: 'Matter Intake & Conflict-Check Automation', order: 3 },
+  'regulatory-filing-monitoring-automation': { kind: 'integration', navLabel: 'Regulatory & SEC Filing Monitoring', order: 4 },
+  // Tax / CPA
+  'tax-software-ai-integration': { kind: 'integration', navLabel: 'Tax Software AI Integration', order: 5 },
+  'k1-tax-form-ocr-extraction': { kind: 'integration', navLabel: 'K-1 Form OCR Extraction', order: 6 },
+  'bookkeeping-automation-quickbooks-xero': { kind: 'integration', navLabel: 'Bookkeeping Automation (QuickBooks & Xero)', order: 7 },
+  'safesend-karbon-workflow-automation': { kind: 'integration', navLabel: 'SafeSend & Karbon Workflow Automation', order: 8 },
+  // Financial / Wealth-RIA
+  'ria-crm-automation': { kind: 'integration', navLabel: 'RIA CRM Automation (Redtail & Wealthbox)', order: 9 },
+  'ria-compliance-automation': { kind: 'integration', navLabel: 'RIA Compliance Automation', order: 10 },
+  'ai-copilot-financial-advisors': { kind: 'integration', navLabel: 'AI Co-Pilot for Financial Advisors', order: 11 },
+  // M&A / PE / IB
+  'affinity-crm-automation': { kind: 'integration', navLabel: 'Affinity CRM Automation', order: 12 },
+  'pitch-deck-parsing-software': { kind: 'integration', navLabel: 'Pitch Deck Parsing', order: 13 },
+  'ai-term-sheet-analysis': { kind: 'integration', navLabel: 'AI Term Sheet Analysis', order: 14 },
+  'portfolio-company-monitoring-automation': { kind: 'integration', navLabel: 'Portfolio Company Monitoring', order: 15 },
 };
 
 export type NavItem = { slug: string; navLabel: string; title: string; heroSub: string };
@@ -68,5 +95,6 @@ export function getCategoryLabel(slug: string): string {
   if (m.kind === 'service') return 'Service';
   if (m.kind === 'function') return 'Use case · By function';
   if (m.kind === 'industry') return 'Use case · By industry';
+  if (m.kind === 'integration') return 'Integration';
   return 'AI automation agency';
 }

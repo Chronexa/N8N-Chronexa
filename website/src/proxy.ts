@@ -37,6 +37,21 @@ const BLOG_REDIRECTS: Record<string, string> = {
   '/blog/the-death-of-the-billable-hour-how-agentic-workflows-are-driving-value-based-pricing-in-2026': '/blog/billable-hour-death-agentic-workflows-value-based-pricing',
   '/blog/the-silent-profit-drain-unmasking-the-hidden-costs-of-traditional-customer-support': '/blog/hidden-costs-traditional-customer-support',
   '/blog/when-a-5m-trust-distribution-depends-on-finding-the-right-clause-in-the-right-pdf': '/blog/trust-distribution-ai-clause-search-pdf',
+
+  // ── Post-launch GSC recheck (2026-06-07): old Framer blog URLs Google still
+  // indexes that 404'd on the new site. Mapped to the closest live post.
+  // Recovers ~9k/120-day impressions (top two: the n8n-vs-zapier guide ~5k and
+  // the self-hosting-n8n guide ~3.8k). Run scripts/gsc-cannibalization.mjs-style
+  // page audit after future Sanity slug changes to catch new drift.
+  '/blog/n8n-vs-zapier-in-2026-cost-ai-features-and-when-to-choose-each': '/blog/n8n-vs-zapier-for-enterprise-automation-a-real-cost-analysis',
+  '/blog/n8n-vs-zapier-in-2026-an-enterprise-teardown': '/blog/n8n-vs-zapier-for-enterprise-automation-a-real-cost-analysis',
+  '/blog/self-hosting-n8n-architecture-security-and-cost-breakdown': '/blog/self-hosting-n8n-architecture-security-and-cost',
+  '/blog/document-automation-tools-regulated-industries-guide': '/blog/document-automation-tools-for-regulated-industries',
+  '/blog/document-automation-tools-regulated-industries-cpa-firms': '/blog/document-automation-tools-for-regulated-industries',
+  '/blog/saas-crm-optimisation': '/blog/how-b2b-saas-companies-reduce-sales-rep-crm-time-from-60-to-20',
+  '/blog/ai-agent-platforms-uae-wealth-managers-cfos': '/blog/best-ai-agent-platforms-wealth-management-uae',
+  '/blog/best-ai-agent-platforms-uae-wealth-managers': '/blog/best-ai-agent-platforms-wealth-management-uae',
+  '/blog/why-scaling-lead-outreach-with-humans-is-financial-suicide-(and-how-ai-agents-are-changing-the-game)': '/blog/why-scaling-lead-outreach-with-humans-is-financial-suicide',
 };
 
 export function proxy(req: NextRequest) {

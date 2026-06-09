@@ -43,15 +43,16 @@ export default function AboutPage() {
           <p className="eyebrow">About Chronexa</p>
           <h1 style={{ maxWidth: '20ch' }}>An engineer-led AI automation agency</h1>
           <p className="heroDescription" style={{ marginTop: 'var(--spacing-sm)', maxWidth: '65ch' }}>
-            We design, build, and maintain custom n8n and AI automation systems for B2B
-            enterprises — deployed on the stack you already run, scoped at a fixed price, and
-            engineered to grow with you for years. We act as your technical co-founders, not a
-            vendor that takes a ticket and disappears.
+            We design, build, and maintain custom, secure AI systems for enterprises in regulated
+            industries — finance, legal, tax and dealmaking — deployed inside the environment you
+            already run, scoped at a fixed price, and engineered to grow with you for years. We act
+            as your technical co-founders, not a vendor that takes a ticket and disappears.
           </p>
           <p className="heroDescription" style={{ marginTop: 'var(--spacing-md)', maxWidth: '65ch' }}>
-            Unlike off-the-shelf SaaS, everything we build is an asset you own. We are n8n-first,
-            so your workflows are portable, self-hostable, and free of per-task pricing — with AI
-            agents, document processing, and deep integrations engineered to production standards.
+            Unlike off-the-shelf SaaS, everything we build is an asset you own, deployed inside your
+            environment so sensitive data stays contained. Agentic systems, RAG knowledge engines,
+            document intelligence, and deep integrations — engineered to production standards. For
+            high-volume, lower-risk work we also ship fast n8n workflow automation you own outright.
           </p>
           <p className="heroDescription" style={{ marginTop: 'var(--spacing-md)', maxWidth: '65ch' }}>
             Founded in {company.foundingYear}, Chronexa is {company.teamDescriptor} with deep,

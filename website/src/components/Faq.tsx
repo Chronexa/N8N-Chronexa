@@ -19,7 +19,7 @@ export const FAQS = [
   },
   {
     q: 'How do you measure ROI?',
-    a: "We track time saved, cost reduction, lead volume, conversion rates, and revenue impact. You receive weekly reports showing exactly what's working and where we're optimizing. Most clients see positive ROI within 30–60 days.",
+    a: "We track time saved, cost reduction, lead volume, conversion rates, and revenue impact. You receive regular reports showing exactly what's working and where we're optimizing, measured against the ROI targets we agree up front and backed by our 90-day ROI guarantee.",
   },
   {
     q: "What happens if results don't meet expectations?",

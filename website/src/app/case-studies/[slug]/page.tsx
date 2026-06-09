@@ -6,6 +6,8 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getCaseStudyBySlug, getCaseStudySlugs, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
 import BookButton from '../../../components/BookButton';
+import TrackView from '../../../components/TrackView';
+import ScrollDepth from '../../../components/ScrollDepth';
 import styles from './case.module.css';
 
 export const revalidate = 3600;
@@ -25,7 +27,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description,
     alternates: { canonical: `/case-studies/${slug}` },
     openGraph: { title: cs.title, description, url: `/case-studies/${slug}`, type: 'article', images: [og] },
+    twitter: { card: 'summary_large_image', title: cs.title, description, images: [og] },
   };
+}
+
+// Re-level Sanity body headings so the document keeps one H1 (the page title) and no
+// skipped levels, regardless of how the author styled headings in the CMS.
+function normalizeHeadings(blocks: unknown): unknown {
+  if (!Array.isArray(blocks)) return blocks;
+  const open: number[] = [];
+  return blocks.map((b) => {
+    const block = b as { _type?: string; style?: string };
+    if (block?._type !== 'block') return b;
+    const m = /^h([1-6])$/.exec(block.style || '');
+    if (!m) return b;
+    const src = Number(m[1]);
+    while (open.length && open[open.length - 1] >= src) open.pop();
+    open.push(src);
+    const target = Math.min(open.length + 1, 6);
+    return `h${target}` === block.style ? b : { ...block, style: `h${target}` };
+  });
 }
 
 const components: PortableTextComponents = {
@@ -68,6 +89,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <>
+      <TrackView event="case_study_view" props={{ slug, title: cs.title, client: cs.companyName, industry: cs.industry }} />
+      <ScrollDepth pageType="case_study" slug={slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article className={styles.article}>
         <div className={`container ${styles.head}`}>
@@ -95,8 +118,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         )}
 
         <div className={`container ${styles.body}`}>
-          {cs.content1 ? <PortableText value={cs.content1 as never} components={components} /> : null}
-          {cs.content2 ? <PortableText value={cs.content2 as never} components={components} /> : null}
+          {cs.content1 ? <PortableText value={normalizeHeadings(cs.content1) as never} components={components} /> : null}
+          {cs.content2 ? <PortableText value={normalizeHeadings(cs.content2) as never} components={components} /> : null}
         </div>
 
         {cs.testimonial && (

@@ -39,19 +39,19 @@ const I = {
 };
 
 const SERVICES: Service[] = [
-  { title: 'Document Processing & Intelligence', description: 'Turn document chaos — contracts, invoices, filings — into structured, searchable, auditable data.', href: '/document-processing-automation', icon: I.doc },
-  { title: 'Sales & Revenue Operations', description: 'Lead scoring, CRM enrichment, and pipeline workflows that turn your team into a predictable revenue engine.', href: '/sales-revenue-automation', icon: I.sales },
-  { title: 'System & Data Integration', description: 'Connect your CRMs, ERPs, and SaaS tools into one clean, real-time data layer everything else runs on.', href: '/system-data-integration', icon: I.integrate },
-  { title: 'Marketing Automation', description: 'Multi-channel campaigns, content, and reporting on autopilot — so the team focuses on strategy, not busywork.', href: '/marketing-automation', icon: I.marketing },
-  { title: 'AI Readiness Assessment', description: 'A fixed-scope audit that maps your workflows and returns a prioritized automation roadmap with ROI estimates.', href: '/ai-readiness-assessment', icon: I.assess },
-  { title: 'Custom AI Agents & n8n', description: 'Bespoke AI automation for the workflows that don’t fit a standard package — built on infrastructure you own.', href: '/n8n-automation-services', icon: I.custom },
+  { title: 'Legal AI', description: 'Regulatory-change monitoring, legal RAG over your matters and precedents, and due-diligence automation — deployed securely inside your environment.', href: '/legal-due-diligence-automation', icon: I.doc },
+  { title: 'Tax & Accounting AI', description: 'An AI copilot for CPA firms that chases client documents, reads W-2s, 1099s and K-1s, and drafts returns — so preparers do advisory, not data entry.', href: '/cpa-tax-document-automation', icon: I.assess },
+  { title: 'Financial Services & Quant', description: 'Compliance and KYC automation, equity-research copilots, and quant/ML systems (XGBoost, LSTM) — built inside your security perimeter.', href: '/financial-services-automation', icon: I.sales },
+  { title: 'M&A, PE & Investment Banking', description: 'Due-diligence and data-room analysis, deal-flow parsing into your CRM, and portfolio monitoring — where confidential deal data can’t leak.', href: '/vc-pe-crm-automation', icon: I.integrate },
+  { title: 'Document Intelligence for Regulated Industries', description: 'OCR + LLM extraction with RAG grounding and human-in-the-loop validation — auditable document automation across legal, finance and pharma.', href: '/document-processing-automation', icon: I.custom },
+  { title: 'Custom AI Agents & Workflow Automation', description: 'Bespoke agentic systems for the work that doesn’t fit a package — plus fast, lower-cost workflow automation for ops and sales.', href: '/n8n-automation-services', icon: I.marketing },
 ];
 
 export default function ServiceShowcase() {
   return (
     <>
-      <p className="eyebrow">What we automate</p>
-      <h2 className={styles.heading}>Custom AI automation across your operations</h2>
+      <p className="eyebrow">What we build</p>
+      <h2 className={styles.heading}>Enterprise AI for the work that can’t leak</h2>
 
       <div className={styles.grid}>
         {SERVICES.map((service, i) => (

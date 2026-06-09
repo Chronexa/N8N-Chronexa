@@ -91,6 +91,7 @@ export async function getAllPosts(): Promise<Post[]> {
 /* ----------------------------- Case studies ----------------------------- */
 export interface CaseStudy {
   _id: string;
+  _updatedAt?: string;
   title: string;
   slug: { current: string };
   thumb?: SanityImage;
@@ -117,7 +118,7 @@ export interface CaseStudy {
 }
 
 const CASE_FIELDS = `
-  _id, title, slug, thumb, logo, overview, projectType, serviceIncluded,
+  _id, _updatedAt, title, slug, thumb, logo, overview, projectType, serviceIncluded,
   companyName, year, industry, websiteName, websiteLink,
   content1, content2, testimonial, client, clientDetails, clientImage, youtubeLink,
   stat1, stat1Text, stat2, stat2Text

@@ -1,14 +1,23 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import styles from './LeadForm.module.css';
 import { openBooking, trackBookCta } from '../lib/cal';
+import { track, identifyByEmail } from '../lib/analytics';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
 export default function LeadForm({ source = 'website', compact = false }: { source?: string; compact?: boolean }) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
+  const startedRef = useRef(false);
+
+  // Fire once when the visitor first engages the form — the top of the form funnel.
+  function onFirstInteract() {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    track('lead_form_start', { source });
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,6 +36,8 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
     }
 
     setStatus('submitting');
+    identifyByEmail(email); // stitch this device to the email → merges with the Cal booking event
+    track('lead_form_submit', { source });
     trackBookCta(`form:${source}`);
 
     // Best-effort lead record (non-blocking). Captures the moment CONTACT_WEBHOOK_URL
@@ -60,7 +71,7 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate>
+    <form className={styles.form} onSubmit={onSubmit} onFocusCapture={onFirstInteract} noValidate>
       <div className={styles.group}>
         <label htmlFor={`${source}-name`}>Name</label>
         <input id={`${source}-name`} name="name" type="text" placeholder="Jane Smith" autoComplete="name" required />

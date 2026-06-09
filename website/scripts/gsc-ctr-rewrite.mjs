@@ -38,6 +38,18 @@ const REWRITES = {
     metaTitle: 'What Is n8n? 2026 Open-Source AI Automation Guide',
     metaDescription: 'What is n8n? A plain-English 2026 guide to the open-source workflow and AI automation platform — how it works, key nodes and integrations, and when to use it.',
   },
+  // Redirect target that inherited the "n8n vs zapier" impressions but had no meta
+  // (the original rewrite targeted the old, now-redirected slug).
+  'n8n-vs-zapier-for-enterprise-automation-a-real-cost-analysis': {
+    metaTitle: 'n8n vs Zapier 2026: Real Pricing & Cost Analysis',
+    metaDescription: 'n8n vs Zapier in 2026: a real cost analysis for enterprise automation — true pricing at scale, AI agents and self-hosting, plus a clear framework for choosing.',
+  },
+  // Repurposed post (slug still says "sdr-engine"): ranks for document-automation
+  // queries but had no meta.
+  'blog-ai-sdr-engine-automation-case-study': {
+    metaTitle: 'Document Automation Tools for Regulated Industries (2026)',
+    metaDescription: 'The best document automation tools for regulated industries in 2026 — HIPAA, SOC 2 and audit-ready workflows for legal, insurance and financial teams, compared.',
+  },
 };
 
 const slugs = Object.keys(REWRITES);

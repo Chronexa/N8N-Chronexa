@@ -1,4 +1,5 @@
 import { site } from './site';
+import { track } from './analytics';
 
 type Prefill = { name?: string; email?: string; notes?: string };
 
@@ -15,12 +16,7 @@ export function openBooking(prefill: Prefill = {}) {
   window.open(u.toString(), '_blank', 'noopener,noreferrer');
 }
 
-/** Best-effort analytics hook (no-op until an analytics tool is wired). */
+/** Fire the booking-CTA click event to Amplitude (`location` = which CTA: hero/nav/footer/form). */
 export function trackBookCta(location: string) {
-  try {
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (window as any)?.posthog?.capture?.('book_cta_click', { location });
-  } catch {
-    /* ignore */
-  }
+  track('book_cta_click', { location });
 }

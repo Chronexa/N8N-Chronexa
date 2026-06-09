@@ -5,6 +5,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ChromeGate from "../components/ChromeGate";
 import ScrollReveal from "../components/ScrollReveal";
+import Analytics from "../components/Analytics";
 import { site, founders, company } from "../lib/site";
 
 const inter = Inter({
@@ -146,6 +147,7 @@ export default function RootLayout({
           {children}
         </ChromeGate>
         <ScrollReveal />
+        <Analytics />
       </body>
     </html>
   );

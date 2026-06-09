@@ -1,7 +1,12 @@
+/* ============================================================================
+   Nav — fixed top bar + multi-layout mega-menus.
+   Three dropdown shapes: Services (compact grid), Use Cases (2-col), AI Engines (mega).
+   All share the same .panel shell; inner structure varies per dropdown.
+   ============================================================================ */
+
 .nav {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100%;
   min-height: var(--nav-height);
   display: flex;
@@ -15,10 +20,12 @@
   z-index: var(--z-nav);
 }
 
+/* ── Logo ──────────────────────────────────────────────────────────────────── */
 .logo { display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.4rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.03em; }
 .logoMark { width: 32px; height: 32px; object-fit: contain; }
 .logoText { color: var(--text-light); }
 
+/* ── Links row ─────────────────────────────────────────────────────────────── */
 .links { display: flex; gap: var(--spacing-md); align-items: center; }
 
 .link, .trigger {
@@ -30,7 +37,10 @@
   gap: 0.3rem;
 }
 .link:hover, .trigger:hover { color: var(--text-light); }
+
 .caret { font-size: 0.7em; transition: transform var(--transition-fast); }
+.item:hover .caret,
+.item[data-open="true"] .caret { transform: rotate(180deg); }
 
 .cta {
   background-color: var(--brand-green);
@@ -43,9 +53,10 @@
 }
 .cta:hover { background-color: var(--brand-green-hover); transform: translateY(-1px); color: var(--bg-dark); }
 
-/* ---- Dropdown items ---- */
+/* ── Dropdown item wrapper ─────────────────────────────────────────────────── */
 .item { position: relative; display: inline-flex; align-items: center; }
 
+/* ── Panel shell — shared by all dropdowns ─────────────────────────────────── */
 .panel {
   position: absolute;
   top: calc(100% + 10px);
@@ -53,40 +64,245 @@
   background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-sm);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 40px -8px rgba(0,0,0,0.14), 0 2px 8px -2px rgba(0,0,0,0.06);
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
   transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
   z-index: var(--z-nav);
+  min-width: 320px;
 }
 .item[data-open="true"] > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
+
 @media (hover: hover) and (pointer: fine) {
   .item:hover > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
-  .item:hover .caret { transform: rotate(180deg); }
 }
 
-.panelGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; min-width: 440px; }
-.panelWide { display: flex; gap: var(--spacing-md); }
-.panelCol { min-width: 210px; }
+/* ── Panel inner content area (with padding) ─────────────────────────────── */
+.panelInner { padding: var(--spacing-sm); }
+
+/* ── Panel footer strip ─────────────────────────────────────────────────── */
+.panelFooter {
+  border-top: 1px solid var(--border-light);
+  padding: 0.55rem var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--neutral-50, var(--bg-sunken));
+}
+.panelFooterLink {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted-light);
+  transition: color var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.panelFooterLink:hover { color: var(--brand-green-ink); }
+
+/* ── Services panel: compact 2-col grid ──────────────────────────────────── */
+.panelGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; min-width: 400px; }
+
 .panelHead {
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: var(--tracking-wide);
-  color: var(--brand-green-ink); font-weight: 700; padding: 0.4rem 0.6rem 0; margin: 0;
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--brand-green-ink); font-weight: 700;
+  padding: 0 0.5rem 0.5rem; margin: 0;
 }
 .panelSub {
-  font-size: 0.72rem; color: var(--text-muted-light); padding: 0 0.6rem 0.4rem; margin: 0 0 0.2rem;
+  font-size: 0.72rem; color: var(--text-muted-light);
+  padding: 0 0.5rem 0.4rem; margin: 0 0 0.2rem;
 }
-.panelLink { display: block; padding: 0.5rem 0.6rem; border-radius: var(--radius-sm); color: var(--text-light); }
+.panelLink { display: block; padding: 0.45rem 0.55rem; border-radius: var(--radius-sm); color: var(--text-light); }
 .panelLink:hover { background: var(--neutral-100); color: var(--brand-green-ink); }
 .panelLabel { font-size: var(--step--1); font-weight: 500; }
 
-/* ---- Mobile toggle ---- */
+/* ── Use Cases panel: 2-col wide ─────────────────────────────────────────── */
+.itemWide { }
+.panelWide { min-width: 460px; }
+.panelCols { display: flex; gap: var(--spacing-md); }
+.panelCol { min-width: 200px; flex: 1; }
+
+/* ── AI Engines mega-menu ────────────────────────────────────────────────── */
+/* Centered under its trigger, wider than other panels. */
+.itemEngines { }
+
+.enginePanel {
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 560px;
+}
+.item[data-open="true"] > .enginePanel { transform: translateX(-50%) translateY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .item:hover > .enginePanel { transform: translateX(-50%) translateY(0); }
+}
+
+.engineCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+/* Left column — live engines */
+.engineColLive {
+  padding: var(--spacing-sm);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Right column — coming soon */
+.engineColSoon {
+  padding: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.engineColHead {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted-light);
+  padding: 0 0.3rem 0.45rem;
+  margin: 0;
+}
+
+/* Live engine card */
+.engineCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  text-decoration: none;
+}
+.engineCard:hover {
+  background: var(--neutral-50, #fafafa);
+  border-color: var(--border-light);
+}
+
+.engineCardTop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.engineCardIcon {
+  width: 26px; height: 26px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--brand-green-soft);
+  color: var(--brand-green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.engineCardName {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--text-light);
+  flex: 1;
+  line-height: 1.2;
+}
+.engineCardBlurb {
+  font-size: 0.76rem;
+  color: var(--text-muted-light);
+  line-height: 1.45;
+  margin: 0;
+  padding-left: calc(26px + 0.5rem);
+}
+.engineCardCta {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--brand-green-ink);
+  padding-left: calc(26px + 0.5rem);
+  transition: gap var(--transition-fast);
+}
+.engineCard:hover .engineCardCta { text-decoration: underline; }
+
+/* Live badge */
+.badgeLive {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.4rem;
+  border-radius: var(--radius-pill);
+  color: var(--brand-green);
+  background: var(--brand-green-soft);
+  border: 1px solid var(--brand-green-line);
+  flex: none;
+}
+
+/* Coming soon row */
+.engineSoonRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+.engineSoonRow:hover { background: var(--neutral-100); }
+
+.engineSoonIcon {
+  width: 24px; height: 24px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--neutral-100);
+  color: var(--text-muted-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.engineSoonText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  flex: 1;
+  min-width: 0;
+}
+.engineSoonName {
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--text-muted-light);
+  line-height: 1.2;
+}
+.engineSoonKicker {
+  font-size: 0.68rem;
+  color: var(--text-muted-light);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Soon badge */
+.badgeSoon {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-muted-light);
+  border: 1px solid var(--border-light-strong, var(--border-light));
+  flex: none;
+}
+
+/* ── Mobile toggle ─────────────────────────────────────────────────────────── */
 .toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; align-items: center; }
 .toggleBar { display: block; width: 22px; height: 2px; background: var(--text-light); transition: transform var(--transition), opacity var(--transition-fast); }
 .toggleBar[data-open="true"]:first-child { transform: translateY(3.5px) rotate(45deg); }
-.toggleBar[data-open="true"]:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+.toggleBar[data-open="true"]:last-child  { transform: translateY(-3.5px) rotate(-45deg); }
 
+/* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .toggle { display: flex; }
   .links {
@@ -116,16 +332,28 @@
     position: static;
     opacity: 1;
     visibility: visible;
-    transform: none;
+    transform: none !important; /* override all transform variants */
     display: none;
     background: transparent;
     border: none;
     box-shadow: none;
-    padding: 0.5rem 0 0 0.75rem;
+    min-width: 0;
+    overflow: visible;
   }
   .item[data-open="true"] > .panel { display: block; }
-  .panelGrid, .panelWide { display: block; min-width: 0; }
+
+  .panelInner { padding: 0.5rem 0 0 0.5rem; }
+  .panelGrid, .panelCols { display: block; min-width: 0; }
   .panelCol { min-width: 0; margin-top: 0.5rem; }
+
+  /* AI Engines on mobile: stack the two columns */
+  .enginePanel { min-width: 0; }
+  .engineCols { display: block; }
+  .engineColLive { border-right: none; border-bottom: 1px solid var(--border-light); padding: 0.5rem 0 0.75rem 0.5rem; }
+  .engineColSoon { padding: 0.5rem 0 0 0.5rem; }
+  .engineCardBlurb, .engineCardCta { padding-left: 0; }
+
+  .panelFooter { background: transparent; border-top: none; padding: 0.4rem 0 0 0.5rem; }
 
   .cta { margin-top: var(--spacing-sm); text-align: center; }
 }

@@ -8,10 +8,10 @@ export const site = {
   legalName: "Chronexa",
   // Production origin. Override via NEXT_PUBLIC_SITE_URL in Vercel if needed.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://chronexa.io",
-  title: "AI Automation Agency — Custom n8n & AI Workflow Services | Chronexa",
+  title: "AI Automation Agency for Regulated Industries | Chronexa",
   description:
-    "Chronexa designs, builds, and maintains custom n8n AI automation systems for B2B enterprises — deployed on your existing stack in 30–60 days. Stop buying software. Start building assets.",
-  tagline: "AI Automation Built Around Your Workflows",
+    "Chronexa builds custom, secure AI systems for regulated enterprises — finance, legal, tax and dealmaking — deployed inside your own environment, not on a vendor's cloud. Assets you own, not subscriptions.",
+  tagline: "Custom Enterprise AI for Regulated Industries",
   email: "info@chronexa.io",
   locality: "IXC — India",
   hours: "Mon–Sat: 9:00am – 8:30pm",
@@ -51,7 +51,7 @@ export const founders: Founder[] = [
     credential: "Chartered Accountant (India)",
     expertise: ["Business strategy", "Financial technology", "Automation ROI", "Enterprise operations"],
     bio: "Abhishek is a Chartered Accountant (India) and Chronexa's founder-CEO, leading the company for the past three-plus years. His background spans financial technology and high-tech product development, including startups he built and ran himself. He owns Chronexa's strategy and client partnerships — translating complex operational goals into automation programs that deliver measurable ROI for clients across multiple industries.",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/abhishek-walia-0710/",
   },
   {
     name: "Ankit Dhiman",
@@ -60,7 +60,7 @@ export const founders: Founder[] = [
     credential: "10+ years in software & AI engineering",
     expertise: ["n8n workflow automation", "AI agents", "Enterprise AI systems", "Fintech & SaaS architecture"],
     bio: "Ankit is Chronexa's co-founder and CTO, with 10+ years engineering software and AI products across fintech, real estate, construction, B2B, and SaaS. He has architected and deployed enterprise-grade AI workflows and agentic systems in production, and leads technical delivery end to end. His north star is ROI: every system is designed around the time it saves and the efficiency it unlocks — not novelty for its own sake.",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/ankitdhiman65/",
   },
   {
     name: "Tushar Kaushik",
@@ -69,7 +69,7 @@ export const founders: Founder[] = [
     credential: "B2B marketing & demand generation",
     expertise: ["Demand generation", "B2B marketing", "Brand strategy", "Go-to-market"],
     bio: "Tushar is Chronexa's co-founder and CMO — a marketer from day one who owns demand generation, brand, and go-to-market strategy. He builds the inbound engine that connects Chronexa's engineering depth to the teams who need it.",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/tushar-kaushik-2452513b0/",
   },
 ];
 

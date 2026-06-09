@@ -17,7 +17,7 @@ export function GET() {
 
 > ${site.description}
 
-Chronexa is an engineer-led, n8n-first AI automation agency for B2B enterprises in the US, UK, and Canada. We build custom AI and n8n workflows on a client's existing stack — scoped, fixed-price, delivered in 30–60 days, and backed by a 90-day ROI guarantee. We build automation assets clients own, not software subscriptions.
+Chronexa is an engineer-led AI automation agency for enterprises in regulated industries (finance, legal, tax, dealmaking) in the US, UK, and Canada. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the client's own environment, scoped and fixed-price, and backed by a 90-day ROI guarantee. We build automation assets clients own, not software subscriptions. For high-volume, lower-risk work we also build fast n8n workflow automation.
 
 ## Services
 ${services}

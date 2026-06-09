@@ -7,12 +7,12 @@ import styles from './solutions.module.css';
 export const metadata: Metadata = {
   title: 'AI Automation Services',
   description:
-    'Chronexa\'s AI automation services — document intelligence, sales & revenue operations, marketing automation, system & data integration, custom AI agents, and an AI readiness assessment. Built on your existing stack.',
+    'Chronexa\'s AI automation capabilities — document intelligence, RevOps, data integration, custom AI agents and more — built securely on the systems you already run. For regulated industries: see our legal, tax, financial & dealmaking solutions.',
   alternates: { canonical: '/solutions' },
   openGraph: {
     title: 'AI Automation Services | Chronexa',
     description:
-      'Document intelligence, RevOps, marketing, data integration, and custom AI agents — built on your existing stack.',
+      'Custom AI & automation capabilities — document intelligence, RevOps, data integration and custom AI agents — deployed securely on your existing stack.',
     url: '/solutions',
     type: 'website',
   },
@@ -39,10 +39,11 @@ export default function SolutionsPage() {
           <p className="eyebrow">Services</p>
           <h1 className={styles.h1}>AI automation services</h1>
           <p className="heroDescription">
-            We don&apos;t sell off-the-shelf software. We build custom n8n and AI workflows on
-            top of the systems you already run — scoped, fixed-price, and live in 30–60 days.
-            Looking for your industry or function?{' '}
-            <Link href="/use-cases" className={styles.inlineLink}>See use cases →</Link>
+            We don&apos;t sell off-the-shelf software. We build custom AI and automation systems —
+            deployed securely inside the environment you already run, and owned by you. Below are
+            our core capabilities; for your industry (legal, tax, financial, dealmaking) or
+            function,{' '}
+            <Link href="/use-cases" className={styles.inlineLink}>see use cases →</Link>
           </p>
         </div>
       </section>

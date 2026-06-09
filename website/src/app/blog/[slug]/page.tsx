@@ -7,6 +7,8 @@ import { getBlogPostBySlug, getBlogSlugs, urlFor, type SanityImage } from '../..
 import { site } from '../../../lib/site';
 import BookButton from '../../../components/BookButton';
 import RelatedServices from '../../../components/RelatedServices';
+import TrackView from '../../../components/TrackView';
+import ScrollDepth from '../../../components/ScrollDepth';
 import styles from './post.module.css';
 
 export const revalidate = 3600; // ISR: refresh published content hourly
@@ -107,6 +109,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
+      <TrackView event="blog_post_view" props={{ slug, title: post.title, category: post.category }} />
+      <ScrollDepth pageType="blog" slug={slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article className={styles.article}>
         <div className={`container ${styles.head}`}>

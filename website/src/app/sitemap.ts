@@ -11,6 +11,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: { path: string; priority: number; freq: 'weekly' | 'monthly' }[] = [
     { path: '/', priority: 1.0, freq: 'weekly' },
     { path: '/solutions', priority: 0.9, freq: 'monthly' },
+    { path: '/ai-engines', priority: 0.9, freq: 'monthly' },
+    { path: '/ai-engines/sales-engine', priority: 0.9, freq: 'monthly' },
+    { path: '/ai-engines/cpa-tax-engine', priority: 0.9, freq: 'monthly' },
     { path: '/case-studies', priority: 0.8, freq: 'monthly' },
     { path: '/blog', priority: 0.8, freq: 'weekly' },
     { path: '/about', priority: 0.6, freq: 'monthly' },
@@ -45,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const all = await getAllCaseStudies();
     cases = all.map((c) => ({
       url: `${site.url}/case-studies/${c.slug.current}`,
-      lastModified: now,
+      lastModified: c._updatedAt ? new Date(c._updatedAt) : now,
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
