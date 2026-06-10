@@ -35,81 +35,92 @@ const OUTPUT_WIDTHS = [65, 55, 70, 45, 60];
 
 function SkeletonCanvas() {
   return (
-    <div style={{
-      height: 'clamp(580px, calc(100vh - 72px), 860px)',
-      background: '#0A0B0A',
-      borderRadius: 14,
-      border: '1px solid rgba(255,255,255,0.07)',
-      display: 'grid',
-      // Must exactly match .workspace in WorkflowCanvas.module.css
-      gridTemplateColumns: '1fr 284px',
-      overflow: 'hidden',
-      boxShadow: '0 40px 120px -40px rgba(0,0,0,0.85)',
-    }}>
-      {/* ── Canvas area ── */}
-      <div style={{ position: 'relative', overflow: 'hidden', borderRight: '1px solid rgba(255,255,255,0.055)' }}>
-        {/* Keyframes injected once — scoped to this skeleton only */}
-        <style>{`
-          @keyframes skeletonPulse {
-            0%, 100% { opacity: 0.35; }
-            50%       { opacity: 0.85; }
-          }
-        `}</style>
+    <>
+      {/* Responsive rules injected globally with unique sk-wc- prefix.
+          Inline styles can't react to breakpoints, so structural layout is
+          handled here while decoration/animation stays inline. */}
+      <style>{`
+        @keyframes skeletonPulse {
+          0%, 100% { opacity: 0.35; }
+          50%       { opacity: 0.85; }
+        }
+        .sk-wc-shell {
+          height: clamp(580px, calc(100vh - 72px), 860px);
+          background: #0A0B0A;
+          border-radius: 14px;
+          border: 1px solid rgba(255,255,255,0.07);
+          display: grid;
+          grid-template-columns: 1fr 284px;
+          overflow: hidden;
+          box-shadow: 0 40px 120px -40px rgba(0,0,0,0.85);
+        }
+        .sk-wc-flow {
+          position: relative;
+          overflow: hidden;
+          border-right: 1px solid rgba(255,255,255,0.055);
+        }
+        .sk-wc-out {
+          background: rgba(10,11,10,0.68);
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        @media (max-width: 860px) {
+          .sk-wc-shell { height: auto; min-height: 0; grid-template-columns: 1fr; }
+          .sk-wc-flow  { height: 400px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.055); }
+          .sk-wc-out   { max-height: 320px; overflow: hidden; }
+        }
+        @media (max-width: 480px) {
+          .sk-wc-flow { height: 240px; }
+          .sk-wc-out  { max-height: none; min-height: 340px; }
+        }
+      `}</style>
 
-        {/* Node grid — centred in the canvas area, matching real fitView position */}
-        <div style={{
-          position: 'absolute',
-          // Grid bounding box: width = 630+255=885, height = 210+130=340
-          // Centre it: offset left by half-width, up by half-height
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%) translate(-62px, 0px)',
-        }}>
-          {NODE_POSITIONS.map((pos, i) => (
-            <div
-              key={i}
-              style={{
-                ...cardStyle,
-                left: pos.x,
-                top: pos.y,
-                // Stagger pulse so cards don't all flash in sync
-                animationDelay: `${i * 0.18}s`,
-              }}
-            />
+      <div className="sk-wc-shell">
+        {/* ── Canvas area ── */}
+        <div className="sk-wc-flow">
+          {/* Node grid — centred in the canvas area */}
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%) translate(-62px, 0px)',
+          }}>
+            {NODE_POSITIONS.map((pos, i) => (
+              <div
+                key={i}
+                style={{
+                  ...cardStyle,
+                  left: pos.x,
+                  top: pos.y,
+                  animationDelay: `${i * 0.18}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ── Output panel ── */}
+        <div className="sk-wc-out">
+          <div style={{
+            height: 10, width: 72, borderRadius: 4,
+            background: 'rgba(103,176,53,0.07)',
+            animation: 'skeletonPulse 2s ease-in-out infinite',
+          }} />
+          <div style={{ height: 8 }} />
+          {OUTPUT_WIDTHS.map((w, i) => (
+            <div key={i} style={{
+              height: 11,
+              width: `${w}%`,
+              borderRadius: 3,
+              background: 'rgba(255,255,255,0.04)',
+              animation: `skeletonPulse 2s ease-in-out ${i * 0.12}s infinite`,
+            }} />
           ))}
         </div>
       </div>
-
-      {/* ── Output panel ── */}
-      <div style={{
-        background: 'rgba(10,11,10,0.68)',
-        padding: '20px 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
-      }}>
-        {/* "LIVE OUTPUT" label skeleton */}
-        <div style={{
-          height: 10,
-          width: 72,
-          borderRadius: 4,
-          background: 'rgba(103,176,53,0.07)',
-          animation: 'skeletonPulse 2s ease-in-out infinite',
-        }} />
-        {/* Divider gap */}
-        <div style={{ height: 8 }} />
-        {/* Output line skeletons — staggered, varying widths */}
-        {OUTPUT_WIDTHS.map((w, i) => (
-          <div key={i} style={{
-            height: 11,
-            width: `${w}%`,
-            borderRadius: 3,
-            background: 'rgba(255,255,255,0.04)',
-            animation: `skeletonPulse 2s ease-in-out ${i * 0.12}s infinite`,
-          }} />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 

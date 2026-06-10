@@ -244,6 +244,16 @@
   .roiStats { grid-template-columns: repeat(2, 1fr); }
   .tGrid { grid-template-columns: 1fr; }
 }
+
+/* Canvas hero: reduce the 6rem section-dark top padding so the canvas
+   appears above fold on tablets and phones without excessive scrolling. */
+@media (max-width: 860px) {
+  .canvasHeroSection {
+    padding-top: var(--spacing-md) !important;
+    padding-inline: 0.75rem;
+  }
+}
+
 @media (max-width: 620px) {
   .stagesGrid { grid-template-columns: 1fr; }
   .enginesGrid { grid-template-columns: 1fr; }
@@ -251,4 +261,11 @@
   .phase { grid-template-columns: 1fr; gap: 0.35rem; }
 
   .roiStats { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .canvasHeroSection {
+    padding-top: var(--spacing-sm) !important;
+    padding-inline: 0.5rem;
+  }
 }
