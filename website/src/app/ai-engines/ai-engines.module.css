@@ -181,6 +181,42 @@
 .bodyTitle { margin-top: 0.3rem; font-size: var(--step-2); line-height: 1.2; }
 .prose { margin-top: 0.75rem; color: var(--text-light); line-height: var(--leading-normal); max-width: 70ch; }
 
+/* Four gaps — before/after framework cards */
+.gapList { display: grid; gap: var(--spacing-md); margin-top: var(--spacing-md); }
+.gapCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+}
+.gapNum { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-on-surface); }
+.gapName { margin-top: 0.35rem; font-size: var(--step-1); }
+.gapDesc { margin-top: 0.5rem; color: var(--text-muted-light); line-height: var(--leading-normal); max-width: 70ch; }
+.gapCompare { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-sm); }
+.gapCol {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+}
+.gapColHead { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.gapColHead[data-kind='before'] { color: var(--color-alert); }
+.gapColHead[data-kind='after'] { color: var(--accent-on-surface); }
+.gapSteps {
+  margin: 0.6rem 0 0; padding-left: 1.1rem;
+  display: grid; gap: 0.35rem;
+  color: var(--text-light); line-height: var(--leading-snug); font-size: 0.92rem;
+}
+.gapOutcome {
+  margin-top: var(--spacing-sm);
+  padding: 0.7rem 1rem;
+  background: var(--brand-green-soft);
+  border-left: 3px solid var(--brand-green);
+  border-radius: var(--radius-sm);
+  color: var(--text-light); line-height: var(--leading-snug); font-weight: 500;
+}
+
 /* Problem — pain list */
 .painList { list-style: none; display: grid; gap: 0.65rem; margin-top: var(--spacing-md); max-width: 70ch; }
 .pain { display: flex; gap: 0.7rem; align-items: flex-start; color: var(--text-light); line-height: var(--leading-snug); }
@@ -259,6 +295,7 @@
   .enginesGrid { grid-template-columns: 1fr; }
   .step { grid-template-columns: 1fr; gap: 0.75rem; }
   .phase { grid-template-columns: 1fr; gap: 0.35rem; }
+  .gapCompare { grid-template-columns: 1fr; }
 
   .roiStats { grid-template-columns: 1fr; }
 }

@@ -145,7 +145,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['regulatory-filing-monitoring-automation', 'imanage-netdocuments-automation', 'contract-review-automation-software', 'law-firm-matter-intake-automation', 'cpa-tax-document-automation', 'document-processing-automation'],
+    related: ['regulatory-filing-monitoring-automation', 'law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software', 'law-firm-matter-intake-automation'],
   },
   {
     slug: 'insurance-claims-triage-automation',
@@ -170,25 +170,55 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'Accelerating First Notice of Loss (FNOL)',
+        heading: 'FNOL speed dictates your loss ratio',
         level: 2,
         body: [
-          'The speed at which you process an FNOL dictates your loss ratio. We build custom infrastructure to completely automate FNOL intake. Using AI document extraction, our systems parse police reports, medical bills, and photos to perform automated claims triage in real time — routing each claim to the right path instantly.',
+          'The clock on a claim starts at First Notice of Loss, and every hour it sits in a manual intake queue widens your loss ratio. As volume rises, cycle times stretch, claims leakage grows, and adjusters spend their day sorting, re-keying, and chasing documents instead of resolving claims. The bottleneck isn’t adjuster skill — it’s the manual handling wrapped around every claim before a human can even make a decision.',
+          'Automating intake and triage attacks that directly: the claim is read, classified and routed the moment it lands, so adjusters open a prioritised, structured file instead of a pile of unread attachments — and the simple, clean claims move through touchless while complex ones reach a specialist faster.',
         ],
       },
       {
-        heading: 'Subrogation detection & enterprise integration',
+        heading: 'Automated FNOL intake & claims triage',
+        level: 2,
+        body: [
+          'We parse the real documents a claim arrives with — police reports, medical bills, repair estimates, photos and the loss-notice itself — extracting the facts into structured fields rather than leaving them as attachments. The system then triages on severity and complexity and routes accordingly: fast-track the low-complexity claims, escalate high-severity or potential-litigation files, and flag the ones that need an experienced adjuster. Triage that took a queue and a day happens in real time, consistently, on every claim.',
+        ],
+      },
+      {
+        heading: 'Fraud signals & subrogation detection',
+        level: 2,
+        body: [
+          'The same extracted, structured data lets the system surface what manual review misses under volume pressure. It flags fraud and SIU indicators — inconsistencies across documents, suspicious patterns — for investigation before payout, and it scans unstructured claim data for subrogation opportunities so recovery dollars aren’t left on the table because no one had time to read the file closely. Both are pure leakage-recovery: money the manual process loses simply because there aren’t enough hours.',
+        ],
+      },
+      {
+        heading: 'Built on Guidewire & Duck Creek — not a replacement',
+        level: 2,
+        body: [
+          'We don’t ask you to rip out your core system. The automation layers directly onto Guidewire ClaimCenter and Duck Creek, with triage and routing rules tuned to your specific lines of business — auto, property, workers’ comp, liability. Adjusters keep working in the tools they know; the AI does the reading, extraction and sorting underneath, feeding clean data into the workflows they already run.',
+        ],
+      },
+      {
+        heading: 'Human adjusters on the consequential calls — with a full audit trail',
         level: 3,
         body: [
-          "Identifying subrogation opportunities manually leaves money on the table. Our pipelines scan unstructured claim data to surface subrogation automatically. And we don't force you into new software — we build these workflows directly on top of legacy systems like Guidewire ClaimCenter and Duck Creek.",
+          'Coverage decisions, reserves and settlements stay with your adjusters — the automation accelerates the work up to those judgement points, it doesn’t replace them. Classification runs against rules tuned to your historical claims, low-confidence items route to human review, and every extraction traces back to its source document for audit and regulatory defensibility. Accuracy improves as the system sees more of your claims.',
         ],
       },
     ],
     process: [
       { title: 'Map your claims flow', body: 'We document FNOL intake, triage rules, and routing across your lines of business.' },
       { title: 'Build on your core system', body: 'We layer AI extraction and triage onto Guidewire/Duck Creek without disrupting adjusters.' },
-      { title: 'Tune & validate', body: 'We test against real claims and tune classification and subrogation rules to your data.' },
-      { title: 'Deploy & measure', body: 'Go live and track FNOL cycle time, touchless triage rate, and recovered subrogation.' },
+      { title: 'Tune & validate', body: 'We test against real claims and tune classification, fraud, and subrogation rules to your data.' },
+      { title: 'Deploy & measure', body: 'Go live and track FNOL cycle time, touchless triage rate, recovered subrogation, and flagged fraud.' },
+    ],
+    workflows: [
+      'Automated FNOL intake & document parsing',
+      'Real-time claims triage & severity-based routing',
+      'Police report, medical bill, estimate & photo extraction',
+      'Fraud / SIU indicator detection',
+      'Subrogation opportunity detection',
+      'Guidewire ClaimCenter & Duck Creek integration',
     ],
     whyCustom: [
       'Layers onto Guidewire/Duck Creek — adjusters keep their existing tools.',
@@ -211,7 +241,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How long does it take to deploy?', a: 'Most builds go live in 4–6 weeks, depending on the number of lines of business and integration points.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    related: ['legal-due-diligence-automation', 'property-management-automation', 'n8n-automation-services'],
+    related: ['document-processing-automation', 'financial-services-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'cpa-tax-document-automation',
@@ -465,17 +495,31 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'Campaigns that run themselves',
+        heading: 'Campaign orchestration across every channel',
         level: 2,
         body: [
-          'Most marketing teams lose hours to scheduling posts, moving data between tools, and assembling reports. We build custom automation that orchestrates multi-channel campaigns end to end — content distribution, ad management, and CRM sync — so launches happen on time without manual hand-offs.',
+          'Most marketing teams lose their week to coordination: scheduling posts, moving lists between tools, syncing the CRM, assembling the report. We orchestrate multi-channel campaigns end to end — email, ads, social and CRM in one connected system — so a launch fires across every channel on time, audiences stay in sync, and nobody is copy-pasting between five platforms at 9pm before a send.',
         ],
       },
       {
-        heading: 'Reporting & optimization without the busywork',
+        heading: 'Content production & distribution',
+        level: 2,
+        body: [
+          'Content is the bottleneck most teams can’t hire their way out of. We build AI-assisted production and distribution pipelines — drafting, repurposing one asset into many formats, and distributing to each channel — with human review where brand and accuracy matter. Output scales without the quality dropping, and your strategists edit and approve instead of starting from a blank page.',
+        ],
+      },
+      {
+        heading: 'Ad optimization & budget allocation',
+        level: 2,
+        body: [
+          'We wire your ad platforms (Google, LinkedIn, Meta) into one pipeline that runs continuous A/B tests and shifts budget toward what’s converting — automatically, daily, instead of in a weekly manual review. Spend follows performance, underperforming creative is flagged, and the optimisation that a marketer can only do occasionally by hand happens always-on.',
+        ],
+      },
+      {
+        heading: 'Reporting & attribution without the busywork',
         level: 3,
         body: [
-          'We wire your ad platforms, analytics, and CRM into one pipeline that optimizes budget allocation, runs A/B tests, and produces the weekly performance report automatically. Your team spends its time on strategy and creative, not copy-paste.',
+          'The weekly report stops being a Monday-morning chore: we unify your ad platforms, analytics and CRM and generate it automatically — the metrics you actually care about (pipeline, conversion, cost per lead, ROI), not vanity dashboards. It runs on the stack you already own, so the team spends its time on strategy and creative, not assembling slides.',
         ],
       },
     ],
@@ -484,6 +528,14 @@ export const SERVICES: ServiceContent[] = [
       { title: 'Build the orchestration', body: 'Campaign, content, and ad workflows wired across your stack with CRM sync.' },
       { title: 'Add analytics & testing', body: 'Automated reporting, A/B tests, and budget optimization tuned to your KPIs.' },
       { title: 'Deploy & optimize', body: 'Go live with weekly reporting and ongoing tuning against your targets.' },
+    ],
+    workflows: [
+      'Multi-channel campaign orchestration (email, ads, social, CRM)',
+      'AI-assisted content production & repurposing',
+      'Cross-channel content distribution',
+      'Ad A/B testing & automated budget allocation',
+      'CRM sync & audience segmentation',
+      'Automated performance & ROI reporting',
     ],
     whyCustom: [
       'Connects the exact channels and CRM you run — not a fixed SaaS template.',
@@ -678,26 +730,48 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'One revenue engine, not disconnected tools',
+        heading: 'The revenue bottleneck most teams don’t see',
         level: 2,
         body: [
-          'Revenue operations (RevOps) aligns sales, marketing, and customer success around shared processes, clean data, and predictable revenue. Most teams lose deals not to competitors but to data trapped in silos — a lead the SDR never saw, a renewal nobody flagged, a forecast built on a stale spreadsheet.',
-          'We instrument the revenue engine end to end: one source of truth, clean and enriched data, and automation that connects every stage from first touch to closed-won and renewal.',
+          'Revenue operations (RevOps) aligns sales, marketing and customer success around shared processes, clean data and predictable revenue. Most teams lose deals not to competitors but to data trapped in silos — a lead the SDR never saw, an enquiry answered a day too late, a renewal nobody flagged, a forecast built on a stale spreadsheet.',
+          'What works at 5 reps breaks at 15: reps spend hours on CRM admin instead of selling, inbound sits untouched, and leadership forecasts on gut feel. We instrument the revenue engine end to end — one source of truth, clean enriched data, and automation connecting every stage from first touch to closed-won and renewal.',
         ],
       },
       {
-        heading: 'From first touch to forecast, automated',
-        level: 3,
+        heading: 'Lead capture, enquiry response & AI scoring',
+        level: 2,
         body: [
-          'We automate AI-powered lead scoring so reps work the highest-intent deals first; CRM enrichment so records stay complete without manual entry; pipeline-management workflows; and deal health and risk detection, where machine learning surfaces at-risk deals before they slip. On top of that sits forecasting, meeting auto-logging, rep activity tracking, and — increasingly — AI-agent orchestration across the full go-to-market workflow.',
+          'Speed-to-lead decides win rates, so the top of funnel is the first thing to automate: inbound enquiries captured and acknowledged instantly with an AI-drafted, context-aware response; every lead enriched and scored on fit and intent so reps work the highest-probability deals first; and the rest nurtured automatically instead of going cold in an inbox.',
+        ],
+      },
+      {
+        heading: 'CRM integrity, pipeline & forecast',
+        level: 2,
+        body: [
+          'A CRM is only as good as its data. We keep it clean and complete automatically — enrichment, deduplication, and AI call-summary auto-updates so reps stop doing data entry — then automate the pipeline on top: stage-triggered workflows and notifications, deal health and risk detection where machine learning flags slipping deals early, and forecasting that reflects reality instead of optimism. Leaders get a live, trustworthy pipeline view, not a Friday spreadsheet.',
+        ],
+      },
+      {
+        heading: 'Outbound prospecting & sequencing',
+        level: 2,
+        body: [
+          'For outbound, we build the engine that researches each account, drafts genuinely personalised multi-channel sequences, and sends on cadence — so prospecting volume no longer depends on who felt motivated this week. It runs on your CRM and your motion, tuned to your historical deals, with your approval gate on what goes out: predictable, researched pipeline without burning your domain or your brand.',
         ],
       },
     ],
     process: [
       { title: 'Map your revenue process', body: 'We document your funnel, data sources, and how sales, marketing, and CS hand off today.' },
       { title: 'Unify & clean the data', body: 'We consolidate and enrich data into your CRM so everything runs on one trustworthy source of truth.' },
-      { title: 'Automate the engine', body: 'Lead scoring, enrichment, pipeline workflows, deal-risk detection, and forecasting, wired across your stack.' },
+      { title: 'Automate the engine', body: 'Lead capture, scoring, enrichment, pipeline workflows, deal-risk detection, forecasting and outbound, wired across your stack.' },
       { title: 'Deploy & report', body: 'Go live with dashboards and weekly reporting, tuning models against your real outcomes.' },
+    ],
+    workflows: [
+      'Lead capture & instant AI-drafted enquiry response',
+      'AI lead scoring on fit & intent',
+      'CRM enrichment, dedup & AI call-summary auto-updates',
+      'Pipeline & deal-risk detection (ML) with forecasting',
+      'Multi-channel outbound sequencing with personalised messaging',
+      'Meeting auto-logging & RevOps dashboards',
     ],
     whyCustom: [
       'Built on your CRM (Salesforce, HubSpot) and your actual go-to-market motion — not a rigid template.',
@@ -1028,9 +1102,9 @@ export const SERVICES: ServiceContent[] = [
     callout:
       'What works at one entity breaks at five. Manual reconciliations and approvals don’t scale with transaction volume — the month-end close gets slower at exactly the moment the business gets bigger.',
     serviceName: 'Finance Automation',
-    serviceType: 'Finance automation',
+    serviceType: 'Finance department automation',
     schemaDescription:
-      'AI finance and accounting automation: accounts payable, invoice processing, reconciliations, financial reporting, expense workflows, and cash-flow forecasting.',
+      'AI automation for the finance department: accounts payable & invoice processing, reconciliations and month-end close, financial reporting and FP&A, expense and approval workflows, and cash-flow forecasting — with controls and audit trails.',
     roi: [
       { value: '40–60%', label: 'Less invoice & AP handling time' },
       { value: '50%+', label: 'Faster month-end close' },
@@ -1038,57 +1112,81 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'The operational pressure on modern finance teams',
+        heading: 'The pressure on a modern finance team',
         level: 2,
         body: [
-          'Finance is expected to do more with the same headcount: faster close, cleaner reporting, tighter controls. But spreadsheet reconciliations, manual invoice approvals, disconnected systems, and repetitive journal entries eat the bandwidth that should go to analysis and decisions. As volume grows, the manual model breaks.',
+          'Finance is asked to do more with the same headcount every year: close faster, report cleaner, hold tighter controls, and still find time for the analysis the business actually wants. Instead, the team spends its days keying invoices, chasing approvals, tying out spreadsheets, and rebuilding the same reports — work that grows with transaction volume and entity count, not with the value it adds.',
+          'The breaking point is predictable: what runs fine at one entity and a few hundred invoices a month seizes up at five entities and a few thousand. The close slips from five days to ten, exceptions pile up, and the controls that satisfy an auditor become harder to evidence at exactly the moment the business is scaling. Automation is how a finance team adds capacity without adding people — and we build it inside the accounting stack you already run.',
         ],
       },
       {
-        heading: 'Where finance automation creates structural advantage',
+        heading: 'Accounts payable & invoice processing',
+        level: 2,
+        body: [
+          'The highest-volume, lowest-value work in the department — and the first to automate. We capture invoices in any format (PDF, email, EDI), extract the line items, run the three-way match against the purchase order and goods receipt, code to the right GL accounts and cost centres, and route for approval on your policy rules. Clean invoices flow straight through; only genuine exceptions — a price variance, a missing PO — reach a human, with the discrepancy and source highlighted. The result written back to your ERP, with a full audit trail on every approval.',
+        ],
+      },
+      {
+        heading: 'Reconciliations & month-end close',
+        level: 2,
+        body: [
+          'Reconciliations are where the close goes to die. We automate bank, ledger and inter-company reconciliation — matching transactions, flagging the breaks that need judgement, and clearing the rest — and orchestrate the close itself: task sequencing, dependencies, status, and the journal entries that recur every period. The team manages exceptions and reviews, instead of manually ticking and tying, and the close compresses from weeks to days with the support evidenced for audit.',
+        ],
+      },
+      {
+        heading: 'Reporting, FP&A & cash-flow forecasting',
+        level: 2,
+        body: [
+          'Once the data flows automatically, reporting stops being a monthly fire drill. We build live financial reporting and executive dashboards off your reconciled data — management accounts, board packs, variance analysis — refreshed automatically rather than rebuilt by hand. On top sits cash-flow and forecast automation: pulling from AP, AR, billing and pipeline so leaders see the cash position and a rolling forecast in real time, not a stale spreadsheet from three weeks ago.',
+        ],
+      },
+      {
+        heading: 'Controls, audit trails & where the data lives',
         level: 3,
         body: [
-          'We automate accounts payable and invoice processing (capture, code, route for approval), reconciliations and close, financial reporting, and expense workflows — and layer in cash-flow forecasting. The result is a finance function that scales with revenue instead of headcount, with audit-ready documentation at every step.',
+          'Finance automation is worthless if it can’t pass an audit. Every step carries segregation-of-duties-aware approvals, human-in-the-loop on anything material, and an immutable log of who (or what) did what and on whose authority. And because this is financial data, the system runs inside your environment with role-based access — not on an uncontrolled public tool. Governance first, automation second.',
         ],
       },
     ],
     process: [
-      { title: 'Map your finance workflows', body: 'AP, close, reporting, and expenses — where the manual effort and risk concentrate.' },
-      { title: 'Build the automation', body: 'Invoice capture, coding, approvals, reconciliation, and reporting wired to your accounting stack.' },
-      { title: 'Validate & control', body: 'Human review for exceptions, with audit trails and controls baked in.' },
-      { title: 'Deploy & measure', body: 'Go live and track close time, handling time, and reporting workload.' },
+      { title: 'Map your finance workflows', body: 'AP, reconciliations, close, reporting and expenses — where the manual effort, risk and control points concentrate.' },
+      { title: 'Build on your stack', body: 'Invoice capture and matching, reconciliations, close orchestration and reporting wired into your ERP/accounting system.' },
+      { title: 'Validate & control', body: 'Human review on exceptions and material items, with segregation of duties and audit trails baked in.' },
+      { title: 'Deploy & measure', body: 'Go live inside your environment and track close time, AP handling time, and reporting workload.' },
     ],
     workflows: [
-      'Automated invoice capture, coding & approval routing',
-      'Bank & ledger reconciliation automation',
-      'Month-end close task orchestration',
-      'Automated financial reporting & dashboards',
+      'Invoice capture, three-way match, GL coding & approval routing',
+      'Bank, ledger & inter-company reconciliation automation',
+      'Month-end close orchestration & recurring journal entries',
+      'Live financial reporting, board packs & variance analysis',
       'Expense capture & policy-compliance checks',
-      'Cash-flow forecasting from live data',
+      'Cash-flow & rolling-forecast automation from live data',
     ],
     whyCustom: [
-      'Built on your finance stack (NetSuite, QuickBooks, Xero, your ERP), not a rigid product.',
-      'Controls, audit trails, and human-in-the-loop where finance needs them.',
-      'Scales through month-end close and quarter-end peaks without adding headcount.',
+      'Built on your finance stack (NetSuite, QuickBooks, Xero, your ERP) — not a rigid product you bend to.',
+      'Segregation-of-duties-aware controls, approvals and audit trails where finance needs them.',
+      'Runs inside your environment — financial data stays contained, not on an uncontrolled public tool.',
+      'Scales through month-end and quarter-end peaks without adding headcount.',
     ],
     included: [
-      'AP & invoice processing automation',
-      'Reconciliation & close automation',
-      'Automated financial reporting',
-      'Expense & compliance workflows',
-      'Cash-flow forecasting',
-      'Accounting-system integration (QBO, Xero, NetSuite)',
-      'Audit-ready logging',
+      'AP & invoice processing with three-way match',
+      'Reconciliation & month-end close automation',
+      'Live financial reporting & dashboards',
+      'Cash-flow & forecast automation',
+      'Expense & policy-compliance workflows',
+      'ERP/accounting integration (QBO, Xero, NetSuite)',
+      'Segregation-of-duties controls & audit-ready logging',
     ],
     faqs: [
-      { q: 'Which accounting systems do you work with?', a: 'QuickBooks, Xero, NetSuite, and most major accounting and ERP platforms, plus the document and banking tools around them.' },
-      { q: 'How much faster can the close get?', a: 'Teams commonly cut the month-end close by half by automating reconciliations and consolidations, with real-time dashboards replacing manual reporting.' },
-      { q: 'Is it safe and auditable?', a: 'Yes — controls, approvals, and full audit trails are built in, with human review on exceptions.' },
-      { q: 'Does this replace our finance team?', a: 'No — it removes the repetitive processing so the team focuses on analysis, controls, and strategy.' },
+      { q: 'Is this for our finance department or for finance-industry companies?', a: 'This is for the finance department/team inside any company — AP, close, reporting, FP&A. If you’re a bank, fintech, wealth manager or PE firm, see our Financial Services use case instead, which is built for the industry.' },
+      { q: 'Which accounting systems do you work with?', a: 'QuickBooks, Xero, NetSuite and most major accounting and ERP platforms, plus the document, banking and expense tools around them. We build on what you already run.' },
+      { q: 'How much faster can the close get?', a: 'Teams commonly cut the month-end close by half or more by automating reconciliations and consolidations, with live dashboards replacing manually rebuilt reports.' },
+      { q: 'Will it pass an audit?', a: 'Yes — segregation-of-duties-aware approvals, human review on material items, and an immutable audit trail on every action are built in, and it runs inside your environment.' },
+      { q: 'Does this replace our finance team?', a: 'No — it removes the repetitive processing (keying, matching, ticking and tying) so the team spends its time on analysis, controls and decisions.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
-    proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How LedgerSync eliminated invoice backlogs with AI automation' },
-    related: ['cpa-tax-document-automation', 'document-processing-automation', 'operations-automation'],
+    proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
+    related: ['cpa-tax-document-automation', 'document-processing-automation', 'financial-services-automation'],
   },
   {
     slug: 'operations-automation',
@@ -1111,17 +1209,32 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'Your operation is only as fast as its slowest manual step',
+        heading: 'When growth exposes operational weakness',
         level: 2,
         body: [
-          'Growth exposes the manual seams: a report someone rebuilds every week, an approval that sits in an inbox, data re-keyed between systems, a handoff that drops. Each is small; together they cap how much the business can do without hiring. We automate those seams end to end.',
+          'Manual operations work fine at small scale, then quietly become the ceiling. Growth exposes the seams: a report someone rebuilds every Monday, an approval sitting in an inbox, data re-keyed between the CRM and the ERP, a fulfilment hand-off that drops, an SLA missed because no one was watching the queue. Each is small on its own; together they cap how much the business can do without hiring.',
+          'The breaking point is when adding revenue means adding headcount just to keep the existing process running. Operations automation breaks that link — the same team handles more volume, more consistently, because the repetitive coordination runs itself.',
         ],
       },
       {
-        heading: 'Process automation that runs unattended',
+        heading: 'Workflow orchestration, task routing & approvals',
+        level: 2,
+        body: [
+          'The core is orchestrating your multi-step processes end to end: triggering the next action automatically, routing approvals to the right person on your rules, escalating when an SLA is at risk, and tracking status so nothing stalls silently. Instead of work moving by email and memory, it moves by a workflow that always fires, with the exceptions — and only the exceptions — surfaced to a human.',
+        ],
+      },
+      {
+        heading: 'System integration, order fulfilment & operational reporting',
+        level: 2,
+        body: [
+          'Most operational pain is really integration pain: systems that don’t talk, so people become the glue. We synchronise data across your CRM, ERP, finance and SaaS tools so it flows automatically instead of being copied by hand, and automate the operational backbone on top — order-to-fulfilment, service-delivery and project workflows, inventory and asset tracking, and the operational reports and dashboards leaders need refreshed live rather than rebuilt weekly.',
+        ],
+      },
+      {
+        heading: 'Process discipline first — and it runs in your environment',
         level: 3,
         body: [
-          'We orchestrate multi-step processes across your tools — triggering actions, routing approvals, updating systems, and generating reports automatically — with monitoring and exception handling so it runs reliably in production, not just in a demo.',
+          'Automating a broken process just breaks it faster, so we map and tighten the process before we automate it. What we ship runs unattended with monitoring, retries and exception handling — built on n8n you own, inside your environment, so it adapts as the operation changes instead of locking you into a rigid product.',
         ],
       },
     ],
@@ -1132,11 +1245,11 @@ export const SERVICES: ServiceContent[] = [
       { title: 'Deploy & monitor', body: 'Go live with alerting and keep optimizing as volume grows.' },
     ],
     workflows: [
-      'Approval routing & escalation workflows',
-      'Cross-system data entry & status sync',
-      'Automated internal & client reporting',
-      'Onboarding / offboarding process automation',
-      'Scheduling, reminders & SLA tracking',
+      'Workflow orchestration, task routing & approval escalation',
+      'Cross-system integration & data synchronisation',
+      'Order-to-fulfilment & service-delivery automation',
+      'Inventory & asset tracking dashboards',
+      'Operational reporting, dashboards & SLA tracking',
       'Exception detection with human-in-the-loop review',
     ],
     whyCustom: [
@@ -1183,17 +1296,31 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'Support volume scales faster than support teams',
+        heading: 'Support volume scales faster than the team',
         level: 2,
         body: [
-          'As you grow, tickets grow faster than the team — and most of them are the same repetitive questions: order status, returns, account changes, FAQs. Answering each by hand is slow and expensive, and it buries the genuinely hard cases that deserve human attention.',
+          'As you grow, tickets grow faster than headcount — and most are the same repetitive questions: order status, returns, account changes, password resets, the same FAQs. Answering each by hand is slow and expensive, and it buries the genuinely hard cases that actually need a person. Hiring your way out is a treadmill.',
         ],
       },
       {
-        heading: 'AI on the routine, humans on the hard',
+        heading: 'Instant resolution on the routine — grounded, not improvised',
+        level: 2,
+        body: [
+          'We resolve the high-volume routine queries instantly with AI grounded in your knowledge base and policies (RAG), so answers come from your actual documentation — not a model improvising policy. The customer gets a correct answer in seconds, 24/7, and the ticket never reaches the queue. The hard rule: if the system isn’t confident, it doesn’t guess — it routes to a human with everything it gathered.',
+        ],
+      },
+      {
+        heading: 'Classification, routing & agent assist — across every channel',
+        level: 2,
+        body: [
+          'Everything that isn’t auto-resolved is classified in under a second and routed to the right place — the right team, the right priority, the right specialist (technical, billing, account) — instead of a flat queue someone triages by hand. For the agent, the AI drafts a grounded response and attaches full context so they never start from zero. It works across channels — email, chat, and voice — so coverage is consistent everywhere your customers reach you.',
+        ],
+      },
+      {
+        heading: 'Humans on the hard cases — and it runs on your stack',
         level: 3,
         body: [
-          'We deploy AI to resolve routine queries instantly (grounded in your knowledge base and policies), classify and route the rest with full context, and draft responses for agents to approve. Your team stops triaging and starts solving — and customers get faster, more consistent answers.',
+          'Sensitive, complex or high-value cases escalate to a person automatically, with the full thread and context handed over. It’s built on the helpdesk and CRM you already run (Zendesk, Intercom, Freshdesk, HubSpot Service), updates tickets and tags itself, and keeps a human in the loop wherever judgement or empathy matters — so automation lifts the experience instead of degrading it.',
         ],
       },
     ],
@@ -1257,14 +1384,28 @@ export const SERVICES: ServiceContent[] = [
         heading: 'HR runs on repetitive, high-volume admin',
         level: 2,
         body: [
-          'Screening resumes, coordinating interviews, chasing onboarding documents, answering the same policy questions — HR spends a huge share of its time on process work that is necessary but not strategic. That is exactly the work AI and automation are good at.',
+          'Screening résumés, coordinating interviews, chasing onboarding documents, provisioning accounts, tracking mandatory training, answering the same policy questions — HR spends a huge share of its time on process work that is necessary but not strategic. As headcount grows, that admin grows with it, and the team that should be building culture is buried in coordination instead.',
+        ],
+      },
+      {
+        heading: 'Recruitment & candidate workflow automation',
+        level: 2,
+        body: [
+          'The hiring funnel is full of automatable coordination: résumés auto-routed and scored against the role, interviews scheduled without the email ping-pong, candidate status moved through the pipeline automatically, and offer letters and contracts generated from templates. Recruiters spend their time talking to people, not managing the ATS — and candidates get a faster, more responsive process.',
+        ],
+      },
+      {
+        heading: 'Onboarding, offboarding & employee lifecycle',
+        level: 2,
+        body: [
+          'Onboarding is a checklist that should run itself: document collection, IT and account provisioning, mandatory-training assignment, and first-week task orchestration. The same applies across the lifecycle — performance-review cycles, leave and absence, probation and visa-expiry alerts, and HR reporting for leadership — through to offboarding, where access revocation and exit steps are exactly the things that must not be missed for compliance.',
         ],
       },
       {
         heading: 'Automate the process, keep the human judgment',
         level: 3,
         body: [
-          'We automate the pipeline — from candidate screening and scheduling to onboarding workflows and document handling — while keeping hiring decisions and sensitive conversations firmly with your team. The result is a faster, more consistent, more compliant people operation.',
+          'Hiring decisions, performance conversations and anything sensitive stay firmly with your people — the automation handles the coordination around them, with fairness and compliance safeguards built in. It’s built on the ATS/HRIS you already run, so the result is a faster, more consistent, more compliant people operation, not a new tool nobody adopts.',
         ],
       },
     ],
@@ -1304,6 +1445,104 @@ export const SERVICES: ServiceContent[] = [
     ],
     related: ['operations-automation', 'document-processing-automation', 'n8n-automation-services'],
   },
+  {
+    slug: 'cybersecurity-automation',
+    metaTitle: 'AI & Automation for Cybersecurity (SOC, IR, Compliance) | Chronexa',
+    metaDescription:
+      'Automate security operations with AI — SOC alert triage, incident response, vulnerability & patch management, compliance evidence, and identity governance — inside your environment, with a human on the consequential calls.',
+    h1: 'AI & Automation for Cybersecurity',
+    heroSub:
+      'Scale a lean security team with automation — SOC alert triage, incident-response playbooks, vulnerability management, compliance evidence and identity governance — with humans gated on anything destructive.',
+    answer:
+      'Cybersecurity automation uses AI to handle the high-volume security work that outpaces a team — aggregating and triaging SOC alerts, running incident-response playbooks, prioritising vulnerabilities, collecting compliance evidence, and governing access — so detection and response get faster (lower MTTD/MTTR) and a lean team covers far more, with humans gated on consequential actions.',
+    callout:
+      'A SOC generates more alerts than any team can triage, so analysts drown in false positives and alert fatigue sets in — and the one real intrusion hides in the noise. The consequence of "too many alerts" isn’t inefficiency; it’s a missed breach.',
+    serviceName: 'Cybersecurity Automation',
+    serviceType: 'Cybersecurity & security-operations automation',
+    schemaDescription:
+      'AI automation for cybersecurity: SOC alert triage and SIEM orchestration, incident-response playbooks, vulnerability and patch management, compliance and governance evidence, and identity/access automation.',
+    roi: [
+      { value: 'Lower MTTD/MTTR', label: 'Faster detection & response, less alert fatigue' },
+      { value: 'Triaged', label: 'Alerts enriched & classified before an analyst looks' },
+      { value: 'Audit-ready', label: 'Compliance evidence collected continuously' },
+    ],
+    sections: [
+      {
+        heading: 'The modern security reality: more alerts than analysts',
+        level: 2,
+        body: [
+          'Security teams are asked to defend a growing attack surface with the same headcount. The SOC throws off thousands of alerts a day, most of them noise; analysts burn out triaging false positives; vulnerabilities pile up faster than they can be patched; and compliance evidence is gathered in a frantic scramble before each audit. The work scales with the threat landscape, not with the team — and that gap is where incidents slip through.',
+          'Automation closes the gap by doing the high-volume, repeatable security work continuously and consistently, so your specialists spend their time on real threats and judgement calls instead of triage and evidence-collection.',
+        ],
+      },
+      {
+        heading: 'SOC workflow & alert-triage automation',
+        level: 2,
+        body: [
+          'The core is taking the SOC from a firehose to a ranked queue: aggregating logs, classifying each alert, and enriching it with threat intelligence and context automatically, so an analyst opens a prioritised, contextualised case rather than a raw signal. We orchestrate across your SIEM and security tools — correlating signals, suppressing known false positives, and surfacing the handful that genuinely need a human, with the reasoning attached.',
+        ],
+      },
+      {
+        heading: 'Incident response, vulnerability & patch management',
+        level: 2,
+        body: [
+          'When something is real, response speed is everything. We automate incident-response playbooks — enrichment, containment steps, stakeholder notifications — with a human-approval gate on anything destructive like endpoint isolation. Alongside, vulnerability and patch management runs continuously: scanning, risk-based prioritisation (which CVE actually matters given your exposure), and remediation tracking through to closed, so the backlog stops growing unmanaged.',
+        ],
+      },
+      {
+        heading: 'Compliance, governance & identity automation',
+        level: 2,
+        body: [
+          'Compliance becomes continuous instead of a fire drill: control monitoring, risk-register upkeep, and audit-evidence collected automatically so you’re always audit-ready (SOC 2, ISO 27001, and the rest). Identity and access is automated end to end — joiner/mover/leaver provisioning and deprovisioning, least-privilege enforcement, and anomaly detection on access patterns — plus phishing-simulation and awareness-campaign orchestration to close the human-factor gap.',
+        ],
+      },
+      {
+        heading: 'Security architecture first — and a human on the consequential calls',
+        level: 3,
+        body: [
+          'Automating a weak security posture just automates the weakness, so we design the architecture before the automation. Everything runs inside your environment with role-based access and a full audit trail, and a human approval gate sits on every consequential action — isolating a host, disabling an account, pushing a patch. AI accelerates the security team; it never gets unsupervised authority over your infrastructure.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Assess the security posture', body: 'We map your SIEM, tools, alert volume, IR playbooks and compliance obligations — and tighten the process before automating.' },
+      { title: 'Automate triage & response', body: 'Alert aggregation, classification and enrichment, plus IR playbooks with human-approval gates on destructive actions.' },
+      { title: 'Add vuln, compliance & identity', body: 'Risk-based vulnerability management, continuous compliance evidence, and joiner/mover/leaver identity automation.' },
+      { title: 'Deploy & monitor', body: 'Go live inside your environment with audit trails, tracking MTTD/MTTR and analyst workload.' },
+    ],
+    workflows: [
+      'SOC alert aggregation, classification & threat-intel enrichment',
+      'SIEM orchestration & false-positive suppression',
+      'Incident-response playbooks (containment gated on human approval)',
+      'Vulnerability scanning, risk-based prioritisation & remediation tracking',
+      'Continuous compliance evidence (SOC 2 / ISO 27001) & risk registers',
+      'Identity provisioning/deprovisioning, least-privilege & anomaly detection',
+    ],
+    whyCustom: [
+      'Built on your SIEM and security stack — not a one-size SaaS that ignores your tooling.',
+      'Human-approval gate on every destructive action; AI never gets unsupervised authority.',
+      'Runs inside your environment with full audit trails — built for regulated/compliance needs.',
+      'Risk prioritisation tuned to your actual exposure, not a generic CVSS list.',
+    ],
+    included: [
+      'SOC alert triage & SIEM orchestration',
+      'Incident-response playbook automation',
+      'Vulnerability & patch management',
+      'Continuous compliance evidence & control monitoring',
+      'Identity & access lifecycle automation',
+      'Phishing simulation & awareness campaigns',
+      'Audit trails & human-approval gates',
+    ],
+    faqs: [
+      { q: 'What security work can actually be automated safely?', a: 'The high-volume, repeatable work: alert aggregation, classification and enrichment, vulnerability scanning and prioritisation, compliance-evidence collection, and identity provisioning. Destructive actions — isolating a host, disabling an account — are automated up to a human-approval gate, never beyond it.' },
+      { q: 'How does this reduce MTTD/MTTR?', a: 'By enriching and ranking alerts automatically so analysts open prioritised, contextualised cases instead of raw signals, and by running response playbooks instantly up to the approval gate — cutting the time to detect and to contain.' },
+      { q: 'Does the AI get to take action on our systems on its own?', a: 'No. A human approval gate sits on every consequential action, everything runs inside your environment with role-based access, and every step is logged. AI accelerates the team; it does not get unsupervised authority over your infrastructure.' },
+      { q: 'Which tools do you integrate with?', a: 'Your SIEM, EDR, ticketing, vulnerability scanners and identity providers — we build on the security stack you already run rather than replacing it.' },
+      { q: 'Can it help with SOC 2 / ISO 27001 audits?', a: 'Yes — control monitoring and audit-evidence collection run continuously, so you stay audit-ready instead of scrambling before each assessment.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['secure-ai-deployment', 'operations-automation', 'financial-services-automation'],
+  },
 
   /* ====================== USE CASES — BY INDUSTRY ====================== */
   {
@@ -1330,15 +1569,36 @@ export const SERVICES: ServiceContent[] = [
         heading: 'Document-heavy, compliance-bound, and ripe for automation',
         level: 2,
         body: [
-          'Few industries handle more dense, high-stakes documents than life sciences — research papers, regulatory filings, quality records, patent and IP material. Extracting and reconciling information by hand is slow and error-prone, and the compliance bar makes generic AI tools a non-starter.',
-          'Document intelligence has been a core Chronexa capability since day one, including work in pharma. We build extraction and workflow automation that respects the controls this sector requires.',
+          'Few industries handle more dense, high-stakes documents than life sciences — regulatory submissions, safety reports, batch and quality records, clinical and research data, patent and IP material. Extracting and reconciling that information by hand is slow and error-prone, and a single transcription mistake can have regulatory consequences. At the same time, the compliance bar — GxP, 21 CFR Part 11, data integrity — makes a generic public AI tool a non-starter the moment the data is confidential or regulated.',
+          'That combination is exactly what custom, controlled automation is for: the volume and density make it high-value to automate, and the compliance requirements make a bespoke, in-environment build the only responsible way to do it. Document intelligence has been a core Chronexa capability since day one, including work in pharma.',
         ],
       },
       {
-        heading: 'Extraction you can trust, workflows that comply',
+        heading: 'Regulatory submissions & document intelligence',
+        level: 2,
+        body: [
+          'Regulatory work runs on assembling, cross-checking and structuring enormous document sets under deadline. We extract and structure data from regulatory filings, source documents and prior submissions — pulling the right fields into the right format, reconciling figures across documents, and flagging inconsistencies before they reach a reviewer. The manual collation that consumes regulatory and medical-writing teams becomes a reviewed, traceable pipeline instead of a hand-built one.',
+        ],
+      },
+      {
+        heading: 'Pharmacovigilance & safety case processing',
+        level: 2,
+        body: [
+          'Adverse-event and safety workloads scale relentlessly and carry hard reporting timelines. We automate the intake and triage of safety cases — extracting case data from intake forms, emails and literature, surfacing seriousness and expectedness signals, and supporting coding and case routing so safety teams spend their time on assessment, not data entry. Literature monitoring runs continuously rather than as a periodic manual sweep, so relevant signals surface earlier.',
+        ],
+      },
+      {
+        heading: 'Quality, GxP records & research literature',
+        level: 2,
+        body: [
+          'Across quality and R&D, the same patterns apply: processing deviation, CAPA and batch records; reconciling data across quality systems; extracting findings from scientific literature; and supporting patent and IP review. Each is a document-heavy, rules-bound process where extraction against a defined schema with cross-document reconciliation removes the manual grind while keeping a complete record of what was found and where.',
+        ],
+      },
+      {
+        heading: 'GxP-grade controls: provenance, validation, and your environment',
         level: 3,
         body: [
-          'We combine OCR and LLM extraction against defined schemas with RAG grounding, so every extracted field traces back to its source for audit — and route low-confidence items to expert review. The workflows run inside your environment with access controls, so confidential research and regulatory data never leaves systems you control.',
+          'Everything is built for the compliance reality: schema-based extraction with RAG grounding so every field traces back to its source document, low-confidence items routed to expert review, and full audit trails and access controls aligned to GxP and data-integrity expectations. It all runs inside your environment, so confidential research, safety and regulatory data never leaves systems you control. We work under NDA and scope security and validation requirements before any build.',
         ],
       },
     ],
@@ -1349,12 +1609,12 @@ export const SERVICES: ServiceContent[] = [
       { title: 'Integrate & govern', body: 'Wire into your systems inside your security and compliance perimeter.' },
     ],
     workflows: [
-      'Regulatory document extraction & structuring',
-      'Research / literature data extraction',
+      'Regulatory submission document extraction & structuring',
+      'Pharmacovigilance & adverse-event case processing',
+      'Scientific literature monitoring & data extraction',
+      'Quality, deviation & CAPA record processing',
       'Patent & IP document review support',
-      'Quality and compliance record processing',
-      'Cross-document reconciliation with provenance',
-      'Routing & approval workflows with audit trails',
+      'Cross-document reconciliation with full provenance',
     ],
     whyCustom: [
       'Built for compliance: provenance, audit trails, and access controls.',
@@ -1554,7 +1814,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['legal-due-diligence-automation', 'contract-review-automation-software', 'document-processing-automation'],
+    related: ['legal-due-diligence-automation', 'law-firm-knowledge-management-ai', 'contract-review-automation-software', 'document-processing-automation'],
   },
   {
     slug: 'contract-review-automation-software',
@@ -1806,7 +2066,287 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'financial-services-automation'],
+    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'law-firm-automated-time-capture', 'financial-services-automation'],
+  },
+  {
+    slug: 'law-firm-automated-time-capture',
+    metaTitle: 'Automated Time Capture for Law Firms — AI Billing | Chronexa',
+    metaDescription:
+      'Close the 26% billing leak: a background timer turns every work session — including AI-tool usage — into a draft time entry against the right matter in Elite 3E, Aderant or Clio. Lawyers approve in one click.',
+    h1: 'Automated Time Capture for Law Firms — Close the AI Billing Gap',
+    heroSub:
+      'Your lawyers use AI tools every day. That time never reaches the billing system. A background timer captures every session against the right matter and drafts the time entry — the lawyer just approves it.',
+    answer:
+      'Automated time capture runs a background timer on the tools lawyers actually work in — including the firm’s AI assistants — and turns each session into a draft time entry against the right matter in your billing system. The lawyer approves, edits or discards it in one click. Industry studies put revenue lost to manual billing failures at 26% of potential; auto-capture closes that gap without another timesheet-discipline campaign.',
+    callout:
+      'A lawyer uses the firm’s AI assistant for 90 minutes on a matter, moves to the next task, forgets to log it, and writes down 45 minutes at 6pm “to be safe.” Multiply that across every lawyer, every day. That is how a firm loses a quarter of its potential revenue without anyone making a single bad decision — and the more your lawyers use AI, the bigger the leak gets.',
+    serviceName: 'Automated Time Capture & AI Billing for Law Firms',
+    serviceType: 'Legal billing & time-capture automation',
+    schemaDescription:
+      'Automated, passive time capture for law firms — background tracking of work sessions including AI-tool usage, draft time entries against the correct matter in Elite 3E, Aderant or Clio, one-click lawyer approval, and a full AI audit trail per matter.',
+    roi: [
+      { value: '26%', label: 'of potential revenue lost to manual billing failures (industry studies)' },
+      { value: '1 click', label: 'to approve a pre-drafted, matter-attributed time entry' },
+      { value: '100%', label: 'of AI prompts & outputs logged to the matter file — audit-ready' },
+    ],
+    sections: [
+      {
+        heading: 'The newest billing leak: AI-assisted work',
+        level: 2,
+        body: [
+          'Billing leakage is an old problem — industry studies have long put revenue lost to manual billing failures around 26% of potential. But AI adoption quietly made it worse. When a lawyer drafts with an internal AI assistant, queries a RAG system, or reviews an AI summary, that is billable, matter-attributable work — and none of the AI platforms write it to your billing system. Even Harvey, the best-funded legal AI on the market, had only announced billing integration in late 2025; it is not built. Every hour of AI-assisted work is an hour your timekeeping process was never designed to see.',
+          'The result is a perverse outcome: the more efficient your lawyers get with AI, the more revenue silently leaks — because the work compresses into sessions that never get logged. Firms respond with timesheet-discipline memos. The fix is not discipline; it is removing the manual step entirely.',
+        ],
+      },
+      {
+        heading: 'How automated time capture works',
+        level: 2,
+        body: [
+          'A background service watches the tools your lawyers work in — the AI assistant, the DMS, the research platform — and associates each session with the matter it belongs to, using the matter context the lawyer is already working under. When the session ends, it creates a draft time entry in your billing or practice-management system: “AI-assisted analysis, 92 minutes, Matter #5821.” The lawyer sees a queue of drafts and approves, edits or discards each in one click. Nothing is billed without human sign-off — the system removes the remembering, not the judgment.',
+          'This is deliberately not another timesheet app. There is no new interface for lawyers to adopt and abandon; the only new thing they see is a draft entry that is already correct, waiting for a yes.',
+        ],
+      },
+      {
+        heading: 'The audit trail your AI governance committee wants anyway',
+        level: 2,
+        body: [
+          'Capturing AI sessions per matter produces a second asset for free: a complete log of every AI prompt, response and output, attributed to the matter file. When a client questions an AI-assisted line item, you can show exactly what was done. When your governance committee asks how AI is being used across the firm — and on whose matters — the answer is a report, not a survey. As bar associations and clients sharpen their scrutiny of AI use in legal work, this defensibility layer is moving from nice-to-have to required.',
+        ],
+      },
+      {
+        heading: 'Built on your billing system — Elite 3E, Aderant, Clio',
+        level: 3,
+        body: [
+          'Draft entries are written into the billing and practice-management stack you already run — Thomson Reuters Elite 3E, Aderant, Clio, or equivalent — through their native APIs. Your billing team’s review process, rate cards and pre-bill workflow stay exactly as they are; the entries simply arrive complete instead of reconstructed from memory at the end of the week.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your billing flow', body: 'We document which tools lawyers work in, how matters are identified, and how entries flow into your billing system today.' },
+      { title: 'Wire the capture layer', body: 'Background session tracking on the AI tools and platforms you choose, attributed to matters via your DMS or matter-management context.' },
+      { title: 'Pilot with one practice group', body: 'Drafts run alongside existing timekeeping for 2–4 weeks; we measure the delta between captured time and what would have been logged manually.' },
+      { title: 'Roll out & measure', body: 'Firm-wide deployment with a monthly recovered-hours report — real data, not estimates.' },
+    ],
+    workflows: [
+      'Background AI-tool session tracking, attributed to the active matter',
+      'Draft time entries created in Elite 3E / Aderant / Clio via native APIs',
+      'One-click lawyer approval queue — approve, edit or discard',
+      'Per-matter AI usage log: every prompt, response and output',
+      'Recovered-hours reporting by practice group',
+      'Configurable rules for non-billable matters and internal work',
+    ],
+    whyCustom: [
+      'Captures the tools your firm actually runs — internal AI assistants included — not a fixed list of integrations.',
+      'Writes into your existing billing stack; no new timesheet app for lawyers to adopt.',
+      'Lawyer approval on every entry — auto-capture, not auto-billing.',
+      'The AI audit trail doubles as your governance and client-defensibility layer.',
+    ],
+    included: [
+      'Background session capture across agreed tools',
+      'Matter attribution via your DMS / matter context',
+      'Draft time entries in your billing system',
+      'One-click approval workflow',
+      'Per-matter AI usage audit log',
+      'Recovered-hours and leakage reporting',
+      'Privacy rules & non-billable filters',
+    ],
+    faqs: [
+      { q: 'Is this surveillance of our lawyers?', a: 'No — it tracks work sessions against matters, not behaviour. It does not screenshot, does not log keystrokes, and only watches the specific work tools the firm configures. Lawyers see every draft entry before anything reaches billing, and the firm controls what is captured and what is excluded. The design goal is to remove the memory burden of timekeeping, not to monitor people.' },
+      { q: 'Can we ethically bill AI-assisted time?', a: 'You bill the lawyer’s time spent directing, reviewing and applying AI output on the client’s matter — which is real, supervised professional work. The system drafts the entry with an accurate description and duration; the lawyer confirms it reflects genuine billable work before approving. That is more defensible than end-of-day reconstruction, because the entry is backed by a contemporaneous, per-matter log of what was actually done.' },
+      { q: 'Which billing systems does it write to?', a: 'Thomson Reuters Elite 3E, Aderant, and Clio are the standard targets; any practice-management or billing platform with an API can be wired in. Entries arrive as drafts in your existing pre-bill workflow — your billing team’s process does not change.' },
+      { q: 'How does it know which matter a session belongs to?', a: 'From the matter context the lawyer is already working in — the document open in iManage or NetDocuments, the matter the AI assistant session was started under, or the matter-management record in focus. Ambiguous sessions are flagged for the lawyer to assign rather than guessed.' },
+      { q: 'What about work outside AI tools — calls, meetings, email?', a: 'The same capture layer can extend to calendar, email and phone systems if the firm wants full passive capture. Most firms start with the AI-tool gap because it is the leak nothing else on the market closes, then widen the scope once the approval workflow has earned trust.' },
+      { q: 'How long does it take to deploy?', a: 'A single-practice-group pilot is typically live in 3–4 weeks: one week to wire the capture layer and billing API, then 2–4 weeks running drafts alongside existing timekeeping to measure recovered hours before firm-wide rollout.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai'],
+  },
+  {
+    slug: 'relativity-document-review-automation',
+    metaTitle: 'Relativity Review-to-Report Automation for Law Firms | Chronexa',
+    metaDescription:
+      'When the Relativity review is marked complete, the report drafting starts: tagged documents exported by category, findings synthesised, and a structured diligence report draft with citations — refined in hours, delivered the same day.',
+    h1: 'Relativity Document Review Automation — From Review Complete to Client Report',
+    heroSub:
+      'The review took three weeks and 8,000 documents. Then a senior associate spends 20 more hours turning the tags into a 40-page report. We automate that second part — drafted in minutes, refined in hours, delivered the same day.',
+    answer:
+      'Relativity review-to-report automation picks up where document review ends: when the review is marked complete, the pipeline exports all tagged documents by category, synthesises the material findings, and generates a structured report draft — executive summary, risk breakdown, citations back to source documents. Senior associates refine instead of write, cutting report time from 16–24 hours to 4–6 and delivering to the client the same day.',
+    callout:
+      'Every firm automates the review and hand-writes the report. After 8,000 documents are tagged in Relativity, a senior associate exports findings to a spreadsheet, re-reads hundreds of “Red Flag” tags, and writes the diligence report section by section — 16–24 hours per deal, with the client waiting three days for a document whose substance was finished the moment the review closed.',
+    serviceName: 'Relativity Review-to-Report Automation',
+    serviceType: 'Diligence report drafting automation for legal document review',
+    schemaDescription:
+      'Automated diligence-report drafting from completed Relativity document reviews — tagged-document export by category, AI synthesis of material findings, structured report drafts with citations, and same-day client delivery.',
+    roi: [
+      { value: '20h → 5h', label: 'senior-associate time per diligence report' },
+      { value: 'Same day', label: 'client receives the report — not three days later' },
+      { value: 'Cited', label: 'every finding traceable to the tagged source document' },
+    ],
+    sections: [
+      {
+        heading: 'The gap nobody automates: after the review ends',
+        level: 2,
+        body: [
+          'Legal tech has poured a decade into making document review faster — predictive coding, TAR, AI-assisted tagging inside Relativity and its peers. But the deliverable a client actually pays for is the report, and that step is untouched: a senior associate exports the findings, manually reads through hundreds of tagged documents, and writes a 40-page diligence report section by section. On a typical M&A or litigation matter that is 16–24 hours of senior time, and the client waits days for substance that existed the moment the review closed.',
+          'That last mile is exactly the kind of work AI synthesis is good at — the documents are already categorised, the risk tags are already applied by your reviewers, and the report follows a structure your firm has used a hundred times.',
+        ],
+      },
+      {
+        heading: 'How review-to-report automation works',
+        level: 2,
+        body: [
+          'The trigger is the review being marked complete in Relativity. The pipeline exports all tagged documents grouped by category — red flags, change-of-control clauses, indemnities, regulatory exposure, whatever taxonomy your review used — and an AI synthesis pass summarises the material findings per category, quoting and citing the underlying documents. The output is a structured draft in your firm’s report format: executive summary, risk breakdown by category, supporting citations that link back to the Relativity documents.',
+          'A senior associate then does what senior associates are actually for: reviewing the analysis, sharpening the judgment calls, and signing off — typically 4–6 hours instead of 16–24. The client gets the report the same day the review closes. On a contested deal, that velocity is a competitive edge, not a convenience.',
+        ],
+      },
+      {
+        heading: 'Findings become precedent automatically',
+        level: 2,
+        body: [
+          'Once the report is approved, it is stored as a precedent — tagged by sector, deal type and risk categories — so the next deal in that sector starts from your firm’s accumulated judgment rather than a blank page. Most firms lose this compounding entirely: the report goes to the client, a copy goes into a folder, and the knowledge never flows back. Connected to a knowledge activation loop, every closed review makes the next one faster.',
+        ],
+      },
+      {
+        heading: 'Privilege, accuracy and review integrity',
+        level: 3,
+        body: [
+          'The pipeline reads only the review workspace you point it at, runs inside your environment, and never sends documents to a public model. Every synthesised finding carries its citation, so a reviewer can verify any claim against the source document in one click — the draft is checkable by construction, not trusted on faith. The review itself, and every legal conclusion in the final report, stays with your lawyers.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your report format', body: 'We encode your diligence report structure, section order and house style from past reports.' },
+      { title: 'Wire the Relativity export', body: 'Completed-review trigger, tagged-document export by category, grouped for synthesis.' },
+      { title: 'Tune synthesis on a past deal', body: 'We run the pipeline against a completed matter and compare the draft to the report you actually delivered — calibrating before anything goes live.' },
+      { title: 'Go live with associate review', body: 'Drafts land in the responsible associate’s queue; we measure drafting hours saved per matter.' },
+    ],
+    workflows: [
+      'Completed-review trigger from Relativity',
+      'Tagged-document export grouped by review category',
+      'AI synthesis of material findings with per-finding citations',
+      'Structured report draft in your firm’s format — executive summary, risk breakdown, annexes',
+      'Associate review & refinement queue',
+      'Approved reports stored as sector-tagged precedent',
+    ],
+    whyCustom: [
+      'Built around your review taxonomy and your report format — not a generic template.',
+      'Citations link every finding back to the tagged source document, so drafts are verifiable.',
+      'Runs inside your environment; review documents never leave your boundary.',
+      'Extends to Everlaw, DISCO, Reveal or any review platform with an export API.',
+    ],
+    included: [
+      'Relativity (or equivalent) completed-review integration',
+      'Category-grouped tagged-document export',
+      'AI findings synthesis with citations',
+      'Report drafts in your house format',
+      'Associate review workflow',
+      'Precedent storage of approved reports',
+      'Secure in-environment deployment',
+    ],
+    faqs: [
+      { q: 'Does this replace the document review itself?', a: 'No. The review — human or TAR-assisted — happens exactly as it does today, inside Relativity. The automation starts only when your team marks the review complete, and works exclusively from the tags and categories your reviewers applied. It automates the report writing, not the legal review.' },
+      { q: 'We use Everlaw / DISCO / Reveal, not Relativity. Does it still work?', a: 'Yes. Relativity is the most common trigger we build against, but the pipeline works with any review platform that can export tagged documents — Everlaw, DISCO, Reveal, or an on-prem system. The synthesis and report stages are platform-agnostic.' },
+      { q: 'How is privilege protected?', a: 'The pipeline runs inside your environment and reads only the workspaces you authorise. Documents are never sent to a public model and never leave your boundary. Privilege calls remain with your reviewers — the system only synthesises documents your team has already tagged for inclusion.' },
+      { q: 'Can the draft match our report style?', a: 'Yes — we encode your structure and house style from 5–10 past reports during setup. The draft arrives in your format with your section conventions, so associates are editing a familiar document, not reformatting a generic one.' },
+      { q: 'What if the AI synthesis gets a finding wrong?', a: 'Every finding carries a citation to its source document, so verification is one click rather than a re-read of the review set. The draft is a starting point that a senior associate reviews and refines — the design assumption is that humans approve everything that reaches a client.' },
+      { q: 'How long does deployment take?', a: 'Typically 4–6 weeks: report-format encoding and Relativity wiring in the first two, then calibration against one or two completed matters before going live on new deals.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['legal-due-diligence-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
+  },
+  {
+    slug: 'law-firm-knowledge-management-ai',
+    metaTitle: 'AI Knowledge Management for Law Firms — Precedent Capture | Chronexa',
+    metaDescription:
+      'Your RAG system retrieves old knowledge; it never learns from the deal that closed today. We automate the loop: closed matters trigger clause extraction, tagging by practice and sector, and push into your knowledge base — so the next team finds it automatically.',
+    h1: 'AI Knowledge Management for Law Firms — Capture Precedents Automatically',
+    heroSub:
+      'The clause your team spent three months negotiating closed today — and went into a folder. Six months from now another team will re-invent it. We close that loop: every closed matter feeds your knowledge base automatically.',
+    answer:
+      'AI knowledge management for law firms automates the capture side of knowledge work: when a matter closes, the system extracts the key negotiated clauses and outcomes, summarises and tags them by practice area and sector, and pushes them into the firm’s knowledge base or RAG index — so institutional knowledge compounds with every deal instead of depending on a partner remembering to file a precedent note.',
+    callout:
+      'A landmark infrastructure deal closes with a hard-won force majeure clause — three months of negotiation, an excellent precedent. It is filed in a DMS folder, untagged, unextracted. Six months later another team handles a similar deal and spends a week re-inventing the same clause. Your knowledge system retrieved nothing, because nothing was ever put in.',
+    serviceName: 'AI Knowledge Management for Law Firms',
+    serviceType: 'Automated precedent capture & knowledge activation',
+    schemaDescription:
+      'Automated knowledge capture for law firms — closed-matter triggers, AI clause and outcome extraction, practice- and sector-tagging, and push into the firm’s knowledge base or RAG index so precedents surface automatically on the next similar matter.',
+    roi: [
+      { value: '20–30%', label: 'less research time on repeat matters once precedents flow back (industry data)' },
+      { value: 'Zero', label: 'manual tagging — capture triggers when the matter closes' },
+      { value: 'Compounds', label: 'knowledge base learns from every closed matter, automatically' },
+    ],
+    sections: [
+      {
+        heading: 'Retrieval is solved. Capture is not.',
+        level: 2,
+        body: [
+          'Most serious firms now have a retrieval system — a RAG layer or knowledge platform that can search what is in the index brilliantly. The unsolved half is capture: getting today’s work into that index. Senior associates spend roughly 30% of their time on document creation (industry data), and a meaningful share of it is re-creating analysis and clauses the firm has already done — because what the firm learned on the last deal never flowed back into the system. Knowledge management by memo (“please file your precedents”) fails for the same reason timesheets fail: it depends on busy people doing optional admin.',
+          'The fix is to make capture an event, not a task. The trigger is something that already happens — a partner marking the final documents in the DMS when a matter closes.',
+        ],
+      },
+      {
+        heading: 'How the knowledge activation loop works',
+        level: 2,
+        body: [
+          'When a matter is marked final in iManage or NetDocuments, the pipeline picks up the closing set, extracts the key negotiated clauses and structural decisions, and generates a precedent summary — “force majeure clause, renewable-energy project, infrastructure sector, February 2026” — tagged by practice area, sector and clause type. That package is pushed into your knowledge base or RAG index automatically. No one writes a precedent note; no one tags anything by hand.',
+          'The payoff arrives on the next similar matter: the team working a comparable deal gets the precedent surfaced automatically — the clause, the context, and who negotiated it. Research that took a week of asking around becomes a retrieval hit. Industry data puts the research-time reduction on repeat matters at 20–30% once precedents flow back systematically.',
+        ],
+      },
+      {
+        heading: 'Institutional memory that survives departures',
+        level: 2,
+        body: [
+          'When a senior partner leaves, their precedent knowledge — which clause held up, which structure the regulator accepted, which fallback the counterparty took — normally walks out the door with them. A capture loop changes that: the knowledge is extracted and indexed while the matter is fresh, attributed and searchable. New hires inherit the firm’s accumulated judgment on day one instead of rebuilding it through hallway questions.',
+        ],
+      },
+      {
+        heading: 'Feeds the knowledge stack you already have',
+        level: 3,
+        body: [
+          'This is not another knowledge platform to migrate to. The loop feeds whatever retrieval layer your firm runs — an internal RAG system, a vector database, or the search layer of your DMS — through its ingestion API. We built exactly this pattern for a top corporate litigation firm: every new judgment and memo automatically embedded into the firm’s vector database, so the knowledge base compounds instead of going stale.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map your knowledge flow', body: 'Where precedents live today, how matters close in your DMS, and which retrieval layer the loop should feed.' },
+      { title: 'Wire the closing trigger', body: 'Matter-final events from iManage/NetDocuments start the extraction pipeline automatically.' },
+      { title: 'Tune extraction & tagging', body: 'Clause extraction and practice/sector taxonomy calibrated on a set of past closed matters, with partner review of the first batches.' },
+      { title: 'Backfill & go live', body: 'Optionally back-process recent closed matters to seed the index, then run continuously with a monthly capture report.' },
+    ],
+    workflows: [
+      'Closed-matter trigger from iManage / NetDocuments',
+      'AI extraction of key negotiated clauses and outcomes',
+      'Precedent summaries tagged by practice area, sector and clause type',
+      'Automatic push into your RAG index / knowledge base',
+      'Auto-surfacing of relevant precedents on new similar matters',
+      'Back-processing of historical closed matters to seed the index',
+    ],
+    whyCustom: [
+      'Feeds the retrieval system you already run — no new platform, no migration.',
+      'Capture is event-driven (matter close), so it does not depend on lawyer discipline.',
+      'Taxonomy tuned to your practice areas and sectors, not a generic legal ontology.',
+      'Runs inside your environment; matter documents never leave your boundary.',
+    ],
+    included: [
+      'DMS closing-event integration (iManage / NetDocuments)',
+      'Clause & outcome extraction',
+      'Practice / sector / clause-type tagging',
+      'Knowledge-base or RAG-index ingestion',
+      'Precedent surfacing on new matters',
+      'Historical backfill option',
+      'Partner review workflow for early batches',
+      'Capture reporting',
+    ],
+    faqs: [
+      { q: 'We already have a RAG system. Isn’t this redundant?', a: 'The opposite — it is the missing half. Your RAG system retrieves what is in the index; this loop is what puts new knowledge in, automatically, every time a matter closes. Without it, the index decays: it knows everything about the firm as of the day it was built and nothing since.' },
+      { q: 'How is this different from buying a knowledge-management platform?', a: 'KM platforms are another destination that still depends on lawyers filing things into it. This is a capture pipeline that feeds whatever destination you already have — triggered by events that already happen, with no new behaviour required from fee-earners. The capture problem is a workflow problem, not a software-license problem.' },
+      { q: 'What exactly gets extracted from a closed matter?', a: 'Configurable by practice group — typically key negotiated clauses, deal structure decisions, regulatory positions taken, and the final outcome, each summarised and tagged by practice area, sector and clause type. Partners review the first batches so the extraction matches what your lawyers actually consider precedent-worthy.' },
+      { q: 'Does confidential matter data stay protected?', a: 'Yes. The pipeline runs inside your environment, respects your DMS access controls and ethical walls, and pushes into a knowledge base governed by the same permissions. Nothing leaves your boundary or trains a public model.' },
+      { q: 'Can it process our historical closed matters, not just new ones?', a: 'Yes — a backfill pass over recent closed matters (say, the last 2–3 years) is the fastest way to seed the index and prove value, with the same partner review on early output.' },
+      { q: 'How long does it take?', a: 'The closing-trigger pipeline is typically live in 4–6 weeks; a historical backfill runs in parallel depending on volume.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-automated-time-capture', 'legal-due-diligence-automation', 'rag-knowledge-engines'],
   },
 
   // ── Tax / CPA tool/integration pages (Layer-A moat keywords) ──────────────────

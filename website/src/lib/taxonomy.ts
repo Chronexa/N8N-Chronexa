@@ -28,6 +28,7 @@ const CLASSIFY: Record<string, Meta> = {
   'hr-automation': { kind: 'function', navLabel: 'HR & Recruitment', order: 4 },
   'sales-revenue-automation': { kind: 'function', navLabel: 'Sales & Revenue', order: 5 },
   'marketing-automation': { kind: 'function', navLabel: 'Marketing', order: 6 },
+  'cybersecurity-automation': { kind: 'function', navLabel: 'Cybersecurity', order: 7 },
 
   // Use cases — by industry (the type of company we serve)
   'legal-due-diligence-automation': { kind: 'industry', navLabel: 'Legal & Law Firms', order: 1 },
@@ -35,9 +36,10 @@ const CLASSIFY: Record<string, Meta> = {
   'insurance-claims-triage-automation': { kind: 'industry', navLabel: 'Insurance', order: 3 },
   'financial-services-automation': { kind: 'industry', navLabel: 'Financial Services', order: 4 },
   'vc-pe-crm-automation': { kind: 'industry', navLabel: 'VC & Private Equity', order: 5 },
-  'property-management-automation': { kind: 'industry', navLabel: 'Property Management', order: 6 },
-  'pharma-life-sciences-automation': { kind: 'industry', navLabel: 'Pharma & Life Sciences', order: 7 },
-  'd2c-ecommerce-automation': { kind: 'industry', navLabel: 'D2C & E-commerce', order: 8 },
+  'pharma-life-sciences-automation': { kind: 'industry', navLabel: 'Pharma & Life Sciences', order: 6 },
+  // Demoted out of the menu (off the regulated-enterprise positioning) — pages kept live
+  // (still routed + in sitemap), just not featured in nav/use-cases. Reversible.
+  // 'property-management-automation' / 'd2c-ecommerce-automation' intentionally omitted.
 
   // Geo
   'us-ai-automation-agency': { kind: 'geo', navLabel: 'US AI Automation Agency', order: 1 },
@@ -50,6 +52,9 @@ const CLASSIFY: Record<string, Meta> = {
   'contract-review-automation-software': { kind: 'integration', navLabel: 'Contract Review Automation', order: 2 },
   'law-firm-matter-intake-automation': { kind: 'integration', navLabel: 'Matter Intake & Conflict-Check Automation', order: 3 },
   'regulatory-filing-monitoring-automation': { kind: 'integration', navLabel: 'Regulatory & SEC Filing Monitoring', order: 4 },
+  'law-firm-automated-time-capture': { kind: 'integration', navLabel: 'Automated Time Capture & AI Billing', order: 16 },
+  'relativity-document-review-automation': { kind: 'integration', navLabel: 'Relativity Review-to-Report Automation', order: 17 },
+  'law-firm-knowledge-management-ai': { kind: 'integration', navLabel: 'AI Knowledge Management for Law Firms', order: 18 },
   // Tax / CPA
   'tax-software-ai-integration': { kind: 'integration', navLabel: 'Tax Software AI Integration', order: 5 },
   'k1-tax-form-ocr-extraction': { kind: 'integration', navLabel: 'K-1 Form OCR Extraction', order: 6 },

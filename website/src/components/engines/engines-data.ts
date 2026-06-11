@@ -142,7 +142,7 @@ export const ENGINE_ROADMAP: RoadmapItem[] = [
   { name: 'CPA & Tax Engine', kicker: 'Tax compliance & filing', status: 'live', icon: 'doc', promise: 'Ingests every client document, extracts all fields including K-1s and brokerage composites, pre-fills the return in your tax software, and routes a reviewer-ready file — with flagged items — to your CPA.', href: '/ai-engines/cpa-tax-engine' },
   { name: 'Investment Research Engine', kicker: 'Capital markets & portfolio AI', status: 'live', icon: 'chart', promise: 'Connects to every brokerage via Plaid and Yodlee, scans news and earnings signals, runs XGBoost and LSTM models to surface exact entry and exit points, and presents human-approved orders to your broker — while monitoring risk in real time.', href: '/ai-engines/investment-research-engine' },
   { name: 'Document Intelligence Engine', kicker: 'Unstructured docs → structured data', status: 'live', icon: 'layers', promise: 'Ingests any volume of PDFs, scanned images, photos, and handwritten forms — extracts every field with a per-field confidence score, runs the domain financial model automatically, and delivers a formatted report in hours instead of weeks.', href: '/ai-engines/document-intelligence-engine' },
-  { name: 'Legal & Regulatory Engine', kicker: 'Reg-watch, matters & precedent RAG', status: 'live', icon: 'shield', promise: 'Monitors SEBI, RBI, IRS, SEC and custom regulatory feeds in real time — matches every new development to your active matters, searches your indexed precedent database via RAG, and delivers a partner-ready guidance memo with billable time auto-logged.', href: '/ai-engines/legal-regulatory-engine' },
+  { name: 'Legal & Regulatory Engine', kicker: 'Alerts, billing, knowledge & diligence', status: 'live', icon: 'shield', promise: 'Closes the four operational gaps in a modern firm: regulatory changes matched to live matters in minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.', href: '/ai-engines/legal-regulatory-engine' },
   { name: 'Customer Support Engine', kicker: 'Omnichannel CS · voice + text', status: 'live', icon: 'inbox', promise: 'Indexes your entire knowledge base, classifies every incoming query in under a second, routes it to the right specialist agent — technical, billing, debug, or feature — and escalates to a human with full context when needed. Voice and text, all channels.', href: '/ai-engines/customer-support-engine' },
 ];
 
@@ -942,11 +942,11 @@ export const LEGAL_REG_ENGINE: EngineDef = {
   id: 'legal-regulatory',
   slug: 'legal-regulatory-engine',
   name: 'Legal & Regulatory Engine',
-  kicker: 'Reg-watch, matters & precedent RAG',
+  kicker: 'Alerts, billing, knowledge & diligence',
   status: 'live',
   icon: 'shield',
   promise:
-    'Monitors SEBI, RBI, IRS, SEC and custom regulatory feeds in real time — matches every new development to your active matters, searches your indexed precedent database via RAG, and delivers a partner-ready guidance memo with billable time auto-logged.',
+    'Closes the four operational gaps in a modern firm: regulatory changes matched to live matters in minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.',
   nodes: [
     {
       id: 'monitor', tag: 'Monitor', label: 'Regulatory Monitor', icon: 'database',
@@ -1057,26 +1057,136 @@ export const LEGAL_REG_OUTPUTS: Record<string, string[]> = {
 };
 
 export const LEGAL_REG_WHATIS: string[] = [
-  'The Legal & Regulatory Engine is a multi-agent system that monitors regulatory publication feeds across jurisdictions, cross-references every new development against the firm\'s active matters and client portfolios, searches the firm\'s indexed precedent database via RAG, drafts partner-ready guidance, and logs everything to your practice management system — automatically.',
-  'Think of it as a regulatory paralegal and knowledge management system working in parallel, every day. It does not practice law. It handles the surveillance, research, and documentation work that currently consumes hours of billable and non-billable time — so partners and associates spend their time on judgment, not monitoring.',
-  'We built this for a large corporate legal firm tracking SEBI, RBI, IRS, and SEC simultaneously. The precedent relearning layer — where every new judgment is automatically embedded into the vector database — was the key insight: the firm\'s institutional knowledge compounds over time rather than walking out the door when a senior partner leaves.',
+  'We don\'t sell AI tools. The serious firms have already shipped them — an internal AI assistant, a RAG system over the document store, an enterprise cloud DMS. The expensive problem now is operational: that AI isn\'t connected to the daily workflows where legal work actually happens. Alerts go out days late, AI-assisted time goes unbilled, hard-won precedents get buried in folders, and reports are still written by hand.',
+  'The Legal & Regulatory Engine is the connection layer. It is four workflows that make your existing stack work end-to-end: regulatory changes matched to live matters and turned into draft client alerts in minutes; AI-tool usage captured into the billing system automatically; closed-matter precedents extracted and fed back into the firm\'s knowledge base; and completed document reviews turned into client-ready diligence report drafts.',
+  'We presented this four-gap analysis to the digital leadership of one of India\'s largest full-service law firms. Their response: every gap is real. No two firms run the same practice mix or the same stack — which is why each workflow is built on the DMS, review platform and billing system you already run, not on a platform you have to migrate to. The engine does not practice law; judgment stays with partners. It handles the monitoring, capture, extraction and drafting around that judgment.',
+];
+
+/** The Four Operational Intelligence Gaps — the framework from our law-firm
+ *  proposal work (validated by the digital leadership of a top-tier Indian firm).
+ *  Before/after workflows are firm-agnostic; numbers are industry benchmarks. */
+export interface LegalGapDef {
+  id: string;
+  name: string;
+  workflow: string; // the workflow that closes it
+  gap: string;      // the problem, in plain English
+  before: string[]; // manual workflow today
+  after: string[];  // orchestrated workflow
+  outcome: string;  // the punchline stat
+}
+
+export const LEGAL_REG_GAPS_INTRO =
+  'Map any modern firm\'s AI program against its daily workflows and the same four gaps appear — we validated this framework with the digital leadership of one of India\'s largest law firms. Each gap below shows the workflow as it runs manually today, and as it runs once the engine connects your existing systems.';
+
+export const LEGAL_REG_GAPS: LegalGapDef[] = [
+  {
+    id: 'regulatory',
+    name: 'The Regulatory Intelligence Gap',
+    workflow: 'Regulatory Alert Engine',
+    gap: 'When SEBI, RBI, the MCA or the SEC releases a new circular, lawyers read it manually and work out which of hundreds of active client matters are affected. Clients often hear about regulatory changes from the news before their lawyer alerts them.',
+    before: [
+      'Regulator releases a circular',
+      'A lawyer reads it manually',
+      'Emails the practice head',
+      'Practice head works out which clients are affected',
+      'Partners pinged on WhatsApp',
+      'Client alert drafted',
+      'Sent 3–4 days later',
+    ],
+    after: [
+      'Regulator releases a circular',
+      'AI classifies it by topic — FPI, NBFC, M&A, securities',
+      'Cross-referenced with active matters tagged in your DMS',
+      'Draft client alert auto-generated',
+      'In the responsible lawyer\'s review queue in 15 minutes',
+    ],
+    outcome: 'Time to client alert: 3–4 days → 15 minutes. Zero clients hearing about a change from the news first.',
+  },
+  {
+    id: 'billing',
+    name: 'The AI Usage Billing Gap',
+    workflow: 'AI Billing Capture',
+    gap: 'Lawyers use the firm\'s AI tools daily, but that time never reaches the billing system — even Harvey only announced billing integration in late 2025, and it isn\'t built yet. Industry studies put revenue lost to manual billing failures at 26%. The more your lawyers use AI, the more revenue silently leaks.',
+    before: [
+      'Lawyer uses the AI assistant for 90 minutes on a matter',
+      'Finishes, moves to the next task',
+      'Forgets to log the time',
+      'Estimates 45 minutes at the end of the day, "to be safe"',
+      '45 minutes of revenue lost',
+    ],
+    after: [
+      'Lawyer opens the AI tool on a matter',
+      'A background timer starts',
+      'On close, a draft time entry is created: "AI-assisted analysis, 92 minutes, Matter #5821"',
+      'Lawyer approves in one click',
+      'Every prompt and output logged to the matter file',
+    ],
+    outcome: 'Closes the 26% billing-leakage loop automatically — and creates the AI audit trail your governance committee wants anyway.',
+  },
+  {
+    id: 'knowledge',
+    name: 'The Knowledge Activation Gap',
+    workflow: 'Knowledge Activation Loop',
+    gap: 'Your RAG system retrieves old knowledge brilliantly. But when a landmark deal closes today with a hard-won precedent clause, it doesn\'t flow back in. Six months later, another team re-invents the same clause from scratch.',
+    before: [
+      'A major infrastructure deal closes',
+      'The team spent 3 months negotiating a force majeure clause',
+      'Excellent precedent',
+      'Filed in a DMS folder',
+      'Not tagged, not extracted',
+      '6 months later, another team handles a similar deal',
+      'Spends a week re-inventing the same clause',
+    ],
+    after: [
+      'Deal closes — partner marks the file "final" in the DMS',
+      'Pipeline extracts the key negotiated clauses',
+      'Summary generated and tagged by practice area and sector',
+      'Pushed into your knowledge system\'s index',
+      'The next team on a similar deal gets it surfaced automatically',
+    ],
+    outcome: 'Your knowledge base stops being an archive and starts learning from every closed matter. Research time on repeat matters drops an estimated 20–30%.',
+  },
+  {
+    id: 'diligence',
+    name: 'The Diligence-to-Report Gap',
+    workflow: 'Diligence-to-Report Automation',
+    gap: 'After a major M&A or litigation document review is complete — often 5,000–10,000 documents in a tool like Relativity — someone still writes the client diligence report by hand. That is 16–24 hours of senior associate time per deal.',
+    before: [
+      '8,000 documents reviewed in Relativity over 3 weeks',
+      'Review marked complete',
+      'Senior associate exports findings to a spreadsheet',
+      'Manually reads hundreds of "Red Flag" tags',
+      'Writes a 40-page diligence report section by section',
+      'Takes 16–24 hours',
+      'Client gets the report 3 days later',
+    ],
+    after: [
+      'Relativity marks the review complete',
+      'Pipeline exports all tagged documents by category',
+      'AI synthesises the material-risk documents by category',
+      'Structured Word draft generated — executive summary, risk breakdown, citations',
+      'Senior associate reviews and refines in 4–6 hours',
+      'Client gets the report the same day',
+    ],
+    outcome: 'Report writing: 20 hours → 5 hours. Deal velocity becomes a competitive edge — and the approved report is stored as precedent for the next deal in that sector.',
+  },
 ];
 
 export const LEGAL_REG_HOWITWORKS_INTRO =
-  'Six agents run in sequence for every regulatory event. The monitor runs continuously; the remaining five trigger when a relevant event is detected. Here is exactly what happens — and what reaches the partner\'s desk at the end.';
+  'The canvas above shows the flagship of the four workflows — the Regulatory Alert Engine — running end-to-end, including the automatic billing log and knowledge indexing steps. Six agents run in sequence for every regulatory event: the monitor runs continuously, the remaining five trigger when a relevant event is detected. The other three workflows — billing capture, knowledge activation, diligence-to-report — reuse the same architecture on different triggers: an AI-tool session, a matter marked final, a review marked complete.';
 
 export const LEGAL_REG_PROBLEM: { intro: string; pains: string[]; closing: string } = {
   intro:
-    'Corporate legal firms and in-house legal teams face the same surveillance problem: the regulations that matter to their clients change continuously, across multiple jurisdictions, and the consequences of missing a material change are serious.',
+    'Firms at the top of the market have already solved the hard problem — they bought or built the AI. Internal assistants, RAG over the document store, enterprise cloud DMS. What remains is operational: none of it is wired into the workflows where the work actually happens.',
   pains: [
-    'Regulatory monitoring is done manually — a paralegal or associate checks bookmarked pages, RSS feeds, and email digests from each regulator.',
-    'Connecting a new rule to the right active matter requires a manual search of the matter list — the impact is often identified days after the change was published.',
-    'Institutional knowledge lives in the heads of senior partners. When they leave, it goes with them — no searchable precedent index, no automated retrieval.',
-    'Billable time spent on regulatory monitoring is often unbilled or written off — it is not tied to a matter, so it does not get logged.',
-    'Client alerts are drafted from scratch each time — the same analysis redone for each event rather than built on prior work.',
+    'When a regulator publishes a circular, lawyers still read it manually and work out which of 500+ active matters are affected — clients sometimes hear about the change from the news first.',
+    'Lawyers use AI tools daily, but that time never reaches the billing system. Industry studies put revenue lost to manual billing failures at 26%.',
+    'A hard-won clause from a deal that closed today never flows back into the knowledge system — six months later, another team re-invents it from scratch.',
+    'After a 5,000–10,000-document review in Relativity, a senior associate still writes the 40-page diligence report by hand — 16–24 hours per deal.',
+    'Institutional knowledge walks out the door when a senior partner leaves — nothing captured, nothing searchable.',
   ],
   closing:
-    'The engine does not replace legal judgment — it ensures the firm is never the last to know about a regulatory change that affects its clients.',
+    'The problem isn\'t AI capability. It\'s workflow connection. The engine doesn\'t replace legal judgment — it makes the AI your firm already owns show up in the daily work, with every action logged.',
 };
 
 export const LEGAL_REG_INTEGRATION: {
@@ -1103,13 +1213,13 @@ export const LEGAL_REG_INTEGRATION: {
 
 export const LEGAL_REG_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '4 min', label: 'from regulatory publication to partner-ready memo' },
-    { value: 'Zero', label: 'unbilled regulatory monitoring hours — all auto-logged' },
-    { value: '24/7', label: 'monitoring across all configured jurisdictions' },
-    { value: '3–4 wks', label: 'to go live across your full regulatory footprint' },
+    { value: '15 min', label: 'from regulatory publication to a draft client alert — down from 3–4 days' },
+    { value: '26%', label: 'of potential revenue lost to billing leakage — the gap auto-capture closes' },
+    { value: '20h → 5h', label: 'senior-associate time per diligence report, with same-day delivery' },
+    { value: '20–30%', label: 'less research time on repeat matters once precedents flow back automatically' },
   ],
   narrative:
-    'For a mid-size corporate firm with 20–50 active matters, the value is twofold. First, time: regulatory monitoring, impact matching, and first-draft guidance is 3–5 hours of associate or paralegal time per material event. At 2–3 events per week and a $350/hr billing rate, that is $4,200–$7,800 per week of work that can be recaptured — billed or redirected to higher-value matters. Second, risk: the cost of missing a material regulatory change and not notifying an affected client is not measured in time — it is measured in malpractice exposure and client trust.',
+    'Take a 100-lawyer practice as the unit of math. Billing capture alone: at two hours of AI-assisted work per lawyer per day and a $300–400 blended rate, recovering even half of the 26% industry leakage is worth millions a year — it is usually the workflow that pays for the entire engine. Diligence reports: 20 M&A or litigation matters a year at 15 hours saved per report is 300 hours of senior-associate time recovered annually, as capacity or as billings. Regulatory alerts are the retention play: for time-sensitive changes — SEBI FPI norms, RBI lending rules, SEC rule amendments — being first to the client\'s inbox instead of third is what keeps the relationship. Exact numbers depend on matter volume, practice mix and current workflows; the discovery call maps them precisely.',
 };
 
 /** PLACEHOLDER — replace with real attributable quotes before production. */
@@ -1119,6 +1229,9 @@ export const LEGAL_REG_TESTIMONIALS: { quote: string; name: string; role: string
 ];
 
 export const LEGAL_REG_FAQS: { q: string; a: string }[] = [
+  { q: 'We already have an internal AI assistant and a RAG system. Why do we need this?', a: 'That is exactly who this engine is for. The tools are the solved problem — the gaps are operational. The assistant\'s usage never reaches your billing system, the RAG index never learns from the matter that closed last week, regulatory alerts still depend on someone reading circulars, and diligence reports are still written by hand. The engine is the orchestration layer that connects the AI you already own to the workflows where revenue is made and lost. We don\'t replace your stack; we wire it together.' },
+  { q: 'Can it really capture AI-tool usage into our billing system?', a: 'Yes — that is the AI Billing Capture workflow. A background timer tracks AI-tool sessions per matter and creates a draft time entry ("AI-assisted analysis, 92 minutes, Matter #5821") in your billing or practice-management system — Elite 3E, Aderant, Clio or equivalent. The lawyer approves, edits or discards it in one click; nothing is billed without human sign-off. It also logs every prompt and output to the matter file, which doubles as the AI audit trail your governance committee wants anyway.' },
+  { q: 'Does it work with iManage, NetDocuments and Relativity?', a: 'Yes. The workflows trigger from the systems you already run: matter tagging and final-document events from iManage or NetDocuments, completed-review exports from Relativity, and write-back into your billing platform. No rip-and-replace — the engine\'s entire point is connecting the stack you have.' },
   { q: 'Which regulators can the engine monitor?', a: 'Any regulator that publishes via a structured feed, RSS, email list, or web publication. We have built integrations for SEC EDGAR, SEBI, RBI, IRS, FINRA, the Federal Register, ESMA, FCA, and MAS. If your practice covers a jurisdiction not on this list, we can add custom monitoring for any regulatory publication source.' },
   { q: 'Does the engine have access to our client files?', a: 'The engine accesses your matter list and the metadata associated with each matter — client name, practice area, relevant jurisdictions — for impact matching. It does not access the full content of matter files unless you explicitly connect a document management system for the precedent index. Access controls mirror your existing DMS permissions.' },
   { q: 'How does the precedent search stay current?', a: 'Every regulatory event, judgment, and internal memo processed by the engine is automatically embedded and added to the vector database. The knowledge base grows with every event — no manual maintenance, no periodic updates. A ruling processed today is searchable for the next event that comes in tomorrow.' },
@@ -1127,8 +1240,8 @@ export const LEGAL_REG_FAQS: { q: string; a: string }[] = [
 ];
 
 export const LEGAL_REG_NUDGE = {
-  title: 'See it run on a regulatory event from your jurisdiction',
-  body: 'We configure the engine for your regulatory footprint, run it on a recent event from one of your sources, and show you the impact map and draft memo — in 30 minutes. No setup required on your end.',
+  title: 'Pick the gap that hurts most — see the workflow run',
+  body: 'Regulatory alerts, billing capture, knowledge loop, or diligence reports: we show the workflow running end-to-end on a real example, mapped to the DMS and billing system your firm already runs — in 30 minutes.',
   cta: 'Book a Free Demo',
 };
 

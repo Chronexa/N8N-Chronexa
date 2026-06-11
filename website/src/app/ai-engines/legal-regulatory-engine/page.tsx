@@ -7,6 +7,7 @@ import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoad
 import {
   LEGAL_REG_ENGINE, LEGAL_REG_OUTPUTS, LEGAL_REG_FLOW_POSITIONS, LEGAL_REG_FLOW_EDGES,
   LEGAL_REG_WHATIS, LEGAL_REG_HOWITWORKS_INTRO,
+  LEGAL_REG_GAPS, LEGAL_REG_GAPS_INTRO,
   LEGAL_REG_PROBLEM, LEGAL_REG_INTEGRATION, LEGAL_REG_ROI, LEGAL_REG_TESTIMONIALS,
   LEGAL_REG_FAQS, LEGAL_REG_NUDGE,
 } from '../../../components/engines/engines-data';
@@ -14,17 +15,18 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/legal-regulatory-engine`;
-const TITLE = 'AI Legal & Regulatory Engine — Reg-Watch, Matter Impact & Precedent RAG | Chronexa';
+const TITLE = 'AI Workflow Orchestration for Law Firms — Legal & Regulatory Engine | Chronexa';
 const DESCRIPTION =
-  'Chronexa\'s Legal & Regulatory Engine monitors SEBI, RBI, IRS, SEC and custom regulatory feeds in real time — matches every development to your active matters, searches your indexed precedent database via RAG, and delivers a partner-ready guidance memo with billable time auto-logged.';
+  'Your firm already has AI — the engine connects it to daily work. Regulatory changes matched to live matters in 15 minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.';
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    'AI regulatory monitoring', 'legal AI automation', 'regulatory compliance AI',
-    'SEC SEBI regulatory alerts', 'legal matter impact analysis AI', 'RAG legal precedent',
-    'law firm AI automation', 'regulatory change management', 'AI legal research',
+    'AI workflow orchestration law firm', 'legal AI automation', 'law firm billing leakage',
+    'automated time capture law firm', 'AI usage billing capture legal', 'legal knowledge management AI',
+    'due diligence report automation', 'Relativity document review automation', 'iManage workflow automation',
+    'AI regulatory monitoring', 'SEC SEBI regulatory alerts', 'regulatory change management',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website' },
@@ -67,7 +69,7 @@ export default function Page() {
 
       {/* 1 — Full-canvas hero */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
-        <h1 className={styles.srOnly}>Regulatory monitoring, matter impact analysis, and precedent search — automated from publication to partner memo.</h1>
+        <h1 className={styles.srOnly}>AI workflow orchestration for law firms — regulatory alerts matched to live matters, AI usage captured into billing, precedents fed back into your knowledge base, and diligence reports drafted from completed review.</h1>
         <WorkflowCanvasLoader
           engine={LEGAL_REG_ENGINE}
           outputs={LEGAL_REG_OUTPUTS}
@@ -87,6 +89,37 @@ export default function Page() {
                 <p className="eyebrow">What it is</p>
                 <h2 className={styles.bodyTitle}>What is the AI Legal &amp; Regulatory Engine?</h2>
                 {LEGAL_REG_WHATIS.map((p) => <p key={p.slice(0, 40)} className={styles.prose}>{p}</p>)}
+              </section>
+
+              {/* The Four Operational Intelligence Gaps */}
+              <section className={styles.bodySection} id="gaps">
+                <p className="eyebrow">The framework</p>
+                <h2 className={styles.bodyTitle}>The Four Operational Intelligence Gaps</h2>
+                <p className={styles.prose}>{LEGAL_REG_GAPS_INTRO}</p>
+                <div className={styles.gapList}>
+                  {LEGAL_REG_GAPS.map((g, i) => (
+                    <article key={g.id} className={styles.gapCard} data-reveal style={{ '--reveal-i': i } as CSSProperties}>
+                      <p className={styles.gapNum}>Gap {String(i + 1).padStart(2, '0')} · {g.workflow}</p>
+                      <h3 className={styles.gapName}>{g.name}</h3>
+                      <p className={styles.gapDesc}>{g.gap}</p>
+                      <div className={styles.gapCompare}>
+                        <div className={styles.gapCol}>
+                          <p className={styles.gapColHead} data-kind="before">Before</p>
+                          <ol className={styles.gapSteps}>
+                            {g.before.map((s) => <li key={s}>{s}</li>)}
+                          </ol>
+                        </div>
+                        <div className={styles.gapCol}>
+                          <p className={styles.gapColHead} data-kind="after">After</p>
+                          <ol className={styles.gapSteps}>
+                            {g.after.map((s) => <li key={s}>{s}</li>)}
+                          </ol>
+                        </div>
+                      </div>
+                      <p className={styles.gapOutcome}>{g.outcome}</p>
+                    </article>
+                  ))}
+                </div>
               </section>
 
               {/* How it works */}
@@ -114,7 +147,7 @@ export default function Page() {
               {/* Problem */}
               <section className={styles.bodySection} id="problem">
                 <p className="eyebrow">The problem</p>
-                <h2 className={styles.bodyTitle}>The regulatory surveillance problem it solves</h2>
+                <h2 className={styles.bodyTitle}>The problem: your AI isn&rsquo;t wired into the work</h2>
                 <p className={styles.prose}>{LEGAL_REG_PROBLEM.intro}</p>
                 <ul className={styles.painList}>
                   {LEGAL_REG_PROBLEM.pains.map((p) => (
