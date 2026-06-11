@@ -199,6 +199,11 @@ export default function Page() {
                   ))}
                 </div>
                 <p className={styles.prose}>{LEGAL_REG_ROI.narrative}</p>
+                <p className={styles.prose}>
+                  Want your firm&rsquo;s number instead of the benchmark?{' '}
+                  <Link href="/law-firm-billing-leakage-calculator">Run the billing-leakage calculator</Link> — your
+                  lawyer count, your rates, your estimate in ten seconds.
+                </p>
               </section>
 
               {/* Testimonials */}

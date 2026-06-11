@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/ai-engines/document-intelligence-engine', priority: 0.9, freq: 'monthly' },
     { path: '/ai-engines/legal-regulatory-engine', priority: 0.9, freq: 'monthly' },
     { path: '/ai-engines/customer-support-engine', priority: 0.9, freq: 'monthly' },
+    { path: '/law-firm-billing-leakage-calculator', priority: 0.9, freq: 'monthly' },
     { path: '/case-studies', priority: 0.8, freq: 'monthly' },
     { path: '/blog', priority: 0.8, freq: 'weekly' },
     { path: '/about', priority: 0.6, freq: 'monthly' },

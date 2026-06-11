@@ -1,0 +1,164 @@
+/* Billing-leakage calculator. Dark interactive card on the dark hero;
+   methodology + links on light bands below. Tokens only. */
+
+.heroInner { max-width: 70ch; }
+.heroTitle { margin-top: 0.4rem; font-size: var(--step-4); }
+.heroSub {
+  margin-top: var(--spacing-sm);
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+  color: var(--text-muted-dark);
+  max-width: 62ch;
+}
+
+/* ---- Calculator card ---------------------------------------------------- */
+.calc {
+  margin-top: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-dark-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  backdrop-filter: blur(8px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* Inputs column */
+.inputs { display: grid; gap: 1.4rem; align-content: start; }
+.currencyRow { display: flex; gap: 0.5rem; }
+.currencyBtn {
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em;
+  padding: 0.35rem 0.9rem; border-radius: var(--radius-pill);
+  border: 1px solid var(--border-dark-strong);
+  background: transparent; color: var(--text-muted-dark); cursor: pointer;
+  transition: all var(--transition, 0.18s ease);
+}
+.currencyBtn[data-active='true'] {
+  background: var(--brand-green); border-color: var(--brand-green);
+  color: var(--text-on-fill); font-weight: 600;
+}
+.field { display: grid; gap: 0.45rem; }
+.fieldTop { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.fieldLabel { font-size: 0.95rem; color: var(--text-dark); }
+.fieldValue { font-family: var(--font-mono); font-size: 0.95rem; color: var(--brand-green); white-space: nowrap; }
+.range {
+  width: 100%;
+  accent-color: var(--brand-green);
+  cursor: pointer;
+}
+.fieldHint { font-size: 0.78rem; color: var(--text-muted-dark); }
+
+/* Results column */
+.results {
+  border-left: 1px solid var(--border-dark);
+  padding-left: var(--spacing-md);
+  display: grid;
+  gap: var(--spacing-sm);
+  align-content: start;
+}
+.resultKicker {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-muted-dark);
+}
+.resultBig {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--brand-green);
+}
+.resultBigLabel { font-size: 0.92rem; color: var(--text-muted-dark); margin-top: 0.2rem; }
+.subResults { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); }
+.subResult {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+}
+.subValue { font-family: var(--font-display); font-size: var(--step-2); font-weight: 600; color: var(--text-dark); line-height: 1.1; }
+.subLabel { font-size: 0.8rem; color: var(--text-muted-dark); margin-top: 0.3rem; line-height: var(--leading-snug); }
+.assumption { font-size: 0.78rem; color: var(--text-muted-dark); line-height: var(--leading-snug); }
+.assumption a { color: var(--text-muted-dark); text-decoration: underline; }
+
+/* ---- Lead capture ------------------------------------------------------- */
+.leadBox {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border-dark);
+  padding-top: var(--spacing-sm);
+  display: grid;
+  gap: 0.75rem;
+}
+.leadHead { font-size: var(--step-1); color: var(--text-dark); font-family: var(--font-display); }
+.leadSub { font-size: 0.9rem; color: var(--text-muted-dark); max-width: 60ch; }
+.leadForm { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.leadInput {
+  flex: 1 1 180px;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-dark-strong);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+.leadInput::placeholder { color: var(--text-muted-dark); }
+.leadInput:focus { outline: 2px solid var(--brand-green); outline-offset: 1px; }
+.leadBtn { flex: 0 0 auto; }
+.leadError { font-size: 0.85rem; color: var(--color-error); }
+.leadSuccess { display: grid; gap: 0.75rem; justify-items: start; }
+.leadSuccessText { color: var(--text-dark); font-size: 0.98rem; max-width: 60ch; line-height: var(--leading-normal); }
+
+/* ---- Light body sections ------------------------------------------------ */
+.bodyTitle { margin-top: 0.3rem; font-size: var(--step-3); }
+.prose { margin-top: 0.75rem; color: var(--text-light); line-height: var(--leading-normal); max-width: 70ch; }
+.formula {
+  margin-top: var(--spacing-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-light);
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.1rem;
+  line-height: 1.7;
+  max-width: 70ch;
+  overflow-x: auto;
+}
+.fixGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-top: var(--spacing-md); }
+.fixCard {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.fixCard:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.fixKicker { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-on-surface); }
+.fixTitle { margin-top: 0.4rem; font-size: var(--step-1); color: var(--text-light); }
+.fixBody { margin-top: 0.4rem; font-size: 0.92rem; color: var(--text-muted-light); line-height: var(--leading-normal); }
+
+.faqList { display: grid; gap: 0.6rem; max-width: 80ch; margin-top: var(--spacing-md); }
+.faqItem { border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-card); padding: 0 var(--spacing-md); }
+.faqQ {
+  cursor: pointer; list-style: none; padding: var(--spacing-sm) 0; font-weight: 600;
+  font-size: var(--step-0); display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.faqQ::after { content: "+"; color: var(--accent-on-surface); font-size: 1.3em; line-height: 1; }
+.faqItem[open] .faqQ::after { content: "–"; }
+.faqQ::-webkit-details-marker { display: none; }
+.faqA { padding: 0 0 var(--spacing-sm); color: var(--text-muted-light); line-height: var(--leading-normal); max-width: 72ch; }
+
+/* ---- Responsive --------------------------------------------------------- */
+@media (max-width: 860px) {
+  .calc { grid-template-columns: 1fr; }
+  .results { border-left: none; border-top: 1px solid var(--border-dark); padding-left: 0; padding-top: var(--spacing-sm); }
+  .fixGrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .subResults { grid-template-columns: 1fr; }
+  .leadForm { flex-direction: column; }
+  .leadBtn { width: 100%; }
+}
