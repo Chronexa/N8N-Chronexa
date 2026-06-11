@@ -40,6 +40,8 @@ const CLASSIFY: Record<string, Meta> = {
   // Demoted out of the menu (off the regulated-enterprise positioning) — pages kept live
   // (still routed + in sitemap), just not featured in nav/use-cases. Reversible.
   // 'property-management-automation' / 'd2c-ecommerce-automation' intentionally omitted.
+  // Law-firm archetype pages ('ai-for-large/mid-size/small-law-firms') also intentionally
+  // out of nav — reached via the legal pillar's related[] and the sitemap.
 
   // Geo
   'us-ai-automation-agency': { kind: 'geo', navLabel: 'US AI Automation Agency', order: 1 },

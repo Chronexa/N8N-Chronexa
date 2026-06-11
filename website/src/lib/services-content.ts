@@ -145,7 +145,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['regulatory-filing-monitoring-automation', 'law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software', 'law-firm-matter-intake-automation'],
+    related: ['ai-for-large-law-firms', 'ai-for-mid-size-law-firms', 'ai-for-small-law-firms', 'regulatory-filing-monitoring-automation', 'law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
   },
   {
     slug: 'insurance-claims-triage-automation',
@@ -2347,6 +2347,288 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
     ],
     related: ['imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-automated-time-capture', 'legal-due-diligence-automation', 'rag-knowledge-engines'],
+  },
+
+  // ── Law-firm archetype pages — no two firms are alike: content segmented by
+  //    firm size, stack and buyer. Out of nav by design; reached via legal
+  //    pillar related[] + sitemap. ──────────────────────────────────────────────
+  {
+    slug: 'ai-for-large-law-firms',
+    metaTitle: 'AI for Large Law Firms — Workflow Orchestration | Chronexa',
+    metaDescription:
+      'Your firm already shipped AI — internal assistant, RAG, cloud DMS. The next problem is operational: connecting it to daily workflows. Regulatory alerts in minutes, AI time captured into billing, precedents that flow back, diligence reports drafted from review.',
+    h1: 'AI for Large Law Firms: From Tools to Orchestration',
+    heroSub:
+      'At 500+ lawyers, the question is no longer which AI tools to buy — you have shipped them. The question is why the assistant’s time never reaches billing, why precedents never flow back into your RAG index, and why client alerts still take three days.',
+    answer:
+      'For large law firms, the highest-ROI AI work is orchestration, not another platform: connecting the AI stack the firm already runs — internal assistants, RAG systems, iManage or NetDocuments, Relativity, Elite 3E or Aderant — into the daily workflows where revenue is made and lost. The four gaps that matter: regulatory alerts matched to live matters, AI usage captured into billing, closed-matter knowledge fed back into the index, and diligence reports drafted from completed review.',
+    callout:
+      'Most firms are still debating which AI tools to use. The leading firms have already shipped them — and discovered the next problem isn’t AI capability, it’s operational intelligence: making the AI work end-to-end in daily workflows. That is an integration problem, and no tool vendor solves it, because it runs across all of their products.',
+    serviceName: 'AI Workflow Orchestration for Large Law Firms',
+    serviceType: 'Enterprise AI orchestration for legal',
+    schemaDescription:
+      'AI workflow orchestration for large law firms — connecting internal AI assistants, RAG systems, DMS, review platforms and billing systems into end-to-end workflows: regulatory alerts, AI billing capture, knowledge activation and diligence-to-report automation.',
+    roi: [
+      { value: '26%', label: 'of potential revenue lost to billing leakage — closed by auto-capture' },
+      { value: '15 min', label: 'from regulatory publication to draft client alert — down from 3–4 days' },
+      { value: '20h → 5h', label: 'senior-associate time per diligence report' },
+    ],
+    sections: [
+      {
+        heading: 'You’ve already solved the hard problem',
+        level: 2,
+        body: [
+          'A firm at your scale has typically built one of the most advanced AI programs in its market: an internal generative AI assistant, a proprietary RAG system over the knowledge base, an enterprise DMS in the cloud, partner-level AI training, a governance group. That was the hard part, and it is done.',
+          'What is not done is the connection layer. The assistant’s usage never reaches the billing system. The RAG index retrieves brilliantly but never learns from the deal that closed last week. A regulator publishes a circular and the alert still travels by email and WhatsApp before a client hears anything. A three-week Relativity review ends and a senior associate starts writing the report by hand. Four gaps — all operational, none about AI capability.',
+        ],
+      },
+      {
+        heading: 'The four gaps orchestration closes',
+        level: 2,
+        body: [
+          'Regulatory intelligence: new circulars classified by topic, cross-referenced against active matters tagged in your DMS, and turned into a draft client alert in the responsible lawyer’s queue within 15 minutes — instead of 3–4 days of manual triage. AI usage billing: a background timer turns every AI-tool session into a draft time entry against the right matter; industry studies put the leakage this closes at 26% of potential revenue.',
+          'Knowledge activation: when a partner marks a matter final, the key negotiated clauses are extracted, tagged by practice and sector, and pushed into your RAG index — so the next team gets them surfaced automatically. Diligence-to-report: when review completes in Relativity, tagged documents are synthesised into a structured report draft with citations, cutting 16–24 hours of senior-associate writing to 4–6 hours of review.',
+        ],
+      },
+      {
+        heading: 'Why orchestration beats buying another platform',
+        level: 2,
+        body: [
+          'Every additional platform adds a silo, a migration, and a per-seat invoice — and still doesn’t connect to the rest of your stack. Orchestration inverts that: the workflows run on the systems you already own, inside your environment (your Azure tenancy or equivalent), under your access controls and ethical walls, with every AI action logged. Your governance committee gets a complete audit trail of AI usage per matter as a by-product, not a separate project.',
+          'It also respects how large firms actually adopt technology: practice group by practice group, with measured results. Every workflow has time-tracking built in, so the ROI conversation happens on real data — alerts triggered, hours captured, precedents created, drafting time saved — not vendor projections.',
+        ],
+      },
+      {
+        heading: 'Where to start: one practice group, one workflow',
+        level: 3,
+        body: [
+          'The discovery call maps your specific workflows: which practice generates the most regulatory alerts, which billing system you run, where knowledge is currently getting lost, what your document review volume looks like. Then a proof of concept of one workflow — your choice — built on your environment and integrated with your existing systems. Measure, then scale practice by practice. The investment to start is a 20-minute conversation.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Discovery', body: 'Map your workflows: which matters generate the most regulatory alerts? Which billing system? Where is knowledge getting lost? What review volume do you handle?' },
+      { title: 'Proof of concept', body: 'A working prototype of one workflow — regulatory alerts, billing capture, or knowledge loop — on your cloud environment, integrated with your DMS, assistant and billing systems.' },
+      { title: 'Measure', body: 'Real results tracked from day one: time saved, alerts triggered, billing entries captured, precedents created. Real data, not estimates.' },
+      { title: 'Scale practice by practice', body: 'Start with one practice group, prove the ROI, expand firm-wide.' },
+    ],
+    workflows: [
+      'Regulatory alerts: circular → classification → matter matching → draft client alert in 15 minutes',
+      'AI billing capture: tool sessions → draft time entries in Elite 3E / Aderant',
+      'Knowledge activation: matter close → clause extraction → RAG index ingestion',
+      'Diligence-to-report: Relativity review complete → cited report draft',
+      'Per-matter AI usage audit trail for governance',
+      'ROI dashboard: hours captured, alerts shipped, precedents created',
+    ],
+    whyCustom: [
+      'Orchestrates the stack you already own — assistant, RAG, DMS, review platform, billing — instead of adding another silo.',
+      'Runs inside your environment under your security model, ethical walls and audit requirements.',
+      'Rolls out practice group by practice group with measured ROI, matching how large firms actually adopt.',
+      'No per-seat tax — fixed-price builds scoped to workflows, not headcount.',
+    ],
+    included: [
+      'Workflow discovery & gap mapping',
+      'Proof of concept on your environment',
+      'DMS, assistant, review-platform & billing integrations',
+      'Human-approval gates on every client-facing output',
+      'AI usage audit trail per matter',
+      'ROI measurement built into every workflow',
+      'Practice-by-practice rollout plan',
+    ],
+    faqs: [
+      { q: 'We have an innovation team. Why not build this in-house?', a: 'Many of our clients have strong internal teams — and keep them focused on the firm’s proprietary AI capabilities, which is where their leverage is. Orchestration is integration work across DMS, billing, review and AI systems: high-value but not differentiating to build, and faster to buy as a fixed-price outcome. We build it on your environment, document it, and your team owns it from day one.' },
+      { q: 'Does this disturb our iManage security model or ethical walls?', a: 'No. Every workflow operates through your existing access controls — matter-level permissions and ethical walls included. The orchestration layer reads and writes through the same APIs your systems already expose, inside your boundary, with every action logged.' },
+      { q: 'How does this interact with our AI governance program?', a: 'It strengthens it. The billing-capture workflow produces a complete per-matter log of AI prompts, responses and outputs — which is precisely the audit trail governance committees and, increasingly, clients ask for. AI usage across the firm becomes a report, not a survey.' },
+      { q: 'What does a proof of concept look like?', a: 'One workflow, one practice group, built on your environment and integrated with your real systems, typically live within 4–8 weeks depending on integration scope. Success metrics are agreed before the build starts, and results are measured on live matters.' },
+      { q: 'Which workflow should we start with?', a: 'It depends on your practice mix — that is what discovery maps. As a pattern: firms with heavy regulatory practices start with alerts; firms pushing AI adoption hardest start with billing capture, because it pays for everything else; M&A-heavy firms start with diligence-to-report.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'regulatory-filing-monitoring-automation', 'imanage-netdocuments-automation', 'ai-for-mid-size-law-firms'],
+  },
+  {
+    slug: 'ai-for-mid-size-law-firms',
+    metaTitle: 'AI for Mid-Size Law Firms — Practical Automation | Chronexa',
+    metaDescription:
+      'Legal AI platforms are priced for big law — per-seat licences, six-month rollouts, innovation teams. A 50–200 lawyer firm needs two or three targeted workflows chosen by its practice mix. Fixed price, live in 4–6 weeks, built on the systems you run.',
+    h1: 'AI for Mid-Size Law Firms: Two or Three Workflows, Not a Program',
+    heroSub:
+      'You don’t need an AI program, an innovation team, or a per-seat platform. You need the two or three workflows that fit your practice mix — built on the systems you already run, at a price scoped to a firm your size.',
+    answer:
+      'For a mid-size firm (roughly 50–200 lawyers), the right AI strategy is not a firm-wide platform — it is two or three targeted workflow automations chosen by practice mix: matter intake and conflict checks, regulatory monitoring, contract review, or automated time capture. Each is built on the DMS and practice-management systems the firm already runs, goes live in 4–6 weeks at a fixed price, and proves its ROI before the next one starts.',
+    callout:
+      'The legal AI market is built for the AmLaw 100: per-seat platforms, six-month implementations, and the assumption that someone on staff exists to run them. A 100-lawyer firm gets quoted enterprise prices for tools designed around someone else’s workflows — so most mid-size firms, sensibly, do nothing. The firms pulling ahead found the third option: targeted builds on their own stack.',
+    serviceName: 'AI Automation for Mid-Size Law Firms',
+    serviceType: 'Targeted workflow automation for mid-size legal practices',
+    schemaDescription:
+      'Practical AI automation for mid-size law firms — two or three targeted workflows chosen by practice mix (intake, regulatory monitoring, contract review, time capture), built on existing systems, fixed price, live in 4–6 weeks.',
+    roi: [
+      { value: '1', label: 'workflow to start — chosen by your practice mix, not a vendor’s roadmap' },
+      { value: '4–6 wks', label: 'to your first live workflow' },
+      { value: 'Fixed price', label: 'scoped to the build — no per-seat licences' },
+    ],
+    sections: [
+      {
+        heading: 'Priced out of big-law AI, underserved by off-the-shelf',
+        level: 2,
+        body: [
+          'Mid-size firms sit in legal tech’s blind spot. The serious AI platforms are priced and designed for firms with 500+ lawyers and an innovation team to drive adoption. The cheap end — consumer chatbot subscriptions — puts confidential client work in a public tool and still leaves every workflow manual. Neither fits a 50–200 lawyer firm with real practice volume, no spare headcount, and partners who will judge any new system by whether it removes work in the first month.',
+          'The economics that actually work at this size: pick the one workflow where your firm bleeds the most time, automate it end-to-end on the systems you already run, measure the result, and only then do the next one.',
+        ],
+      },
+      {
+        heading: 'Your practice mix decides the first workflow',
+        level: 2,
+        body: [
+          'No two firms should start in the same place, because no two firms have the same practice mix. A corporate and transactional firm bleeds time in contract review and due diligence — clause extraction against your own playbook is the first build. A litigation-led firm bleeds in matter intake, conflict checks and regulatory monitoring. A full-service firm with healthy AI-tool adoption usually starts with automated time capture, because recovered billable hours fund everything that follows.',
+          'This is also why we don’t lead with a product demo: the right answer depends on your matters, your clients and your systems. The discovery call maps where the hours actually go, and the first build targets the worst of it.',
+        ],
+      },
+      {
+        heading: 'Built on the systems you already run',
+        level: 2,
+        body: [
+          'Whether your stack is NetDocuments and Aderant, Clio end-to-end, or a DMS that is mostly network folders and discipline, the automation is built on top of it — no migration project, no new system for lawyers to adopt. Where the stack is partly archaic (paper intake, scanned PDFs, spreadsheets), that is not a blocker; document intake and OCR extraction is often the highest-ROI first build precisely because the manual version is so expensive.',
+          'Client confidentiality is handled the same way as for our largest clients: everything runs inside an environment you control, nothing trains a public model, and every AI action is logged.',
+        ],
+      },
+      {
+        heading: 'Prove it, then expand',
+        level: 3,
+        body: [
+          'The first workflow goes live in 4–6 weeks at a fixed price, with success metrics agreed up front — hours saved, intake time cut, entries captured. When the numbers hold, the second workflow starts. Most mid-size clients run two or three automations within a year, each one paid for by the last.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Map where the hours go', body: 'A short discovery against your practice mix: which workflow bleeds the most time — intake, review, monitoring, or billing?' },
+      { title: 'Build the first workflow', body: 'Fixed price, on your existing systems, with human review gates where they matter. Live in 4–6 weeks.' },
+      { title: 'Measure against agreed targets', body: 'Hours saved, turnaround cut, entries captured — tracked from day one and reported monthly.' },
+      { title: 'Expand workflow by workflow', body: 'The second build starts when the first has proven itself. No platform commitment, ever.' },
+    ],
+    workflows: [
+      'Matter intake & conflict-check automation',
+      'Contract review against your clause playbook',
+      'Regulatory & filing monitoring mapped to live matters',
+      'Automated time capture into your billing system',
+      'Document intake & OCR extraction for paper-heavy practices',
+      'Precedent capture into a private knowledge base',
+    ],
+    whyCustom: [
+      'Scoped and priced for a mid-size firm — fixed-price builds, no per-seat licences.',
+      'First workflow chosen by your practice mix, not a vendor’s feature list.',
+      'Built on your existing DMS and practice-management systems — no migration.',
+      'Each build proves its ROI before the next one starts.',
+    ],
+    included: [
+      'Practice-mix discovery & workflow selection',
+      'Fixed-price build of the chosen workflow',
+      'Integration with your DMS / practice management / billing',
+      'Human-in-the-loop review gates',
+      'Secure deployment in your environment',
+      'Agreed success metrics & monthly reporting',
+      'Documentation & handover',
+    ],
+    faqs: [
+      { q: 'We don’t have an IT team. Who runs this?', a: 'We do — that is part of the engagement. The automation is built, monitored and maintained by us, with documentation and a support arrangement. Your lawyers interact with review queues and approvals, not infrastructure.' },
+      { q: 'Half our processes still involve paper and scanned PDFs. Is that a problem?', a: 'The opposite — it is usually the opportunity. Document intake with OCR and AI extraction is often the highest-ROI first build at a mid-size firm, because the manual version (re-keying, re-reading, re-filing) is so expensive. Archaic input is fine; the automation modernises the workflow around it.' },
+      { q: 'Is this another per-seat subscription?', a: 'No. Builds are fixed-price and scoped to the workflow. There is no per-lawyer licence, so the economics don’t punish you for growing.' },
+      { q: 'How is client confidentiality protected at our size?', a: 'Identically to our largest clients: the workflows run inside an environment you control, client data never leaves your boundary or trains a public model, access mirrors your existing permissions, and every AI action is logged. We work under NDA.' },
+      { q: 'We honestly don’t know which workflow to start with.', a: 'That is normal, and it is what the free audit is for: a short structured discovery against your practice mix and systems that ends with a one-page recommendation — which workflow first, what it would save, what it costs. No obligation either way.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['law-firm-matter-intake-automation', 'contract-review-automation-software', 'law-firm-automated-time-capture', 'regulatory-filing-monitoring-automation', 'ai-for-large-law-firms', 'ai-for-small-law-firms'],
+  },
+  {
+    slug: 'ai-for-small-law-firms',
+    metaTitle: 'AI for Small Law Firms & Boutiques — Done-For-You | Chronexa',
+    metaDescription:
+      'A 10-lawyer boutique has no IT department and no innovation budget — just partners doing admin at 9pm. We build small, fixed-scope automations on the tools you already use: intake, drafting from your own precedents, document chasing, time capture.',
+    h1: 'AI for Small Law Firms: Automation That Runs Itself',
+    heroSub:
+      'No IT department, no innovation budget, no time to “drive adoption.” We build small, fixed-scope automations on the tools you already use — Outlook, Word, Clio, Google Workspace — and they simply run.',
+    answer:
+      'For a small firm or boutique (roughly 5–30 lawyers), AI pays off as done-for-you automation, not as another subscription someone has to learn: client intake that stops re-keying, first drafts assembled from your own past matters, automatic document chasing, and passive time capture. Each is a small fixed-scope build on the tools the firm already uses, deployed securely so client files never touch a public chatbot.',
+    callout:
+      'A 12-lawyer boutique doesn’t have an innovation budget — it has partners doing admin at 9pm. The intake form gets re-keyed three times, the engagement letter is assembled by hunting through old matters, the client still hasn’t sent the documents, and half of Thursday never made it onto a timesheet. None of that is legal work. All of it is automatable.',
+    serviceName: 'AI Automation for Small Law Firms & Boutiques',
+    serviceType: 'Done-for-you automation for small legal practices',
+    schemaDescription:
+      'Done-for-you AI automation for small law firms and boutiques — client intake, drafting from the firm’s own precedents, document chasing and passive time capture, built fixed-scope on Outlook, Word, Clio or Google Workspace with client confidentiality protected.',
+    roi: [
+      { value: 'Hours / wk', label: 'of admin recovered per lawyer — intake, drafting, chasing, timesheets' },
+      { value: 'No IT dept', label: 'needed — we build it, run it and maintain it' },
+      { value: 'Fixed scope', label: 'small builds, priced for a small firm' },
+    ],
+    sections: [
+      {
+        heading: 'The boutique trap: senior lawyers doing admin',
+        level: 2,
+        body: [
+          'At a small firm, the most expensive people do the least billable work parts of their day: re-keying intake details into three places, assembling an engagement letter from a 2023 matter, chasing a client for documents for the fourth time, reconstructing the week’s time on Friday evening. Hiring admin staff helps but caps out; practice-management software stores the work but doesn’t do it.',
+          'The specific advantage a boutique has is focus: you do the same types of matters repeatedly, which means your workflows are consistent enough to automate properly — often more so than at a large firm.',
+        ],
+      },
+      {
+        heading: 'What we automate first at a small firm',
+        level: 2,
+        body: [
+          'Client intake: a new enquiry becomes a structured record, a conflict check against your past clients, and a drafted engagement letter — captured once, no re-keying. Drafting: first drafts of routine documents assembled from your own past matters and templates, in your house style, for the lawyer to refine. Document chasing: the system follows up clients for outstanding documents automatically, with context, until the file is complete. Time capture: work sessions become draft time entries the lawyer approves — so Thursday stops disappearing.',
+          'Each is a small, separate build. Most boutique clients start with one, see it run for a month, then add the next.',
+        ],
+      },
+      {
+        heading: 'Why not just a ChatGPT subscription?',
+        level: 2,
+        body: [
+          'A chatbot subscription is a tool someone still has to drive — open it, prompt it, paste the result back, every time. An automation is a system that runs without being driven: the intake processes itself, the follow-up sends itself, the draft is waiting in the morning. The subscription saves minutes when someone remembers to use it; the automation saves hours because nobody has to.',
+          'There is also a confidentiality line a law firm cannot cross: client files do not belong in a public chatbot. Our builds run in an environment you control, and client data never trains a public model — which is the standard we apply to firms a hundred times your size.',
+        ],
+      },
+      {
+        heading: 'Built to your size — no enterprise process',
+        level: 3,
+        body: [
+          'No six-month implementation, no committee, no per-seat licence. A scoping call, a fixed price, a build on the tools you already use — Outlook, Word, Clio, Google Workspace — and a support arrangement so it keeps running without anyone at the firm owning “the system.”',
+        ],
+      },
+    ],
+    process: [
+      { title: 'A scoping call, not a sales cycle', body: 'Thirty minutes on where your week actually goes. We recommend one build with a fixed price.' },
+      { title: 'Build on your existing tools', body: 'Outlook, Word, Clio, Google Workspace — whatever you run today. Nothing new for the firm to learn.' },
+      { title: 'Run it for a month', body: 'The automation works alongside your normal process while you confirm it earns its keep.' },
+      { title: 'Add the next one when ready', body: 'Most boutiques add a second and third build over a year — each funded by the time the last one freed.' },
+    ],
+    workflows: [
+      'Client intake: enquiry → record → conflict check → drafted engagement letter',
+      'First drafts assembled from your own precedents and templates',
+      'Automatic client document chasing until the file is complete',
+      'Passive time capture with one-click approval',
+      'Invoice preparation & payment follow-up',
+      'Court / deadline date tracking with reminders',
+    ],
+    whyCustom: [
+      'Done-for-you: we build, run and maintain it — no IT staff required.',
+      'Built on the tools you already use; nothing new to adopt.',
+      'Client confidentiality to a regulated-firm standard — no public chatbots.',
+      'Fixed-scope, small-firm pricing — start with one build.',
+    ],
+    included: [
+      'Scoping call & fixed-price proposal',
+      'One automation built end-to-end',
+      'Integration with your email, documents & practice tools',
+      'Secure deployment — client data stays yours',
+      'A month of side-by-side running',
+      'Ongoing support & maintenance arrangement',
+    ],
+    faqs: [
+      { q: 'Aren’t we too small for custom AI?', a: 'No — small firms are often the best fit, because the workflows are consistent and the decision is fast. The builds are scoped to match: one workflow, fixed price, live in weeks. You are not buying an enterprise program; you are buying back hours.' },
+      { q: 'What does it cost at our scale?', a: 'Each build is fixed-price and scoped small — the point is that one automation pays for itself in recovered lawyer-hours within months. The scoping call ends with an exact price before you commit to anything.' },
+      { q: 'We basically run on Outlook and Word. Is that enough to build on?', a: 'Yes — that is the most common small-firm stack we build on, usually alongside Clio or Google Workspace. The automation works through the tools you have; you don’t need to buy a platform first.' },
+      { q: 'How is client confidentiality handled?', a: 'Client files never go into a public chatbot. The automation runs in an environment you control, data never trains a public model, and every action is logged — the same standard we apply at firms many times your size. We work under NDA.' },
+      { q: 'Who maintains it when something changes?', a: 'We do, under a light support arrangement. When your templates change, a tool updates, or you want the workflow adjusted, that is a message to us — not a job for a lawyer.' },
+      { q: 'How fast can we be live?', a: 'A first build is typically live in 2–4 weeks from the scoping call.' },
+    ],
+    related: ['law-firm-matter-intake-automation', 'law-firm-automated-time-capture', 'contract-review-automation-software', 'document-processing-automation', 'ai-for-mid-size-law-firms'],
   },
 
   // ── Tax / CPA tool/integration pages (Layer-A moat keywords) ──────────────────
