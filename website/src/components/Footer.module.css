@@ -20,6 +20,7 @@
 .email:hover { color: var(--brand-green-hover); }
 
 .col { display: flex; flex-direction: column; gap: 0.6rem; }
+.col h2:not(:first-child) { margin-top: 0.9rem; }
 .col h2 {
   font-size: var(--step--1);
   text-transform: uppercase;

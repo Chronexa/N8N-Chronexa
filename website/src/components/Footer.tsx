@@ -42,6 +42,8 @@ export default function Footer() {
           <Link href="/blog" className={styles.link}>Blog</Link>
           <Link href="/about" className={styles.link}>About</Link>
           <Link href="/contact" className={styles.link}>Contact</Link>
+          <h2>Free tools</h2>
+          <Link href="/law-firm-billing-leakage-calculator" className={styles.link}>Billing Leakage Calculator</Link>
         </div>
 
         <div className={styles.col}>
