@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { site } from '../lib/site';
 import { SERVICES } from '../lib/services-content';
+import { CALCULATORS } from '../components/calculators/registry';
 import { getAllPosts, getAllCaseStudies } from '../sanity/client';
 
 export const revalidate = 3600;
@@ -18,7 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/ai-engines/document-intelligence-engine', priority: 0.9, freq: 'monthly' },
     { path: '/ai-engines/legal-regulatory-engine', priority: 0.9, freq: 'monthly' },
     { path: '/ai-engines/customer-support-engine', priority: 0.9, freq: 'monthly' },
-    { path: '/law-firm-billing-leakage-calculator', priority: 0.9, freq: 'monthly' },
+    { path: '/tools', priority: 0.8, freq: 'monthly' },
+    ...CALCULATORS.map((c) => ({ path: `/${c.slug}`, priority: 0.9, freq: 'monthly' as const })),
     { path: '/case-studies', priority: 0.8, freq: 'monthly' },
     { path: '/blog', priority: 0.8, freq: 'weekly' },
     { path: '/about', priority: 0.6, freq: 'monthly' },

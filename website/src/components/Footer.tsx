@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 import { site } from '../lib/site';
 import { services, useCasesByIndustry } from '../lib/taxonomy';
+import { CALCULATORS } from './calculators/registry';
 
 export default function Footer() {
   const year = 2026; // static to keep the footer a pure server component (no Date() at render)
@@ -43,7 +44,10 @@ export default function Footer() {
           <Link href="/about" className={styles.link}>About</Link>
           <Link href="/contact" className={styles.link}>Contact</Link>
           <h2>Free tools</h2>
-          <Link href="/law-firm-billing-leakage-calculator" className={styles.link}>Billing Leakage Calculator</Link>
+          {CALCULATORS.map((c) => (
+            <Link key={c.slug} href={`/${c.slug}`} className={styles.link}>{c.navLabel}</Link>
+          ))}
+          <Link href="/tools" className={styles.link}>All free tools</Link>
         </div>
 
         <div className={styles.col}>

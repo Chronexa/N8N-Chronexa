@@ -25,6 +25,12 @@ export async function POST(req: Request) {
   const usecase = String(data.usecase || '').trim();
   const source = String(data.source || 'website');
   const submittedAt = new Date().toISOString();
+  // Structured calculator payload (inputs/results) — forwarded to the webhook
+  // fan-out only, so the breakdown-email workflow gets machine-readable data.
+  // Baserow/Sheets schemas stay untouched.
+  const meta = data.meta && typeof data.meta === 'object' && !Array.isArray(data.meta)
+    ? (data.meta as Record<string, unknown>)
+    : undefined;
 
   // --- Baserow (Website Leads table) — best-effort -------------------------
   const baseHost = process.env.BASEROW_HOST || 'https://api.baserow.io';
@@ -88,7 +94,7 @@ export async function POST(req: Request) {
       await fetch(webhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, usecase, source, submittedAt }),
+        body: JSON.stringify({ name, email, company, usecase, source, submittedAt, ...(meta ? { meta } : {}) }),
       });
     } catch (e) {
       console.error('[contact] webhook mirror failed:', e);

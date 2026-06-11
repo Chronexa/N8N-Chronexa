@@ -166,6 +166,11 @@ export default function Page() {
                   ))}
                 </div>
                 <p className={styles.prose}>{DOC_INTEL_ROI.narrative}</p>
+                <p className={styles.prose}>
+                  Want your team&rsquo;s number instead of the benchmark?{' '}
+                  <Link href="/document-processing-cost-calculator">Run the document processing cost calculator</Link> —
+                  your volume, your touch time, your staff cost, in ten seconds.
+                </p>
               </section>
 
               {/* Testimonials */}

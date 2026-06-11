@@ -3,7 +3,7 @@ import Link from 'next/link';
 import CtaBand from '../../components/CtaBand';
 import { site } from '../../lib/site';
 import LeakageCalculator from './LeakageCalculator';
-import styles from './calculator.module.css';
+import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/law-firm-billing-leakage-calculator`;
 const TITLE = 'Law Firm Billing Leakage Calculator — How Much Revenue Is Your Firm Losing? | Chronexa';

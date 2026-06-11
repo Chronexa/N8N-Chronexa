@@ -166,6 +166,11 @@ export default function Page() {
                   ))}
                 </div>
                 <p className={styles.prose}>{CPA_TAX_ROI.narrative}</p>
+                <p className={styles.prose}>
+                  Want your firm&rsquo;s number instead of the benchmark?{' '}
+                  <Link href="/cpa-tax-season-capacity-calculator">Run the tax-season capacity calculator</Link> — your
+                  preparers, your return volume, your fee, in ten seconds.
+                </p>
               </section>
 
               {/* Testimonials */}
