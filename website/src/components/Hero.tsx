@@ -19,17 +19,17 @@ export default function Hero() {
       <div className={`container ${styles.heroContainer}`}>
         <div className={styles.heroContent}>
           <h1 id="hero-title" className={styles.heroTitle}>
-            Custom Enterprise AI for Regulated Industries
+            We build AI systems that do the work your team shouldn&apos;t have to.
           </h1>
           <p className={styles.heroDescription}>
-            Not chatbots or off-the-shelf tools. We build bespoke AI and agentic systems —
-            RAG knowledge engines, document intelligence, secure deployments — for finance,
-            legal, tax and dealmaking teams where the data can’t leak and the work has to
-            stand up to an audit.
+            Custom automation, AI agents, and document intelligence — built on your data,
+            for your workflow. Shipped across property, legal, finance, sales, and agriculture.
           </p>
           <div className={styles.heroActions}>
-            <BookButton location="hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
-            <a href="/solutions" className="btn-outline">Explore Solutions</a>
+            <a href="#case-studies" className="btn-primary">
+              See what we&apos;ve built <span aria-hidden="true">→</span>
+            </a>
+            <BookButton location="hero" className="btn-outline">Book a discovery call</BookButton>
           </div>
         </div>
       </div>

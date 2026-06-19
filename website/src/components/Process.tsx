@@ -25,8 +25,8 @@ export default function Process() {
     <>
       <p className="eyebrow">How It Works</p>
       <h2 className={styles.heading}>
-        From Manual to<br />Automated in{' '}
-        <span className={styles.highlight}>4 Weeks</span>
+        Our 4 Steps to<br />
+        <span className={styles.highlight}>AI Automation Success</span>
       </h2>
 
       <ol className={styles.steps}>

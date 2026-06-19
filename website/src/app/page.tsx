@@ -1,20 +1,27 @@
 import Hero from '../components/Hero';
 import LogoMarquee from '../components/LogoMarquee';
-import QuestionTicker from '../components/QuestionTicker';
-import PainPoints from '../components/PainPoints';
-import ServiceShowcase from '../components/ServiceShowcase';
 import Numbers from '../components/Numbers';
+import PainPoints from '../components/PainPoints';
+import PartnershipModel from '../components/PartnershipModel';
 import Process from '../components/Process';
-import WorkShipped from '../components/WorkShipped';
 import Faq from '../components/Faq';
+import WorkShipped from '../components/WorkShipped';
 import CtaBand from '../components/CtaBand';
+
+// Hidden — kept for spoke pages / future use
+// import RoiGrid from '../components/RoiGrid';
+// import ServiceShowcase from '../components/ServiceShowcase';
 
 export default function Home() {
   return (
     <>
       <Hero />
+
+      {/* OAP badge + tech partners */}
       <LogoMarquee />
-      <QuestionTicker />
+
+      {/* Stat bar */}
+      <Numbers />
 
       {/* The problem */}
       <section className="section-light">
@@ -23,27 +30,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What we automate — recessed band so the white capability cards lift */}
-      <section className="section-muted">
+      {/* Our method — dark band, core identity statement */}
+      <section className="section-dark">
         <div className="container">
-          <ServiceShowcase />
+          <PartnershipModel />
         </div>
       </section>
 
-      {/* Proof in numbers (self-contained light band, dark stat cards) */}
-      <Numbers />
-
-      {/* How it works */}
+      {/* How the engagement runs */}
       <section className="section-light">
         <div className="container">
           <Process />
-        </div>
-      </section>
-
-      {/* Proof in case studies — the one internal dark accent band */}
-      <section className="section-dark">
-        <div className="container">
-          <WorkShipped />
         </div>
       </section>
 
@@ -51,6 +48,13 @@ export default function Home() {
       <section className="section-muted">
         <div className="container">
           <Faq />
+        </div>
+      </section>
+
+      {/* Client success stories — directly before the CTA */}
+      <section id="case-studies" className="section-dark">
+        <div className="container">
+          <WorkShipped />
         </div>
       </section>
 

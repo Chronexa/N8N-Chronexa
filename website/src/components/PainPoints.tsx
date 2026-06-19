@@ -1,6 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
 import styles from './PainPoints.module.css';
-import BookButton from './BookButton';
 
 const sv = (path: ReactNode) => (
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{path}</svg>
@@ -9,23 +8,23 @@ const sv = (path: ReactNode) => (
 const PAINS = [
   {
     icon: sv(<><path d="M3 7h18M3 12h18M3 17h12" /><path d="m19 15 3 3-3 3" /></>),
-    title: 'Manual work hides the real problem',
-    body: 'Every spreadsheet, copy-paste, and inbox approval is effort you can’t scale. Layering more tools on top makes future fixes more expensive, not cheaper.',
+    title: 'What got you here won’t get you there.',
+    body: 'The workarounds that worked when your team was small start to break under volume. Every spreadsheet, every inbox approval, every manual handoff is a process that cannot grow with you.',
   },
   {
     icon: sv(<><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 17h7M17.5 14v7" /></>),
-    title: 'More tools, less control',
-    body: 'Each new app adds another disconnected silo. Without one clean data layer, visibility drops exactly when you need it most.',
+    title: 'More tools, more fragmentation.',
+    body: 'Adding another app does not add control — it adds another silo. Without a connected data layer, visibility disappears exactly when decisions need to be made.',
   },
   {
     icon: sv(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
-    title: 'Busy isn’t the same as ROI',
-    body: 'Point solutions burn budget without moving the numbers. Effort climbs while throughput and margin quietly stall.',
+    title: 'Activity isn’t the same as output.',
+    body: 'Teams can be fully occupied and still underperform on the metrics that matter. Point solutions burn budget without moving revenue, margin, or capacity.',
   },
   {
     icon: sv(<><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z" /><path d="M12 9v3M12 15h.01" /></>),
-    title: 'Speed without guardrails is risk',
-    body: 'Rushing AI in without controls, data governance, and audit trails exposes you — especially in legal, finance, and regulated work.',
+    title: 'Speed without structure is its own kind of risk.',
+    body: 'Deploying AI without governance, audit trails, or data controls creates exposure — especially where decisions carry legal, financial, or operational consequences.',
   },
 ];
 
@@ -33,10 +32,10 @@ export default function PainPoints() {
   return (
     <>
       <p className="eyebrow">Why scaling gets harder</p>
-      <h2 className={styles.heading}>Growth shouldn&apos;t mean more chaos</h2>
+      <h2 className={styles.heading}>Why AI &amp; automation is harder to scale than it looks</h2>
       <p className={styles.intro}>
-        As you grow, the manual workarounds that used to work start to cost you. More tools,
-        more handoffs, more risk — and the team runs faster just to stand still.
+        As organisations grow, processes that once worked start to cost more than they save.
+        The problem is rarely the team. It&apos;s the absence of the right system underneath them.
       </p>
 
       <div className={styles.grid}>
@@ -48,12 +47,6 @@ export default function PainPoints() {
           </article>
         ))}
       </div>
-
-      <p className={styles.closer}>
-        These are the exact gaps a{' '}
-        <BookButton className={styles.closerLink} location="painpoints">free Chronexa audit</BookButton>{' '}
-        finds — and a roadmap to fix.
-      </p>
     </>
   );
 }

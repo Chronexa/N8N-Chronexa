@@ -45,5 +45,8 @@
 .cardDesc { color: var(--text-muted-light); font-size: var(--step--1); margin-bottom: var(--spacing-md); flex-grow: 1; }
 .cardLink { color: var(--brand-green-ink); font-size: var(--step--1); }
 
+.inlineLink { color: var(--brand-green-ink); font-weight: 600; }
+.inlineLink:hover { text-decoration: underline; }
+
 @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }

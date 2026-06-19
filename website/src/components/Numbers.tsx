@@ -1,45 +1,44 @@
 import styles from './Numbers.module.css';
 
-const GROUPS = [
+const STATS = [
   {
-    label: 'Experience',
-    big: '5+',
-    bigLabel: 'Industries served',
-    details: ['10+ countries reached', 'Document, legal, sales, marketing & e-commerce'],
-  },
-  {
-    label: 'Client Success',
-    big: '100+',
-    bigLabel: 'Automations deployed',
-    details: ['90% client satisfaction rate', '30–45 days average launch time'],
-  },
-  {
-    label: 'Impact',
     big: '$12M+',
-    bigLabel: 'ROI generated',
-    details: ['80% client return rate', '65× average output increase'],
+    label: 'Revenue unlocked for clients',
+    detail: 'Across sales, ops, and document workflows',
+  },
+  {
+    big: '80%',
+    label: 'Reduction in manual processing time',
+    detail: 'Average across document-heavy engagements',
+  },
+  {
+    big: '65×',
+    label: 'Output per operator',
+    detail: 'What one person produces with AI vs without',
+  },
+  {
+    big: '4 wks',
+    label: 'Average time to go live',
+    detail: 'Fixed price, scoped upfront, no surprises',
   },
 ];
 
 export default function Numbers() {
   return (
     <section className={styles.numbersSection} aria-labelledby="numbers-title">
-      <div className={`container ${styles.numbersInner}`}>
-        <div>
+      <div className="container">
+        <div className={styles.header}>
           <p className="eyebrow">By the numbers</p>
           <h2 id="numbers-title" className={styles.numbersTitle}>
             Numbers don&apos;t lie and ours say you&apos;re in good hands.
           </h2>
         </div>
         <div className={styles.numbersBox}>
-          {GROUPS.map((g) => (
-            <div className={styles.group} key={g.label}>
-              <span className={styles.groupLabel}>{g.label}</span>
-              <div className={styles.numBig}>{g.big}</div>
-              <div className={styles.numLabel}>{g.bigLabel}</div>
-              <ul className={styles.details}>
-                {g.details.map((d) => <li key={d}>{d}</li>)}
-              </ul>
+          {STATS.map((s) => (
+            <div className={styles.group} key={s.big}>
+              <div className={styles.numBig}>{s.big}</div>
+              <div className={styles.numLabel}>{s.label}</div>
+              <p className={styles.numDetail}>{s.detail}</p>
             </div>
           ))}
         </div>

@@ -67,7 +67,7 @@ export default function UseCasesPage() {
         <div className="container">
           <Group
             title="By function"
-            sub="Automate a department end to end — whatever industry you’re in."
+            sub="Automate a department end to end — whatever industry you're in."
             items={useCasesByFunction}
           />
           <div style={{ marginTop: 'var(--spacing-2xl)' }}>
@@ -77,6 +77,12 @@ export default function UseCasesPage() {
               items={useCasesByIndustry}
             />
           </div>
+          <p style={{ marginTop: 'var(--spacing-xl)', color: 'var(--color-muted)' }}>
+            Not sure where to start?{' '}
+            <Link href="/ai-readiness-assessment" className={styles.inlineLink}>
+              Take the AI Readiness Assessment →
+            </Link>
+          </p>
         </div>
       </section>
     </>

@@ -6,9 +6,9 @@ import { CALCULATORS } from '../../components/calculators/registry';
 import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/tools`;
-const TITLE = 'Free AI Automation ROI Calculators & Tools | Chronexa';
+const TITLE = 'Free AI Automation ROI Calculators for Law Firms, CPA Firms & Finance Teams | Chronexa';
 const DESCRIPTION =
-  'Free, ungated calculators with the math in the open: law-firm billing leakage, CPA tax-season capacity, document processing cost. See what manual work costs you — and what automation recovers — in your own numbers.';
+  'Free, ungated calculators built for professional services firms: law-firm billing leakage, CPA tax-season capacity, document processing cost. See what manual work costs you — and what automation recovers — in your own numbers.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   keywords: [
     'automation ROI calculator', 'AI ROI calculator', 'billing leakage calculator',
     'tax season capacity calculator', 'document processing cost calculator', 'free business calculators',
+    'law firm automation calculator', 'CPA firm automation calculator', 'professional services AI tools',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website', images: [site.ogImage] },
@@ -31,6 +32,13 @@ const jsonLd = {
         { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
         { '@type': 'ListItem', position: 2, name: 'Free Tools', item: URL },
       ],
+    },
+    {
+      '@type': 'CollectionPage',
+      name: 'Free AI Automation Calculators for Professional Services Firms',
+      description: DESCRIPTION,
+      url: URL,
+      publisher: { '@type': 'Organization', name: site.name, url: site.url },
     },
     {
       '@type': 'ItemList',
@@ -56,9 +64,9 @@ export default function Page() {
             <p className="eyebrow">Free tools</p>
             <h1 className={styles.heroTitle}>Calculators with the math in the open</h1>
             <p className={styles.heroSub}>
-              No gates, no black boxes. Each calculator runs live in your browser on published benchmarks, shows its
-              formula, and models recovery conservatively — so the number you get is one you can defend to a partner or
-              a CFO.
+              Built for law firms, CPA practices, and finance teams. No gates, no black boxes. Each calculator runs live
+              in your browser on published benchmarks, shows its formula, and models recovery conservatively — so the
+              number you get is one you can defend to a partner or a CFO.
             </p>
           </div>
         </div>

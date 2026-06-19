@@ -5,14 +5,14 @@ import { site } from '../../lib/site';
 import styles from './solutions.module.css';
 
 export const metadata: Metadata = {
-  title: 'AI Automation Services',
+  title: 'AI Automation Services for Professional Services Firms',
   description:
-    'Chronexa\'s AI automation capabilities — document intelligence, RevOps, data integration, custom AI agents and more — built securely on the systems you already run. For regulated industries: see our legal, tax, financial & dealmaking solutions.',
+    'Chronexa\'s AI automation capabilities for law firms, CPA practices, and finance teams — document intelligence, agentic AI systems, RAG knowledge engines, secure AI deployment and more — built on the systems you already run.',
   alternates: { canonical: '/solutions' },
   openGraph: {
-    title: 'AI Automation Services | Chronexa',
+    title: 'AI Automation Services for Professional Services Firms | Chronexa',
     description:
-      'Custom AI & automation capabilities — document intelligence, RevOps, data integration and custom AI agents — deployed securely on your existing stack.',
+      'Custom AI automation for law firms, CPA practices, and finance teams — agentic systems, RAG knowledge engines, document intelligence — deployed securely inside your environment.',
     url: '/solutions',
     type: 'website',
   },
@@ -37,7 +37,7 @@ export default function SolutionsPage() {
       <section className={styles.hero}>
         <div className="container">
           <p className="eyebrow">Services</p>
-          <h1 className={styles.h1}>AI automation services</h1>
+          <h1 className={styles.h1}>AI automation services for professional services firms</h1>
           <p className="heroDescription">
             We don&apos;t sell off-the-shelf software. We build custom AI and automation systems —
             deployed securely inside the environment you already run, and owned by you. Below are
@@ -61,6 +61,12 @@ export default function SolutionsPage() {
               </Link>
             ))}
           </div>
+          <p style={{ marginTop: 'var(--spacing-xl)', color: 'var(--color-muted)' }}>
+            Not sure where to start?{' '}
+            <Link href="/ai-readiness-assessment" className={styles.inlineLink}>
+              Take the AI Readiness Assessment →
+            </Link>
+          </p>
         </div>
       </section>
     </>

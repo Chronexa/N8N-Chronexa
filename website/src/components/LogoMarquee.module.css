@@ -7,15 +7,18 @@
   overflow: hidden;
 }
 
-.eyebrow {
-  text-align: center;
-  font-size: var(--step--1);
-  letter-spacing: 0.02em;
-  color: var(--text-muted-dark);
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   margin-bottom: var(--spacing-md);
-  padding-inline: var(--spacing-md);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--brand-green);
+  text-transform: uppercase;
 }
-.partner { color: var(--brand-green); font-weight: 600; }
 
 /* Edge-faded viewport so logos slide in/out softly instead of clipping. */
 .marquee {

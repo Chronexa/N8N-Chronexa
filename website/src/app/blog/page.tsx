@@ -1,58 +1,68 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { getAllPosts, urlFor } from '../../sanity/client';
+import BlogGrid, { type BlogCard } from './BlogGrid';
+import { site } from '../../lib/site';
 import styles from './blog.module.css';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Blog — AI & Workflow Automation Insights',
+  title: 'Blog — AI Automation Insights for Professional Services Firms',
   description:
-    'Deep-dive insights on n8n, AI automation, and workflow engineering for legal, insurance, accounting, property, and venture capital teams.',
+    'Practical guides on agentic AI, legal RAG, tax workflow automation, and document intelligence — written for law firms, CPA practices, and finance teams.',
   alternates: { canonical: '/blog' },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI Automation Blog — Chronexa',
+  description:
+    'Deep-dive insights on AI automation, agentic systems, and workflow engineering for law firms, CPA firms, and finance teams.',
+  url: `${site.url}/blog`,
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
 };
 
 export default async function BlogIndexPage() {
   const posts = await getAllPosts();
 
-  return (
-    <section className={styles.wrap}>
-      <div className="container">
-        <p className="eyebrow">Blog</p>
-        <h1 className={styles.h1}>AI &amp; workflow automation insights</h1>
-        <p className="heroDescription" style={{ marginBottom: 'var(--spacing-lg)' }}>
-          {posts.length} articles on n8n, AI agents, and automation for B2B teams.
-        </p>
+  const cards: BlogCard[] = posts.map((post) => {
+    const date = post.publishedAt || post._createdAt;
+    return {
+      id: post._id,
+      href: `/blog/${post.slug.current}`,
+      title: post.title,
+      excerpt: post.excerpt,
+      category: post.category || 'Blog',
+      dateLabel: date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : undefined,
+      readingTime: post.readingTime,
+      thumb: post.hero?.asset ? urlFor(post.hero).width(640).height(360).fit('crop').crop('entropy').auto('format').url() : undefined,
+      alt: post.hero?.alt,
+    };
+  });
 
-        <div className={styles.grid}>
-          {posts.map((post) => {
-            const href = `/blog/${post.slug.current}`;
-            const thumb = post.hero?.asset ? urlFor(post.hero).width(640).height(360).fit('crop').auto('format').url() : null;
-            const date = post.publishedAt || post._createdAt;
-            return (
-              <Link href={href} key={post._id} className={styles.card}>
-                <div className={styles.thumb}>
-                  {thumb ? (
-                    <Image src={thumb} alt={post.hero?.alt || post.title} width={640} height={360} sizes="(max-width: 720px) 100vw, 380px" />
-                  ) : (
-                    <div className={styles.thumbFallback} aria-hidden="true">Chronexa</div>
-                  )}
-                </div>
-                <div className={styles.cardBody}>
-                  <span className={styles.cat}>{post.category || 'Blog'}</span>
-                  <h2 className={styles.cardTitle}>{post.title}</h2>
-                  {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
-                  <div className={styles.cardMeta}>
-                    {date && <span>{new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
-                    {post.readingTime ? <span>{post.readingTime} min</span> : null}
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <section className={styles.wrap}>
+        <div className="container">
+          <p className="eyebrow">Blog</p>
+          <h1 className={styles.h1}>AI automation insights for professional services firms</h1>
+          <p className="heroDescription">
+            Practical guides on agentic AI, legal RAG, tax workflow automation, and document intelligence — written for
+            law firms, CPA practices, and finance teams.
+          </p>
+          <p className="heroDescription" style={{ marginBottom: 'var(--spacing-lg)' }}>
+            {posts.length} articles.{' '}
+            <Link href="/contact" style={{ textDecoration: 'underline' }}>
+              Building AI automation for your firm? Book a free audit →
+            </Link>
+          </p>
+
+          <BlogGrid cards={cards} />
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

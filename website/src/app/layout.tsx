@@ -6,6 +6,9 @@ import Footer from "../components/Footer";
 import ChromeGate from "../components/ChromeGate";
 import ScrollReveal from "../components/ScrollReveal";
 import Analytics from "../components/Analytics";
+import VisitorIdentify from "../components/VisitorIdentify";
+import ChatWidget from "../components/ChatWidget";
+import ExitIntent from "../components/ExitIntent";
 import { site, founders, company } from "../lib/site";
 
 const inter = Inter({
@@ -34,6 +37,7 @@ export const metadata: Metadata = {
   applicationName: site.name,
   alternates: { canonical: "/" },
   keywords: [
+    "AI automation for professional services",
     "AI automation agency",
     "n8n automation services",
     "n8n consultant",
@@ -41,6 +45,12 @@ export const metadata: Metadata = {
     "workflow automation",
     "AI automation consultants",
     "document processing automation",
+    "agentic AI systems",
+    "RAG knowledge engine",
+    "secure AI deployment",
+    "AI agents for law firms",
+    "CPA tax automation",
+    "legal AI automation",
   ],
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
@@ -104,14 +114,26 @@ const orgSchema = {
         ...(f.linkedin ? { sameAs: [f.linkedin] } : {}),
       })),
       sameAs: [site.socials.linkedin, site.socials.twitter, site.socials.instagram],
+      award: "Official Anthropic Partner",
+      memberOf: {
+        "@type": "Organization",
+        name: "Anthropic Partner Network",
+        url: "https://www.anthropic.com",
+        sameAs: "https://www.anthropic.com",
+      },
       areaServed: ["US", "GB", "CA"],
       knowsAbout: [
+        "AI automation for professional services",
         "AI automation",
         "n8n workflow automation",
         "AI agents",
+        "agentic AI systems",
+        "legal RAG",
+        "RAG knowledge engines",
         "document processing automation",
         "CRM automation",
         "business process automation",
+        "secure AI deployment",
       ],
       contactPoint: {
         "@type": "ContactPoint",
@@ -148,6 +170,9 @@ export default function RootLayout({
         </ChromeGate>
         <ScrollReveal />
         <Analytics />
+        <VisitorIdentify />
+        <ChatWidget />
+        <ExitIntent />
       </body>
     </html>
   );

@@ -6,13 +6,13 @@ import CtaBand from '../../components/CtaBand';
 import { site, company } from '../../lib/site';
 
 export const metadata: Metadata = {
-  title: { absolute: 'About Chronexa — Engineer-Led AI Automation Agency' },
+  title: { absolute: 'About Chronexa — AI Automation for Law Firms, CPA Practices & Finance Teams' },
   description:
-    'Chronexa is an engineer-led AI and n8n automation agency for B2B enterprises. We build custom automation assets on your existing stack — not software subscriptions.',
+    'Chronexa is an engineer-led AI automation agency for professional services firms. We build custom AI systems — legal RAG, tax workflow automation, document intelligence — deployed inside your environment, not a vendor\'s cloud.',
   alternates: { canonical: '/about' },
   openGraph: {
-    title: 'About Chronexa — Engineer-Led AI Automation Agency',
-    description: 'An engineer-led AI & n8n automation agency for B2B enterprises.',
+    title: 'About Chronexa — AI Automation for Professional Services Firms',
+    description: 'An engineer-led AI automation agency for law firms, CPA practices, and finance teams.',
     url: '/about',
     type: 'website',
   },
@@ -41,7 +41,7 @@ export default function AboutPage() {
       <section className="section-dark" style={{ paddingTop: 'calc(var(--nav-height) + var(--spacing-xl))' }}>
         <div className="container">
           <p className="eyebrow">About Chronexa</p>
-          <h1 style={{ maxWidth: '20ch' }}>An engineer-led AI automation agency</h1>
+          <h1 style={{ maxWidth: '26ch' }}>An engineer-led AI automation agency for law firms, CPA practices, and finance teams</h1>
           <p className="heroDescription" style={{ marginTop: 'var(--spacing-sm)', maxWidth: '65ch' }}>
             We design, build, and maintain custom, secure AI systems for enterprises in regulated
             industries — finance, legal, tax and dealmaking — deployed inside the environment you

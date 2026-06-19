@@ -8,9 +8,9 @@ export const site = {
   legalName: "Chronexa",
   // Production origin. Override via NEXT_PUBLIC_SITE_URL in Vercel if needed.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://chronexa.io",
-  title: "AI Automation Agency for Regulated Industries | Chronexa",
+  title: "Custom Enterprise AI for Law Firms, CPA Practices & Finance Teams | Chronexa",
   description:
-    "Chronexa builds custom, secure AI systems for regulated enterprises — finance, legal, tax and dealmaking — deployed inside your own environment, not on a vendor's cloud. Assets you own, not subscriptions.",
+    "Chronexa builds custom, secure AI systems for law firms, CPA practices, and finance teams — deployed inside your own environment, owned by you, scoped at a fixed price with a 90-day ROI guarantee.",
   tagline: "Custom Enterprise AI for Regulated Industries",
   email: "info@chronexa.io",
   locality: "IXC — India",
