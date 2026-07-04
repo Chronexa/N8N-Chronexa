@@ -6,12 +6,15 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getBlogPostBySlug, getBlogSlugs, getRelatedPosts, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
 import { blockText, extractFaq, extractHeadings, slugifyHeading, type PTBlockLike } from '../../../lib/blog-article';
+import { relatedCalculator } from '../../../lib/blog-links';
 import BookButton from '../../../components/BookButton';
+import CalcCtaButton from '../../../components/CalcCtaButton';
 import RelatedServices from '../../../components/RelatedServices';
 import ShareRow from '../../../components/ShareRow';
 import TrackView from '../../../components/TrackView';
 import ScrollDepth from '../../../components/ScrollDepth';
 import NewsletterCallout from '../../../components/NewsletterCallout';
+import BlogStickyCta from '../../../components/BlogStickyCta';
 import styles from './post.module.css';
 
 export const revalidate = 3600; // ISR: refresh published content hourly
@@ -107,6 +110,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const headings = extractHeadings(body).filter((h) => h.level === 2);
   const faq = extractFaq(body);
   const related = await getRelatedPosts(slug, post.category);
+  const calc = relatedCalculator({ title: post.title, category: post.category, slug });
   const pageUrl = `${site.url}/blog/${slug}`;
   const avatarUrl = post.author?.avatar?.asset ? urlFor(post.author.avatar).width(112).height(112).fit('crop').url() : null;
 
@@ -131,11 +135,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dateModified: post.updatedAt || post.publishedAt || post._createdAt,
         image: heroUrl ? [heroUrl] : undefined,
         author: authorSchema,
-        publisher: { '@type': 'Organization', name: site.name, url: site.url },
+        publisher: { '@type': 'Organization', '@id': `${site.url}/#organization`, name: site.name, url: site.url },
         mainEntityOfPage: pageUrl,
         keywords: post.category
-          ? `${post.category}, AI automation, professional services, workflow automation`
-          : 'AI automation, professional services, workflow automation',
+          ? [post.category, 'AI automation', 'professional services', 'workflow automation']
+          : ['AI automation', 'professional services', 'workflow automation'],
       },
       {
         '@type': 'BreadcrumbList',
@@ -164,6 +168,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       <TrackView event="blog_post_view" props={{ slug, title: post.title, category: post.category }} />
       <ScrollDepth pageType="blog" slug={slug} />
+      <BlogStickyCta slug={slug} title={post.title} category={post.category} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article className={styles.article}>
         <div className={`container ${styles.head}`}>
@@ -268,7 +273,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         <div className={`container ${styles.cta}`}>
-          <BookButton location="blog-post">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+          {calc ? (
+            <>
+              <CalcCtaButton slug={calc.slug} location="blog-post">
+                {calc.navLabel} <span aria-hidden="true">→</span>
+              </CalcCtaButton>
+              <BookButton className="btn-outline" location="blog-post-secondary">Or book a free call</BookButton>
+            </>
+          ) : (
+            <BookButton location="blog-post">Book a Free Strategy Call <span aria-hidden="true">→</span></BookButton>
+          )}
           <Link href="/blog" className="btn-outline">More articles</Link>
         </div>
       </article>

@@ -1,4 +1,5 @@
 import { services, useCasesByFunction, useCasesByIndustry } from './taxonomy';
+import { CALCULATORS, type CalculatorDef } from '../components/calculators/registry';
 
 /**
  * Maps a blog post to its 2-3 most relevant service/use-case pages, so every
@@ -40,4 +41,25 @@ export function relatedServices(opts: { title?: string; category?: string; slug?
   }
   for (const s of FALLBACK) { if (picked.length >= 3) break; if (!picked.includes(s)) picked.push(s); }
   return picked.slice(0, 3).map((slug) => ({ slug, label: LABEL.get(slug) || slug }));
+}
+
+/**
+ * Matches a blog post to one of the three free calculators, when the topic is a
+ * genuine fit — a law-firm/tax/document reader gets a 2-minute "see your number"
+ * offer instead of a cold call ask. No fallback: most posts (n8n tutorials, etc.)
+ * don't fit any calculator and keep the plain book-a-call CTA rather than being
+ * pushed toward an irrelevant one.
+ */
+const CALC_RULES: [RegExp, string][] = [
+  [/legal|law firm|contract|due diligence|clause|litigation|matter intake|imanage|netdocuments|billable|billing|conflict check/i, 'law-firm-billing-leakage-calculator'],
+  [/\btax\b|cpa|accounting|\b1099\b|w-?2|bookkeep|tax season|\bk-?1\b|axcess|safesend|karbon/i, 'cpa-tax-season-capacity-calculator'],
+  [/document|\bocr\b|\bpdf\b|extraction|\bidp\b|unstructured|data entry|paperwork/i, 'document-processing-cost-calculator'],
+];
+
+export function relatedCalculator(opts: { title?: string; category?: string; slug?: string }): CalculatorDef | undefined {
+  const hay = `${opts.title || ''} ${opts.category || ''} ${opts.slug || ''}`.toLowerCase();
+  for (const [re, slug] of CALC_RULES) {
+    if (re.test(hay)) return CALCULATORS.find((c) => c.slug === slug);
+  }
+  return undefined;
 }

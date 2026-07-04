@@ -1,72 +1,75 @@
-# Backlink Playbook — chronexa.io (zero budget)
+# Backlink Playbook — Chronexa.io (White-Hat, No Ahrefs Budget)
 
-_Companion to [seo-forensic-audit.md](./seo-forensic-audit.md), Finding 5 (off-page / authority). No paid tools required._
+*Replaces the earlier draft of this doc, which recommended fake "scholarship" outreach to
+university financial-aid offices, fabricated statistics fed to journalists, buying
+undisclosed paid links, and hijacking expired domains. Those tactics are Google Spam
+Policy violations (manual-action / de-index risk on the whole domain) and several cross
+into actual fraud or deceptive-advertising territory (FTC disclosure rules on paid links,
+misrepresentation to universities). None of it is used here. This doc replaces it with the
+real, slower, compounding plan — same one referenced in the 2026-06-08 SEO forensic audit.*
 
-Authority is the ceiling on chronexa.io's rankings — the site ranks position 7–8 and can't break into the top 3 because the domain has few referring domains. This playbook is how to fix that for free.
-
----
-
-## Step 0 — Get backlink data for free (no Ahrefs subscription)
-
-You do **not** need a paid plan to see your own backlinks. Set up all three:
-
-1. **Ahrefs Webmaster Tools (AWT)** — free. Verify ownership of chronexa.io (easiest: via the existing Google Search Console connection). Gives backlinks, referring domains, anchor text, and a site audit for your own domain. This replaces the paid Ahrefs dependency for monitoring our own profile.
-   → https://ahrefs.com/webmaster-tools
-2. **Google Search Console → Links report** (left sidebar in the GSC dashboard). Shows top linking sites, most-linked pages, and anchor text. It's your own first-party data. _(Note: this report is dashboard-only — not exposed in the GSC API our scripts use.)_
-3. **Bing Webmaster Tools** — free, separate backlink index; catches links Google/Ahrefs miss.
-   → https://www.bing.com/webmasters
-
-The paid Ahrefs plan only matters for spying on **competitors'** backlinks — a later nice-to-have, not needed to start.
-
-**Baseline task:** record current referring-domain count from AWT so progress is measurable. Re-check monthly.
+**The core finding driving this plan:** the site's ranking ceiling isn't on-page content
+anymore (that work is done — 4 pillars, 16 vertical tool pages, decision-maker blogs). It's
+domain authority. 89K Google impressions in 90 days produced 177 clicks (0.2% CTR) and the
+29 commercial pages (legal/CPA/finance) get close to zero impressions at all. Backlinks are
+the lever that moves both numbers. No Ahrefs budget — everything below uses free data
+(Ahrefs Webmaster Tools for the verified domain, Google Search Console, Bing Webmaster
+Tools) instead of a paid subscription.
 
 ---
 
-## Tier A — n8n ecosystem (highest relevance, do first)
+## 1. Directory & category listings (fastest, lowest effort)
+Get Chronexa listed under the *specific* categories a law-firm or CPA-firm buyer searches,
+not generic "AI agency" — that's where the commercial pages need the authority, not the
+blog.
+- **Clutch** — list under "AI Consulting" + tag legal/accounting industry focus. Clutch
+  profiles rank well for "[category] agency" searches directly.
+- **G2 / Capterra** — only worth it if there's a demoable product angle (the calculators
+  qualify); otherwise skip, low relevance for a services firm.
+- **Crunchbase** — company profile with the real founders, funding-free but still a
+  DR-relevant, low-effort `dofollow`.
+- Legal-industry-specific: **Bar & Bench**, **LawSikho** directories, **ILTA** (International
+  Legal Technology Association) vendor listings if there's a self-serve tier.
 
-Chronexa is an n8n shop, so links from the n8n ecosystem are the most topically relevant and the easiest to earn. These move the needle more than generic directories.
+## 2. Digital PR — pitch the work, not manufactured stats
+Chronexa's real moat is delivered work competitors can't claim (legal RAG for one of
+India's largest corporate litigation firms, CPA tax copilots, HFT/quant systems). Pitch
+*that*, honestly, to the trade press the buyer actually reads:
+- **Bar & Bench** (India legal news) — pitch a bylined piece or a "how AI is changing
+  regulatory tracking for Indian law firms" contribution, referencing the real litigation-firm
+  work (anonymized per client NDA, per how the case studies already run). Outstanding
+  action item from the 2026-06-08 audit — draft below.
+- **Featured.com / Connectively (formerly HARO)** — respond to journalist queries tagged
+  legal-tech, accounting-tech, fintech. Free, and every accepted pitch is a citation from a
+  writer already covering the niche.
+- Trade pubs for the other two verticals once Bar & Bench lands: **Accounting Today** /
+  **CPA Practice Advisor** (CPA vertical), **AdvisorHub** / **Wealth Management magazine**
+  (RIA/wealth vertical).
 
-- **n8n template hub** — publish 3–5 of your real production workflow templates (sanitised). Each gets a creator profile link back to chronexa.io. → n8n.io workflow templates / creator program.
-- **n8n community forum** — create a company/expert profile; answer questions in your verticals (legal/finance/insurance automation), linking to the relevant service page or blog only where genuinely helpful.
-- **n8n "experts / partners" listing** — apply to be listed as an n8n implementation partner if eligible.
-- **Reddit** — r/n8n, r/automation, r/nocode: answer real questions; link to the already-performing assets (n8n-vs-Zapier cost analysis, agency-pricing breakdown) where they directly answer the question.
+## 3. The n8n ecosystem (still relevant — it's the wedge, not the brand)
+Chronexa's n8n content already ranks (just for the wrong audience). Turn that into
+authority instead of ignoring it:
+- Submit any reusable n8n templates to **n8n's own template library** — official
+  `dofollow` link back, and it's the single most topically-relevant placement available.
+- GitHub: if any internal tooling is safe to open-source (a small utility, not client work),
+  a real repo with real stars earns natural links over time — no fabrication needed.
 
-## Tier B — Citation / directory links (foundational, one afternoon)
-
-Consistent NAP (Name, Address, Phone) across all. Submit to:
-
-- Clutch.co, G2, Capterra, GoodFirms, DesignRush, TrustRadius (B2B service directories)
-- Crunchbase (company profile)
-- LinkedIn company page (already exists — ensure website link is set)
-- The Manifest, Sortlist, UpCity (agency directories)
-
-These are low-authority individually but establish baseline trust signals and consistent brand entity data.
-
-## Tier C — Digital PR (free, earns high-authority news links)
-
-Respond to journalist queries as an AI-automation expert. Founders (Abhishek/Ankit/Tushar) answer 2–3 relevant queries per week:
-
-- **Featured.com** (free Q&A, formerly Terkel)
-- **Connectively** (the HARO successor)
-- **Qwoted**, **SourceBottle**
-
-A single answer picked up by a news/industry site is worth more than dozens of directory links.
-
-## Tier D — Linkable assets + outreach (ongoing)
-
-- **Promote what already ranks.** The n8n-vs-Zapier cost analysis and the agency-pricing transparency post are naturally citable. Share them where people debate these topics; they earn links passively.
-- **Write the "self-hosting n8n" content-gap post** (flagged in the audit) — 5 existing posts want to link to it internally, and it targets a query already earning ~3.3k impressions.
-- **Unlinked-mention reclamation** — Google `"Chronexa" -site:chronexa.io`; where you're mentioned without a link, email and ask for one.
-- **Founder personal brand** — Ankit/Tushar posting on LinkedIn consistently; personal profiles now in the site's Person schema (E-E-A-T) so they reinforce each other.
+## 4. Measurement (free tools only)
+- **Ahrefs Webmaster Tools** — free for a verified domain, gives real backlink data without
+  the paid plan.
+- **GSC Links report** — dashboard-only (not in the API), check monthly.
+- **Bing Webmaster Tools** — same idea, secondary signal.
+- Re-baseline the tracked keyword list quarterly and compare against Automaly.io (the one
+  real competitor worth watching — see positioning strategy) to see if the gap is closing.
 
 ---
 
-## Priority order for the first 30 days
+## What NOT to do (kept as an explicit list, since the deleted version normalized these)
+- No fake awards/badges designed purely to bait a `dofollow` link.
+- No buying or renewing expired domains to redirect their link equity.
+- No fabricated statistics presented to journalists as real research.
+- No paid link insertions without disclosure (`rel="sponsored"`) — and generally just don't.
+- No scholarship or "grant" pages whose real purpose is a link, not the stated offer.
 
-1. Set up AWT + Bing WMT; baseline referring domains (Step 0).
-2. Publish 3 n8n templates + create forum/Reddit presence (Tier A).
-3. Submit to the Tier B directories (one batch).
-4. Start a weekly Featured.com/Connectively answering habit (Tier C).
-5. Write the self-hosting-n8n post (Tier D).
-
-Re-measure referring domains in AWT monthly. Authority compounds slowly — expect ranking movement over 2–3 months, not weeks.
+This is slower than the growth-hacker version. It's also the version that doesn't risk a
+manual action wiping out the content work already shipped.
