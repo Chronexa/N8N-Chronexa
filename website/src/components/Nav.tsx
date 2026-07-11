@@ -7,13 +7,14 @@ import type { ReactNode } from 'react';
 import styles from './Nav.module.css';
 import { services, useCasesByFunction, useCasesByIndustry } from '../lib/taxonomy';
 import BookButton from './BookButton';
+import { ENGINE_ROADMAP, type IconKey, type RoadmapItem } from './engines/engines-data';
 
 // ─── AI Engines nav items ────────────────────────────────────────────────────
-// Defined inline (not imported from engines-data) to keep the nav bundle lean.
+// Sourced from ENGINE_ROADMAP — the same data the /ai-engines hub page reads —
+// so this list can't go stale the way a separate hardcoded copy did before
+// (it kept marking engines "coming soon" after their pages had already shipped).
 
-type IconKey = 'send' | 'doc' | 'chart' | 'layers' | 'shield' | 'inbox';
-
-const ENGINE_ICON_PATHS: Record<IconKey, ReactNode> = {
+const ENGINE_ICON_PATHS: Partial<Record<IconKey, ReactNode>> = {
   send:   <><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></>,
   doc:    <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></>,
   chart:  <><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></>,
@@ -23,30 +24,19 @@ const ENGINE_ICON_PATHS: Record<IconKey, ReactNode> = {
 };
 
 function EngIco({ type }: { type: IconKey }) {
+  const path = ENGINE_ICON_PATHS[type];
+  if (!path) return null;
   return (
     <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor"
       strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
-      {ENGINE_ICON_PATHS[type]}
+      {path}
     </svg>
   );
 }
 
-type NavEngine = { name: string; kicker: string; icon: IconKey } & (
-  | { status: 'live'; href: string; blurb: string }
-  | { status: 'soon' }
+const LIVE_ENGINES = ENGINE_ROADMAP.filter(
+  (e): e is RoadmapItem & { href: string } => e.status === 'live' && !!e.href,
 );
-
-const AI_ENGINES: NavEngine[] = [
-  { name: 'Sales Engine',                kicker: 'Outbound & pipeline',          status: 'live', icon: 'send',   href: '/ai-engines/sales-engine',    blurb: 'Sources buyers, researches every account, writes sequences, and sends — on autopilot.' },
-  { name: 'CPA & Tax Engine',            kicker: 'Tax compliance & filing',      status: 'live', icon: 'doc',    href: '/ai-engines/cpa-tax-engine',   blurb: 'Extracts every document, pre-fills the return in your tax software, routes to CPA for sign-off.' },
-  { name: 'Investment Research Engine',  kicker: 'Capital markets & RA',         status: 'soon', icon: 'chart'  },
-  { name: 'Document & Data Engine',      kicker: 'Unstructured → structured',    status: 'soon', icon: 'layers' },
-  { name: 'Legal & Regulatory Engine',   kicker: 'Reg-watch & matters',          status: 'soon', icon: 'shield' },
-  { name: 'Customer Support Engine',     kicker: 'Omnichannel CS',               status: 'soon', icon: 'inbox'  },
-];
-
-const LIVE_ENGINES  = AI_ENGINES.filter((e): e is Extract<NavEngine, { status: 'live' }> => e.status === 'live');
-const SOON_ENGINES  = AI_ENGINES.filter((e): e is Extract<NavEngine, { status: 'soon' }> => e.status === 'soon');
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -137,43 +127,23 @@ export default function Nav() {
             AI Engines <span className={styles.caret} aria-hidden="true">▾</span>
           </button>
           <div className={`${styles.panel} ${styles.enginePanel}`}>
-            <div className={styles.engineCols}>
-
-              {/* Live — left column */}
-              <div className={styles.engineColLive}>
-                <p className={styles.engineColHead}>Live now</p>
-                {LIVE_ENGINES.map((e) => (
-                  <Link key={e.name} href={e.href} className={styles.engineCard} onClick={close}>
-                    <div className={styles.engineCardTop}>
-                      <span className={styles.engineCardIcon}><EngIco type={e.icon} /></span>
-                      <span className={styles.engineCardName}>{e.name}</span>
-                      <span className={styles.badgeLive}>Live</span>
-                    </div>
-                    <p className={styles.engineCardBlurb}>{e.blurb}</p>
-                    <span className={styles.engineCardCta}>Explore <span aria-hidden="true">→</span></span>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Coming soon — right column */}
-              <div className={styles.engineColSoon}>
-                <p className={styles.engineColHead}>Coming soon</p>
-                {SOON_ENGINES.map((e) => (
-                  <div key={e.name} className={styles.engineSoonRow}>
-                    <span className={styles.engineSoonIcon}><EngIco type={e.icon} /></span>
-                    <span className={styles.engineSoonText}>
-                      <span className={styles.engineSoonName}>{e.name}</span>
-                      <span className={styles.engineSoonKicker}>{e.kicker}</span>
-                    </span>
-                    <span className={styles.badgeSoon}>Soon</span>
+            <div className={styles.engineGrid}>
+              {LIVE_ENGINES.map((e) => (
+                <Link key={e.name} href={e.href} className={styles.engineCard} onClick={close}>
+                  <div className={styles.engineCardTop}>
+                    <span className={styles.engineCardIcon}><EngIco type={e.icon} /></span>
+                    <span className={styles.engineCardName}>{e.name}</span>
+                    <span className={styles.badgeLive}>Live</span>
                   </div>
-                ))}
-              </div>
+                  <p className={styles.engineCardBlurb}>{e.promise}</p>
+                  <span className={styles.engineCardCta}>Explore <span aria-hidden="true">→</span></span>
+                </Link>
+              ))}
             </div>
 
             <div className={styles.panelFooter}>
               <Link href="/ai-engines" className={styles.panelFooterLink} onClick={close}>
-                View all 6 AI Engines <span aria-hidden="true">→</span>
+                View all AI Engines <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>

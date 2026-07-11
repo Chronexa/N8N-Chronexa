@@ -21,7 +21,7 @@ export default function CalcCtaButton({
 }) {
   return (
     <Link
-      href={`/tools/${slug}`}
+      href={`/${slug}`}
       className={className}
       onClick={() => track('calculator_cta_click', { location, calculator: slug })}
     >

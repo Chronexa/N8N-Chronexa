@@ -151,6 +151,11 @@
 .relatedCard { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-md); border: 1px solid var(--border-light); border-radius: var(--radius-md); font-weight: 600; transition: border-color var(--transition), color var(--transition); }
 .relatedCard:hover { border-color: var(--brand-green); color: var(--brand-green-ink); }
 
+/* Closing CTA */
+.closingCta { text-align: center; max-width: 640px; margin-inline: auto; padding-block: var(--spacing-md); }
+.closingTitle { font-size: var(--step-3); color: var(--text-dark); margin-bottom: var(--spacing-sm); }
+.closingSub { color: var(--text-muted-dark); margin-bottom: var(--spacing-md); }
+
 @media (max-width: 900px) {
   .body { grid-template-columns: 1fr; }
   .aside { position: static; }

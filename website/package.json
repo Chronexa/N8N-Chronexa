@@ -13,6 +13,7 @@
     "@amplitude/engagement-browser": "^1.0.10",
     "@amplitude/plugin-session-replay-browser": "^1.31.1",
     "@portabletext/react": "^6.2.0",
+    "@sanity/client": "^7.22.1",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.28.0",
     "@xyflow/react": "^12.11.0",
@@ -26,8 +27,8 @@
   },
   "devDependencies": {
     "@sanity/block-tools": "^3.70.0",
-    "@sanity/client": "^7.22.1",
     "@sanity/schema": "^5.28.0",
+    "@types/jsdom": "^28.0.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

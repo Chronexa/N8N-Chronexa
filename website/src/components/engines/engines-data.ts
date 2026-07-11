@@ -1,12 +1,10 @@
 /**
- * Data for the AI Engines pages. Pure data (no JSX) so the server pages and the
- * client demo share it.
- *
- * IMPORTANT: we only ship fully-built content for engines we have deep-researched
- * and actually run. Today that is the Sales Engine. The other five are honest
- * "Coming soon" roadmap entries — no fabricated orchestration — and each will get
- * its own dedicated, researched page later. The crux of these pages is CLARITY
- * and CONVICTION (plain-English, benefit-led), not visual flourish.
+ * Data for the AI Engines pages. Pure data (no JSX) so the server pages, the
+ * client demo, and the nav mega-menu (Nav.tsx) all read the same source —
+ * ENGINE_ROADMAP is the single place that decides which engines are "live"
+ * vs "coming soon". Only flip an entry to 'live' once its page is genuinely
+ * deep-researched and built; add new "coming soon" entries here as future
+ * engines get planned.
  */
 
 export type IconKey =

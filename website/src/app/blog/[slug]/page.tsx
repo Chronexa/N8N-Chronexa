@@ -5,16 +5,16 @@ import { notFound } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { getBlogPostBySlug, getBlogSlugs, getRelatedPosts, urlFor, type SanityImage } from '../../../sanity/client';
 import { site } from '../../../lib/site';
-import { blockText, extractFaq, extractHeadings, slugifyHeading, type PTBlockLike } from '../../../lib/blog-article';
+import { blockText, extractFaq, extractHeadings, midpointBlockIndex, slugifyHeading, type PTBlockLike } from '../../../lib/blog-article';
 import { relatedCalculator } from '../../../lib/blog-links';
 import BookButton from '../../../components/BookButton';
 import CalcCtaButton from '../../../components/CalcCtaButton';
 import RelatedServices from '../../../components/RelatedServices';
-import ShareRow from '../../../components/ShareRow';
 import TrackView from '../../../components/TrackView';
 import ScrollDepth from '../../../components/ScrollDepth';
 import NewsletterCallout from '../../../components/NewsletterCallout';
 import BlogStickyCta from '../../../components/BlogStickyCta';
+import BlogInlineCta from '../../../components/BlogInlineCta';
 import styles from './post.module.css';
 
 export const revalidate = 3600; // ISR: refresh published content hourly
@@ -107,6 +107,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const heroUrl = post.hero?.asset ? urlFor(post.hero).width(1600).height(840).fit('crop').crop('entropy').auto('format').url() : null;
 
   const body = normalizeHeadings(post.body);
+  const bodyBlocks = Array.isArray(body) ? (body as unknown[]) : [];
+  const inlineCtaAt = midpointBlockIndex(bodyBlocks);
   const headings = extractHeadings(body).filter((h) => h.level === 2);
   const faq = extractFaq(body);
   const related = await getRelatedPosts(slug, post.category);
@@ -184,9 +186,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {updatedLabel && <span>Updated {updatedLabel}</span>}
             {post.readingTime ? <span>{post.readingTime} min read</span> : null}
           </div>
-          <div className={styles.share}>
-            <ShareRow url={pageUrl} title={post.title} />
-          </div>
         </div>
 
         {heroUrl && (
@@ -224,7 +223,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
 
         <div className={`container ${styles.body}`}>
-          {post.body ? <PortableText value={body as never} components={components} /> : <p>Content coming soon.</p>}
+          {post.body ? (
+            inlineCtaAt > 0 ? (
+              <>
+                <PortableText value={bodyBlocks.slice(0, inlineCtaAt) as never} components={components} />
+                <BlogInlineCta title={post.title} category={post.category} slug={slug} />
+                <PortableText value={bodyBlocks.slice(inlineCtaAt) as never} components={components} />
+              </>
+            ) : (
+              <PortableText value={body as never} components={components} />
+            )
+          ) : (
+            <p>Content coming soon.</p>
+          )}
           <NewsletterCallout />
         </div>
 

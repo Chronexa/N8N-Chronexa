@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T08:33:14.633Z",
+  "updatedAt": "2026-05-29T11:06:47.072Z",
   "createdAt": "2026-05-11T04:44:44.681Z",
   "id": "Pxyseu0euKXlTXsX",
   "name": "Blog Agent 5: Publisher",
@@ -182,21 +182,23 @@
       "parameters": {
         "method": "POST",
         "url": "https://framer-bridge-production-c7d8.up.railway.app/publish",
-        "authentication": "none",
+        "authentication": "genericCredentialType",
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
         "jsonBody": "={{ ({ title: $json.title, slug: $json.slug, meta_description: $json.meta_description, html_body: $json.html_body, cover_image_url: $json.cover_image_url, published_date: $json.published_date }) }}",
         "sendHeaders": true,
         "headerParameters": {
-          "parameters": [
-            {
-              "name": "X-Bridge-Secret",
-              "value": "8551d38370dad766d338544779bf8bafbcdc9e582fd4590d"
-            }
-          ]
+          "parameters": []
         },
-        "options": {}
+        "options": {},
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1bHL7yYOdZSmhBsr",
+          "name": "Framer Bridge Secret"
+        }
       }
     },
     {
@@ -343,9 +345,9 @@
     "builderVariant": "mcp"
   },
   "pinData": null,
-  "versionId": "7e92775b-ccfb-476a-a29f-274baa3ef42d",
+  "versionId": "1928556a-a568-4199-83e6-3cb300004d6b",
   "activeVersionId": null,
-  "versionCounter": 28,
+  "versionCounter": 29,
   "triggerCount": 1,
   "shared": [
     {

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T07:35:47.874Z",
+  "updatedAt": "2026-05-29T10:50:17.571Z",
   "createdAt": "2026-05-13T07:10:10.737Z",
   "id": "d96au9JL4iHaFdKj",
   "name": "[DRAFT] Blog Agent 1: SEO Strategist",
@@ -37,16 +37,12 @@
         300
       ],
       "parameters": {
-        "authentication": "none",
+        "authentication": "genericCredentialType",
         "method": "POST",
         "url": "https://api.anthropic.com/v1/messages",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "x-api-key",
-              "value": "REDACTED_ANTHROPIC_API_KEY"
-            },
             {
               "name": "anthropic-version",
               "value": "2023-06-01"
@@ -63,6 +59,13 @@
         "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 600,\n  \"system\": \"You are an SEO strategist for Chronexa, an AI orchestration firm. You MUST write for the exact persona given — no substitutions. Topics must be specific, operational, and never about generic 'AI automation'. Avoid: client onboarding (already covered x4), generic workflow automation, vague AI trends. Good angles: cost quantification, compliance risk, vendor consolidation, reporting bottlenecks, document processing, data reconciliation, RevOps gaps, audit preparation, capacity planning, error rates from manual work.\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate ONE SEO blog post brief for Chronexa.\\n\\nMANDATORY PERSONA: {{ ['wealth_management','supply_chain','saas_founder','agency_owner','cpa_firm'][Math.floor(Date.now()/(2*60*60*1000))%5] }}\\nYou MUST output this exact value in the %%PERSONA%% field. Do not use any other persona.\\n\\nPick a SPECIFIC operational pain point for this persona that:\\n- Is NOT about client onboarding\\n- Has clear financial impact (time saved, errors reduced, cost cut)\\n- A mid-market operations team would google\\n\\nReturn EXACTLY this format, no extra text:\\n\\n%%TITLE%%\\n<SEO title 60-65 chars>\\n%%KEYWORD%%\\n<primary keyword 2-4 words>\\n%%SECONDARY%%\\n<3-5 related terms comma separated>\\n%%PERSONA%%\\n<must match the mandatory persona above>\\n%%THESIS%%\\n<core argument 1-2 sentences with a specific stat or dollar figure>\\n%%END%%\"\n    }\n  ]\n}",
         "options": {
           "timeout": 30000
+        },
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "MBzkzU0jc7m1gBTJ",
+          "name": "Anthropic API"
         }
       }
     },
@@ -223,9 +226,9 @@
   },
   "meta": null,
   "pinData": null,
-  "versionId": "72e1969a-4346-4019-acde-adaa53d9d6ac",
+  "versionId": "9787e89a-3996-4319-828d-bf1e11286931",
   "activeVersionId": null,
-  "versionCounter": 6,
+  "versionCounter": 7,
   "triggerCount": 1,
   "shared": [
     {

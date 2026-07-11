@@ -234,6 +234,16 @@ export default function ServiceArticle({ data }: { data: ServiceContent }) {
           </div>
         </div>
       </section>
+
+      {/* Closing CTA — the page previously ended at "Related solutions" with
+          no actual ask. Anyone who reads this far already has intent. */}
+      <section className="section-dark">
+        <div className={`container ${styles.closingCta}`}>
+          <h2 className={styles.closingTitle}>Ready to put {data.serviceName} to work?</h2>
+          <p className={styles.closingSub}>15 minutes to see if this is worth building for you — no pressure if it isn&apos;t.</p>
+          <BookButton location="service-footer">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+        </div>
+      </section>
     </>
   );
 }

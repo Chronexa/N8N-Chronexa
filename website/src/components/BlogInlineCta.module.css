@@ -1,0 +1,24 @@
+.box {
+  max-width: 760px;
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--brand-green-line);
+  background: var(--brand-green-soft);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-weight: 700;
+  color: var(--brand-green-ink);
+  margin-bottom: 0.4rem;
+}
+
+.line {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-light);
+  margin-bottom: var(--spacing-sm);
+}

@@ -26,10 +26,10 @@ export default function Hero() {
             for your workflow. Shipped across property, legal, finance, sales, and agriculture.
           </p>
           <div className={styles.heroActions}>
-            <a href="#case-studies" className="btn-primary">
+            <BookButton location="hero" className="btn-primary">Book a discovery call</BookButton>
+            <a href="#case-studies" className="btn-outline">
               See what we&apos;ve built <span aria-hidden="true">→</span>
             </a>
-            <BookButton location="hero" className="btn-outline">Book a discovery call</BookButton>
           </div>
         </div>
       </div>

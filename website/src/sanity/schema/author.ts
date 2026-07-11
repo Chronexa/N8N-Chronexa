@@ -10,6 +10,7 @@ export default defineType({
     defineField({ name: 'role', title: 'Role', type: 'string' }),
     defineField({ name: 'about', title: 'About', type: 'text', rows: 3 }),
     defineField({ name: 'avatar', title: 'Avatar', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'linkedin', title: 'LinkedIn URL', type: 'url', description: 'Shown in the author box; also feeds Person schema sameAs (E-E-A-T)' }),
   ],
   preview: { select: { title: 'name', subtitle: 'role', media: 'avatar' } },
 });

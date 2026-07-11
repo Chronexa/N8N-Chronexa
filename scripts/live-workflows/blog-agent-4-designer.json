@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T07:35:33.894Z",
+  "updatedAt": "2026-05-29T10:50:15.419Z",
   "createdAt": "2026-05-11T04:44:37.979Z",
   "id": "3EVAeoUzCWBzlvKp",
   "name": "[DRAFT] Blog Agent 4: Image Designer",
@@ -125,10 +125,6 @@
         "headerParameters": {
           "parameters": [
             {
-              "name": "x-api-key",
-              "value": "REDACTED_ANTHROPIC_API_KEY"
-            },
-            {
               "name": "anthropic-version",
               "value": "2023-06-01"
             },
@@ -144,6 +140,14 @@
         "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 300,\n  \"system\": \"You are an AI art director for a B2B technology firm. Create precise, visual Imagen prompts for blog cover images. Style: professional, abstract, enterprise. No text in images. Think: dark minimalist backgrounds, glowing data flows, geometric patterns, cinematic lighting. Never include people's faces. Never include text or numbers. Return ONLY the prompt string, nothing else.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Create an Imagen 3 prompt for this B2B blog post cover image:\\nTitle: {{ $('Get Pending Record').first().json['Title'] }}\\nThesis: {{ $('Get Pending Record').first().json['Thesis'] }}\\n\\nReturn ONLY the image prompt string (2-3 sentences max).\"\n  }]\n}",
         "options": {
           "timeout": 30000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "MBzkzU0jc7m1gBTJ",
+          "name": "Anthropic API"
         }
       }
     },
@@ -190,7 +194,7 @@
       "onError": "continueErrorOutput",
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=AIzaSyDlVXNg54Mzoo7l4K27grJ_gKrLYG6HMFE",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=={{ $env.GEMINI_API_KEY }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -457,9 +461,9 @@
   },
   "meta": null,
   "pinData": null,
-  "versionId": "1645b632-6c7d-4fec-ac45-4114ccbf0d4b",
+  "versionId": "0552b81c-06de-4e55-8d1b-dabc11af685d",
   "activeVersionId": null,
-  "versionCounter": 19,
+  "versionCounter": 20,
   "triggerCount": 1,
   "shared": [
     {

@@ -2,11 +2,13 @@ import Hero from '../components/Hero';
 import LogoMarquee from '../components/LogoMarquee';
 import Numbers from '../components/Numbers';
 import PainPoints from '../components/PainPoints';
+import MidPageCta from '../components/MidPageCta';
 import PartnershipModel from '../components/PartnershipModel';
 import Process from '../components/Process';
 import Faq from '../components/Faq';
 import WorkShipped from '../components/WorkShipped';
 import CtaBand from '../components/CtaBand';
+import ScrollDepth from '../components/ScrollDepth';
 
 // Hidden — kept for spoke pages / future use
 // import RoiGrid from '../components/RoiGrid';
@@ -15,6 +17,7 @@ import CtaBand from '../components/CtaBand';
 export default function Home() {
   return (
     <>
+      <ScrollDepth pageType="home" />
       <Hero />
 
       {/* OAP badge + tech partners */}
@@ -23,10 +26,12 @@ export default function Home() {
       {/* Stat bar */}
       <Numbers />
 
-      {/* The problem */}
+      {/* The problem — mid-page CTA sits right where a reader thinks
+          "yes, that's my problem," instead of only at the very bottom. */}
       <section className="section-light">
         <div className="container">
           <PainPoints />
+          <MidPageCta />
         </div>
       </section>
 

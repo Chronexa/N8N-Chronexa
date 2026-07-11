@@ -3,9 +3,9 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import CpaTaxScene from '../../../components/engines/cpa-scene/CpaTaxScene';
 import {
-  CPA_TAX_ENGINE, CPA_TAX_OUTPUTS, CPA_TAX_FLOW_POSITIONS, CPA_TAX_FLOW_EDGES,
+  CPA_TAX_ENGINE,
   CPA_TAX_WHATIS, CPA_TAX_HOWITWORKS_INTRO,
   CPA_TAX_PROBLEM, CPA_TAX_INTEGRATION, CPA_TAX_ROI, CPA_TAX_TESTIMONIALS,
   CPA_TAX_FAQS, CPA_TAX_NUDGE,
@@ -65,15 +65,10 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* 1 — Full-canvas hero: the shell IS the hero */}
+      {/* 1 — Hero: one real return built on screen, inside a bright app window */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         <h1 className={styles.srOnly}>Your entire tax-prep workflow, automated from intake to e-file.</h1>
-        <WorkflowCanvasLoader
-          engine={CPA_TAX_ENGINE}
-          outputs={CPA_TAX_OUTPUTS}
-          flowPositions={CPA_TAX_FLOW_POSITIONS}
-          flowEdges={CPA_TAX_FLOW_EDGES}
-        />
+        <CpaTaxScene />
       </section>
 
       {/* 3 — Blog-style body + sticky nudge */}

@@ -40,18 +40,20 @@ export interface Post {
   category?: string;
   readingTime?: number;
   publishedAt?: string;
+  updatedAt?: string;
+  keyTakeaways?: string[];
   hero?: SanityImage;
   // PortableText blocks — typed loosely to avoid a hard @portabletext dependency here.
   body?: unknown[];
   metaTitle?: string;
   metaDescription?: string;
-  author?: { name?: string; role?: string };
+  author?: { name?: string; role?: string; about?: string; linkedin?: string; avatar?: SanityImage };
 }
 
 const POST_FIELDS = `
-  _id, _createdAt, title, slug, excerpt, category, readingTime, publishedAt,
-  hero, body, metaTitle, metaDescription,
-  author->{ name, role }
+  _id, _createdAt, title, slug, excerpt, category, readingTime, publishedAt, updatedAt,
+  keyTakeaways, hero, body, metaTitle, metaDescription,
+  author->{ name, role, about, linkedin, avatar }
 `;
 
 const CARD_FIELDS = `
@@ -86,6 +88,23 @@ export async function getBlogPostBySlug(slug: string): Promise<Post | null> {
 /** Published posts, newest first — used by the blog index (no heavy body field). */
 export async function getAllPosts(): Promise<Post[]> {
   return safeFetch(`*[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc){ ${CARD_FIELDS} }`, undefined, []);
+}
+
+/**
+ * Up to 3 related posts for the "Keep reading" row: same category first,
+ * newest first, padded with the latest posts if the category is thin.
+ */
+export async function getRelatedPosts(slug: string, category?: string): Promise<Post[]> {
+  const posts = await safeFetch<Post[]>(
+    `*[_type == "post" && defined(slug.current) && slug.current != $slug]
+      | order(coalesce(publishedAt, _createdAt) desc)
+      { ${CARD_FIELDS} }[0...24]`,
+    { slug },
+    []
+  );
+  const same = category ? posts.filter((p) => p.category === category) : [];
+  const rest = posts.filter((p) => !same.includes(p));
+  return [...same, ...rest].slice(0, 3);
 }
 
 /* ----------------------------- Case studies ----------------------------- */

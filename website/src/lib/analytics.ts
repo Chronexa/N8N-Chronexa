@@ -30,3 +30,22 @@ export function identifyByEmail(email: string) {
     /* ignore */
   }
 }
+
+/**
+ * Tag the anonymous device with how it first arrived (referrer + UTM + landing
+ * page). Runs once per browser via VisitorIdentify. This is what lets a lead
+ * that converts on a *different* page than they landed on (or weeks later)
+ * still carry its real source instead of showing up as untraceable.
+ */
+export function identifyFirstTouch(props: Record<string, string>) {
+  if (typeof window === 'undefined') return;
+  try {
+    const identify = new amplitude.Identify();
+    for (const [k, v] of Object.entries(props)) {
+      if (v) identify.setOnce(k, v);
+    }
+    amplitude.identify(identify);
+  } catch {
+    /* ignore */
+  }
+}

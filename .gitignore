@@ -8,3 +8,10 @@ dist/
 .gemini/
 .claude/
 .DS_Store
+
+# lead data & marketing bulk assets — never commit (PII)
+*.xlsx
+*.csv
+marketing-ops/
+marketing-ops.tar.gz
+cover-samples/

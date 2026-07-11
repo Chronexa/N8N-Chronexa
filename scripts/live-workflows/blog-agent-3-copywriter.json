@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-13T07:35:13.664Z",
+  "updatedAt": "2026-05-29T10:50:20.022Z",
   "createdAt": "2026-05-11T04:44:31.402Z",
   "id": "eVPVPBzfFp4obCu0",
   "name": "[DRAFT] Blog Agent 3: Copywriter",
@@ -125,10 +125,6 @@
         "headerParameters": {
           "parameters": [
             {
-              "name": "x-api-key",
-              "value": "REDACTED_ANTHROPIC_API_KEY"
-            },
-            {
               "name": "anthropic-version",
               "value": "2023-06-01"
             },
@@ -144,6 +140,14 @@
         "jsonBody": "={{ ({model:'claude-sonnet-4-6',max_tokens:8192,system:'You are a senior B2B content strategist for Chronexa, an AI orchestration firm that helps mid-market operations teams replace fragmented SaaS with custom AI workflows built on n8n.\\n\\nBRAND VOICE: Authoritative, data-driven, B2B focused, no fluff.\\n\\nHTML FORMAT (Framer CMS — use EXACTLY this):\\n- Headings: <h2>Heading Text</h2> (no dir attribute)\\n- Paragraphs: <p>Text here.</p>\\n- Bold: <strong>text</strong>\\n- Lists: <ul><li>item</li></ul>\\n- Start with ONE <h2> as the opening heading, then 3-5 more <h2> sections\\n- NO <html>, <body>, <head>, <h1> tags\\n\\nOUTPUT FORMAT — respond with EXACTLY this structure, no other text:\\n%%TITLE%%\\n<your SEO title 60-65 chars>\\n%%SLUG%%\\n<your url-slug-hyphenated>\\n%%META%%\\n<your 155-char meta description>\\n%%WORDCOUNT%%\\n<estimated word count as integer>\\n%%HTML_START%%\\n<full html body content here>\\n%%HTML_END%%',messages:[{role:'user',content:'Write a comprehensive SEO blog post (1800-2500 words).\\n\\nTITLE DIRECTION: '+$('Get Pending Record').first().json['Title']+'\\nKEYWORD: '+$('Get Pending Record').first().json['Target Keyword']+'\\nSECONDARY KEYWORDS: '+$('Get Pending Record').first().json['Secondary Keywords']+'\\nPERSONA: '+$('Get Pending Record').first().json['Persona']+'\\nTHESIS: '+$('Get Pending Record').first().json['Thesis']+'\\n\\nRESEARCH BRIEF:\\n'+$('Get Pending Record').first().json['Research Brief']+'\\n\\nStructure: opening stat hook → 3-5 H2 sections → CTA to Chronexa. Use the delimited output format exactly.'}]}) }}",
         "options": {
           "timeout": 120000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "MBzkzU0jc7m1gBTJ",
+          "name": "Anthropic API"
         }
       }
     },
@@ -435,9 +439,9 @@
   },
   "meta": null,
   "pinData": null,
-  "versionId": "fecde873-0a79-4aa2-bf7a-d20de2b0a3f2",
+  "versionId": "170d69ce-1bc8-46a0-a3c8-09d2441dc73e",
   "activeVersionId": null,
-  "versionCounter": 15,
+  "versionCounter": 16,
   "triggerCount": 1,
   "shared": [
     {
