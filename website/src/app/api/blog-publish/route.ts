@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
   let payload: {
     title?: string;
     slug?: string;
+    meta_title?: string;
     meta_description?: string;
     html_body?: string;
     cover_image_url?: string;
@@ -65,10 +66,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid JSON body' }, { status: 400 });
   }
 
-  const { title, slug, meta_description, html_body, cover_image_url, published_date, category, key_takeaways } = payload;
+  const { title, slug, meta_title, meta_description, html_body, cover_image_url, published_date, category, key_takeaways } = payload;
   if (!title || !slug || !html_body) {
     return NextResponse.json({ error: 'title, slug and html_body are required' }, { status: 400 });
   }
+
+  // Server-side quality backstop: every publisher (pipeline or ad-hoc script)
+  // goes through this route, so thin content gets rejected here even if an
+  // upstream gate is bypassed. The pipeline's own gate is stricter (1,500).
+  const bodyWords = html_body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  if (bodyWords < 1000) {
+    return NextResponse.json(
+      { error: `html_body is ${bodyWords} words; minimum is 1000 (doctrine target 1800-2500)` },
+      { status: 422 }
+    );
+  }
+
+  // Optional SERP title. Stored only when it's a plausible complete phrase —
+  // never auto-truncated (a mid-word 60-char slice is worse than no metaTitle,
+  // which falls back to the full title at render time).
+  const metaTitle = meta_title?.trim();
+  const metaTitleOk = !!metaTitle && metaTitle.length >= 15 && metaTitle.length <= 70;
 
   try {
     const body = htmlToPortableText(html_body);
@@ -90,8 +108,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const words = html_body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
-
     // 3-5 one-line takeaways (newline-separated string from n8n, or an array)
     const takeaways = (Array.isArray(key_takeaways) ? key_takeaways : (key_takeaways || '').split('\n'))
       .map((t) => t.replace(/^[-•*]\s*/, '').trim())
@@ -110,9 +126,10 @@ export async function POST(req: NextRequest) {
       category: (category || 'Resources').trim(),
       featured: false,
       excerpt: meta_description?.trim() || undefined,
+      ...(metaTitleOk ? { metaTitle } : {}),
       metaDescription: meta_description?.trim() || undefined,
       ...(takeaways.length >= 3 ? { keyTakeaways: takeaways } : {}),
-      readingTime: Math.max(2, Math.round(words / 200)),
+      readingTime: Math.max(2, Math.round(bodyWords / 200)),
       publishedAt: published_date || new Date().toISOString(),
       ...(exists ? { updatedAt: new Date().toISOString() } : {}),
       body,

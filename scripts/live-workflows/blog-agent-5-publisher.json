@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-05-29T11:06:47.072Z",
-  "createdAt": "2026-05-11T04:44:44.681Z",
-  "id": "Pxyseu0euKXlTXsX",
-  "name": "Blog Agent 5: Publisher",
-  "description": "Polls Airtable every 5 min for ready_to_publish posts, publishes directly to Framer CMS via the framer-bridge Railway service.",
-  "active": false,
+  "updatedAt": "2026-06-11T16:21:22.266Z",
+  "createdAt": "2026-05-19T13:16:01.551Z",
+  "id": "qYIiCFzOoPMNFEmO",
+  "name": "Blog Agent 5: Publisher (Baserow)",
+  "description": null,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
-      "id": "8fabcbb3-0521-4f51-a324-a32b86c11ba8",
+      "id": "a5b-sched-001",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -28,95 +28,69 @@
       }
     },
     {
-      "id": "b2e560dc-029f-4ab2-ad84-d3763055fbf2",
-      "name": "Get Ready to Publish",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a5b-fetch-001",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        224,
+        220,
         0
       ],
       "parameters": {
-        "operation": "search",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "filterByFormula": "{Status}=\"ready_to_publish\"",
-        "returnAll": false,
-        "limit": 1,
-        "sort": {
-          "property": [
+        "method": "GET",
+        "url": "https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true&filter__Status__equal=ready_to_publish&size=1",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
             {
-              "field": "Title",
-              "direction": "asc"
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
             }
           ]
         },
         "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
       }
     },
     {
-      "id": "578e8955-8cae-4c49-9a4e-540cd0acac73",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a5b-if-001",
+      "name": "IF: Has Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
-        448,
+        440,
         0
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $json.id }}",
-            "Status": "publishing"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
           },
-          "matchingColumns": [
-            "id"
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
           ],
-          "schema": []
-        },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
+          "combinator": "and"
         }
       }
     },
     {
-      "id": "d63d9647-6826-454d-8efa-300809ed139a",
-      "name": "Map to Framer Schema",
+      "id": "a5b-extract-001",
+      "name": "Extract Record",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        672,
-        0
+        660,
+        -120
       ],
       "parameters": {
         "mode": "manual",
@@ -124,45 +98,45 @@
         "assignments": {
           "assignments": [
             {
-              "id": "assign-record-id",
+              "id": "ea-rid",
               "name": "record_id",
-              "value": "={{ $('Get Ready to Publish').first().json.id }}",
-              "type": "string"
+              "value": "={{ $json.results[0].id }}",
+              "type": "number"
             },
             {
-              "id": "assign-slug",
+              "id": "ea-slug",
               "name": "slug",
-              "value": "={{ $('Get Ready to Publish').first().json['Slug'] }}",
+              "value": "={{ $json.results[0]['Slug'] }}",
               "type": "string"
             },
             {
-              "id": "assign-title",
+              "id": "ea-title",
               "name": "title",
-              "value": "={{ $('Get Ready to Publish').first().json['Title'] }}",
+              "value": "={{ $json.results[0]['Title'] }}",
               "type": "string"
             },
             {
-              "id": "assign-meta",
+              "id": "ea-meta",
               "name": "meta_description",
-              "value": "={{ $('Get Ready to Publish').first().json['Meta Description'] }}",
+              "value": "={{ $json.results[0]['Meta Description'] }}",
               "type": "string"
             },
             {
-              "id": "assign-body",
+              "id": "ea-body",
               "name": "html_body",
-              "value": "={{ $('Get Ready to Publish').first().json['HTML Body'] }}",
+              "value": "={{ $json.results[0]['HTML Body'] }}",
               "type": "string"
             },
             {
-              "id": "assign-hero",
+              "id": "ea-hero",
               "name": "cover_image_url",
-              "value": "={{ $('Get Ready to Publish').first().json['Cover Image URL'] || '' }}",
+              "value": "={{ $json.results[0]['Cover Image URL'] || '' }}",
               "type": "string"
             },
             {
-              "id": "assign-date",
-              "name": "published_date",
-              "value": "={{ new Date().toISOString() }}",
+              "id": "ea-takeaways",
+              "name": "key_takeaways",
+              "value": "={{ $json.results[0]['Key Takeaways'] || '' }}",
               "type": "string"
             }
           ]
@@ -171,104 +145,199 @@
       }
     },
     {
-      "id": "451bbfcc-f7c4-4f9e-82e5-4f9bd43c0f1c",
-      "name": "Publish to Framer",
+      "id": "a5b-lock-001",
+      "name": "Lock Record",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        896,
-        0
+        880,
+        -120
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"publishing\" }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a5b-map-001",
+      "name": "Map to Publish Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        -120
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "mf-rid",
+              "name": "record_id",
+              "value": "={{ $('Extract Record').first().json.record_id }}",
+              "type": "number"
+            },
+            {
+              "id": "mf-slug",
+              "name": "slug",
+              "value": "={{ $('Extract Record').first().json.slug }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-title",
+              "name": "title",
+              "value": "={{ $('Extract Record').first().json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-meta",
+              "name": "meta_description",
+              "value": "={{ $('Extract Record').first().json.meta_description }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-body",
+              "name": "html_body",
+              "value": "={{ $('Extract Record').first().json.html_body }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-hero",
+              "name": "cover_image_url",
+              "value": "={{ $('Extract Record').first().json.cover_image_url }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-date",
+              "name": "published_date",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            },
+            {
+              "id": "mf-takeaways",
+              "name": "key_takeaways",
+              "value": "={{ $('Extract Record').first().json.key_takeaways }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a5b-publish-001",
+      "name": "Publish to Sanity (chronexa.io)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        -120
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://framer-bridge-production-c7d8.up.railway.app/publish",
+        "url": "https://chronexa.io/api/blog-publish",
         "authentication": "genericCredentialType",
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={{ ({ title: $json.title, slug: $json.slug, meta_description: $json.meta_description, html_body: $json.html_body, cover_image_url: $json.cover_image_url, published_date: $json.published_date }) }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": []
+        "jsonBody": "={{ ({ title: $json.title, slug: $json.slug, meta_description: $json.meta_description, html_body: $json.html_body, cover_image_url: $json.cover_image_url, published_date: $json.published_date, category: 'Resources', key_takeaways: $json.key_takeaways || '' }) }}",
+        "options": {
+          "timeout": 60000
         },
-        "options": {},
         "genericAuthType": "httpHeaderAuth"
       },
+      "onError": "continueErrorOutput",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "1bHL7yYOdZSmhBsr",
-          "name": "Framer Bridge Secret"
+          "id": "n0ju7wsCrfMX0hHr",
+          "name": "Blog Publish Secret (chronexa.io)"
         }
       }
     },
     {
-      "id": "26fa0a1e-4645-40cb-aa7d-6b30541d638c",
+      "id": "a5b-mark-pub-001",
       "name": "Mark Published",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1120,
-        0
+        1540,
+        -220
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
         },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $('Map to Framer Schema').first().json.record_id }}",
-            "Status": "published",
-            "Framer Item ID": "={{ $json.framer_item_id }}"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": []
-        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"published\", \"Framer Item ID\": $json.id || '' }) }}",
         "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
       }
     },
     {
-      "id": "5f43872a-4d84-49e7-b30d-2630a3e5d43d",
-      "name": "Sticky Note a82e9ee7",
-      "type": "n8n-nodes-base.stickyNote",
+      "id": "a5b-mark-fail-001",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        -20
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"ready_to_publish\", \"Error Log\": \"Sanity publish failed (POST /api/blog-publish) — see n8n execution\" }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a5b-end-001",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        560,
-        64
+        660,
+        100
       ],
-      "parameters": {
-        "content": {
-          "version": 1,
-          "config": {
-            "name": "⚙️ Agent 5: Publisher",
-            "position": [
-              200,
-              160
-            ],
-            "parameters": {
-              "content": "## Blog Agent 5: Publisher\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline table (status = ready_to_publish)\n**Output:** POST to Framer Bridge (Railway) → direct Framer CMS publish\n\n**Bridge:** https://framer-bridge-production-c7d8.up.railway.app\n\nReturns: { success, framer_item_id, slug }",
-              "height": 160,
-              "width": 420
-            }
-          }
-        }
-      }
+      "parameters": {}
     }
   ],
   "connections": {
@@ -276,14 +345,43 @@
       "main": [
         [
           {
-            "node": "Get Ready to Publish",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Ready to Publish": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "IF: Has Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Has Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -298,29 +396,36 @@
       "main": [
         [
           {
-            "node": "Map to Framer Schema",
+            "node": "Map to Publish Payload",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Map to Framer Schema": {
+    "Map to Publish Payload": {
       "main": [
         [
           {
-            "node": "Publish to Framer",
+            "node": "Publish to Sanity (chronexa.io)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Publish to Framer": {
+    "Publish to Sanity (chronexa.io)": {
       "main": [
         [
           {
             "node": "Mark Published",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Failed",
             "type": "main",
             "index": 0
           }
@@ -332,29 +437,25 @@
     "executionOrder": "v1",
     "saveManualExecutions": true,
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "MKBhIfmRNZtPDJg0",
-    "availableInMCP": true
+    "errorWorkflow": "MKBhIfmRNZtPDJg0"
   },
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": []
     }
   },
-  "meta": {
-    "aiBuilderAssisted": true,
-    "builderVariant": "mcp"
-  },
+  "meta": null,
   "pinData": null,
-  "versionId": "1928556a-a568-4199-83e6-3cb300004d6b",
-  "activeVersionId": null,
-  "versionCounter": 29,
+  "versionId": "912d118e-219a-4363-9290-a4418412b2a8",
+  "activeVersionId": "912d118e-219a-4363-9290-a4418412b2a8",
+  "versionCounter": 20,
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-05-11T04:44:44.684Z",
-      "createdAt": "2026-05-11T04:44:44.684Z",
+      "updatedAt": "2026-05-19T13:16:01.558Z",
+      "createdAt": "2026-05-19T13:16:01.558Z",
       "role": "workflow:owner",
-      "workflowId": "Pxyseu0euKXlTXsX",
+      "workflowId": "qYIiCFzOoPMNFEmO",
       "projectId": "b8KOq9Xa215X1ZmL",
       "project": {
         "updatedAt": "2025-09-10T05:16:40.899Z",
@@ -369,5 +470,459 @@
     }
   ],
   "tags": [],
-  "activeVersion": null
+  "activeVersion": {
+    "updatedAt": "2026-06-11T16:21:22.268Z",
+    "createdAt": "2026-06-11T16:21:22.268Z",
+    "versionId": "912d118e-219a-4363-9290-a4418412b2a8",
+    "workflowId": "qYIiCFzOoPMNFEmO",
+    "nodes": [
+      {
+        "id": "a5b-sched-001",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ],
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/5 * * * *"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "a5b-fetch-001",
+        "name": "Fetch Pending Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          220,
+          0
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true&filter__Status__equal=ready_to_publish&size=1",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-if-001",
+        "name": "IF: Has Record?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          440,
+          0
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "cond-count",
+                "leftValue": "={{ $json.count }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          }
+        }
+      },
+      {
+        "id": "a5b-extract-001",
+        "name": "Extract Record",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          660,
+          -120
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "ea-rid",
+                "name": "record_id",
+                "value": "={{ $json.results[0].id }}",
+                "type": "number"
+              },
+              {
+                "id": "ea-slug",
+                "name": "slug",
+                "value": "={{ $json.results[0]['Slug'] }}",
+                "type": "string"
+              },
+              {
+                "id": "ea-title",
+                "name": "title",
+                "value": "={{ $json.results[0]['Title'] }}",
+                "type": "string"
+              },
+              {
+                "id": "ea-meta",
+                "name": "meta_description",
+                "value": "={{ $json.results[0]['Meta Description'] }}",
+                "type": "string"
+              },
+              {
+                "id": "ea-body",
+                "name": "html_body",
+                "value": "={{ $json.results[0]['HTML Body'] }}",
+                "type": "string"
+              },
+              {
+                "id": "ea-hero",
+                "name": "cover_image_url",
+                "value": "={{ $json.results[0]['Cover Image URL'] || '' }}",
+                "type": "string"
+              },
+              {
+                "id": "ea-takeaways",
+                "name": "key_takeaways",
+                "value": "={{ $json.results[0]['Key Takeaways'] || '' }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-lock-001",
+        "name": "Lock Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          880,
+          -120
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"publishing\" }) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-map-001",
+        "name": "Map to Publish Payload",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1100,
+          -120
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "mf-rid",
+                "name": "record_id",
+                "value": "={{ $('Extract Record').first().json.record_id }}",
+                "type": "number"
+              },
+              {
+                "id": "mf-slug",
+                "name": "slug",
+                "value": "={{ $('Extract Record').first().json.slug }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-title",
+                "name": "title",
+                "value": "={{ $('Extract Record').first().json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-meta",
+                "name": "meta_description",
+                "value": "={{ $('Extract Record').first().json.meta_description }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-body",
+                "name": "html_body",
+                "value": "={{ $('Extract Record').first().json.html_body }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-hero",
+                "name": "cover_image_url",
+                "value": "={{ $('Extract Record').first().json.cover_image_url }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-date",
+                "name": "published_date",
+                "value": "={{ new Date().toISOString() }}",
+                "type": "string"
+              },
+              {
+                "id": "mf-takeaways",
+                "name": "key_takeaways",
+                "value": "={{ $('Extract Record').first().json.key_takeaways }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-publish-001",
+        "name": "Publish to Sanity (chronexa.io)",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1320,
+          -120
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://chronexa.io/api/blog-publish",
+          "authentication": "genericCredentialType",
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ title: $json.title, slug: $json.slug, meta_description: $json.meta_description, html_body: $json.html_body, cover_image_url: $json.cover_image_url, published_date: $json.published_date, category: 'Resources', key_takeaways: $json.key_takeaways || '' }) }}",
+          "options": {
+            "timeout": 60000
+          },
+          "genericAuthType": "httpHeaderAuth"
+        },
+        "onError": "continueErrorOutput",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "n0ju7wsCrfMX0hHr",
+            "name": "Blog Publish Secret (chronexa.io)"
+          }
+        }
+      },
+      {
+        "id": "a5b-mark-pub-001",
+        "name": "Mark Published",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1540,
+          -220
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"published\", \"Framer Item ID\": $json.id || '' }) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-mark-fail-001",
+        "name": "Mark Failed",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1540,
+          -20
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"ready_to_publish\", \"Error Log\": \"Sanity publish failed (POST /api/blog-publish) — see n8n execution\" }) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "a5b-end-001",
+        "name": "End: No Pending Records",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          660,
+          100
+        ],
+        "parameters": {}
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Fetch Pending Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Pending Record": {
+        "main": [
+          [
+            {
+              "node": "IF: Has Record?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IF: Has Record?": {
+        "main": [
+          [
+            {
+              "node": "Extract Record",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "End: No Pending Records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Record": {
+        "main": [
+          [
+            {
+              "node": "Lock Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lock Record": {
+        "main": [
+          [
+            {
+              "node": "Map to Publish Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Map to Publish Payload": {
+        "main": [
+          [
+            {
+              "node": "Publish to Sanity (chronexa.io)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Publish to Sanity (chronexa.io)": {
+        "main": [
+          [
+            {
+              "node": "Mark Published",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Mark Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Team Chronexa",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-11T16:21:22.337Z",
+        "id": 587,
+        "workflowId": "qYIiCFzOoPMNFEmO",
+        "versionId": "912d118e-219a-4363-9290-a4418412b2a8",
+        "event": "activated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      },
+      {
+        "createdAt": "2026-06-11T16:21:22.312Z",
+        "id": 586,
+        "workflowId": "qYIiCFzOoPMNFEmO",
+        "versionId": "912d118e-219a-4363-9290-a4418412b2a8",
+        "event": "deactivated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    ]
+  }
 }

@@ -4,12 +4,14 @@ const fs = require('fs');
 const url = process.env.N8N_API_URL;
 const apiKey = process.env.N8N_API_KEY;
 
+// ACTIVE production pipeline (verified against live instance 2026-07-12).
+// The previous IDs here pointed at inactive [DRAFT] copies — mirrors were stale.
 const ids = {
-  'd96au9JL4iHaFdKj': 'blog-agent-1-strategist.json',
-  'PKh8zA5zH3dewf02': 'blog-agent-2-researcher.json',
-  'eVPVPBzfFp4obCu0': 'blog-agent-3-copywriter.json',
-  '3EVAeoUzCWBzlvKp': 'blog-agent-4-designer.json',
-  'Pxyseu0euKXlTXsX': 'blog-agent-5-publisher.json'
+  'fPqf1XhTxhGyWVbF': 'blog-agent-1-gsc-strategist.json',
+  '6SzXgyv0rMfA68l6': 'blog-agent-2-researcher-baserow.json',
+  'EbW7suHY7ji6EhsD': 'blog-agent-3-copywriter.json',
+  'Z2ehkUAAYsub4l2i': 'blog-agent-4-designer.json',
+  'qYIiCFzOoPMNFEmO': 'blog-agent-5-publisher.json'
 };
 
 async function fetchLive() {

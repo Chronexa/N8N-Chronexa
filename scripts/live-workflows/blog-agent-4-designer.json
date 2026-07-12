@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-05-29T10:50:15.419Z",
-  "createdAt": "2026-05-11T04:44:37.979Z",
-  "id": "3EVAeoUzCWBzlvKp",
-  "name": "[DRAFT] Blog Agent 4: Image Designer",
+  "updatedAt": "2026-06-11T06:17:55.031Z",
+  "createdAt": "2026-05-19T13:01:49.188Z",
+  "id": "Z2ehkUAAYsub4l2i",
+  "name": "Agent 4: Image Designer (Baserow)",
   "description": null,
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
-      "id": "a4-trigger",
+      "id": "a4b-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -28,96 +28,178 @@
       }
     },
     {
-      "id": "a4-get-pending",
-      "name": "Get Pending Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a4b-fetch",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         460,
         300
       ],
       "parameters": {
-        "operation": "search",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "filterByFormula": "{Status}=\"copy_written\"",
-        "returnAll": false,
-        "limit": 1,
-        "sort": {
-          "property": [
+        "method": "GET",
+        "url": "https://api.baserow.io/api/database/rows/table/975683/",
+        "authentication": "none",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
             {
-              "field": "Title",
-              "direction": "asc"
+              "name": "user_field_names",
+              "value": "true"
+            },
+            {
+              "name": "filter__Status__equal",
+              "value": "copy_written"
+            },
+            {
+              "name": "size",
+              "value": "1"
             }
           ]
         },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000
         }
       }
     },
     {
-      "id": "a4-lock",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a4b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
         680,
         300
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $json.id }}",
-            "Status": "generating_image"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
           },
-          "matchingColumns": [
-            "id"
+          "conditions": [
+            {
+              "id": "check-count",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
           ],
-          "schema": []
+          "combinator": "and"
         },
         "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
       }
     },
     {
-      "id": "a4-gen-prompt",
-      "name": "Generate Image Prompt",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "a4b-end",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4b-extract",
+      "name": "Extract Record",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         900,
         300
       ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "er-id",
+              "name": "record_id",
+              "value": "={{ $json.results[0].id }}",
+              "type": "number"
+            },
+            {
+              "id": "er-title",
+              "name": "title",
+              "value": "={{ $json.results[0]['Title'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-thesis",
+              "name": "thesis",
+              "value": "={{ $json.results[0]['Thesis'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a4b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"generating_image\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a4b-gen-prompt",
+      "name": "Generate Image Prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        300
+      ],
+      "onError": "continueErrorOutput",
       "parameters": {
         "method": "POST",
         "url": "https://api.anthropic.com/v1/messages",
@@ -137,7 +219,7 @@
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 300,\n  \"system\": \"You are an AI art director for a B2B technology firm. Create precise, visual Imagen prompts for blog cover images. Style: professional, abstract, enterprise. No text in images. Think: dark minimalist backgrounds, glowing data flows, geometric patterns, cinematic lighting. Never include people's faces. Never include text or numbers. Return ONLY the prompt string, nothing else.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Create an Imagen 3 prompt for this B2B blog post cover image:\\nTitle: {{ $('Get Pending Record').first().json['Title'] }}\\nThesis: {{ $('Get Pending Record').first().json['Thesis'] }}\\n\\nReturn ONLY the image prompt string (2-3 sentences max).\"\n  }]\n}",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 200,\n  \"system\": \"You are an art director for Chronexa, whose blog covers are minimal editorial line illustrations in ONE fixed house style. Given a blog title and thesis, return ONE short motif sentence describing the abstract subject matter as concrete drawable objects flowing through connected isometric nodes. Example: deal documents and company folders flowing through analysis nodes toward a completed transaction handshake. Rules: physical objects only (documents, folders, shields, vaults, scales, building blocks), no text or letters or numbers in the scene, no people, no logos, no screens or UI. Return ONLY the motif sentence, nothing else.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Blog title: {{ $('Extract Record').first().json.title }}\\nThesis: {{ $('Extract Record').first().json.thesis }}\\n\\nReturn ONLY the motif sentence.\"\n  }]\n}",
         "options": {
           "timeout": 30000
         },
@@ -152,12 +234,12 @@
       }
     },
     {
-      "id": "a4-extract-prompt",
+      "id": "a4b-extract-prompt",
       "name": "Extract Image Prompt",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1120,
+        1560,
         300
       ],
       "parameters": {
@@ -168,8 +250,8 @@
             {
               "id": "assign-record-id",
               "name": "record_id",
-              "value": "={{ $('Get Pending Record').first().json.id }}",
-              "type": "string"
+              "value": "={{ $('Extract Record').first().json.record_id }}",
+              "type": "number"
             },
             {
               "id": "assign-image-prompt",
@@ -183,23 +265,63 @@
       }
     },
     {
-      "id": "a4-gen-image",
-      "name": "Generate Image with Gemini",
+      "id": "a4b-gen-image",
+      "name": "Generate Image with OpenAI",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1340,
+        1780,
         300
       ],
       "onError": "continueErrorOutput",
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=={{ $env.GEMINI_API_KEY }}",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ model: 'gpt-image-1', prompt: \"Minimal editorial line illustration. Fine cream (#FBFAF7) linework on a deep forest-green (#1E3B26) background, with a SINGLE brighter leaf-green (#67B035) accent element. Light isometric depth, generous negative space, thin consistent strokes. CRITICAL: render absolutely NO words, letters, numbers, labels or symbols anywhere - every document, page or surface must be blank or show only abstract horizontal line-marks, never real text. No logos, watermarks, UI, or people. No glowing neon, no robots, no brains. Premium, restrained, editorial. Keep all key elements within the central 80% of the frame. 16:9 wide.\" + ' Subject: ' + $json.image_prompt + '.', size: '1536x1024', n: 1, quality: 'medium' }) }}",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lXwN59cPwsZJ7KyS",
+          "name": "OpenAI API Key (images)"
+        }
+      }
+    },
+    {
+      "id": "a4b-save-image-success",
+      "name": "Save Image URL (With Image)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2220,
+        200
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Image Prompt').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
         "sendHeaders": true,
+        "specifyHeaders": "keypair",
         "headerParameters": {
           "parameters": [
             {
-              "name": "content-type",
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
               "value": "application/json"
             }
           ]
@@ -207,7 +329,142 @@
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={\n  \"instances\": [{\n    \"prompt\": \"{{ $json.image_prompt }}. Professional enterprise B2B tech aesthetic, dark background, abstract data visualization, no text, no faces, cinematic quality\"\n  }],\n  \"parameters\": {\n    \"sampleCount\": 1,\n    \"aspectRatio\": \"16:9\",\n    \"outputMimeType\": \"image/png\",\n    \"personGeneration\": \"dont_allow\"\n  }\n}",
+        "jsonBody": "={{ ({ \"Cover Image URL\": $json.document?.url || '', \"Cover Image Prompt\": $('Extract Image Prompt').first().json.image_prompt, \"Status\": \"ready_to_publish\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a4b-save-image-no",
+      "name": "Save Image URL (No Image)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        440
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Image Prompt').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Cover Image URL\": '', \"Cover Image Prompt\": $('Extract Image Prompt').first().json.image_prompt, \"Status\": \"ready_to_publish\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a4b-fail",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        460
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"failed\", \"Error Log\": \"Image prompt generation failed (Claude API error)\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a4b-sticky",
+      "name": "⚙️ Agent 4: Image Designer (Baserow)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        100
+      ],
+      "parameters": {
+        "content": "## Agent 4: Image Designer (Baserow → Sanity)\n\nPolls copy_written every 5 min → Claude motif → OpenAI gpt-image-1 (1536x1024; all display surfaces crop to 16:9) — switched 2026-06-11, Gemini key was dead in the FIXED house style (dark-green editorial line art, picked 2026-06-10; keep in sync with website/scripts/gen-blog-covers.mjs) → uploads to Sanity assets (credential: Sanity Write Token) → Cover Image URL + ready_to_publish.\n\nImgbb removed 2026-06-10 (hardcoded key, off-brand covers).",
+        "height": 140,
+        "width": 560
+      }
+    },
+    {
+      "id": "a4-convert-binary",
+      "name": "Convert Image to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        200
+      ],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {
+          "fileName": "={{ 'blog-cover-' + $('Extract Image Prompt').first().json.record_id + '.png' }}",
+          "mimeType": "image/png"
+        }
+      }
+    },
+    {
+      "id": "a4-upload-sanity",
+      "name": "Upload Cover to Sanity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2192,
+        200
+      ],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Deb9qEZUnTCjDaGi",
+          "name": "Sanity Write Token"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://up57bpxm.api.sanity.io/v2024-01-01/assets/images/production?filename=blog-cover-' + $('Extract Image Prompt').first().json.record_id + '.png' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
         "options": {
           "timeout": 60000,
           "response": {
@@ -217,141 +474,6 @@
           }
         }
       }
-    },
-    {
-      "id": "a4-upload-imgbb",
-      "name": "Upload Image to Imgbb",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1560,
-        220
-      ],
-      "onError": "continueErrorOutput",
-      "parameters": {
-        "method": "POST",
-        "url": "=https://api.imgbb.com/1/upload?key=7356768e4502c6eec54d7228f1c0d06d&name=blog-{{ $('Extract Image Prompt').first().json.record_id }}",
-        "sendHeaders": false,
-        "sendBody": true,
-        "contentType": "form-urlencoded",
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "image",
-              "value": "={{ $json.predictions[0].bytesBase64Encoded }}"
-            }
-          ]
-        },
-        "options": {
-          "timeout": 30000,
-          "response": {
-            "response": {
-              "responseFormat": "json"
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "a4-save-image-success",
-      "name": "Save Image URL (With Image)",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        1780,
-        220
-      ],
-      "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $('Extract Image Prompt').first().json.record_id }}",
-            "Cover Image URL": "={{ $json.data?.display_url || '' }}",
-            "Cover Image Prompt": "={{ $('Extract Image Prompt').first().json.image_prompt }}",
-            "Status": "ready_to_publish"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": []
-        },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
-      }
-    },
-    {
-      "id": "a4-save-image",
-      "name": "Save Image URL (No Image)",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        1560,
-        400
-      ],
-      "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $('Extract Image Prompt').first().json.record_id }}",
-            "Cover Image URL": "",
-            "Cover Image Prompt": "={{ $('Extract Image Prompt').first().json.image_prompt }}",
-            "Status": "ready_to_publish"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": []
-        },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
-      }
-    },
-    {
-      "id": "a4-sticky",
-      "name": "⚙️ Agent 4: Image Designer",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        200,
-        160
-      ],
-      "parameters": {
-        "content": "## Blog Agent 4: Image Designer v2\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline (status = copy_written)\n**Output:** Gemini Imagen 3 → Imgbb CDN URL → status = ready_to_publish\n\n**Image Model:** Imagen 3 via Gemini API (key hardcoded)\n**Hosting:** Imgbb free CDN (accepts base64 directly — no Code node needed)\n**Fallback:** If Gemini or Imgbb fails, publishes without cover image (pipeline continues)\n\n**Flow:**\nGemini success → Upload to Imgbb → Save Image URL (With Image)\nGemini error → Save Image URL (No Image)",
-        "height": 180,
-        "width": 380
-      }
     }
   ],
   "connections": {
@@ -359,14 +481,43 @@
       "main": [
         [
           {
-            "node": "Get Pending Record",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Pending Record": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -396,6 +547,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Mark Failed",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -403,18 +561,18 @@
       "main": [
         [
           {
-            "node": "Generate Image with Gemini",
+            "node": "Generate Image with OpenAI",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Generate Image with Gemini": {
+    "Convert Image to File": {
       "main": [
         [
           {
-            "node": "Upload Image to Imgbb",
+            "node": "Upload Cover to Sanity",
             "type": "main",
             "index": 0
           }
@@ -428,7 +586,7 @@
         ]
       ]
     },
-    "Upload Image to Imgbb": {
+    "Upload Cover to Sanity": {
       "main": [
         [
           {
@@ -445,14 +603,29 @@
           }
         ]
       ]
+    },
+    "Generate Image with OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Convert Image to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Image URL (No Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "saveManualExecutions": true,
-    "errorWorkflow": "MKBhIfmRNZtPDJg0",
-    "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": true
+    "saveManualExecutions": false
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -461,16 +634,16 @@
   },
   "meta": null,
   "pinData": null,
-  "versionId": "0552b81c-06de-4e55-8d1b-dabc11af685d",
-  "activeVersionId": null,
-  "versionCounter": 20,
+  "versionId": "0f8af714-f89c-4db7-b992-60ec94a7af57",
+  "activeVersionId": "0f8af714-f89c-4db7-b992-60ec94a7af57",
+  "versionCounter": 26,
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-05-11T04:44:37.983Z",
-      "createdAt": "2026-05-11T04:44:37.983Z",
+      "updatedAt": "2026-05-19T13:01:49.193Z",
+      "createdAt": "2026-05-19T13:01:49.193Z",
       "role": "workflow:owner",
-      "workflowId": "3EVAeoUzCWBzlvKp",
+      "workflowId": "Z2ehkUAAYsub4l2i",
       "projectId": "b8KOq9Xa215X1ZmL",
       "project": {
         "updatedAt": "2025-09-10T05:16:40.899Z",
@@ -485,5 +658,649 @@
     }
   ],
   "tags": [],
-  "activeVersion": null
+  "activeVersion": {
+    "updatedAt": "2026-06-11T06:17:55.033Z",
+    "createdAt": "2026-06-11T06:17:55.033Z",
+    "versionId": "0f8af714-f89c-4db7-b992-60ec94a7af57",
+    "workflowId": "Z2ehkUAAYsub4l2i",
+    "nodes": [
+      {
+        "id": "a4b-trigger",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          240,
+          300
+        ],
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/5 * * * *"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "a4b-fetch",
+        "name": "Fetch Pending Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          460,
+          300
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://api.baserow.io/api/database/rows/table/975683/",
+          "authentication": "none",
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "user_field_names",
+                "value": "true"
+              },
+              {
+                "name": "filter__Status__equal",
+                "value": "copy_written"
+              },
+              {
+                "name": "size",
+                "value": "1"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "sendBody": false,
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a4b-check",
+        "name": "Has Pending Record?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          680,
+          300
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "check-count",
+                "leftValue": "={{ $json.count }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a4b-end",
+        "name": "End: No Pending Records",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          900,
+          460
+        ],
+        "parameters": {}
+      },
+      {
+        "id": "a4b-extract",
+        "name": "Extract Record",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          900,
+          300
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "er-id",
+                "name": "record_id",
+                "value": "={{ $json.results[0].id }}",
+                "type": "number"
+              },
+              {
+                "id": "er-title",
+                "name": "title",
+                "value": "={{ $json.results[0]['Title'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-thesis",
+                "name": "thesis",
+                "value": "={{ $json.results[0]['Thesis'] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a4b-lock",
+        "name": "Lock Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1120,
+          300
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"generating_image\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a4b-gen-prompt",
+        "name": "Generate Image Prompt",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1340,
+          300
+        ],
+        "onError": "continueErrorOutput",
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 200,\n  \"system\": \"You are an art director for Chronexa, whose blog covers are minimal editorial line illustrations in ONE fixed house style. Given a blog title and thesis, return ONE short motif sentence describing the abstract subject matter as concrete drawable objects flowing through connected isometric nodes. Example: deal documents and company folders flowing through analysis nodes toward a completed transaction handshake. Rules: physical objects only (documents, folders, shields, vaults, scales, building blocks), no text or letters or numbers in the scene, no people, no logos, no screens or UI. Return ONLY the motif sentence, nothing else.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Blog title: {{ $('Extract Record').first().json.title }}\\nThesis: {{ $('Extract Record').first().json.thesis }}\\n\\nReturn ONLY the motif sentence.\"\n  }]\n}",
+          "options": {
+            "timeout": 30000
+          },
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth"
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "MBzkzU0jc7m1gBTJ",
+            "name": "Anthropic API"
+          }
+        }
+      },
+      {
+        "id": "a4b-extract-prompt",
+        "name": "Extract Image Prompt",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1560,
+          300
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "assign-record-id",
+                "name": "record_id",
+                "value": "={{ $('Extract Record').first().json.record_id }}",
+                "type": "number"
+              },
+              {
+                "id": "assign-image-prompt",
+                "name": "image_prompt",
+                "value": "={{ $json.content[0].text.trim() }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a4b-gen-image",
+        "name": "Generate Image with OpenAI",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1780,
+          300
+        ],
+        "onError": "continueErrorOutput",
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.openai.com/v1/images/generations",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ model: 'gpt-image-1', prompt: \"Minimal editorial line illustration. Fine cream (#FBFAF7) linework on a deep forest-green (#1E3B26) background, with a SINGLE brighter leaf-green (#67B035) accent element. Light isometric depth, generous negative space, thin consistent strokes. CRITICAL: render absolutely NO words, letters, numbers, labels or symbols anywhere - every document, page or surface must be blank or show only abstract horizontal line-marks, never real text. No logos, watermarks, UI, or people. No glowing neon, no robots, no brains. Premium, restrained, editorial. Keep all key elements within the central 80% of the frame. 16:9 wide.\" + ' Subject: ' + $json.image_prompt + '.', size: '1536x1024', n: 1, quality: 'medium' }) }}",
+          "options": {
+            "timeout": 120000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "lXwN59cPwsZJ7KyS",
+            "name": "OpenAI API Key (images)"
+          }
+        }
+      },
+      {
+        "id": "a4b-save-image-success",
+        "name": "Save Image URL (With Image)",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2220,
+          200
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Image Prompt').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Cover Image URL\": $json.document?.url || '', \"Cover Image Prompt\": $('Extract Image Prompt').first().json.image_prompt, \"Status\": \"ready_to_publish\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a4b-save-image-no",
+        "name": "Save Image URL (No Image)",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2000,
+          440
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Image Prompt').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Cover Image URL\": '', \"Cover Image Prompt\": $('Extract Image Prompt').first().json.image_prompt, \"Status\": \"ready_to_publish\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a4b-fail",
+        "name": "Mark Failed",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1560,
+          460
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"failed\", \"Error Log\": \"Image prompt generation failed (Claude API error)\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a4b-sticky",
+        "name": "⚙️ Agent 4: Image Designer (Baserow)",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          240,
+          100
+        ],
+        "parameters": {
+          "content": "## Agent 4: Image Designer (Baserow → Sanity)\n\nPolls copy_written every 5 min → Claude motif → OpenAI gpt-image-1 (1536x1024; all display surfaces crop to 16:9) — switched 2026-06-11, Gemini key was dead in the FIXED house style (dark-green editorial line art, picked 2026-06-10; keep in sync with website/scripts/gen-blog-covers.mjs) → uploads to Sanity assets (credential: Sanity Write Token) → Cover Image URL + ready_to_publish.\n\nImgbb removed 2026-06-10 (hardcoded key, off-brand covers).",
+          "height": 140,
+          "width": 560
+        }
+      },
+      {
+        "id": "a4-convert-binary",
+        "name": "Convert Image to File",
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          2000,
+          200
+        ],
+        "onError": "continueErrorOutput",
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "data[0].b64_json",
+          "options": {
+            "fileName": "={{ 'blog-cover-' + $('Extract Image Prompt').first().json.record_id + '.png' }}",
+            "mimeType": "image/png"
+          }
+        }
+      },
+      {
+        "id": "a4-upload-sanity",
+        "name": "Upload Cover to Sanity",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2192,
+          200
+        ],
+        "onError": "continueErrorOutput",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "Deb9qEZUnTCjDaGi",
+            "name": "Sanity Write Token"
+          }
+        },
+        "parameters": {
+          "method": "POST",
+          "url": "={{ 'https://up57bpxm.api.sanity.io/v2024-01-01/assets/images/production?filename=blog-cover-' + $('Extract Image Prompt').first().json.record_id + '.png' }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {
+            "timeout": 60000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Fetch Pending Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Pending Record": {
+        "main": [
+          [
+            {
+              "node": "Has Pending Record?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has Pending Record?": {
+        "main": [
+          [
+            {
+              "node": "Extract Record",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "End: No Pending Records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Record": {
+        "main": [
+          [
+            {
+              "node": "Lock Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lock Record": {
+        "main": [
+          [
+            {
+              "node": "Generate Image Prompt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate Image Prompt": {
+        "main": [
+          [
+            {
+              "node": "Extract Image Prompt",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Mark Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Image Prompt": {
+        "main": [
+          [
+            {
+              "node": "Generate Image with OpenAI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert Image to File": {
+        "main": [
+          [
+            {
+              "node": "Upload Cover to Sanity",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Save Image URL (No Image)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upload Cover to Sanity": {
+        "main": [
+          [
+            {
+              "node": "Save Image URL (With Image)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Save Image URL (No Image)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate Image with OpenAI": {
+        "main": [
+          [
+            {
+              "node": "Convert Image to File",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Save Image URL (No Image)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Team Chronexa",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-11T06:17:55.129Z",
+        "id": 583,
+        "workflowId": "Z2ehkUAAYsub4l2i",
+        "versionId": "0f8af714-f89c-4db7-b992-60ec94a7af57",
+        "event": "activated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      },
+      {
+        "createdAt": "2026-06-11T06:17:55.094Z",
+        "id": 582,
+        "workflowId": "Z2ehkUAAYsub4l2i",
+        "versionId": "0f8af714-f89c-4db7-b992-60ec94a7af57",
+        "event": "deactivated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    ]
+  }
 }

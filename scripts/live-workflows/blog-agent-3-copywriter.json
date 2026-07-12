@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-05-29T10:50:20.022Z",
-  "createdAt": "2026-05-11T04:44:31.402Z",
-  "id": "eVPVPBzfFp4obCu0",
-  "name": "[DRAFT] Blog Agent 3: Copywriter",
+  "updatedAt": "2026-06-11T17:29:27.660Z",
+  "createdAt": "2026-05-19T12:53:28.678Z",
+  "id": "EbW7suHY7ji6EhsD",
+  "name": "Agent 3: Copywriter (Baserow)",
   "description": null,
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
-      "id": "a3-trigger",
+      "id": "a3b-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -28,100 +28,208 @@
       }
     },
     {
-      "id": "a3-get-pending",
-      "name": "Get Pending Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a3b-fetch",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         460,
         300
       ],
       "parameters": {
-        "operation": "search",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "filterByFormula": "{Status}=\"research_complete\"",
-        "returnAll": false,
-        "limit": 1,
-        "sort": {
-          "property": [
+        "method": "GET",
+        "url": "https://api.baserow.io/api/database/rows/table/975683/",
+        "authentication": "none",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
             {
-              "field": "Title",
-              "direction": "asc"
+              "name": "user_field_names",
+              "value": "true"
+            },
+            {
+              "name": "filter__Status__equal",
+              "value": "research_complete"
+            },
+            {
+              "name": "size",
+              "value": "1"
             }
           ]
         },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000
         }
       }
     },
     {
-      "id": "a3-lock",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a3b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
         680,
         300
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $json.id }}",
-            "Status": "writing"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
           },
-          "matchingColumns": [
-            "id"
+          "conditions": [
+            {
+              "id": "check-count",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
           ],
-          "schema": []
+          "combinator": "and"
         },
         "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
-        }
       }
     },
     {
-      "id": "a3-call-claude",
-      "name": "Call Claude - Write Blog Post",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "a3b-end",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3b-extract",
+      "name": "Extract Record",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         900,
         300
       ],
       "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "er-id",
+              "name": "record_id",
+              "value": "={{ $json.results[0].id }}",
+              "type": "number"
+            },
+            {
+              "id": "er-ti",
+              "name": "title",
+              "value": "={{ $json.results[0]['Title'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-kw",
+              "name": "target_keyword",
+              "value": "={{ $json.results[0]['Target Keyword'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-sk",
+              "name": "secondary_keywords",
+              "value": "={{ $json.results[0]['Secondary Keywords'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-pe",
+              "name": "persona",
+              "value": "={{ $json.results[0]['Persona'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-th",
+              "name": "thesis",
+              "value": "={{ $json.results[0]['Thesis'] }}",
+              "type": "string"
+            },
+            {
+              "id": "er-rb",
+              "name": "research_brief",
+              "value": "={{ $json.results[0]['Research Brief'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a3b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"writing\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a3b-claude",
+      "name": "Call Claude - Write Blog Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        300
+      ],
+      "onError": "continueErrorOutput",
+      "parameters": {
         "method": "POST",
         "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
         "sendHeaders": true,
+        "specifyHeaders": "keypair",
         "headerParameters": {
           "parameters": [
             {
@@ -137,11 +245,10 @@
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={{ ({model:'claude-sonnet-4-6',max_tokens:8192,system:'You are a senior B2B content strategist for Chronexa, an AI orchestration firm that helps mid-market operations teams replace fragmented SaaS with custom AI workflows built on n8n.\\n\\nBRAND VOICE: Authoritative, data-driven, B2B focused, no fluff.\\n\\nHTML FORMAT (Framer CMS — use EXACTLY this):\\n- Headings: <h2>Heading Text</h2> (no dir attribute)\\n- Paragraphs: <p>Text here.</p>\\n- Bold: <strong>text</strong>\\n- Lists: <ul><li>item</li></ul>\\n- Start with ONE <h2> as the opening heading, then 3-5 more <h2> sections\\n- NO <html>, <body>, <head>, <h1> tags\\n\\nOUTPUT FORMAT — respond with EXACTLY this structure, no other text:\\n%%TITLE%%\\n<your SEO title 60-65 chars>\\n%%SLUG%%\\n<your url-slug-hyphenated>\\n%%META%%\\n<your 155-char meta description>\\n%%WORDCOUNT%%\\n<estimated word count as integer>\\n%%HTML_START%%\\n<full html body content here>\\n%%HTML_END%%',messages:[{role:'user',content:'Write a comprehensive SEO blog post (1800-2500 words).\\n\\nTITLE DIRECTION: '+$('Get Pending Record').first().json['Title']+'\\nKEYWORD: '+$('Get Pending Record').first().json['Target Keyword']+'\\nSECONDARY KEYWORDS: '+$('Get Pending Record').first().json['Secondary Keywords']+'\\nPERSONA: '+$('Get Pending Record').first().json['Persona']+'\\nTHESIS: '+$('Get Pending Record').first().json['Thesis']+'\\n\\nRESEARCH BRIEF:\\n'+$('Get Pending Record').first().json['Research Brief']+'\\n\\nStructure: opening stat hook → 3-5 H2 sections → CTA to Chronexa. Use the delimited output format exactly.'}]}) }}",
+        "jsonBody": "={{ ({model:'claude-sonnet-4-6',max_tokens:8192,system:'You are a senior content strategist for Chronexa, an enterprise AI firm that designs secure, auditable custom AI systems for regulated industries: private equity and M&A, wealth management and RIAs, law firms, CPA and tax firms, and financial services. Chronexa builds document intelligence, RAG knowledge engines and agentic workflows where client data cannot leak and outputs must stand up to an audit. Workflow tools such as n8n are implementation details, never the story.\\n\\nBRAND VOICE: Authoritative, specific, written from the chair of the person who lives the problem. Concrete numbers and workflow detail over adjectives. No fluff, no generic AI hype.\\n\\nSTRUCTURE (mandatory):\\n1. Open with the problem stated exactly as the buyer would say it. No statistics-dump intro.\\n2. 3-5 <h2> sections developing: the cost of the status quo (real ROI math), how a custom AI system solves it (concrete workflow detail), and security/compliance (data residency, access control, audit trail - the deal-decider for these buyers).\\n3. A final <h2>FAQ</h2> section with 3-4 real buyer questions as <h3> headings, each followed by a 2-3 sentence answer.\\n4. Close with a short CTA paragraph inviting a free audit at Chronexa.\\n5. Weave in 1-2 inline links where genuinely relevant for the persona: legal: https://chronexa.io/legal-due-diligence-automation | cpa_firm: https://chronexa.io/cpa-tax-document-automation | wealth_management or financial_services: https://chronexa.io/financial-services-automation | private_equity: https://chronexa.io/vc-pe-crm-automation\\n\\nHTML FORMAT (use EXACTLY this):\\n- Headings: <h2>Heading Text</h2>, FAQ questions as <h3>Question?</h3>\\n- Paragraphs: <p>Text here.</p>\\n- Bold: <strong>text</strong>\\n- Links: <a href=\\\"url\\\">text</a>\\n- Lists: <ul><li>item</li></ul>\\n- Comparison table when data genuinely warrants it (costs, build-vs-buy, vendor comparison; max one or two per post, 3-4 columns): <table><thead><tr><th>Col</th></tr></thead><tbody><tr><td>cell</td></tr></tbody></table>\\n- NO <html>, <body>, <head>, <h1> tags. No inline styles.\\n\\nOUTPUT FORMAT - respond with EXACTLY this structure, no other text:\\n%%TITLE%%\\n<your SEO title 60-65 chars>\\n%%SLUG%%\\n<your url-slug-hyphenated>\\n%%META%%\\n<your 155-char meta description>\\n%%WORDCOUNT%%\\n<estimated word count as integer>\\n%%TAKEAWAYS%%\\n<3-5 key takeaways, ONE PER LINE: each a single standalone sentence stating a specific fact, number or decision rule from the article, max 22 words, no marketing filler>\\n%%HTML_START%%\\n<full html body content here>\\n%%HTML_END%%',messages:[{role:'user',content:'Write a comprehensive SEO blog post (1800-2500 words).\\n\\nTITLE DIRECTION: '+$('Extract Record').first().json.title+'\\nKEYWORD: '+$('Extract Record').first().json.target_keyword+'\\nSECONDARY KEYWORDS: '+$('Extract Record').first().json.secondary_keywords+'\\nPERSONA: '+$('Extract Record').first().json.persona+'\\nTHESIS: '+$('Extract Record').first().json.thesis+'\\n\\nRESEARCH BRIEF:\\n'+$('Extract Record').first().json.research_brief+'\\n\\nFollow the mandatory structure from the system prompt (buyer-words opening, ROI math, security/compliance section, FAQ, CTA). Use the delimited output format exactly.'}]}) }}",
         "options": {
           "timeout": 120000
         },
-        "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth"
       },
       "credentials": {
@@ -152,12 +259,12 @@
       }
     },
     {
-      "id": "a3-parse-fields",
+      "id": "a3b-parse",
       "name": "Parse Blog Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1120,
+        1560,
         300
       ],
       "parameters": {
@@ -168,8 +275,8 @@
             {
               "id": "assign-record-id",
               "name": "record_id",
-              "value": "={{ $('Get Pending Record').first().json.id }}",
-              "type": "string"
+              "value": "={{ $('Extract Record').first().json.record_id }}",
+              "type": "number"
             },
             {
               "id": "assign-title",
@@ -192,13 +299,19 @@
             {
               "id": "assign-wc",
               "name": "word_count",
-              "value": "={{ parseInt($json.content[0].text.split('%%WORDCOUNT%%')[1].split('%%HTML_START%%')[0].trim()) || 1800 }}",
+              "value": "={{ parseInt($json.content[0].text.split('%%WORDCOUNT%%')[1].split('%%TAKEAWAYS%%')[0].trim()) || 1800 }}",
               "type": "number"
             },
             {
               "id": "assign-html",
               "name": "html_body",
               "value": "={{ $json.content[0].text.split('%%HTML_START%%')[1].split('%%HTML_END%%')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-takeaways",
+              "name": "key_takeaways",
+              "value": "={{ ($json.content[0].text.split('%%TAKEAWAYS%%')[1] || '').split('%%HTML_START%%')[0].trim() }}",
               "type": "string"
             }
           ]
@@ -207,12 +320,12 @@
       }
     },
     {
-      "id": "a3-quality-gate",
+      "id": "a3b-quality",
       "name": "Quality Gate",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1340,
+        1780,
         300
       ],
       "parameters": {
@@ -243,110 +356,95 @@
             }
           ],
           "combinator": "and"
-        }
+        },
+        "options": {}
       }
     },
     {
-      "id": "a3-save-content",
+      "id": "a3b-save",
       "name": "Save Content",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1560,
-        200
+        2000,
+        180
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
         },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $json.record_id }}",
-            "Title": "={{ $json.title }}",
-            "Slug": "={{ $json.slug }}",
-            "Meta Description": "={{ $json.meta_description }}",
-            "HTML Body": "={{ $json.html_body }}",
-            "Word Count": "={{ $json.word_count }}",
-            "Status": "copy_written"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": []
-        },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Title\": $json.title, \"Slug\": $json.slug, \"Meta Description\": $json.meta_description, \"HTML Body\": $json.html_body, \"Word Count\": \"\" + $json.word_count, \"Key Takeaways\": $json.key_takeaways || '', \"Status\": \"copy_written\" }) }}",
+        "options": {
+          "timeout": 30000
         }
       }
     },
     {
-      "id": "a3-fail",
+      "id": "a3b-fail",
       "name": "Mark Failed",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1560,
-        420
+        2000,
+        440
       ],
       "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appDyvRC1mKQO6mMJ",
-          "mode": "id"
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
         },
-        "table": {
-          "__rl": true,
-          "value": "tblEKgg9T1Z8tsj55",
-          "mode": "id"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "id": "={{ $json.record_id }}",
-            "Status": "failed",
-            "Error Log": "={{ 'Parse failed or quality gate: wc=' + $json.word_count + ' html_len=' + $json.html_body.length }}"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": []
-        },
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "dKOWpUaGvyy1S0eM",
-          "name": "Airtable Personal Access Token account"
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"failed\", \"Error Log\": \"Agent3 failed: wc=\" + ($json.word_count || \"N/A\") + \" html_len=\" + (($json.html_body || \"\").length) }) }}",
+        "options": {
+          "timeout": 15000
         }
       }
     },
     {
-      "id": "a3-sticky",
-      "name": "⚙️ Agent 3: Copywriter",
+      "id": "a3b-sticky",
+      "name": "⚙️ Agent 3: Copywriter (Baserow)",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        200,
-        160
+        240,
+        100
       ],
       "parameters": {
-        "content": "## Blog Agent 3: Copywriter v6 — Delimiter Parsing\n\n**Trigger:** Every 5 min\n**Input:** blog_pipeline status=research_complete\n**Output:** HTML blog post → status=copy_written\n\n**Model:** claude-sonnet-4-6 (~74s)\n**Fix:** Claude returns delimited format (%%TITLE%%, %%HTML_START%%, etc.) instead of JSON. Parsed with .split() in Set node — no Code nodes, no task runner, no JSON.parse needed.",
-        "height": 160,
-        "width": 400
+        "content": "## Agent 3: Copywriter (Baserow)\n\nPolls research_complete every 5 min → Claude Sonnet writes the post → quality gate (≥1000 words) → copy_written.\n\n**Positioning (2026-06-10):** enterprise AI for regulated industries. Mandatory structure: buyer-words opening → ROI → security/compliance → FAQ → CTA, with persona-matched internal links.",
+        "height": 140,
+        "width": 500
       }
     }
   ],
@@ -355,14 +453,43 @@
       "main": [
         [
           {
-            "node": "Get Pending Record",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Pending Record": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -389,6 +516,13 @@
         [
           {
             "node": "Parse Blog Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Failed",
             "type": "main",
             "index": 0
           }
@@ -427,10 +561,7 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "saveManualExecutions": true,
-    "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "MKBhIfmRNZtPDJg0",
-    "availableInMCP": true
+    "saveManualExecutions": false
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -439,16 +570,16 @@
   },
   "meta": null,
   "pinData": null,
-  "versionId": "170d69ce-1bc8-46a0-a3c8-09d2441dc73e",
-  "activeVersionId": null,
-  "versionCounter": 16,
+  "versionId": "0c1023a0-8cb9-437b-8b46-4a02b454bbbe",
+  "activeVersionId": "0c1023a0-8cb9-437b-8b46-4a02b454bbbe",
+  "versionCounter": 23,
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-05-11T04:44:31.474Z",
-      "createdAt": "2026-05-11T04:44:31.474Z",
+      "updatedAt": "2026-05-19T12:53:28.687Z",
+      "createdAt": "2026-05-19T12:53:28.687Z",
       "role": "workflow:owner",
-      "workflowId": "eVPVPBzfFp4obCu0",
+      "workflowId": "EbW7suHY7ji6EhsD",
       "projectId": "b8KOq9Xa215X1ZmL",
       "project": {
         "updatedAt": "2025-09-10T05:16:40.899Z",
@@ -463,5 +594,585 @@
     }
   ],
   "tags": [],
-  "activeVersion": null
+  "activeVersion": {
+    "updatedAt": "2026-06-11T17:29:27.663Z",
+    "createdAt": "2026-06-11T17:29:27.663Z",
+    "versionId": "0c1023a0-8cb9-437b-8b46-4a02b454bbbe",
+    "workflowId": "EbW7suHY7ji6EhsD",
+    "nodes": [
+      {
+        "id": "a3b-trigger",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          240,
+          300
+        ],
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/5 * * * *"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "a3b-fetch",
+        "name": "Fetch Pending Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          460,
+          300
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://api.baserow.io/api/database/rows/table/975683/",
+          "authentication": "none",
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "user_field_names",
+                "value": "true"
+              },
+              {
+                "name": "filter__Status__equal",
+                "value": "research_complete"
+              },
+              {
+                "name": "size",
+                "value": "1"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              }
+            ]
+          },
+          "sendBody": false,
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a3b-check",
+        "name": "Has Pending Record?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          680,
+          300
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "check-count",
+                "leftValue": "={{ $json.count }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a3b-end",
+        "name": "End: No Pending Records",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          900,
+          460
+        ],
+        "parameters": {}
+      },
+      {
+        "id": "a3b-extract",
+        "name": "Extract Record",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          900,
+          300
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "er-id",
+                "name": "record_id",
+                "value": "={{ $json.results[0].id }}",
+                "type": "number"
+              },
+              {
+                "id": "er-ti",
+                "name": "title",
+                "value": "={{ $json.results[0]['Title'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-kw",
+                "name": "target_keyword",
+                "value": "={{ $json.results[0]['Target Keyword'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-sk",
+                "name": "secondary_keywords",
+                "value": "={{ $json.results[0]['Secondary Keywords'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-pe",
+                "name": "persona",
+                "value": "={{ $json.results[0]['Persona'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-th",
+                "name": "thesis",
+                "value": "={{ $json.results[0]['Thesis'] }}",
+                "type": "string"
+              },
+              {
+                "id": "er-rb",
+                "name": "research_brief",
+                "value": "={{ $json.results[0]['Research Brief'] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a3b-lock",
+        "name": "Lock Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1120,
+          300
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"writing\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a3b-claude",
+        "name": "Call Claude - Write Blog Post",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1340,
+          300
+        ],
+        "onError": "continueErrorOutput",
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "authentication": "genericCredentialType",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({model:'claude-sonnet-4-6',max_tokens:8192,system:'You are a senior content strategist for Chronexa, an enterprise AI firm that designs secure, auditable custom AI systems for regulated industries: private equity and M&A, wealth management and RIAs, law firms, CPA and tax firms, and financial services. Chronexa builds document intelligence, RAG knowledge engines and agentic workflows where client data cannot leak and outputs must stand up to an audit. Workflow tools such as n8n are implementation details, never the story.\\n\\nBRAND VOICE: Authoritative, specific, written from the chair of the person who lives the problem. Concrete numbers and workflow detail over adjectives. No fluff, no generic AI hype.\\n\\nSTRUCTURE (mandatory):\\n1. Open with the problem stated exactly as the buyer would say it. No statistics-dump intro.\\n2. 3-5 <h2> sections developing: the cost of the status quo (real ROI math), how a custom AI system solves it (concrete workflow detail), and security/compliance (data residency, access control, audit trail - the deal-decider for these buyers).\\n3. A final <h2>FAQ</h2> section with 3-4 real buyer questions as <h3> headings, each followed by a 2-3 sentence answer.\\n4. Close with a short CTA paragraph inviting a free audit at Chronexa.\\n5. Weave in 1-2 inline links where genuinely relevant for the persona: legal: https://chronexa.io/legal-due-diligence-automation | cpa_firm: https://chronexa.io/cpa-tax-document-automation | wealth_management or financial_services: https://chronexa.io/financial-services-automation | private_equity: https://chronexa.io/vc-pe-crm-automation\\n\\nHTML FORMAT (use EXACTLY this):\\n- Headings: <h2>Heading Text</h2>, FAQ questions as <h3>Question?</h3>\\n- Paragraphs: <p>Text here.</p>\\n- Bold: <strong>text</strong>\\n- Links: <a href=\\\"url\\\">text</a>\\n- Lists: <ul><li>item</li></ul>\\n- Comparison table when data genuinely warrants it (costs, build-vs-buy, vendor comparison; max one or two per post, 3-4 columns): <table><thead><tr><th>Col</th></tr></thead><tbody><tr><td>cell</td></tr></tbody></table>\\n- NO <html>, <body>, <head>, <h1> tags. No inline styles.\\n\\nOUTPUT FORMAT - respond with EXACTLY this structure, no other text:\\n%%TITLE%%\\n<your SEO title 60-65 chars>\\n%%SLUG%%\\n<your url-slug-hyphenated>\\n%%META%%\\n<your 155-char meta description>\\n%%WORDCOUNT%%\\n<estimated word count as integer>\\n%%TAKEAWAYS%%\\n<3-5 key takeaways, ONE PER LINE: each a single standalone sentence stating a specific fact, number or decision rule from the article, max 22 words, no marketing filler>\\n%%HTML_START%%\\n<full html body content here>\\n%%HTML_END%%',messages:[{role:'user',content:'Write a comprehensive SEO blog post (1800-2500 words).\\n\\nTITLE DIRECTION: '+$('Extract Record').first().json.title+'\\nKEYWORD: '+$('Extract Record').first().json.target_keyword+'\\nSECONDARY KEYWORDS: '+$('Extract Record').first().json.secondary_keywords+'\\nPERSONA: '+$('Extract Record').first().json.persona+'\\nTHESIS: '+$('Extract Record').first().json.thesis+'\\n\\nRESEARCH BRIEF:\\n'+$('Extract Record').first().json.research_brief+'\\n\\nFollow the mandatory structure from the system prompt (buyer-words opening, ROI math, security/compliance section, FAQ, CTA). Use the delimited output format exactly.'}]}) }}",
+          "options": {
+            "timeout": 120000
+          },
+          "genericAuthType": "httpHeaderAuth"
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "MBzkzU0jc7m1gBTJ",
+            "name": "Anthropic API"
+          }
+        }
+      },
+      {
+        "id": "a3b-parse",
+        "name": "Parse Blog Fields",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1560,
+          300
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "assign-record-id",
+                "name": "record_id",
+                "value": "={{ $('Extract Record').first().json.record_id }}",
+                "type": "number"
+              },
+              {
+                "id": "assign-title",
+                "name": "title",
+                "value": "={{ $json.content[0].text.split('%%TITLE%%')[1].split('%%SLUG%%')[0].trim() }}",
+                "type": "string"
+              },
+              {
+                "id": "assign-slug",
+                "name": "slug",
+                "value": "={{ $json.content[0].text.split('%%SLUG%%')[1].split('%%META%%')[0].trim() }}",
+                "type": "string"
+              },
+              {
+                "id": "assign-meta",
+                "name": "meta_description",
+                "value": "={{ $json.content[0].text.split('%%META%%')[1].split('%%WORDCOUNT%%')[0].trim() }}",
+                "type": "string"
+              },
+              {
+                "id": "assign-wc",
+                "name": "word_count",
+                "value": "={{ parseInt($json.content[0].text.split('%%WORDCOUNT%%')[1].split('%%TAKEAWAYS%%')[0].trim()) || 1800 }}",
+                "type": "number"
+              },
+              {
+                "id": "assign-html",
+                "name": "html_body",
+                "value": "={{ $json.content[0].text.split('%%HTML_START%%')[1].split('%%HTML_END%%')[0].trim() }}",
+                "type": "string"
+              },
+              {
+                "id": "assign-takeaways",
+                "name": "key_takeaways",
+                "value": "={{ ($json.content[0].text.split('%%TAKEAWAYS%%')[1] || '').split('%%HTML_START%%')[0].trim() }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a3b-quality",
+        "name": "Quality Gate",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1780,
+          300
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "wc-check",
+                "leftValue": "={{ $json.word_count }}",
+                "rightValue": 1000,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              },
+              {
+                "id": "html-check",
+                "leftValue": "={{ $json.html_body.length }}",
+                "rightValue": 2000,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a3b-save",
+        "name": "Save Content",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2000,
+          180
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Title\": $json.title, \"Slug\": $json.slug, \"Meta Description\": $json.meta_description, \"HTML Body\": $json.html_body, \"Word Count\": \"\" + $json.word_count, \"Key Takeaways\": $json.key_takeaways || '', \"Status\": \"copy_written\" }) }}",
+          "options": {
+            "timeout": 30000
+          }
+        }
+      },
+      {
+        "id": "a3b-fail",
+        "name": "Mark Failed",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2000,
+          440
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/' + $('Extract Record').first().json.record_id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"failed\", \"Error Log\": \"Agent3 failed: wc=\" + ($json.word_count || \"N/A\") + \" html_len=\" + (($json.html_body || \"\").length) }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a3b-sticky",
+        "name": "⚙️ Agent 3: Copywriter (Baserow)",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          240,
+          100
+        ],
+        "parameters": {
+          "content": "## Agent 3: Copywriter (Baserow)\n\nPolls research_complete every 5 min → Claude Sonnet writes the post → quality gate (≥1000 words) → copy_written.\n\n**Positioning (2026-06-10):** enterprise AI for regulated industries. Mandatory structure: buyer-words opening → ROI → security/compliance → FAQ → CTA, with persona-matched internal links.",
+          "height": 140,
+          "width": 500
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Fetch Pending Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Pending Record": {
+        "main": [
+          [
+            {
+              "node": "Has Pending Record?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has Pending Record?": {
+        "main": [
+          [
+            {
+              "node": "Extract Record",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "End: No Pending Records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Record": {
+        "main": [
+          [
+            {
+              "node": "Lock Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lock Record": {
+        "main": [
+          [
+            {
+              "node": "Call Claude - Write Blog Post",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Claude - Write Blog Post": {
+        "main": [
+          [
+            {
+              "node": "Parse Blog Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Mark Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Blog Fields": {
+        "main": [
+          [
+            {
+              "node": "Quality Gate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Quality Gate": {
+        "main": [
+          [
+            {
+              "node": "Save Content",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Mark Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Team Chronexa",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-11T17:29:27.792Z",
+        "id": 589,
+        "workflowId": "EbW7suHY7ji6EhsD",
+        "versionId": "0c1023a0-8cb9-437b-8b46-4a02b454bbbe",
+        "event": "activated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      },
+      {
+        "createdAt": "2026-06-11T17:29:27.759Z",
+        "id": 588,
+        "workflowId": "EbW7suHY7ji6EhsD",
+        "versionId": "0c1023a0-8cb9-437b-8b46-4a02b454bbbe",
+        "event": "deactivated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    ]
+  }
 }

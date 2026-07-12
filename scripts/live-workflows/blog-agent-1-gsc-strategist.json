@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T11:38:52.759Z",
+  "updatedAt": "2026-06-11T05:56:29.212Z",
   "createdAt": "2026-05-15T08:06:45.471Z",
   "id": "fPqf1XhTxhGyWVbF",
   "name": "Agent 1: GSC Strategist (Baserow)",
@@ -12,8 +12,12 @@
         "rule": {
           "interval": [
             {
-              "field": "hours",
-              "hoursInterval": 6
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 6
             }
           ]
         }
@@ -45,8 +49,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        464,
-        304
+        832,
+        160
       ],
       "credentials": {
         "googleOAuth2Api": {
@@ -57,15 +61,15 @@
     },
     {
       "parameters": {
-        "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 5);\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
+        "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 1); // one post per run — strategy is ~4/month, depth over volume\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    source: 'gsc',\n    context_line: 'Google Search Console striking-distance keyword: position ' + r.position.toFixed(1) + ' with ' + Math.round(r.impressions) + ' impressions over 90 days. A focused post can capture existing demand.',\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
       },
       "id": "a1g-filter",
       "name": "Filter Striking Distance",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        688,
-        304
+        1024,
+        160
       ]
     },
     {
@@ -97,8 +101,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        912,
-        304
+        1216,
+        160
       ]
     },
     {
@@ -108,10 +112,6 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "x-api-key",
-              "value": "REDACTED_ANTHROPIC_API_KEY"
-            },
             {
               "name": "anthropic-version",
               "value": "2023-06-01"
@@ -124,19 +124,27 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an AI automation agency serving wealth managers, CFOs, SaaS founders, supply chain operators, and CPA firms.\\n\\nA Google Search Console keyword is in position ' + $json.position + ' with ' + $json.impressions + ' impressions over 90 days. This is a high-opportunity striking distance keyword.\\n\\nKeyword: ' + $json.query + '\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: wealth_management, supply_chain, saas_founder, agency_owner, cpa_firm]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
+        "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an enterprise AI firm that designs secure, auditable custom AI systems for regulated industries: private equity and M&A, wealth management and RIAs, law firms, CPA and tax firms, and financial services. Readers are partners, principals and COOs at US mid-market firms. Workflow tools such as n8n are implementation details, never the story.\\n\\nTarget keyword: ' + $json.query + '\\nKeyword context: ' + ($json.context_line || 'High-opportunity keyword for Chronexa.') + '\\n\\nBrief principles: state the problem exactly as the buyer would phrase it, promise concrete ROI, treat security and compliance as the deal-decider, demand first-hand operational depth. No generic AI content.\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: private_equity, wealth_management, legal, cpa_firm, financial_services]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
         "options": {
           "timeout": 60000
-        }
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
       },
       "id": "a1g-claude",
       "name": "Claude Brief Generation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1136,
-        400
-      ]
+        1408,
+        368
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "MBzkzU0jc7m1gBTJ",
+          "name": "Anthropic API"
+        }
+      }
     },
     {
       "parameters": {
@@ -148,8 +156,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1360,
-        400
+        1600,
+        368
       ]
     },
     {
@@ -181,8 +189,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1584,
-        400
+        1792,
+        368
       ]
     },
     {
@@ -191,8 +199,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1808,
-        304
+        2528,
+        496
       ],
       "parameters": {
         "method": "POST",
@@ -227,8 +235,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1136,
-        208
+        1408,
+        64
       ]
     },
     {
@@ -238,13 +246,13 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1808,
-        496
+        1984,
+        560
       ]
     },
     {
       "parameters": {
-        "content": "## Agent 1: GSC Strategist (Baserow) v1\n\n**Trigger:** Every 6 hours\n**Input:** Google Search Console searchAnalytics (position 11-30, impressions ≥50)\n**Output:** blog_pipeline row in Baserow (status=idea_generated)\n\n**Auth:** Service account JWT (built in Code node — no n8n GSC cred needed)\n**Model:** claude-haiku-4-5-20251001\n**DB:** Baserow Blog CMS (table 975683)\n\n**Replaces:** Old Agent 1 (time-based persona rotation, no GSC)\nOld workflow ID d96au9JL4iHaFdKj is preserved but deactivated.",
+        "content": "## Agent 1: SEO Strategist (Keyword Backlog + GSC fallback)\n\n**Cadence:** weekly (Mon 06:00 UTC) ≈ 4 posts/month per the 2026-06-08 SEO strategy.\n\n**Primary source:** Keyword Backlog table 1022496 (curated 3-layer keyword plan, Status=queued, by Priority; row marked used immediately after pick).\n**Fallback:** GSC striking distance (pos 11-30, ≥50 impressions, top 1).\n\nBrief → Claude Haiku → dedup vs blog table (HTTP node — Code nodes CANNOT use fetch, that bug stalled the pipeline May 20 → Jun 10) → idea_generated row.\n\nPositioning: enterprise AI for regulated industries (PE/M&A, wealth/RIA, legal, CPA, financial services).",
         "height": 696,
         "width": 1808
       },
@@ -256,6 +264,255 @@
         208,
         0
       ]
+    },
+    {
+      "id": "a1g-dedup-if",
+      "name": "IF: Already Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2336,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "dup-flag-check",
+              "leftValue": "={{ $json.duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "a1g-dedup-end",
+      "name": "End: Keyword Already Exists",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-fetch-backlog",
+      "name": "Fetch Keyword Backlog",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        304
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io/api/database/rows/table/1022496/",
+        "authentication": "none",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            },
+            {
+              "name": "filter__Status__equal",
+              "value": "queued"
+            },
+            {
+              "name": "order_by",
+              "value": "Priority"
+            },
+            {
+              "name": "size",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a1g-has-backlog",
+      "name": "Has Backlog Keyword?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        640,
+        304
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "backlog-count",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-mark-used",
+      "name": "Mark Backlog Used",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        480
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/1022496/' + $json.results[0].id + '/?user_field_names=true' }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ ({ \"Status\": \"used\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a1g-extract-backlog",
+      "name": "Extract Backlog Keyword",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        480
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb-query",
+              "name": "query",
+              "value": "={{ $json.Keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "eb-source",
+              "name": "source",
+              "value": "backlog",
+              "type": "string"
+            },
+            {
+              "id": "eb-context",
+              "name": "context_line",
+              "value": "={{ 'Curated Layer ' + $json.Layer + ' strategic keyword for the ' + $json.Vertical + ' vertical, from the Chronexa SEO content plan. Prioritize buyer intent and tool-specific, first-hand depth.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-dedup-http",
+      "name": "Baserow: Check Duplicate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1984,
+        400
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true&size=1&filter__Target%20Keyword__equal=' + encodeURIComponent($json.keyword) }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a1g-dedup-merge",
+      "name": "Merge Duplicate Flag",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const brief = $('Parse Brief Fields').first().json;\nreturn [{ json: { ...brief, duplicate: ($json.count || 0) > 0 } }];"
+      }
     }
   ],
   "connections": {
@@ -263,7 +520,7 @@
       "main": [
         [
           {
-            "node": "Fetch GSC Striking Distance",
+            "node": "Fetch Keyword Backlog",
             "type": "main",
             "index": 0
           }
@@ -343,7 +600,98 @@
         ],
         [
           {
+            "node": "Baserow: Check Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Already Exists?": {
+      "main": [
+        [
+          {
+            "node": "End: Keyword Already Exists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "Create Baserow Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Keyword Backlog": {
+      "main": [
+        [
+          {
+            "node": "Has Backlog Keyword?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Backlog Keyword?": {
+      "main": [
+        [
+          {
+            "node": "Mark Backlog Used",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch GSC Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Backlog Used": {
+      "main": [
+        [
+          {
+            "node": "Extract Backlog Keyword",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Backlog Keyword": {
+      "main": [
+        [
+          {
+            "node": "Claude Brief Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baserow: Check Duplicate": {
+      "main": [
+        [
+          {
+            "node": "Merge Duplicate Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Duplicate Flag": {
+      "main": [
+        [
+          {
+            "node": "IF: Already Exists?",
             "type": "main",
             "index": 0
           }
@@ -360,20 +708,41 @@
   },
   "staticData": {
     "node:Schedule Trigger": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        6
+      ]
     }
   },
   "meta": null,
   "pinData": {},
-  "versionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
-  "activeVersionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
-  "versionCounter": 55,
+  "versionId": "770c121e-2f80-4786-ad78-3d9941503002",
+  "activeVersionId": "770c121e-2f80-4786-ad78-3d9941503002",
+  "versionCounter": 184,
   "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-15T08:06:45.537Z",
+      "createdAt": "2026-05-15T08:06:45.537Z",
+      "role": "workflow:owner",
+      "workflowId": "fPqf1XhTxhGyWVbF",
+      "projectId": "b8KOq9Xa215X1ZmL",
+      "project": {
+        "updatedAt": "2025-09-10T05:16:40.899Z",
+        "createdAt": "2025-09-10T05:14:38.849Z",
+        "id": "b8KOq9Xa215X1ZmL",
+        "name": "Team Chronexa <team@chronexa.io>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    }
+  ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-05-15T11:38:52.761Z",
-    "createdAt": "2026-05-15T11:38:52.761Z",
-    "versionId": "fed9ae19-00dc-42b8-bffe-585cc437c61b",
+    "updatedAt": "2026-06-11T05:56:29.214Z",
+    "createdAt": "2026-06-11T05:56:29.214Z",
+    "versionId": "770c121e-2f80-4786-ad78-3d9941503002",
     "workflowId": "fPqf1XhTxhGyWVbF",
     "nodes": [
       {
@@ -381,8 +750,12 @@
           "rule": {
             "interval": [
               {
-                "field": "hours",
-                "hoursInterval": 6
+                "field": "weeks",
+                "weeksInterval": 1,
+                "triggerAtDay": [
+                  1
+                ],
+                "triggerAtHour": 6
               }
             ]
           }
@@ -414,8 +787,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          464,
-          304
+          832,
+          160
         ],
         "credentials": {
           "googleOAuth2Api": {
@@ -426,15 +799,15 @@
       },
       {
         "parameters": {
-          "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 5);\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
+          "jsCode": "const rows = items[0].json.rows || [];\nconst filtered = rows\n  .filter(r => r.position >= 11 && r.position <= 30 && r.impressions >= 50)\n  .sort((a, b) => b.impressions - a.impressions)\n  .slice(0, 1); // one post per run — strategy is ~4/month, depth over volume\n\nif (filtered.length === 0) {\n  return [{ json: { skip: true, reason: 'No striking distance keywords found', total_rows: rows.length } }];\n}\n\nreturn filtered.map(r => ({\n  json: {\n    skip: false,\n    query: r.keys[0],\n    source: 'gsc',\n    context_line: 'Google Search Console striking-distance keyword: position ' + r.position.toFixed(1) + ' with ' + Math.round(r.impressions) + ' impressions over 90 days. A focused post can capture existing demand.',\n    impressions: Math.round(r.impressions),\n    clicks: Math.round(r.clicks),\n    ctr: parseFloat((r.ctr * 100).toFixed(2)),\n    position: parseFloat(r.position.toFixed(1))\n  }\n}));"
         },
         "id": "a1g-filter",
         "name": "Filter Striking Distance",
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          688,
-          304
+          1024,
+          160
         ]
       },
       {
@@ -466,8 +839,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2,
         "position": [
-          912,
-          304
+          1216,
+          160
         ]
       },
       {
@@ -477,10 +850,6 @@
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
-              {
-                "name": "x-api-key",
-                "value": "REDACTED_ANTHROPIC_API_KEY"
-              },
               {
                 "name": "anthropic-version",
                 "value": "2023-06-01"
@@ -493,19 +862,27 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an AI automation agency serving wealth managers, CFOs, SaaS founders, supply chain operators, and CPA firms.\\n\\nA Google Search Console keyword is in position ' + $json.position + ' with ' + $json.impressions + ' impressions over 90 days. This is a high-opportunity striking distance keyword.\\n\\nKeyword: ' + $json.query + '\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: wealth_management, supply_chain, saas_founder, agency_owner, cpa_firm]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
+          "jsonBody": "={{ ({\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'You are an expert B2B content strategist for Chronexa.io, an enterprise AI firm that designs secure, auditable custom AI systems for regulated industries: private equity and M&A, wealth management and RIAs, law firms, CPA and tax firms, and financial services. Readers are partners, principals and COOs at US mid-market firms. Workflow tools such as n8n are implementation details, never the story.\\n\\nTarget keyword: ' + $json.query + '\\nKeyword context: ' + ($json.context_line || 'High-opportunity keyword for Chronexa.') + '\\n\\nBrief principles: state the problem exactly as the buyer would phrase it, promise concrete ROI, treat security and compliance as the deal-decider, demand first-hand operational depth. No generic AI content.\\n\\nGenerate a blog post brief using EXACTLY this format with NO extra text before or after:\\n\\n%%TITLE%%\\n[A compelling, specific blog post title targeting this keyword. Max 65 characters.]\\n%%TITLE%%\\n\\n%%KEYWORD%%\\n' + $json.query + '\\n%%KEYWORD%%\\n\\n%%SECONDARY%%\\n[3-5 secondary keywords, comma-separated, semantically related to the main keyword]\\n%%SECONDARY%%\\n\\n%%PERSONA%%\\n[Pick ONE: private_equity, wealth_management, legal, cpa_firm, financial_services]\\n%%PERSONA%%\\n\\n%%THESIS%%\\n[2-3 sentences: the core argument and value of this post for the target persona]\\n%%THESIS%%'\n  }]\n}) }}",
           "options": {
             "timeout": 60000
-          }
+          },
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth"
         },
         "id": "a1g-claude",
         "name": "Claude Brief Generation",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1136,
-          400
-        ]
+          1408,
+          368
+        ],
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "MBzkzU0jc7m1gBTJ",
+            "name": "Anthropic API"
+          }
+        }
       },
       {
         "parameters": {
@@ -517,8 +894,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1360,
-          400
+          1600,
+          368
         ]
       },
       {
@@ -550,8 +927,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2,
         "position": [
-          1584,
-          400
+          1792,
+          368
         ]
       },
       {
@@ -560,8 +937,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1808,
-          304
+          2528,
+          496
         ],
         "parameters": {
           "method": "POST",
@@ -596,8 +973,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          1136,
-          208
+          1408,
+          64
         ]
       },
       {
@@ -607,13 +984,13 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          1808,
-          496
+          1984,
+          560
         ]
       },
       {
         "parameters": {
-          "content": "## Agent 1: GSC Strategist (Baserow) v1\n\n**Trigger:** Every 6 hours\n**Input:** Google Search Console searchAnalytics (position 11-30, impressions ≥50)\n**Output:** blog_pipeline row in Baserow (status=idea_generated)\n\n**Auth:** Service account JWT (built in Code node — no n8n GSC cred needed)\n**Model:** claude-haiku-4-5-20251001\n**DB:** Baserow Blog CMS (table 975683)\n\n**Replaces:** Old Agent 1 (time-based persona rotation, no GSC)\nOld workflow ID d96au9JL4iHaFdKj is preserved but deactivated.",
+          "content": "## Agent 1: SEO Strategist (Keyword Backlog + GSC fallback)\n\n**Cadence:** weekly (Mon 06:00 UTC) ≈ 4 posts/month per the 2026-06-08 SEO strategy.\n\n**Primary source:** Keyword Backlog table 1022496 (curated 3-layer keyword plan, Status=queued, by Priority; row marked used immediately after pick).\n**Fallback:** GSC striking distance (pos 11-30, ≥50 impressions, top 1).\n\nBrief → Claude Haiku → dedup vs blog table (HTTP node — Code nodes CANNOT use fetch, that bug stalled the pipeline May 20 → Jun 10) → idea_generated row.\n\nPositioning: enterprise AI for regulated industries (PE/M&A, wealth/RIA, legal, CPA, financial services).",
           "height": 696,
           "width": 1808
         },
@@ -625,6 +1002,255 @@
           208,
           0
         ]
+      },
+      {
+        "id": "a1g-dedup-if",
+        "name": "IF: Already Exists?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2336,
+          400
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "dup-flag-check",
+                "leftValue": "={{ $json.duplicate }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          }
+        }
+      },
+      {
+        "id": "a1g-dedup-end",
+        "name": "End: Keyword Already Exists",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2528,
+          304
+        ],
+        "parameters": {}
+      },
+      {
+        "id": "a1g-fetch-backlog",
+        "name": "Fetch Keyword Backlog",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          448,
+          304
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://api.baserow.io/api/database/rows/table/1022496/",
+          "authentication": "none",
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "user_field_names",
+                "value": "true"
+              },
+              {
+                "name": "filter__Status__equal",
+                "value": "queued"
+              },
+              {
+                "name": "order_by",
+                "value": "Priority"
+              },
+              {
+                "name": "size",
+                "value": "1"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": false,
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a1g-has-backlog",
+        "name": "Has Backlog Keyword?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          640,
+          304
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "backlog-count",
+                "leftValue": "={{ $json.count }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a1g-mark-used",
+        "name": "Mark Backlog Used",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          832,
+          480
+        ],
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/1022496/' + $json.results[0].id + '/?user_field_names=true' }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "json",
+          "specifyBody": "json",
+          "jsonBody": "={{ ({ \"Status\": \"used\" }) }}",
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a1g-extract-backlog",
+        "name": "Extract Backlog Keyword",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1024,
+          480
+        ],
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "eb-query",
+                "name": "query",
+                "value": "={{ $json.Keyword }}",
+                "type": "string"
+              },
+              {
+                "id": "eb-source",
+                "name": "source",
+                "value": "backlog",
+                "type": "string"
+              },
+              {
+                "id": "eb-context",
+                "name": "context_line",
+                "value": "={{ 'Curated Layer ' + $json.Layer + ' strategic keyword for the ' + $json.Vertical + ' vertical, from the Chronexa SEO content plan. Prioritize buyer intent and tool-specific, first-hand depth.' }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "a1g-dedup-http",
+        "name": "Baserow: Check Duplicate",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1984,
+          400
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "={{ 'https://api.baserow.io/api/database/rows/table/975683/?user_field_names=true&size=1&filter__Target%20Keyword__equal=' + encodeURIComponent($json.keyword) }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "specifyHeaders": "keypair",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Token 5xwJzwjAM4G5epUcsdcbUd8VqB2FmkmQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": false,
+          "options": {
+            "timeout": 15000
+          }
+        }
+      },
+      {
+        "id": "a1g-dedup-merge",
+        "name": "Merge Duplicate Flag",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2160,
+          400
+        ],
+        "parameters": {
+          "jsCode": "const brief = $('Parse Brief Fields').first().json;\nreturn [{ json: { ...brief, duplicate: ($json.count || 0) > 0 } }];"
+        }
       }
     ],
     "connections": {
@@ -632,7 +1258,7 @@
         "main": [
           [
             {
-              "node": "Fetch GSC Striking Distance",
+              "node": "Fetch Keyword Backlog",
               "type": "main",
               "index": 0
             }
@@ -712,7 +1338,98 @@
           ],
           [
             {
+              "node": "Baserow: Check Duplicate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IF: Already Exists?": {
+        "main": [
+          [
+            {
+              "node": "End: Keyword Already Exists",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
               "node": "Create Baserow Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Keyword Backlog": {
+        "main": [
+          [
+            {
+              "node": "Has Backlog Keyword?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has Backlog Keyword?": {
+        "main": [
+          [
+            {
+              "node": "Mark Backlog Used",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Fetch GSC Striking Distance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mark Backlog Used": {
+        "main": [
+          [
+            {
+              "node": "Extract Backlog Keyword",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Backlog Keyword": {
+        "main": [
+          [
+            {
+              "node": "Claude Brief Generation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow: Check Duplicate": {
+        "main": [
+          [
+            {
+              "node": "Merge Duplicate Flag",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge Duplicate Flag": {
+        "main": [
+          [
+            {
+              "node": "IF: Already Exists?",
               "type": "main",
               "index": 0
             }
@@ -723,6 +1440,24 @@
     "authors": "Team Chronexa",
     "name": null,
     "description": null,
-    "autosaved": false
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-11T05:56:29.331Z",
+        "id": 581,
+        "workflowId": "fPqf1XhTxhGyWVbF",
+        "versionId": "770c121e-2f80-4786-ad78-3d9941503002",
+        "event": "activated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      },
+      {
+        "createdAt": "2026-06-11T05:56:29.292Z",
+        "id": 580,
+        "workflowId": "fPqf1XhTxhGyWVbF",
+        "versionId": "770c121e-2f80-4786-ad78-3d9941503002",
+        "event": "deactivated",
+        "userId": "75bd63ac-8a80-4092-a9a4-0daa23e4025c"
+      }
+    ]
   }
 }
