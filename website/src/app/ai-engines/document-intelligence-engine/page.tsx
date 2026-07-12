@@ -3,9 +3,9 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import DocIntelScene from '../../../components/engines/docintel-scene/DocIntelScene';
 import {
-  DOC_INTEL_ENGINE, DOC_INTEL_OUTPUTS, DOC_INTEL_FLOW_POSITIONS, DOC_INTEL_FLOW_EDGES,
+  DOC_INTEL_ENGINE,
   DOC_INTEL_WHATIS, DOC_INTEL_HOWITWORKS_INTRO,
   DOC_INTEL_PROBLEM, DOC_INTEL_INTEGRATION, DOC_INTEL_ROI, DOC_INTEL_TESTIMONIALS,
   DOC_INTEL_FAQS, DOC_INTEL_NUDGE,
@@ -65,15 +65,10 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* 1 — Full-canvas hero */}
+      {/* 1 — Hero: one real reserve study built on screen, inside a bright app window */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         <h1 className={styles.srOnly}>Any document, any format — extracted, calculated, and delivered as a report in hours.</h1>
-        <WorkflowCanvasLoader
-          engine={DOC_INTEL_ENGINE}
-          outputs={DOC_INTEL_OUTPUTS}
-          flowPositions={DOC_INTEL_FLOW_POSITIONS}
-          flowEdges={DOC_INTEL_FLOW_EDGES}
-        />
+        <DocIntelScene />
       </section>
 
       {/* 2 — Blog-style body + sticky nudge */}

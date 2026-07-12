@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
-import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import SupportScene from '../../../components/engines/support-scene/SupportScene';
 import {
-  CS_ENGINE, CS_OUTPUTS, CS_FLOW_POSITIONS, CS_FLOW_EDGES,
+  CS_ENGINE,
   CS_WHATIS, CS_HOWITWORKS_INTRO,
   CS_PROBLEM, CS_INTEGRATION, CS_ROI, CS_TESTIMONIALS,
   CS_FAQS, CS_NUDGE,
@@ -65,15 +64,10 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* 1 — Full-canvas hero */}
+      {/* 1 — Hero: one real ticket resolved on screen, inside a bright chat window */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         <h1 className={styles.srOnly}>Every support query routed to the right specialist agent — resolved in seconds, escalated with full context when it needs a human.</h1>
-        <WorkflowCanvasLoader
-          engine={CS_ENGINE}
-          outputs={CS_OUTPUTS}
-          flowPositions={CS_FLOW_POSITIONS}
-          flowEdges={CS_FLOW_EDGES}
-        />
+        <SupportScene />
       </section>
 
       {/* 2 — Blog-style body + sticky nudge */}

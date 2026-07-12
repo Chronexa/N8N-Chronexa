@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
-import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import SalesScene from '../../../components/engines/sales-scene/SalesScene';
 import {
-  SALES_ENGINE, SALES_OUTPUTS, SALES_FLOW_POSITIONS, SALES_FLOW_EDGES,
+  SALES_ENGINE,
   SALES_WHATIS, SALES_HOWITWORKS_INTRO, SALES_PROBLEM,
   SALES_INTEGRATION, SALES_ROI, SALES_TESTIMONIALS, SALES_FAQS, SALES_NUDGE,
 } from '../../../components/engines/engines-data';
@@ -42,16 +41,11 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* 1 — Full-canvas hero: the shell IS the hero */}
+      {/* 1 — Hero: one morning's outbound run built on screen, inside a bright app window */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         {/* sr-only h1 keeps this page indexed correctly by search engines */}
         <h1 className={styles.srOnly}>Your entire outbound motion, run by a team of AI agents.</h1>
-        <WorkflowCanvasLoader
-          engine={SALES_ENGINE}
-          outputs={SALES_OUTPUTS}
-          flowPositions={SALES_FLOW_POSITIONS}
-          flowEdges={SALES_FLOW_EDGES}
-        />
+        <SalesScene />
       </section>
 
       {/* 3 — Blog-style body + sticky nudge */}

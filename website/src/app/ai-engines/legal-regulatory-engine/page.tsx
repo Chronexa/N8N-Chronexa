@@ -3,9 +3,9 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import LegalScene from '../../../components/engines/legal-scene/LegalScene';
 import {
-  LEGAL_REG_ENGINE, LEGAL_REG_OUTPUTS, LEGAL_REG_FLOW_POSITIONS, LEGAL_REG_FLOW_EDGES,
+  LEGAL_REG_ENGINE,
   LEGAL_REG_WHATIS, LEGAL_REG_HOWITWORKS_INTRO,
   LEGAL_REG_GAPS, LEGAL_REG_GAPS_INTRO,
   LEGAL_REG_PROBLEM, LEGAL_REG_INTEGRATION, LEGAL_REG_ROI, LEGAL_REG_TESTIMONIALS,
@@ -70,12 +70,7 @@ export default function Page() {
       {/* 1 — Full-canvas hero */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         <h1 className={styles.srOnly}>AI workflow orchestration for law firms — regulatory alerts matched to live matters, AI usage captured into billing, precedents fed back into your knowledge base, and diligence reports drafted from completed review.</h1>
-        <WorkflowCanvasLoader
-          engine={LEGAL_REG_ENGINE}
-          outputs={LEGAL_REG_OUTPUTS}
-          flowPositions={LEGAL_REG_FLOW_POSITIONS}
-          flowEdges={LEGAL_REG_FLOW_EDGES}
-        />
+        <LegalScene />
       </section>
 
       {/* 2 — Blog-style body + sticky nudge */}

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
-import Link from 'next/link';
 import BookButton from '../../../components/BookButton';
 import CtaBand from '../../../components/CtaBand';
-import WorkflowCanvasLoader from '../../../components/engines/WorkflowCanvasLoader';
+import InvestScene from '../../../components/engines/invest-scene/InvestScene';
 import {
-  INV_RESEARCH_ENGINE, INV_RESEARCH_OUTPUTS, INV_RESEARCH_FLOW_POSITIONS, INV_RESEARCH_FLOW_EDGES,
+  INV_RESEARCH_ENGINE,
   INV_RESEARCH_WHATIS, INV_RESEARCH_HOWITWORKS_INTRO,
   INV_RESEARCH_PROBLEM, INV_RESEARCH_INTEGRATION, INV_RESEARCH_ROI, INV_RESEARCH_TESTIMONIALS,
   INV_RESEARCH_FAQS, INV_RESEARCH_NUDGE,
@@ -68,12 +67,7 @@ export default function Page() {
       {/* 1 — Full-canvas hero */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
         <h1 className={styles.srOnly}>Portfolio research, ML signals, and human-approved execution — automated end to end.</h1>
-        <WorkflowCanvasLoader
-          engine={INV_RESEARCH_ENGINE}
-          outputs={INV_RESEARCH_OUTPUTS}
-          flowPositions={INV_RESEARCH_FLOW_POSITIONS}
-          flowEdges={INV_RESEARCH_FLOW_EDGES}
-        />
+        <InvestScene />
       </section>
 
       {/* 2 — Blog-style body + sticky nudge */}
