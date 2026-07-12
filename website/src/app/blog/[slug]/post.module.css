@@ -21,10 +21,54 @@
 .body :global(p) { color: var(--text-muted-light); margin-bottom: var(--spacing-sm); font-size: 1.05rem; line-height: 1.75; }
 .body :global(ul), .body :global(ol) { color: var(--text-muted-light); margin: 0 0 var(--spacing-sm) 1.25rem; line-height: 1.75; }
 .body :global(li) { margin-bottom: 0.4rem; }
-.body :global(a) { color: var(--brand-green-ink); text-decoration: underline; text-underline-offset: 2px; }
+/* :not() guards keep this prose-link styling off CTA buttons (BlogInlineCta,
+   NewsletterCallout) that render inside .body — otherwise this descendant
+   selector (higher specificity than a single .btn-primary class) repaints
+   button text the same dark green as the button's own background. */
+.body :global(a:not(.btn-primary):not(.btn-outline)) { color: var(--brand-green-ink); text-decoration: underline; text-underline-offset: 2px; }
 .body :global(blockquote) { border-left: 3px solid var(--brand-green); padding-left: var(--spacing-sm); margin: var(--spacing-md) 0; color: var(--text-light); font-style: italic; }
 .body :global(strong) { color: var(--text-light); }
 
 .bodyImg { width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-block: var(--spacing-md); }
+
+/* Data tables injected via dangerouslySetInnerHTML — scrollable on mobile */
+.tableWrap { max-width: 760px; overflow-x: auto; margin-block: var(--spacing-md); }
+.tableWrap :global(table) { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+.tableWrap :global(th), .tableWrap :global(td) { border: 1px solid var(--border-light); padding: 0.6rem 0.8rem; text-align: left; }
+.tableWrap :global(th) { background: var(--neutral-50); font-weight: 700; color: var(--text-light); }
+
+/* Shared eyebrow label for boxed sections (takeaways, TOC, related) */
+.boxEyebrow { font-size: var(--step--1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-green-ink); margin-bottom: var(--spacing-sm); }
+
+.takeaways { max-width: 760px; background: var(--neutral-50); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+.takeaways ul { margin: 0; padding-left: 1.1rem; color: var(--text-light); line-height: 1.7; }
+.takeaways li { margin-bottom: 0.4rem; }
+.takeaways li:last-child { margin-bottom: 0; }
+
+.toc { max-width: 760px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+.toc ol { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.toc a { color: var(--text-light); text-decoration: none; }
+.toc a:hover { color: var(--brand-green-ink); text-decoration: underline; }
+
+.authorBox { display: flex; gap: var(--spacing-md); align-items: flex-start; max-width: 760px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-top: var(--spacing-xl); }
+.authorAvatar { border-radius: 50%; flex-shrink: 0; }
+.authorName { font-weight: 700; color: var(--text-light); margin-bottom: 0.3rem; }
+.authorRole { font-weight: 400; color: var(--text-muted-light); }
+.authorAbout { color: var(--text-muted-light); font-size: var(--step--1); line-height: 1.6; margin-bottom: 0.5rem; }
+.authorLink { color: var(--brand-green-ink); font-size: var(--step--1); font-weight: 600; text-decoration: none; }
+.authorLink:hover { text-decoration: underline; }
+
+.related { max-width: 900px; margin-top: var(--spacing-xl); }
+.relatedGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-top: var(--spacing-sm); }
+.relatedCard { display: flex; flex-direction: column; border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
+.relatedCard:hover { border-color: var(--brand-green); box-shadow: var(--shadow-sm); }
+.relatedCard :global(img) { width: 100%; height: auto; display: block; }
+.relatedCat { font-size: var(--step--1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand-green-ink); padding: var(--spacing-sm) var(--spacing-sm) 0; }
+.relatedTitle { font-weight: 600; color: var(--text-light); line-height: 1.4; padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-sm); }
+
+@media (max-width: 720px) {
+  .relatedGrid { grid-template-columns: 1fr; }
+  .authorBox { flex-direction: column; }
+}
 
 .cta { max-width: 760px; display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-light); }
