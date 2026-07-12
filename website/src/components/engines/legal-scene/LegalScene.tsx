@@ -3,16 +3,35 @@
 /**
  * LegalScene — the Legal & Regulatory Engine hero demo.
  *
- * One regulatory event (SEC Release No. 33-11138, Rule 10b5-1 amendments)
- * handled end-to-end inside a bright, familiar app window: the release is
- * caught the moment it publishes, matched against live matters, backed by the
- * firm's own precedents, drafted into a partner memo, billed, and indexed.
- * The device is THE CLOCK — a scripted timestamp that jumps 09:02 → 09:07
- * while the caption reminds you the old way is "day 3". Loops while in view;
- * the stepper scrubs to any beat.
+ * NOT an app window. An open dark stage — real third-party tools (an SEC EDGAR
+ * regulatory feed, an iManage matter wall, a precedent search, a Word memo, an
+ * Elite 3E billing meter, an Outlook client alert) enter as SEPARATE bright
+ * windows, play their beat, then dock into the chain connected by green threads.
  *
- * Design rule (2026-07-11): client-facing surfaces are friendly software —
- * tool logos, named humans, plain English. No terminal chrome.
+ * THE SIGNATURE MOTION — BRANCH-AND-CONVERGE. Every other engine is a linear
+ * chain. Legal is not. After the regulatory match, the orb fires THREE threads
+ * at once and THREE windows (precedents, memo, billing) work in PARALLEL at the
+ * same time — three days of sequential human work collapsed into ~4 synchronised
+ * minutes. Then all three CONVERGE into one Outlook approval that waits for a
+ * partner. That visible parallelism IS the argument.
+ *
+ * ATTRIBUTION (client mandate — the whole point): Chronexa owns neither an AI
+ * nor a legal database. The protagonist orb is labelled "AI agent · Claude" —
+ * the precedent search, matter-matching and drafting are Claude reasoning. The
+ * tools (iManage, Word, Elite 3E, Outlook) are the firm's own systems.
+ *
+ * THE DEVICE — THE CLOCK: a scripted timestamp chip that jumps 09:02 → 09:06
+ * while the run does three days of work; "the old way: day 3" sits beneath it.
+ * Scripted state only — never real time.
+ *
+ * Movie structure: setup (Watch → Match), the fan-out (Work), the trust climax
+ * (Approve — the amber gate for Partner Shah), the payoff (Alert), resolution
+ * (Learn → wide shot, orb at the centre of the chain). Loops (~52s); rail scrubs.
+ *
+ * Design rule (2026-07-11): friendly, bright software — real logos, a named
+ * partner with a real headshot, plain English, a serif accent for the legal
+ * register. No terminal chrome. Green (#67B035) is reserved for Chronexa (orb,
+ * threads, nodes, rail); amber marks the human-control moments only.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -22,57 +41,62 @@ import styles from './LegalScene.module.css';
 
 // ─── Scene data ───────────────────────────────────────────────────────────────
 
-const STEPS = ['Watch', 'Impact', 'Precedent', 'Draft', 'Log', 'Learn'] as const;
+type WinKey = 'sec' | 'imanage' | 'precedents' | 'word' | 'billing' | 'outlook';
+type Mode = 'hidden' | 'focus' | 'trio' | 'converge' | 'docked';
+type NodeMode = 'hidden' | 'focus' | 'docked';
+type OrbPos = 'watch' | 'match' | 'branch' | 'approve' | 'alert' | 'learn' | 'wide';
+type ThreadKey =
+  | 't0'
+  | 'bA' | 'bB' | 'bC'
+  | 'cvA' | 'cvB' | 'cvC'
+  | 'out1' | 'out2'
+  | 'lrn'
+  | 's1' | 's2' | 's3' | 's4' | 's5';
+
+const STEPS = ['Watch', 'Match', 'Work', 'Approve', 'Alert', 'Learn'] as const;
 
 /** Scripted timestamp per beat — this is state, not real time. */
-const CLOCKS = ['09:02', '09:02', '09:03', '09:06', '09:07', '09:07'] as const;
+const CLOCKS = ['09:02', '09:02', '09:05', '09:06', '09:06', '09:06'] as const;
 
-const FEEDS = [
-  { name: 'SEC EDGAR', mark: 'SEC', cls: styles.logoSec },
-  { name: 'SEBI', mark: 'SB', cls: styles.logoSebi },
-  { name: 'RBI', mark: 'RB', cls: styles.logoRbi },
-  { name: 'FINRA', mark: 'FN', cls: styles.logoFinra },
-  { name: 'Federal Register', mark: 'FR', cls: styles.logoFr },
+/** One caption per beat; the optional amber clause is the human-control tint. */
+const CAPTIONS: { lead: string; amber?: string }[] = [
+  { lead: 'It watches every regulator so a paralegal doesn’t have to — and catches the release the moment it publishes.' },
+  { lead: 'It cross-references the release against 500+ active matters in seconds — and flags who’s exposed.' },
+  { lead: 'Then it does three days of work at once: your own precedents, the memo in your voice, and the billable time — automatically.' },
+  { lead: 'Nothing goes to a client on autopilot. ', amber: 'A partner approves every word — here, that took one click.' },
+  { lead: 'Your client hears it from you first — in minutes, not three days.' },
+  { lead: 'Every release and memo makes the next search better — knowledge that never leaves when a partner does.' },
 ];
 
-const APPS = [
-  { name: 'iManage', mark: 'iM', cls: styles.logoIm },
-  { name: 'Elite 3E', mark: '3E', cls: styles.logo3e },
+// 0 · WATCH — the watched regulator feeds (chips marked "Live")
+const FEED_CHIPS: { src: string; alt: string }[] = [
+  { src: '/logos/sec.png', alt: 'SEC EDGAR' },
+  { src: '/logos/sebi.png', alt: 'SEBI' },
+  { src: '/logos/rbi.png', alt: 'RBI' },
+  { src: '/logos/fedregister.png', alt: 'Federal Register' },
 ];
-
-/** The quiet feed — most of regulatory monitoring is uneventful. */
 const QUIET = [
-  { mark: 'FR', cls: styles.logoFr, text: 'Federal Register — routine notice' },
-  { mark: 'SB', cls: styles.logoSebi, text: 'SEBI — circular update, out of scope' },
-  { mark: 'FN', cls: styles.logoFinra, text: 'FINRA — no change to watched rules' },
+  'Federal Register — routine notice · no action',
+  'SEBI — circular update · out of scope',
+  'RBI — no change to watched rules',
 ];
 
-const IMPACT = [
-  { text: 'Matter #4472 — exec trading plan · Partner Shah', amber: false },
-  { text: 'Matter #4509 — 10b5-1 setup · Partner Lee', amber: false },
-  { text: '+5 more matters', amber: false },
+// 1 · MATCH — the matters that illuminate on the iManage wall
+const MATTERS: { text: string; amber: boolean }[] = [
+  { text: '#4472 · exec trading plan · Shah', amber: false },
+  { text: '#4509 · Rule 10b5-1 setup · Lee', amber: false },
+  { text: '+5 more matters exposed', amber: false },
   { text: '2 pending filings — put on hold automatically', amber: true },
 ];
 
-const PRECEDENTS = [
+// 2 · WORK · Window A — precedents (the firm's own memory surfaced)
+const PRECEDENTS: { title: string; sub: string; own: boolean }[] = [
   { title: 'SEC v. Salman (2016)', sub: 'tipper-tippee liability', own: false },
-  { title: 'Your own 2022 guidance memo', sub: 'surfaced from the archive', own: true },
+  { title: 'Your own 2022 10b5-1 guidance memo', sub: 'surfaced from the archive', own: true },
   { title: 'Prior matter #3841', sub: 'same client, same issue (2023)', own: false },
 ];
 
-const DRAFT_SRC = [
-  'The release, parsed in plain English',
-  '7 affected matters, ranked by partner',
-  '12 precedents, cited inline',
-];
-
-const LOG_ROWS = [
-  'Matter #4472 updated',
-  '1.2 hrs research time logged — automatically',
-  'Client dockets updated',
-  'Compliance calendar updated',
-];
-
+// 2 · WORK · Window B — the memo sections that check on, line by line
 const MEMO_ROWS = [
   'The change, in plain English',
   '7 affected matters, by partner',
@@ -80,118 +104,195 @@ const MEMO_ROWS = [
   '3 numbered action items',
 ];
 
-type LeftView = 'feed' | 'precedent' | 'drafting' | 'log' | 'learn';
+const FINE_LOGOS: { src: string; alt: string }[] = [
+  { src: '/logos/imanage.png', alt: 'iManage' },
+  { src: '/logos/thomsonreuters.png', alt: 'Elite 3E' },
+  { src: '/logos/clio.png', alt: 'Clio' },
+  { src: '/logos/netdocuments.png', alt: 'NetDocuments' },
+  { src: '/logos/outlook.png', alt: 'Outlook' },
+];
+
+/**
+ * Green thread paths in the 1000×620 stage space. t0 links the release into the
+ * matter wall; bA/bB/bC are the SIGNATURE fan-out — three threads fired at once
+ * from the orb's branch point into the three parallel windows; cvA/cvB/cvC are
+ * the convergence into the Outlook approval; out1/out2 are the client alerts
+ * departing; lrn files the release into the knowledge base; s1–s5 are the wide-
+ * shot spokes radiating from the orb's final centre seat.
+ */
+const THREAD_PATHS: { key: ThreadKey; d: string }[] = [
+  { key: 't0',  d: 'M155,162 C250,220 380,300 460,335' },  // SEC (docked) → iManage matter wall
+  { key: 'bA',  d: 'M492,184 C420,240 300,300 200,352' },  // orb branch → precedents  (fired together)
+  { key: 'bB',  d: 'M500,188 C500,250 500,310 500,362' },  // orb branch → memo        (fired together)
+  { key: 'bC',  d: 'M508,184 C580,240 700,300 800,352' },  // orb branch → billing     (fired together)
+  { key: 'cvA', d: 'M180,185 C260,270 400,340 468,362' },  // precedents → Outlook  (converge)
+  { key: 'cvB', d: 'M500,160 C500,240 500,300 500,346' },  // memo       → Outlook  (converge)
+  { key: 'cvC', d: 'M820,185 C740,270 600,340 532,362' },  // billing    → Outlook  (converge)
+  { key: 'out1', d: 'M560,362 C700,350 830,325 940,300' }, // Outlook → client alert 1
+  { key: 'out2', d: 'M560,382 C700,395 830,420 940,440' }, // Outlook → client alert 2
+  { key: 'lrn', d: 'M735,255 C650,290 560,320 520,338' },  // orb → knowledge base node
+  { key: 's1',  d: 'M488,286 C400,250 250,175 150,152' },  // orb centre → SEC
+  { key: 's2',  d: 'M480,296 C380,320 220,338 128,344' },  // orb centre → iManage
+  { key: 's3',  d: 'M514,286 C640,250 780,175 860,158' },  // orb centre → memo
+  { key: 's4',  d: 'M518,300 C640,325 800,340 878,348' },  // orb centre → billing
+  { key: 's5',  d: 'M512,306 C620,390 690,470 722,516' },  // orb centre → Outlook
+];
 
 // ─── Scene state ──────────────────────────────────────────────────────────────
 
 interface SceneState {
   step: number; // 0–5 = beats, 6 = receipt
+  capIdx: number;
   clock: string;
+  // the protagonist
+  orbPos: OrbPos;
+  orbSay: string;
+  // windows
+  win: Record<WinKey, Mode>;
+  // 0 · watch
   feedsLive: number;
-  pmConnected: boolean;
   quietIn: number;
   releaseIn: boolean;
-  view: LeftView;
-  impactIn: number;
+  // 1 · match
+  matterIn: number;
+  // 2 · work (three windows, concurrent)
   precIn: number;
-  precFootIn: boolean;
-  draftSrcIn: number;
-  logIn: number;
-  learnIn: boolean;
-  memoStub: boolean;
+  precFoot: boolean;
+  memoTitleIn: boolean;
   memoDone: number;
   stampIn: boolean;
-  trayIn: boolean;
+  billMeter: number; // 0–100, displayed as hrs
+  billNote: boolean;
+  // 3 · approve
+  alertDraftIn: boolean;
+  approveWait: boolean;
   approved: boolean;
-  ringPct: number;
-  ringLabel: string;
-  partnerMeta: string;
-  toast: string;
-  toastDone: boolean;
+  // 4 · alert
+  sentOut: number;
+  deliveredIn: boolean;
+  compareIn: boolean;
+  // 5 · learn (green knowledge node)
+  kbMode: NodeMode;
+  kbCount: number;
+  kbLine: boolean;
+  // connective tissue + finale
+  threads: Record<ThreadKey, boolean>;
+  wide: boolean;
+  pulse: boolean;
   receipt: boolean;
-  paneTitle: string;
 }
+
+const NO_THREADS: Record<ThreadKey, boolean> = {
+  t0: false,
+  bA: false, bB: false, bC: false,
+  cvA: false, cvB: false, cvC: false,
+  out1: false, out2: false,
+  lrn: false,
+  s1: false, s2: false, s3: false, s4: false, s5: false,
+};
 
 const INITIAL: SceneState = {
   step: 0,
+  capIdx: 0,
   clock: '09:02',
+  orbPos: 'watch',
+  orbSay: '',
+  win: { sec: 'hidden', imanage: 'hidden', precedents: 'hidden', word: 'hidden', billing: 'hidden', outlook: 'hidden' },
   feedsLive: 0,
-  pmConnected: false,
   quietIn: 0,
   releaseIn: false,
-  view: 'feed',
-  impactIn: 0,
+  matterIn: 0,
   precIn: 0,
-  precFootIn: false,
-  draftSrcIn: 0,
-  logIn: 0,
-  learnIn: false,
-  memoStub: false,
+  precFoot: false,
+  memoTitleIn: false,
   memoDone: 0,
   stampIn: false,
-  trayIn: false,
+  billMeter: 0,
+  billNote: false,
+  alertDraftIn: false,
+  approveWait: false,
   approved: false,
-  ringPct: 0,
-  ringLabel: 'waking the feeds',
-  partnerMeta: 'reviews every client alert',
-  toast: 'Starting the engine…',
-  toastDone: false,
+  sentOut: 0,
+  deliveredIn: false,
+  compareIn: false,
+  kbMode: 'hidden',
+  kbCount: 0,
+  kbLine: false,
+  threads: { ...NO_THREADS },
+  wide: false,
+  pulse: false,
   receipt: false,
-  paneTitle: 'Regulatory feed',
 };
 
-/** Cumulative end-state per beat — lets the stepper scrub to any point. */
+/** Cumulative end-state per beat — lets the rail scrub to any point. */
 const APPLY: ((s: SceneState) => SceneState)[] = [
+  // 0 · WATCH — the feed window up, feeds Live, the bulletin caught
   (s) => ({
     ...s,
     clock: CLOCKS[0],
-    feedsLive: FEEDS.length, quietIn: QUIET.length, releaseIn: true,
-    ringPct: 12, ringLabel: 'watching 14 feeds',
+    win: { ...s.win, sec: 'focus' },
+    feedsLive: FEED_CHIPS.length, quietIn: QUIET.length, releaseIn: true,
+    orbPos: 'watch', orbSay: '', capIdx: 0,
   }),
+  // 1 · MATCH — SEC docks, iManage up, 7 matters lit, 2 filings on hold
   (s) => ({
     ...s,
     clock: CLOCKS[1],
-    impactIn: IMPACT.length, memoStub: true,
-    ringPct: 30, ringLabel: '7 matters affected',
+    win: { ...s.win, sec: 'docked', imanage: 'focus' },
+    matterIn: MATTERS.length,
+    threads: { ...s.threads, t0: true },
+    orbPos: 'match', capIdx: 1,
   }),
+  // 2 · WORK — iManage docks; three windows work in PARALLEL; three threads fired
   (s) => ({
     ...s,
     clock: CLOCKS[2],
-    view: 'precedent', paneTitle: 'The firm’s own precedents',
-    precIn: PRECEDENTS.length, precFootIn: true,
-    ringPct: 50, ringLabel: '12 precedents',
+    win: { ...s.win, imanage: 'docked', precedents: 'trio', word: 'trio', billing: 'trio' },
+    threads: { ...s.threads, t0: false, bA: true, bB: true, bC: true },
+    precIn: PRECEDENTS.length, precFoot: true,
+    memoTitleIn: true, memoDone: MEMO_ROWS.length, stampIn: true,
+    billMeter: 100, billNote: true,
+    orbPos: 'branch', capIdx: 2,
   }),
+  // 3 · APPROVE — the three converge into Outlook; Partner Shah signs
   (s) => ({
     ...s,
     clock: CLOCKS[3],
-    view: 'drafting', paneTitle: 'Composing the memo',
-    draftSrcIn: DRAFT_SRC.length,
-    memoDone: MEMO_ROWS.length, stampIn: true, trayIn: true,
-    ringPct: 75, ringLabel: 'memo drafted',
+    win: { ...s.win, precedents: 'converge', word: 'converge', billing: 'converge', outlook: 'focus' },
+    threads: { ...s.threads, bA: false, bB: false, bC: false, cvA: true, cvB: true, cvC: true },
+    alertDraftIn: true, approveWait: false, approved: true,
+    orbPos: 'approve', capIdx: 3,
   }),
+  // 4 · ALERT — the two client alerts depart; comparison chip lands
   (s) => ({
     ...s,
     clock: CLOCKS[4],
-    view: 'log', paneTitle: 'Practice management',
-    logIn: LOG_ROWS.length, pmConnected: true, approved: true,
-    partnerMeta: '3 matters, briefed by 09:06',
-    ringPct: 92, ringLabel: 'time logged',
+    threads: { ...s.threads, cvA: false, cvB: false, cvC: false, out1: true, out2: true },
+    sentOut: 2, deliveredIn: true, compareIn: true,
+    orbPos: 'alert', capIdx: 4,
   }),
+  // 5 · LEARN — release files into the knowledge base; wide shot, orb centred
   (s) => ({
     ...s,
     clock: CLOCKS[5],
-    view: 'learn', paneTitle: 'Knowledge base',
-    learnIn: true,
-    ringPct: 100, ringLabel: 'indexed',
+    win: {
+      sec: 'docked', imanage: 'docked', precedents: 'docked',
+      word: 'docked', billing: 'docked', outlook: 'docked',
+    },
+    kbMode: 'docked', kbCount: 4218, kbLine: true,
+    threads: {
+      ...s.threads, out1: false, out2: false, lrn: false,
+      s1: true, s2: true, s3: true, s4: true, s5: true,
+    },
+    wide: true, orbPos: 'wide', orbSay: 'Four minutes. Not three days.', capIdx: 5,
   }),
 ];
-
-const FINAL_TOAST = 'Published 09:02 — partner-ready memo by 09:06';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function LegalScene() {
   const shellRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const inView = useInView(shellRef, { amount: 0.2 });
   const reduced = useReducedMotion();
 
@@ -204,6 +305,31 @@ export default function LegalScene() {
     tokenRef.current += 1;
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
+  }, []);
+
+  /** Flying chip: files the release from the SEC feed into the knowledge base. */
+  const fly = useCallback((fromSel: string, toSel: string, text: string) => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const from = stage.querySelector<HTMLElement>(fromSel);
+    const to = stage.querySelector<HTMLElement>(toSel);
+    if (!from || !to) return;
+    const wr = stage.getBoundingClientRect();
+    const a = from.getBoundingClientRect();
+    const b = to.getBoundingClientRect();
+    const g = document.createElement('span');
+    g.className = styles.ghost;
+    g.textContent = text;
+    g.style.left = `${a.left - wr.left + a.width / 2 - 40}px`;
+    g.style.top = `${a.top - wr.top + a.height / 2}px`;
+    stage.appendChild(g);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        g.style.transform = `translate(${b.left - a.left + (b.width - a.width) / 2}px, ${b.top - a.top + (b.height - a.height) / 2}px)`;
+        g.style.opacity = '0';
+      });
+    });
+    window.setTimeout(() => g.remove(), 800);
   }, []);
 
   const goTo = useCallback((start: number) => {
@@ -225,92 +351,119 @@ export default function LegalScene() {
     if (reduced) {
       let fin = INITIAL;
       APPLY.forEach((f) => { fin = f(fin); });
-      setS({ ...fin, step: 6, receipt: true, toastDone: true, toast: FINAL_TOAST });
+      setS({ ...fin, step: 6, receipt: true, pulse: false });
       return;
     }
 
     const playBeat = (i: number, done: () => void) => {
-      if (i <= 5) patch({ step: i, clock: CLOCKS[i] });
+      patch({ step: i });
       if (i === 0) {
-        patch({ paneTitle: 'Regulatory feed', toast: 'Watching 14 regulatory feeds — a paralegal doesn’t have to…', toastDone: false });
-        FEEDS.forEach((_, k) => at(200 + k * 250, () => patch({ feedsLive: k + 1 })));
-        QUIET.forEach((_, k) => at(600 + k * 500, () => patch({ quietIn: k + 1 })));
-        at(1500, () => patch({ ringPct: 12, ringLabel: 'watching 14 feeds' }));
-        at(2600, () => patch({
-          releaseIn: true,
-          toast: 'SEC Release No. 33-11138 detected — Rule 10b5-1 amendments', toastDone: true,
-        }));
-        at(5200, done);
+        // WATCH (setup) — the feeds wake; routine items tick past; then the
+        // release lands highlighted the moment it publishes.
+        patch({ capIdx: 0, clock: CLOCKS[0], orbPos: 'watch', orbSay: '' });
+        at(200, () => patch((p) => ({ win: { ...p.win, sec: 'focus' } })));
+        FEED_CHIPS.forEach((_, k) => at(500 + k * 200, () => patch({ feedsLive: k + 1 })));
+        QUIET.forEach((_, k) => at(900 + k * 420, () => patch({ quietIn: k + 1 })));
+        at(2500, () => patch({ releaseIn: true, orbPos: 'watch', orbSay: 'New SEC release — is any live matter exposed?' }));
+        at(5000, done);
       } else if (i === 1) {
-        patch({ toast: 'New SEC release — matching it against 500+ active matters…', toastDone: false });
-        at(700, () => patch({ impactIn: 1 }));
-        at(1400, () => patch({ impactIn: 2 }));
-        at(2100, () => patch({ impactIn: 3, memoStub: true, ringPct: 30, ringLabel: '7 matters affected' }));
-        at(2900, () => patch({
-          impactIn: 4,
-          toast: '7 matters affected — 2 pending filings put on hold', toastDone: true,
-        }));
-        at(5600, done);
+        // MATCH — SEC docks; the iManage matter wall lights up; 2 filings held.
+        patch({ capIdx: 1, clock: CLOCKS[1] });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, sec: 'docked', imanage: 'focus' },
+          threads: { ...p.threads, t0: true },
+        })));
+        at(650, () => patch({ orbPos: 'match', orbSay: 'Seven matters. Two filings I’ll pause until a partner looks.' }));
+        at(1150, () => patch({ matterIn: 1 }));
+        at(1550, () => patch({ matterIn: 2 }));
+        at(1950, () => patch({ matterIn: 3 }));
+        at(2500, () => patch({ matterIn: 4 })); // the amber "on hold" row
+        at(5000, done);
       } else if (i === 2) {
-        patch({
-          view: 'precedent', paneTitle: 'The firm’s own precedents',
-          toast: 'Searching the firm’s own precedents — memory that never leaves…', toastDone: false,
-        });
-        at(600, () => patch({ precIn: 1 }));
-        at(1500, () => patch({ precIn: 2 }));
-        at(2400, () => patch({ precIn: 3 }));
-        at(3200, () => patch({
-          precFootIn: true, ringPct: 50, ringLabel: '12 precedents',
-          toast: '12 precedents matched — including your own 2022 memo', toastDone: true,
-        }));
-        at(6000, done);
+        // WORK (the fan-out — the SIGNATURE beat). The orb reaches the branch
+        // point and fires THREE threads at once; three windows work in PARALLEL.
+        patch({ capIdx: 2, clock: '09:03' });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, imanage: 'docked', precedents: 'trio', word: 'trio', billing: 'trio' },
+        })));
+        at(600, () => patch({ orbPos: 'branch', orbSay: 'Precedents, memo and the billing entry — all at once.' }));
+        // fire all three branch threads TOGETHER — the visible parallelism
+        at(950, () => patch((p) => ({ threads: { ...p.threads, bA: true, bB: true, bC: true } })));
+        // Window A · precedents — rows land
+        at(1300, () => patch({ precIn: 1 }));
+        at(1700, () => patch({ precIn: 2 }));
+        at(2100, () => patch({ precIn: 3 }));
+        at(2500, () => patch({ precFoot: true }));
+        // Window B · memo — sections check on (SAME time window as A and C)
+        at(1400, () => patch({ memoTitleIn: true }));
+        at(1650, () => patch({ memoDone: 1 }));
+        at(2000, () => patch({ memoDone: 2 }));
+        at(2350, () => patch({ memoDone: 3 }));
+        at(2700, () => patch({ memoDone: 4 }));
+        at(3050, () => patch({ stampIn: true }));
+        // Window C · billing — the meter counts (SAME time window as A and B)
+        for (let k = 1; k <= 20; k++) at(1500 + k * 75, () => patch({ billMeter: Math.round((100 * k) / 20) }));
+        at(3050, () => patch({ billNote: true, clock: '09:05' }));
+        at(3500, () => patch({ orbSay: 'Three days of work — in parallel.' }));
+        at(4600, done);
       } else if (i === 3) {
-        patch({
-          view: 'drafting', paneTitle: 'Composing the memo',
-          toast: 'Drafting the partner memo in your house style…', toastDone: false,
-        });
-        at(500, () => patch({ draftSrcIn: 1 }));
-        at(1000, () => patch({ draftSrcIn: 2 }));
-        at(1500, () => patch({ draftSrcIn: 3 }));
-        at(900, () => patch({ memoDone: 1 }));
-        at(1700, () => patch({ memoDone: 2 }));
-        at(2500, () => patch({ memoDone: 3 }));
-        at(3300, () => patch({ memoDone: 4 }));
-        at(4000, () => patch({ stampIn: true, ringPct: 75, ringLabel: 'memo drafted' }));
-        at(4600, () => patch({
-          trayIn: true,
-          toast: 'Memo drafted in 4 min 12 sec — 2 client alerts wait for approval', toastDone: true,
-        }));
-        at(7200, done);
+        // APPROVE (the trust climax) — the three CONVERGE into Outlook; the amber
+        // gate holds; then Partner Shah approves in one click.
+        patch({ capIdx: 3, clock: CLOCKS[3] });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, precedents: 'converge', word: 'converge', billing: 'converge' },
+          threads: { ...p.threads, bA: false, bB: false, bC: false, cvA: true, cvB: true, cvC: true },
+        })));
+        at(700, () => patch((p) => ({ win: { ...p.win, outlook: 'focus' }, orbPos: 'approve', orbSay: 'Drafting the client alert — then stopping.' })));
+        at(1300, () => patch({ alertDraftIn: true }));
+        at(1900, () => patch({ approveWait: true, orbSay: '' })); // amber gate holds ~2.5s
+        at(4400, () => patch({ approveWait: false, approved: true }));
+        at(4900, () => patch({ orbSay: 'A partner approved every word.' }));
+        at(5900, done);
       } else if (i === 4) {
-        patch({
-          view: 'log', paneTitle: 'Practice management',
-          toast: 'Logging 1.2 hrs of research time — billing leakage closed…', toastDone: false,
-        });
-        at(400, () => patch({ pmConnected: true }));
-        at(800, () => patch({ logIn: 1 }));
-        at(1500, () => patch({ logIn: 2, ringPct: 92, ringLabel: 'time logged' }));
-        at(2200, () => patch({ logIn: 3 }));
-        at(2900, () => patch({ logIn: 4 }));
-        at(3700, () => patch({
-          approved: true, partnerMeta: '3 matters, briefed by 09:06',
-          toast: 'Approved by Partner Shah — alerts sent, billing captured', toastDone: true,
-        }));
-        at(6200, done);
+        // ALERT (the payoff) — the two client alerts depart; the comparison lands.
+        patch({ capIdx: 4, clock: CLOCKS[4] });
+        at(200, () => patch((p) => ({ threads: { ...p.threads, cvA: false, cvB: false, cvC: false } })));
+        at(500, () => patch({ orbPos: 'alert', orbSay: 'Your client hears it from you — first.' }));
+        at(900, () => patch((p) => ({ threads: { ...p.threads, out1: true } })));
+        at(1100, () => patch({ sentOut: 1 }));
+        at(1300, () => patch((p) => ({ threads: { ...p.threads, out2: true } })));
+        at(1500, () => patch({ sentOut: 2 }));
+        at(2100, () => patch({ deliveredIn: true }));
+        at(2800, () => patch({ compareIn: true, orbSay: '' }));
+        at(4000, done);
       } else if (i === 5) {
-        patch({
-          view: 'learn', paneTitle: 'Knowledge base',
-          toast: 'Indexing the release — the firm just got smarter', toastDone: false,
-        });
-        at(800, () => patch({ learnIn: true, ringPct: 100, ringLabel: 'indexed' }));
-        at(1800, () => patch({
-          toast: 'Knowledge base: 4,218 documents — the next search already knows', toastDone: true,
-        }));
-        at(4400, done);
+        // LEARN (resolution) — the release files into the knowledge base; then
+        // the wide shot: the orb settles at the centre of the chain it built.
+        patch({ capIdx: 5, clock: CLOCKS[5] });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, outlook: 'docked' },
+          threads: { ...p.threads, out1: false, out2: false },
+        })));
+        at(600, () => patch({ kbMode: 'focus', orbPos: 'learn', orbSay: 'Filed. The firm just got smarter.' }));
+        at(900, () => patch((p) => ({ threads: { ...p.threads, lrn: true } })));
+        at(1000, () => fly('[data-fly="release"]', '[data-fly="kb"]', 'SEC 33-11138'));
+        for (let k = 1; k <= 18; k++) {
+          const e = 1 - Math.pow(1 - k / 18, 3);
+          const v = Math.round(4200 + 18 * e);
+          at(1200 + k * 60, () => patch({ kbCount: v }));
+        }
+        at(2500, () => patch({ kbLine: true }));
+        at(3300, () => patch((p) => ({
+          win: {
+            sec: 'docked', imanage: 'docked', precedents: 'docked',
+            word: 'docked', billing: 'docked', outlook: 'docked',
+          },
+          kbMode: 'docked' as NodeMode,
+          wide: true, pulse: true, orbPos: 'wide' as OrbPos, orbSay: 'Four minutes. Not three days.',
+          threads: { ...p.threads, lrn: false, s1: true, s2: true, s3: true, s4: true, s5: true },
+        })));
+        at(4900, done);
       } else {
+        // RECEIPT
         patch({ step: 6 });
-        at(300, () => patch({ receipt: true, toast: FINAL_TOAST, toastDone: true }));
-        at(7200, done);
+        at(400, () => patch({ receipt: true }));
+        at(6600, done);
       }
     };
 
@@ -328,7 +481,7 @@ export default function LegalScene() {
       playBeat(i, () => run(i + 1));
     };
     run(start);
-  }, [reduced, stop]);
+  }, [fly, reduced, stop]);
 
   useEffect(() => {
     // Kick off via a timer so no state updates happen synchronously in the
@@ -340,286 +493,310 @@ export default function LegalScene() {
     return () => { window.clearTimeout(id); stop(); };
   }, [inView, reduced, goTo, stop]);
 
+  const on = (b: boolean) => (b ? 'true' : 'false');
+  const cap = CAPTIONS[s.capIdx];
+  const billHrs = ((s.billMeter * 1.2) / 100).toFixed(1);
+
   return (
     <div className={styles.scene} ref={shellRef}>
-      <div className={styles.window} aria-label="Legal & Regulatory Engine — live demonstration">
-
-        {/* ── Window chrome ── */}
-        <div className={styles.chrome}>
-          <div className={styles.dots} aria-hidden="true"><span /><span /><span /></div>
-          <span className={styles.chromeTitle}>Chronexa · Legal &amp; Regulatory Engine</span>
-          <span className={styles.livePill}><i aria-hidden="true" />Live run</span>
-          <span className={styles.clockChip}>
-            <span className={styles.clockTime}>{s.clock}</span>
-            <span className={styles.clockCaption}>the old way: day 3</span>
-          </span>
-        </div>
-
-        {/* ── Stepper ── */}
-        <div className={styles.stepper} role="tablist" aria-label="Pipeline steps">
+      <div
+        className={styles.stage}
+        ref={stageRef}
+        data-pulse={on(s.pulse)}
+        aria-label="Legal & Regulatory Engine — live demonstration"
+      >
+        {/* ── Progress rail ── */}
+        <div className={styles.rail} role="tablist" aria-label="Pipeline steps">
           {STEPS.map((name, i) => (
             <button
               key={name}
               type="button"
               role="tab"
               aria-selected={s.step === i}
-              className={styles.step}
+              className={styles.pill}
               data-state={i < s.step ? 'done' : i === s.step ? 'active' : 'idle'}
               onClick={() => goTo(i)}
             >
-              <span className={styles.stepDot}>{i < s.step ? '✓' : i + 1}</span>
-              <span className={styles.stepName}>{name}</span>
+              {name}
             </button>
           ))}
         </div>
 
-        {/* ── Body ── */}
-        <div className={styles.body}>
-          <aside className={styles.side}>
-            <div className={styles.sideCard}>
-              <div className={styles.clientRow}>
-                <span className={`${styles.avatar} ${styles.avatarMs}`}>MS</span>
-                <div>
-                  <div className={styles.clientName}>Meridian Shah LLP</div>
-                  <div className={styles.clientMeta}>Securities &amp; corporate · 500+ active matters</div>
+        {/* ── The clock (Legal's device) — scripted, never real time ── */}
+        <div className={styles.clock} aria-hidden="true">
+          <span className={styles.clockTime}>{s.clock}</span>
+          <span className={styles.clockCap}>the old way: day 3</span>
+        </div>
+
+        <p className={styles.caption} role="status" aria-live="polite">
+          <span className={styles.capDot} aria-hidden="true" />
+          <span className={styles.capText}>
+            {cap.lead}
+            {cap.amber ? <span className={styles.capAmber}>{cap.amber}</span> : null}
+          </span>
+        </p>
+
+        {/* ── The desktop: threads + the AI orb + tool windows ── */}
+        <div className={styles.world} data-wide={on(s.wide)}>
+          <svg className={styles.threads} viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+            {THREAD_PATHS.map((t) => (
+              <path key={t.key} className={styles.thread} d={t.d} data-on={on(s.threads[t.key])} vectorEffect="non-scaling-stroke" />
+            ))}
+          </svg>
+
+          {/* The protagonist: the AI agent (Claude) orb + thought bubble */}
+          <div className={styles.orb} data-pos={s.orbPos}>
+            <span className={styles.orbChip}>
+              <span className={styles.orbDot} aria-hidden="true" />
+              <span className={styles.orbName}>AI agent</span>
+              <span className={styles.orbModel}>Claude</span>
+            </span>
+            <span className={styles.orbSay} data-on={on(s.orbSay !== '')}>
+              {s.orbSay || ' '}
+            </span>
+          </div>
+
+          <span className={styles.vlink} data-on={on(s.win.sec !== 'hidden')} aria-hidden="true" />
+
+          {/* 0 · WATCH — the SEC EDGAR regulatory feed + the bulletin */}
+          <div className={`${styles.win} ${styles.wSec}`} data-mode={s.win.sec} data-fly="release">
+            <div className={styles.tbar}>
+              <img src="/logos/sec.png" alt="SEC EDGAR" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>Regulatory feed</span>
+              <span className={styles.tsub}>watching, live</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.feedChips}>
+                {FEED_CHIPS.map((f, i) => (
+                  <span key={f.alt} className={styles.feedChip} data-live={on(i < s.feedsLive)}>
+                    <img src={f.src} alt={f.alt} width={14} height={14} className={styles.feedChipLogo} />
+                    <span className={styles.feedLiveDot} aria-hidden="true" />Live
+                  </span>
+                ))}
+              </div>
+              <div className={styles.feedList}>
+                {QUIET.map((q, i) => (
+                  <div key={q} className={styles.quietRow} data-in={on(i < s.quietIn)}>
+                    <span className={styles.quietText}>{q}</span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.releaseCard} data-in={on(s.releaseIn)}>
+                <div className={styles.relHead}>
+                  <img src="/logos/sec.png" alt="SEC EDGAR" width={16} height={16} className={styles.relLogo} />
+                  <span className={styles.relSrc}>SEC EDGAR · just published</span>
+                </div>
+                <div className={styles.relTitle}>SEC Release No. 33-11138 — Rule 10b5-1 trading plan amendments</div>
+                <div className={styles.relMeta}>effective Feb 27, 2026</div>
+                <div className={styles.chips}>
+                  <span className={styles.chip}>Securities law</span>
+                  <span className={styles.chip} data-amber="true">Insider trading</span>
                 </div>
               </div>
-              <div className={styles.ringWrap}>
-                <div className={styles.ring}>
-                  <svg width="62" height="62" viewBox="0 0 62 62" aria-hidden="true">
-                    <circle className={styles.ringBg} cx="31" cy="31" r="26" />
-                    <circle
-                      className={styles.ringFg} cx="31" cy="31" r="26"
-                      style={{ strokeDashoffset: 163.4 * (1 - s.ringPct / 100) }}
-                    />
-                  </svg>
-                  <span className={styles.ringPct}>{s.ringPct}%</span>
-                </div>
-                <span className={styles.ringLabel}><b>Response progress</b><br />{s.ringLabel}</span>
-              </div>
             </div>
+          </div>
 
-            <div className={styles.sideCard}>
-              <div className={styles.sideTitle}>Watching</div>
-              {FEEDS.map((f, i) => (
-                <div key={f.name} className={styles.appRow}>
-                  <span className={`${styles.logo} ${f.cls}`}>{f.mark}</span>{f.name}
-                  {i < s.feedsLive && <span className={styles.appStatus}>Live</span>}
-                </div>
-              ))}
-              <div className={`${styles.sideTitle} ${styles.sideTitleSecond}`}>Connected</div>
-              {APPS.map((a) => (
-                <div key={a.name} className={styles.appRow}>
-                  <span className={`${styles.logo} ${a.cls}`}>{a.mark}</span>{a.name}
-                  {s.pmConnected && <span className={styles.appStatus}>Connected</span>}
-                </div>
-              ))}
+          <span className={styles.vlink} data-on={on(s.win.imanage !== 'hidden')} aria-hidden="true" />
+
+          {/* 1 · MATCH — the iManage matter wall */}
+          <div className={`${styles.win} ${styles.wImanage}`} data-mode={s.win.imanage}>
+            <div className={styles.tbar}>
+              <img src="/logos/imanage.png" alt="iManage" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>iManage</span>
+              <span className={styles.tsub}>matter wall</span>
+              <span className={styles.tick} aria-hidden="true" />
             </div>
-
-            <div className={styles.sideCard}>
-              <div className={styles.sideTitle}>The partner</div>
-              <div className={styles.prepRow}>
-                <span className={`${styles.avatar} ${styles.avatarAs}`}>AS</span>
-                <div>
-                  <div className={styles.prepName}>Partner A. Shah</div>
-                  <div className={styles.prepMeta}>{s.partnerMeta}</div>
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <div className={styles.main}>
-            {/* ── Left: feed / precedents / drafting / log / learn ── */}
-            <div className={styles.workL}>
-              <span className={styles.paneTitle}>{s.paneTitle}</span>
-
-              {s.view === 'feed' && (
-                <div className={styles.feedList}>
-                  {QUIET.map((q, i) => (
-                    <div key={q.text} className={styles.quietRow} data-in={i < s.quietIn ? 'true' : 'false'}>
-                      <span className={`${styles.logo} ${styles.quietLogo} ${q.cls}`}>{q.mark}</span>
-                      <span className={styles.quietText}>{q.text}</span>
-                      <span className={styles.quietTag}>no action</span>
-                    </div>
-                  ))}
-                  <div className={styles.releaseCard} data-in={s.releaseIn ? 'true' : 'false'}>
-                    <div className={styles.relHead}>
-                      <span className={`${styles.logo} ${styles.logoSec}`}>SEC</span>
-                      <span className={styles.relSrc}>SEC EDGAR · just published</span>
-                    </div>
-                    <div className={styles.relTitle}>SEC Release No. 33-11138 — Rule 10b5-1 trading plan amendments</div>
-                    <div className={styles.relMeta}>Effective Feb 27, 2026</div>
-                    <div className={styles.chips}>
-                      <span className={styles.chip}>Securities law</span>
-                      <span className={styles.chip}>Insider trading</span>
-                    </div>
-                  </div>
-                  <div className={styles.impactList}>
-                    {IMPACT.map((m, i) => (
-                      <div
-                        key={m.text}
-                        className={styles.impactRow}
-                        data-in={i < s.impactIn ? 'true' : 'false'}
-                        data-amber={m.amber ? 'true' : 'false'}
-                      >
-                        <span className={styles.impactMark}>{m.amber ? '!' : '→'}</span>
-                        <span className={styles.impactText}>{m.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {s.view === 'precedent' && (
-                <div className={styles.precList}>
-                  {PRECEDENTS.map((p, i) => (
-                    <div
-                      key={p.title}
-                      className={styles.precCard}
-                      data-in={i < s.precIn ? 'true' : 'false'}
-                      data-own={p.own ? 'true' : 'false'}
-                    >
-                      <span className={styles.precIco} aria-hidden="true">§</span>
-                      <div>
-                        <div className={styles.precTitle}>{p.title}</div>
-                        <div className={styles.precSub}>{p.sub}</div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className={styles.precFoot} data-in={s.precFootIn ? 'true' : 'false'}>
-                    12 matched · relevance 0.87+
-                  </div>
-                </div>
-              )}
-
-              {s.view === 'drafting' && (
-                <div className={styles.draftCard}>
-                  <div className={styles.draftHead}>Composing from</div>
-                  {DRAFT_SRC.map((d, i) => (
-                    <div key={d} className={styles.draftRow} data-done={i < s.draftSrcIn ? 'true' : 'false'}>
-                      <span className={styles.draftCheck}>{'✓'}</span>{d}
-                    </div>
-                  ))}
-                  <div className={styles.draftHint}>The memo builds on the right →</div>
-                </div>
-              )}
-
-              {s.view === 'log' && (
-                <div className={styles.logCard}>
-                  <div className={styles.logHead}>
-                    <span className={`${styles.logo} ${styles.logoIm}`}>iM</span>
-                    <span className={`${styles.logo} ${styles.logo3e}`}>3E</span>
-                    <span className={styles.logTitle}>iManage · Elite 3E</span>
-                  </div>
-                  {LOG_ROWS.map((l, i) => (
-                    <div key={l} className={styles.logRow} data-in={i < s.logIn ? 'true' : 'false'}>
-                      <span className={styles.logCheck}>{'✓'}</span>{l}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {s.view === 'learn' && (
-                <div className={styles.learnCard} data-in={s.learnIn ? 'true' : 'false'}>
-                  <div className={styles.learnTitle}>Release embedded into the firm&rsquo;s knowledge base</div>
-                  <div className={styles.learnBig}>4,218</div>
-                  <div className={styles.learnSub}>documents the next search can draw on</div>
-                  <div className={styles.learnLine}>The next search already knows about it.</div>
-                </div>
-              )}
-            </div>
-
-            {/* ── Right: the partner memo being composed ── */}
-            <div className={styles.workR}>
-              <span className={styles.paneTitle}>The partner memo</span>
-              <div className={styles.memoCard}>
-                <div className={styles.memoKicker}>Guidance memo · house style</div>
-                <div className={styles.memoTitleWrap}>
-                  {s.memoStub
-                    ? <span className={styles.memoTitle}>Rule 10b5-1 amendments — client impact</span>
-                    : <span className={styles.memoSkelLine} aria-hidden="true" />}
-                </div>
-                <div className={styles.memoBody}>
-                  {MEMO_ROWS.map((m, i) => (
-                    <div key={m} className={styles.memoRow} data-done={i < s.memoDone ? 'true' : 'false'}>
-                      <span className={styles.memoCheck}>{'✓'}</span>
-                      <span className={styles.memoLab}>{m}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className={styles.stampRow}>
-                  <span className={styles.stamp} data-in={s.stampIn ? 'true' : 'false'}>Drafted in 4 min 12 sec</span>
-                </div>
-              </div>
-
-              <div className={styles.tray}>
-                <div className={styles.trayHead}>
-                  <span className={styles.trayTitle}>For partner approval</span>
-                </div>
-                <div className={styles.trayBody}>
+            <div className={styles.winBody}>
+              <div className={styles.matterHead}>Meridian Shah LLP · 500+ active matters cross-referenced</div>
+              <div className={styles.matterGrid}>
+                {MATTERS.map((m, i) => (
                   <div
-                    className={styles.trayItem}
-                    data-in={s.trayIn ? 'true' : 'false'}
-                    data-resolved={s.approved ? 'true' : 'false'}
+                    key={m.text}
+                    className={styles.matterCard}
+                    data-in={on(i < s.matterIn)}
+                    data-amber={on(m.amber)}
                   >
-                    <span className={styles.trayMark}>!</span>
-                    <span className={styles.trayText}>
-                      2 client alert emails — drafted, not sent&nbsp;
-                      <span className={styles.trayFix}>Approved by Partner Shah {'✓'} · sent</span>
-                    </span>
+                    <span className={styles.matterMark} aria-hidden="true">{m.amber ? '!' : '§'}</span>
+                    <span className={styles.matterText}>{m.text}</span>
                   </div>
-                </div>
+                ))}
               </div>
-              <p className={styles.trustLine}>Nothing reaches a client without a partner&rsquo;s yes.</p>
             </div>
+          </div>
 
-            {/* ── Receipt overlay ── */}
-            <div className={styles.receipt} data-show={s.receipt ? 'true' : 'false'}>
-              <div className={styles.receiptCard}>
-                <svg className={styles.bigCheck} viewBox="0 0 54 54" aria-hidden="true">
-                  <circle cx="27" cy="27" r="24" />
-                  <path d="M17 28l7 7 14-15" />
-                </svg>
-                <p className={styles.receiptTitle}>Published 09:02. Partner-ready memo by 09:06.</p>
-                <p className={styles.receiptSub}>The old way, this is day 3 — and the client heard it from the news first.</p>
-                <div className={styles.receiptRows}>
-                  <div className={styles.receiptRow}><span>Feeds watched</span><b>14</b></div>
-                  <div className={styles.receiptRow}><span>Matters matched</span><b>7</b></div>
-                  <div className={styles.receiptRow}>
-                    <span>Precedents surfaced</span>
-                    <b>12 <span className={styles.receiptNote}>incl. your own 2022 memo</span></b>
-                  </div>
-                  <div className={styles.receiptRow}>
-                    <span>Billable time captured</span>
-                    <b className={styles.receiptHl}>1.2 hrs <span className={styles.receiptNote}>automatically</span></b>
-                  </div>
-                  <div className={styles.receiptRow}>
-                    <span>Time to draft alert</span>
-                    <b><s className={styles.receiptOld}>3–4 days</s> <span className={styles.receiptHl}>4 min</span></b>
+          <span className={styles.vlink} data-on={on(s.win.precedents !== 'hidden')} aria-hidden="true" />
+
+          {/* 2 · WORK · Window A — precedents (the firm's own memory) */}
+          <div className={`${styles.win} ${styles.wPrec}`} data-mode={s.win.precedents}>
+            <div className={styles.tbar}>
+              <img src="/logos/imanage.png" alt="iManage" width={18} height={18} className={styles.tlogo} />
+              <span className={styles.tname}>Precedent search</span>
+              <span className={styles.tsub}>iManage · RAG</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              {PRECEDENTS.map((p, i) => (
+                <div key={p.title} className={styles.precCard} data-in={on(i < s.precIn)} data-own={on(p.own)}>
+                  <span className={styles.precIco} aria-hidden="true">§</span>
+                  <div className={styles.precTextWrap}>
+                    <div className={styles.precTitle}>{p.title}</div>
+                    <div className={styles.precSub}>{p.sub}</div>
                   </div>
                 </div>
-                <BookButton className={styles.receiptCta} location="legal-regulatory-engine-scene-receipt">
-                  Pick the gap that hurts most →
-                </BookButton>
-                <span className={styles.receiptFine}>
-                  Regulatory alerts, billing capture, knowledge loop, or diligence reports — see one run end-to-end in 30 minutes.<br />
-                  <b>iManage · NetDocuments · Elite 3E · Clio</b>
+              ))}
+              <div className={styles.precFoot} data-in={on(s.precFoot)}>12 matched · relevance 0.87+</div>
+            </div>
+          </div>
+
+          <span className={styles.vlink} data-on={on(s.win.word !== 'hidden')} aria-hidden="true" />
+
+          {/* 2 · WORK · Window B — the partner memo (real Word icon) */}
+          <div className={`${styles.win} ${styles.wWord}`} data-mode={s.win.word}>
+            <div className={styles.tbar}>
+              <img src="/logos/word.svg" alt="Microsoft Word" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>Guidance memo</span>
+              <span className={styles.tsub}>Word · house style</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.memoTitleWrap}>
+                {s.memoTitleIn
+                  ? <span className={styles.memoTitle}>Rule 10b5-1 amendments — client impact</span>
+                  : <span className={styles.memoSkel} aria-hidden="true" />}
+              </div>
+              <div className={styles.memoBody}>
+                {MEMO_ROWS.map((m, i) => (
+                  <div key={m} className={styles.memoRow} data-done={on(i < s.memoDone)}>
+                    <span className={styles.memoCheck} aria-hidden="true">{'✓'}</span>
+                    <span className={styles.memoLab}>{m}</span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.stampRow}>
+                <span className={styles.stamp} data-in={on(s.stampIn)}>Drafted in 4 min 12 sec</span>
+              </div>
+            </div>
+          </div>
+
+          <span className={styles.vlink} data-on={on(s.win.billing !== 'hidden')} aria-hidden="true" />
+
+          {/* 2 · WORK · Window C — Elite 3E billing meter (Thomson Reuters) */}
+          <div className={`${styles.win} ${styles.wBilling}`} data-mode={s.win.billing}>
+            <div className={styles.tbar}>
+              <img src="/logos/thomsonreuters.png" alt="Thomson Reuters Elite" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>Elite 3E</span>
+              <span className={styles.tsub}>time &amp; billing</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.billLab}>Research time — logged to #4472</div>
+              <div className={styles.billMeterWrap}>
+                <span className={styles.billMeterFill} style={{ width: `${s.billMeter}%` }} />
+              </div>
+              <div className={styles.billNums}>
+                <span className={styles.billHrs}>{billHrs} hrs</span>
+                <span className={styles.billAuto}>automatically</span>
+              </div>
+              <div className={styles.billNote} data-in={on(s.billNote)}>26% billing leakage — closed</div>
+            </div>
+          </div>
+
+          <span className={styles.vlink} data-on={on(s.win.outlook !== 'hidden')} aria-hidden="true" />
+
+          {/* 3 · APPROVE / 4 · ALERT — Outlook client alert + the amber gate */}
+          <div className={`${styles.win} ${styles.wOutlook}`} data-mode={s.win.outlook}>
+            <div className={styles.tbar}>
+              <img src="/logos/outlook.png" alt="Outlook" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>Outlook</span>
+              <span className={styles.tsub}>client alert</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.olDraft} data-in={on(s.alertDraftIn)}>
+                <div className={styles.olRow}><span className={styles.olK}>To</span><span className={styles.olV}>[affected clients]</span></div>
+                <div className={styles.olRow}><span className={styles.olK}>Subject</span><span className={styles.olV}>SEC Rule 10b5-1 amendment — action needed on your trading plan</span></div>
+              </div>
+
+              <div
+                className={styles.olBanner}
+                data-show={on(s.alertDraftIn && !s.approved)}
+                data-wait={on(s.approveWait)}
+              >
+                <span className={styles.olBannerMark} aria-hidden="true">!</span>
+                Awaiting Partner Shah — nothing reaches a client without a partner
+              </div>
+
+              <div className={styles.olApproved} data-in={on(s.approved)}>
+                <img src="/demo/shah.png" alt="Partner A. Shah" width={22} height={22} className={styles.olAvatar} />
+                <span className={styles.olApprovedText}>
+                  <span className={styles.olCheck} aria-hidden="true">{'✓'}</span>
+                  Approved by A. Shah · sent to 2 clients
                 </span>
               </div>
+
+              <div className={styles.olDelivered} data-in={on(s.deliveredIn)}>
+                <span className={styles.olDelChip}>Delivered to 2 clients {'✓'}</span>
+              </div>
+
+              <div className={styles.olCompare} data-in={on(s.compareIn)}>
+                <b>You: 09:06.</b> The market&rsquo;s other lawyers: still on day 3.
+              </div>
+            </div>
+          </div>
+
+          {/* 5 · LEARN — the knowledge-base node (green Chronexa tissue) */}
+          <div className={`${styles.node} ${styles.kbNode}`} data-mode={s.kbMode} data-fly="kb">
+            <span className={styles.nodeTag}>Your knowledge base</span>
+            <div className={styles.kbInner}>
+              <span className={styles.kbHead}>Embedded — the next matter already knows</span>
+              <span className={styles.kbBig}>{s.kbCount.toLocaleString('en-US')}</span>
+              <span className={styles.kbSub}>documents · it never leaves when a partner does</span>
+              <span className={styles.kbLine} data-in={on(s.kbLine)}>SEC Release 33-11138 filed {'✓'}</span>
             </div>
           </div>
         </div>
 
-        {/* ── Toast ── */}
-        <div className={styles.toastWrap}>
-          <div className={styles.toast} data-done={s.toastDone ? 'true' : 'false'} role="status" aria-live="polite">
-            <span className={styles.toastSpin} aria-hidden="true" />
-            <span className={styles.toastCheck} aria-hidden="true">{'✓'}</span>
-            <span className={styles.toastText}>{s.toast}</span>
+        {/* ── Receipt overlay ── */}
+        <div className={styles.receipt} data-show={on(s.receipt)}>
+          <div className={styles.receiptCard}>
+            <p className={styles.receiptKicker}>Published 09:02 · you replied 09:06</p>
+            <p className={styles.receiptTitle}>Four minutes to a partner-approved client alert.</p>
+            <div className={styles.receiptRows}>
+              <div className={styles.receiptRow}><span>Matters checked</span><b>500+</b></div>
+              <div className={styles.receiptRow}><span>Exposed matters found</span><b className={styles.receiptHl}>7</b></div>
+              <div className={styles.receiptRow}>
+                <span>Precedents surfaced</span>
+                <b>12 <span className={styles.receiptNote}>incl. your own 2022 memo</span></b>
+              </div>
+              <div className={styles.receiptRow}>
+                <span>Billable time captured</span>
+                <b className={styles.receiptHl}>1.2 hrs <span className={styles.receiptNote}>auto</span></b>
+              </div>
+              <div className={styles.receiptRow}>
+                <span>Time to client alert</span>
+                <b><s className={styles.receiptOld}>3–4 days</s> <span className={styles.receiptHl}>4 min</span></b>
+              </div>
+            </div>
+            <BookButton className={styles.receiptCta} location="legal-regulatory-engine-scene-receipt">
+              Pick the gap that hurts most →
+            </BookButton>
+            <span className={styles.receiptFine}>
+              <span className={styles.fineLogos}>
+                {FINE_LOGOS.map((l) => (
+                  <img key={l.src} src={l.src} alt={l.alt} width={14} height={14} />
+                ))}
+              </span>
+              Regulatory alerts, billing capture, knowledge activation, diligence-to-report — four workflows, on the systems you already run.
+            </span>
           </div>
         </div>
       </div>
 
+      <p className={styles.orchNote}>
+        Chronexa doesn&rsquo;t sell an AI or a legal database. We orchestrate Claude with the systems you already run —
+        iManage, your billing platform, Word and Outlook. We build the workflow; every client alert still waits for a partner.
+      </p>
       <p className={styles.hint}>Click a step above to jump · the run loops on its own</p>
     </div>
   );
