@@ -575,7 +575,8 @@ export default function SalesScene() {
           <div className={styles.orb} data-pos={s.orbPos}>
             <span className={styles.orbChip}>
               <span className={styles.orbDot} aria-hidden="true" />
-              <span className={styles.orbName}>Chronexa AI</span>
+              <span className={styles.orbName}>AI agent</span>
+              <span className={styles.orbModel}>Claude</span>
             </span>
             <span className={styles.orbSay} data-on={on(s.orbSay !== '')}>
               {s.orbSay || ' '}
@@ -768,7 +769,7 @@ export default function SalesScene() {
                 <span className={styles.slOrb} aria-hidden="true"><i /></span>
                 <div className={styles.slMsgBody}>
                   <div className={styles.slMeta}>
-                    <b>Chronexa AI</b><span className={styles.slApp}>APP</span><span className={styles.slTime}>08:58</span>
+                    <b>Chronexa</b><span className={styles.slApp}>APP</span><span className={styles.slTime}>08:58</span>
                   </div>
                   <p className={styles.slText}>41 researched sequences ready. Each pitched on a live signal.</p>
                   <p className={styles.slSub}>Top fit: Rahul Verma · Acme Logistics · 92/100</p>
@@ -864,6 +865,10 @@ export default function SalesScene() {
         </div>
       </div>
 
+      <p className={styles.orchNote}>
+        Chronexa doesn&rsquo;t sell an AI. We orchestrate the leading models — Claude, GPT-4o — with the tools you already run.
+        We build and run the system; you own it.
+      </p>
       <p className={styles.hint}>Click a step above to jump · the run loops on its own</p>
     </div>
   );

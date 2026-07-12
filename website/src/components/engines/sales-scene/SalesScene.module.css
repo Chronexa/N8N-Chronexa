@@ -48,9 +48,29 @@
   border-radius: 20px;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 62% 52% at 50% 40%, rgba(103, 176, 53, 0.05), transparent 72%),
-    #0A0B0A;
+    radial-gradient(ellipse 62% 52% at 50% 40%, rgba(103, 176, 53, 0.06), transparent 72%),
+    #08090A;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+/* 3D perspective floor grid — gives the dark stage real depth (static, no motion) */
+.stage::before {
+  content: "";
+  position: absolute;
+  left: -25%;
+  right: -25%;
+  bottom: -12%;
+  height: 72%;
+  background-image:
+    linear-gradient(to right, rgba(103, 176, 53, 0.14) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 140, 120, 0.10) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(460px) rotateX(62deg);
+  transform-origin: bottom center;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent 80%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent 80%);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ── Progress rail (slim pills · 7 beats) ──────────────────── */
@@ -135,6 +155,7 @@
 .world {
   position: absolute;
   inset: 0;
+  z-index: 1;
   transform-origin: 50% 56%;
   transition: transform 1.6s var(--cam);
 }
@@ -227,6 +248,18 @@
   font-weight: 700;
   letter-spacing: 0.01em;
   color: #DDF0CC;
+  white-space: nowrap;
+}
+/* the AI agent runs on an incumbent model — Chronexa orchestrates it, not owns it */
+.orbModel {
+  flex: none;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #0A0B0A;
+  background: #DDF0CC;
+  border-radius: 999px;
+  padding: 0.06rem 0.36rem;
   white-space: nowrap;
 }
 /* the thought bubble — friendly, sentence case */
@@ -1163,8 +1196,18 @@
   opacity: 0.85;
 }
 
+/* orchestrator clarity — our role, stated plainly, under the stage */
+.orchNote {
+  max-width: 62ch;
+  margin: 1rem auto 0;
+  text-align: center;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: rgba(244, 244, 244, 0.72);
+}
+
 /* hint under the stage, on the dark page */
-.hint { font-size: 0.72rem; color: rgba(255, 255, 255, 0.38); text-align: center; }
+.hint { font-size: 0.72rem; color: rgba(255, 255, 255, 0.38); text-align: center; margin-top: 0.5rem; }
 
 /* ── Responsive: <860px = sequential vertical stack ────────── */
 @media (max-width: 860px) {
