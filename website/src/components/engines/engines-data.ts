@@ -139,7 +139,7 @@ export const ENGINE_ROADMAP: RoadmapItem[] = [
   { name: 'Sales Engine', kicker: 'Outbound & pipeline', status: 'live', icon: 'send', promise: SALES_ENGINE.promise, href: '/ai-engines/sales-engine' },
   { name: 'CPA & Tax Engine', kicker: 'Tax compliance & filing', status: 'live', icon: 'doc', promise: 'Ingests every client document, extracts all fields including K-1s and brokerage composites, pre-fills the return in your tax software, and routes a reviewer-ready file — with flagged items — to your CPA.', href: '/ai-engines/cpa-tax-engine' },
   { name: 'Investment Research Engine', kicker: 'Capital markets & portfolio AI', status: 'live', icon: 'chart', promise: 'Connects to every brokerage via Plaid and Yodlee, scans news and earnings signals, runs XGBoost and LSTM models to surface exact entry and exit points, and presents human-approved orders to your broker — while monitoring risk in real time.', href: '/ai-engines/investment-research-engine' },
-  { name: 'Document Intelligence Engine', kicker: 'Unstructured docs → structured data', status: 'live', icon: 'layers', promise: 'Ingests any volume of PDFs, scanned images, photos, and handwritten forms — extracts every field with a per-field confidence score, runs the domain financial model automatically, and delivers a formatted report in hours instead of weeks.', href: '/ai-engines/document-intelligence-engine' },
+  { name: 'Document Intelligence Engine', kicker: 'Any document → a cited answer', status: 'live', icon: 'layers', promise: 'Reads every document your business runs on — leases, loan files, tax returns, audit and compliance files — across legal, finance, compliance and tax, then lets anyone ask a plain-language question and get an answer cited to the exact page, grounded only in your own documents. Nothing is sent to public AI.', href: '/ai-engines/document-intelligence-engine' },
   { name: 'Legal & Regulatory Engine', kicker: 'Alerts, billing, knowledge & diligence', status: 'live', icon: 'shield', promise: 'Closes the four operational gaps in a modern firm: regulatory changes matched to live matters in minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.', href: '/ai-engines/legal-regulatory-engine' },
   { name: 'Customer Support Engine', kicker: 'Omnichannel CS · voice + text', status: 'live', icon: 'inbox', promise: 'Indexes your entire knowledge base, classifies every incoming query in under a second, routes it to the right specialist agent — technical, billing, debug, or feature — and escalates to a human with full context when needed. Voice and text, all channels.', href: '/ai-engines/customer-support-engine' },
 ];
@@ -715,73 +715,75 @@ export const INV_RESEARCH_FLOW_EDGES = [
 
 // ============================================================================
 // DOCUMENT INTELLIGENCE ENGINE
-// First-hand: reserve study automation (14 days → 4 hours), OCR + AI on
-// images/handwriting/PDFs, financial model automation, cross-industry pattern.
+// Cross-vertical (2026-07-15): reads TONS of documents across legal, finance,
+// compliance & tax via AI+OCR, indexes them into a private "safe RAG" layer,
+// and answers plain-language questions with page-level citations. The reserve
+// study is kept as ONE proof point, not the whole story.
 // ============================================================================
 
 export const DOC_INTEL_ENGINE: EngineDef = {
   id: 'document-intelligence',
   slug: 'document-intelligence-engine',
   name: 'Document Intelligence Engine',
-  kicker: 'Unstructured docs → structured data',
+  kicker: 'Any document → a cited answer',
   status: 'live',
   icon: 'layers',
   promise:
-    'Ingests any volume of PDFs, scanned images, photos, and handwritten forms — extracts every field with a per-field confidence score, runs the domain financial model automatically, and delivers a formatted report in hours instead of weeks.',
+    'Reads every document your business runs on — leases, loan files, tax returns, audit and compliance files — across legal, finance, compliance and tax, then lets anyone ask a plain-language question and get an answer cited to the exact page, grounded only in your own documents. Nothing is sent to public AI.',
   nodes: [
     {
-      id: 'upload', tag: 'Intake', label: 'Document Upload', icon: 'inbox',
-      tools: ['PDF', 'JPEG / TIFF', 'Phone photos', 'Handwritten forms', 'Google Drive', 'SharePoint'],
-      stat: '47 docs queued',
-      caption: 'Pulling all submitted documents — PDFs, photos, handwritten inspection sheets.',
-      activity: '47 documents queued · 312 pages · 18 photos · 3 handwritten sheets',
-      detail: 'Every document type is accepted — clean PDFs, scanned images, phone photos taken on-site, handwritten inspection reports, TIFF exports from legacy systems. Files are pulled from Google Drive, SharePoint, Box, or direct upload. Duplicates are detected and flagged. Every file gets a timestamped intake record before processing begins.',
-      gives: 'A complete, deduplicated document set ready for extraction — no matter how messy the source files.',
+      id: 'upload', tag: 'Collect', label: 'Document Intake', icon: 'inbox',
+      tools: ['PDF & scans', 'Phone photos', 'Handwritten', 'Email', 'Google Drive', 'SharePoint', 'Box'],
+      stat: '12,480 docs',
+      caption: 'Pulling every document type from every system — deduplicated.',
+      activity: '12,480 documents · leases, loan files, tax returns, audit & KYC files · 3 sources',
+      detail: 'Every document your business runs on is pulled in — clean PDFs, faxed and scanned pages, phone photos, handwritten forms, email attachments — from Google Drive, SharePoint, Box, or direct upload. Duplicates are detected, and every file gets a timestamped intake record before anything is read. There is no “supported formats” list to fight: if a person can read it, the engine takes it in.',
+      gives: 'One deduplicated set of every document — no matter how messy, or how many systems they were scattered across.',
     },
     {
-      id: 'ocr', tag: 'Extract', label: 'OCR + AI Extraction', icon: 'search',
-      tools: ['AWS Textract', 'Azure Document Intelligence', 'GPT-4o Vision', 'Handwriting model'],
-      stat: '94% OCR confidence',
-      caption: 'Extracting text, tables, and handwritten content from every file.',
-      activity: '21 component categories extracted · handwriting OCR: 94% confidence',
-      detail: 'Combines OCR with AI vision models to extract text, tables, and structured data from every document type. Handwritten field values are read by a handwriting-specific model — not the same pipeline as printed text. Images of physical inspection reports photographed on-site are processed identically to clean PDFs. Every extracted value carries a confidence score; low-confidence reads are flagged for human review rather than silently accepted.',
-      gives: 'All document content extracted with a per-field confidence score. Nothing is quietly wrong.',
+      id: 'ocr', tag: 'Read', label: 'AI + OCR Reading', icon: 'search',
+      tools: ['OCR', 'Vision models', 'Handwriting model', 'Confidence scoring'],
+      stat: 'flagged, not guessed',
+      caption: 'Reading text off even a faxed, stamped scan — line by line.',
+      activity: 'Suite 400 lease read · renewal clause §12.3 captured · 1 handwritten line flagged at 58%',
+      detail: 'OCR and AI vision read text, tables, and stamped or handwritten content off documents that legacy OCR tools choke on — a faxed lease, a photographed form, a decades-old scan. Every value carries a confidence score, and the one line it cannot read confidently is flagged for a person rather than silently guessed. In a compliance or legal file, that difference — flag versus guess — is the whole game.',
+      gives: 'Clean, structured content from even the worst source files — with the one uncertain line flagged, never invented.',
     },
     {
-      id: 'classify', tag: 'Structure', label: 'Classification & Schema', icon: 'layers',
-      tools: ['Custom classifier', 'Domain schema', 'Cross-validation rules', 'Industry tables'],
-      stat: '18 categories mapped',
-      caption: 'Mapping extracted data to a structured schema — by document category.',
-      activity: 'HVAC: 23 units · Roof: 180,000 sq ft · Pool: 4 systems · 18 categories mapped',
-      detail: 'Extracted data is classified by document category and mapped to a structured schema specific to the industry and document type. For a reserve study: HVAC units, roofing, plumbing, pool equipment, paving, signage — each component gets a structured record with quantity, condition rating, age, and useful life remaining. For a different vertical, the schema adapts — the classification engine is not locked to one industry.',
-      gives: 'Structured, queryable data — not a pile of extracted text, but organised records ready for the financial model.',
+      id: 'classify', tag: 'Sort', label: 'Classify across departments', icon: 'layers',
+      tools: ['Document classifier', 'Legal', 'Finance', 'Compliance', 'Tax'],
+      stat: '38 types recognised',
+      caption: 'Sorting the whole pile across legal, finance, compliance and tax.',
+      activity: 'Legal 3,120 · Finance 3,610 · Compliance 1,880 · Tax 3,870',
+      detail: 'Each document is recognised for what it is — a commercial lease, a term loan agreement, a Form 1120, a SOC 2 report, a KYC file — and routed to the right department and schema. One engine covers legal, finance, compliance and tax rather than four siloed tools, which is why a single archive becomes searchable across every team at once.',
+      gives: 'Every document filed under the right department — so one question can span legal, finance, compliance and tax together.',
     },
     {
-      id: 'calculate', tag: 'Calculate', label: 'Financial Calculation', icon: 'chart',
-      tools: ['Reserve study model', 'RS Means cost data', 'Depreciation engine', '30-year projection'],
-      stat: '$2.1M reserve required',
-      caption: 'Running the full financial model — 30-year projection and reserve requirements.',
-      activity: '30-year projection complete · $2.1M required · funded: 61%',
-      detail: 'The structured data feeds a domain-specific financial model. For a reserve study: straight-line and accelerated depreciation, replacement cost indexing from RS Means, and a 30-year cash flow projection under current funding. For other document types: valuation models, loan amortisation schedules, insurance payout calculations. The math is fully auditable — every calculation traces back to a source document and a field extraction.',
-      gives: 'A fully computed financial result — auditable, reproducible, and sourced to the input documents.',
+      id: 'calculate', tag: 'Index', label: 'Private, cited knowledge base', icon: 'shield',
+      tools: ['Secure RAG index', 'Your tenant only', 'Source-page citations', 'No public models'],
+      stat: 'grounded + private',
+      caption: 'Building a private index grounded only in your own documents.',
+      activity: 'Indexed inside your tenant · every passage linked to its source page · nothing sent to public AI',
+      detail: 'The content is indexed into a retrieval layer that lives inside your own environment. “Safe RAG” means exactly this: RAG is when the AI answers only from a specific set of documents instead of the open internet, and “safe” means those documents are yours, they never leave your boundary, and every passage stays linked to its exact source page. So the model cannot make things up, an auditor can trace any answer, and nothing is sent to a public AI service.',
+      gives: 'A knowledge base private to you, grounded in your own documents, that can cite every source it uses.',
     },
     {
-      id: 'qa', tag: 'QA', label: 'QA & Flag Review', icon: 'shield',
-      tools: ['Cross-validation', 'Anomaly detection', 'Prior-year comparison', 'Benchmark tables'],
-      stat: '2 items flagged',
-      caption: 'Cross-validating results and surfacing anomalies for human review.',
-      activity: '⚠ HVAC Unit 14 — remaining life inconsistent · ⚠ Roof section C — cost outlier',
-      detail: 'A QA agent cross-validates calculated results against industry benchmarks, prior-year reports, and internal consistency rules. Anomalies — a component with remaining life longer than its expected useful life, a replacement cost 40% above the RS Means index — are flagged with context. The QA pass surfaces what needs human judgment, not a list of errors requiring full rework.',
-      gives: 'A short, specific flagged-items list — the 2–5 things that need a human decision, not a full re-review.',
+      id: 'qa', tag: 'Ask', label: 'Ask in plain words → cited answer', icon: 'spark',
+      tools: ['Plain-language questions', 'Claude reasoning', 'Cross-document', 'Source-page citations'],
+      stat: 'answer in seconds',
+      caption: 'Anyone asks a plain question; the answer comes back cited.',
+      activity: 'Q: which leases auto-renew before Dec 31? → 3 leases · earliest notice Oct 2 · cited p.7 §12.3',
+      detail: 'This is the payoff. Anyone on the team asks a question the way they would ask a colleague — “which commercial leases auto-renew before December?”, “any KYC files missing a 2024 refresh?”, “which entities filed a 1120 for 2024?” — and gets an answer in seconds, with every claim pinned to the exact document and page. Where a domain model applies, the same layer runs the calculation — a reserve study’s 30-year projection, a loan-covenant total — with every figure traced back to a source document.',
+      gives: 'Answers to plain-language questions across your whole archive — every one cited to the source page, ready to defend in an audit.',
     },
     {
-      id: 'report', tag: 'Deliver', label: 'Report Generation', icon: 'doc',
-      tools: ['PDF report', 'Excel model', 'Client portal', 'E-signature'],
-      stat: '89-page report · 4 hours',
-      caption: 'Generating the final report — client-ready and formatted to your standard.',
-      activity: 'Reserve Study: 89-page PDF generated · Excel model attached · ready for delivery',
-      detail: 'The final output is a formatted report in your firm\'s standard template — not a data export someone must reformat. For a reserve study: the full 30-year funding plan, component inventory, and professional certification page. The Excel model is attached for the client\'s own analysis. Both files are ready for e-signature and delivery without any manual reformatting.',
-      gives: 'A client-ready deliverable generated in hours — not the two weeks it takes a team to produce manually.',
+      id: 'report', tag: 'Review', label: 'Human review & deliver', icon: 'doc',
+      tools: ['Reviewer sign-off', 'Flagged items', 'Your report template', 'Full audit trail'],
+      stat: 'nothing files itself',
+      caption: 'A named reviewer confirms before anything is filed or sent.',
+      activity: 'Elena · Head of Compliance — confirms flagged lines and answers before anything is filed',
+      detail: 'Nothing is filed, sent, or acted on automatically. Flagged lines and drafted answers go to a named person — a compliance lead, a partner, an analyst — who confirms or corrects before anything leaves the system, and every extraction, answer and calculation keeps a full audit trail back to the source document. Where you want a finished document out — a reserve study, an adjuster summary, an underwriting memo — it is produced in your own template.',
+      gives: 'A human sign-off on every judgment call, a full audit trail, and finished output in your own format.',
     },
   ],
 };
@@ -838,26 +840,26 @@ export const DOC_INTEL_OUTPUTS: Record<string, string[]> = {
 };
 
 export const DOC_INTEL_WHATIS: string[] = [
-  'The Document Intelligence Engine converts any volume of unstructured documents — PDFs, scanned images, handwritten forms, phone photos taken on-site — into structured, queryable data, then runs the domain-specific financial model and delivers a formatted report. It is not a generic OCR tool; it is a purpose-built pipeline for document-heavy professional workflows.',
-  'The reserve study is the proof of concept. A process that requires two engineers and two weeks of manual data entry, spreadsheet work, and report formatting now takes four hours with the same quality and a full audit trail. The same architecture — document intake, AI extraction, domain model, QA, formatted output — applies to any industry where high-volume document processing is the bottleneck.',
-  'Industries where this pattern directly applies: property management (reserve studies, condition assessments), insurance (claims processing, policy review), lending (mortgage underwriting, appraisal processing), healthcare (medical records digitisation), and any firm that moves information from paper or PDF into structured records as a core part of its work.',
+  'The Document Intelligence Engine reads every document your business runs on — leases, loan files, tax returns, audit reports, claims, contracts — across legal, finance, compliance and tax, and turns them into a private knowledge base you can simply ask. Anyone types a plain-language question and gets an answer in seconds, with every claim cited to the exact source page. It is not a generic OCR tool, and it is not public AI pointed at your files; it is a grounded, cited, private layer over your own documents.',
+  '“Safe RAG” is the heart of it. RAG means the AI answers only from a specific set of documents rather than from the open internet; “safe” means those documents are yours, they stay inside your environment, and every answer links back to the page it came from. So the engine cannot make things up, an auditor can trace any answer to its source, and nothing is sent to a public AI service — the three things a compliance, legal or finance team needs before it will trust an AI answer at all.',
+  'The reserve study is one proof point. A property firm’s process that took two engineers two weeks — reading handwritten inspection sheets, keying data, running a 30-year model, formatting an 89-page report — now runs in hours, with the one illegible line flagged rather than guessed. The same pipeline reads a lease as easily as a loan file or a tax return, which is why one engine serves legal, finance, compliance and tax instead of four separate tools.',
 ];
 
 export const DOC_INTEL_HOWITWORKS_INTRO =
-  'Six agents handle the full document-to-report pipeline. Each is specialised — the handwriting OCR model is different from the domain classifier; the financial calculation engine is separate from the QA agent. Here is exactly what happens at each step and what leaves the pipeline at the end.';
+  'Six specialised steps take a document from wherever it lives to an answer you can cite. Each model is purpose-built — the handwriting reader is not the classifier; the private retrieval index is not the answer model. Here is exactly what happens at each step, and what a person still controls.';
 
 export const DOC_INTEL_PROBLEM: { intro: string; pains: string[]; closing: string } = {
   intro:
-    'Document-intensive professional workflows have a common bottleneck: the hours between receiving a document and producing a usable output. The bottleneck is not professional judgment — it is the manual work of reading, extracting, structuring, and calculating that happens before any judgment begins.',
+    'Most businesses already have every answer they need — it is just trapped in documents. Contracts, filings, claims, returns and reports pile up across departments, and finding one fact means a person opening files one at a time. The bottleneck is not judgment; it is the hours of reading and searching before judgment can begin.',
   pains: [
-    'A reserve study engineer spends 60–70% of their time on data entry and spreadsheet work — not engineering judgment.',
-    'Insurance claims adjusters manually extract data from 40–80 pages of documentation per claim before any assessment begins.',
-    'Mortgage underwriters manually key data from appraisals, tax returns, and bank statements — 2–4 hours per file before any credit analysis.',
-    'Any document with handwriting, poor scan quality, or non-standard formatting falls outside what legacy OCR tools handle reliably.',
-    'Legacy systems require re-keying data from one format into another — a source of compounding errors throughout the pipeline.',
+    'A compliance or legal team hunts through hundreds of contracts by hand to answer one question — which agreements auto-renew, which are missing a clause.',
+    'Finance and underwriting teams re-key data from appraisals, tax returns and bank statements — hours per file before any analysis starts.',
+    'Anything handwritten, faxed, or badly scanned falls outside what legacy OCR tools read reliably, so it stays manual.',
+    'Documents are scattered across Drive, SharePoint, Box and email, with no single place to ask a question across all of them.',
+    'Generic AI tools can answer, but they make things up, cannot cite a source, and send your confidential files to a public model — a non-starter in a regulated workflow.',
   ],
   closing:
-    'The engine does not change what professionals decide — it eliminates the hours spent reading and keying before they can decide anything.',
+    'The engine does not replace professional judgment. It reads and indexes everything first, so a plain-language question returns a cited answer in seconds — and a person still signs off before anything is filed.',
 };
 
 export const DOC_INTEL_INTEGRATION: {
@@ -866,50 +868,51 @@ export const DOC_INTEL_INTEGRATION: {
   prerequisites: string[];
   note: string;
 } = {
-  timeline: 'Most workflows are live in 2–4 weeks.',
+  timeline: 'Most document sets are live and answerable in 2–4 weeks.',
   phases: [
-    { phase: 'Define the schema', time: 'Week 1', detail: 'We map your document types to a structured schema — what fields matter, what the domain model requires, what the output report looks like.' },
-    { phase: 'Train and test extraction', time: 'Week 1–2', detail: 'Run the extraction pipeline on 20 real documents from your workflow. Validate accuracy against your manually-prepared ground truth.' },
-    { phase: 'Wire the financial model', time: 'Week 2–3', detail: 'Connect your domain-specific calculation model. For reserve studies: RS Means cost data, depreciation tables, 30-year projection. For other verticals: your firm\'s own model, even if it lives in a spreadsheet today.' },
-    { phase: 'Report template and go-live', time: 'Week 3–4', detail: 'Match the output to your firm\'s standard report template. Run 5 live documents end-to-end. Sign off and go live.' },
+    { phase: 'Connect your documents', time: 'Week 1', detail: 'Point the engine at where your documents already live — Google Drive, SharePoint, Box, email, or direct upload. It ingests and deduplicates across all of them; nothing has to be moved or re-filed.' },
+    { phase: 'Tune reading & classification', time: 'Week 1–2', detail: 'Run the reader on 20–50 real documents from your workflow — including your worst scans and handwriting — and validate accuracy against your own ground truth, department by department.' },
+    { phase: 'Build the private, cited index', time: 'Week 2–3', detail: 'Stand up the retrieval index inside your own environment, so every answer is grounded in your documents and linked to its source page, with nothing sent to public AI. Where a domain model applies, we wire it in — even if it lives in a spreadsheet today.' },
+    { phase: 'Set questions, reviewers & go-live', time: 'Week 3–4', detail: 'Confirm the everyday questions each team will ask, who reviews flagged items before anything is filed, and any output templates you need. Run live documents end-to-end, sign off, and go live.' },
   ],
   prerequisites: [
-    'A representative sample of 20–50 documents from your workflow — PDFs, scans, or images.',
-    'Your current output report template — the format clients or regulators expect.',
-    'The financial model or calculation logic your team applies — even if it lives in a spreadsheet today.',
-    'A document storage location — Google Drive, SharePoint, Box, or direct upload.',
+    'A representative sample of 20–50 documents — including your messiest scans and handwriting.',
+    'Read access to where documents live today — Google Drive, SharePoint, Box, or email.',
+    'The everyday questions each team needs answered, and who signs off on the answers.',
+    'Any output template or domain model you already use — even if it lives in a spreadsheet today.',
   ],
-  note: 'The engine adapts to your documents — not the other way around. We train the extraction models on your actual document types before go-live, so accuracy is validated on your data, not a benchmark dataset.',
+  note: 'Your documents never leave your environment. We validate accuracy on your actual files before go-live, and the retrieval index runs inside a tenant you control — which is what compliance and client-confidentiality agreements require.',
 };
 
 export const DOC_INTEL_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '14 days → 4 hrs', label: 'reserve study turnaround — real client result' },
-    { value: '94%', label: 'extraction accuracy on handwritten inspection forms' },
-    { value: '5×', label: 'throughput increase per analyst or engineer' },
-    { value: '2–4 wks', label: 'to go live on your document type' },
+    { value: 'Seconds', label: 'from a plain-language question to a cited answer' },
+    { value: '12,480', label: 'documents read & indexed across four departments' },
+    { value: 'Zero', label: 'files sent to public AI — grounded in yours, every answer cited' },
+    { value: '14d → 4h', label: 'one reserve study, intake to finished report' },
   ],
   narrative:
-    'For a reserve study firm charging $4,500–$8,000 per study, a 14-day turnaround is the production bottleneck. Compressing it to 4 hours means the same team handles 3–4× the volume without new hires. At $6,000 average per study, a 3× capacity gain on a 10-person team represents $1.2M–$2M in additional addressable revenue per year from the same fixed cost base. The same math applies to insurance claims, mortgage files, or any document-intensive workflow: more throughput, same headcount.',
+    'The cost is not the software — it is the hours your team spends reading and searching, and the risk of a missed clause or a filing that slips a deadline. When any question against your whole archive returns a cited answer in seconds, a compliance review that took days becomes an afternoon, and an auditor’s request is answered on the call. The reserve-study example — two engineers and two weeks compressed into hours — is the same pattern applied to one vertical: read everything once, then ask it anything, with a person signing off on the judgment calls.',
 };
 
 /** PLACEHOLDER — replace with real attributable quotes before production. */
 export const DOC_INTEL_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We were producing 8–10 reserve studies a month with a team of four engineers. The same team now handles 28–32. The engine does the data entry; the engineers do what they were hired to do.', name: 'Robert C.', role: 'Principal Engineer', company: 'Property reserve consultancy' },
-  { quote: 'The handwriting recognition was the thing I didn\'t believe would work. We photograph inspection sheets on-site with an iPhone. The engine reads them correctly 94% of the time — better than our staff re-keying from a photo.', name: 'Michelle T.', role: 'Operations Director', company: 'Property management firm' },
+  { quote: 'My team used to open contracts one by one to answer a single question. Now we just ask it — “which leases auto-renew before December” — and get the answer with the clause and page number attached. Because it only reads our own documents and cites every line, our auditors accept it.', name: 'Nadia R.', role: 'Head of Compliance', company: 'Financial services firm' },
+  { quote: 'Reserve studies were our proof it works. A job that took two engineers two weeks — reading handwritten sheets, keying data, running the model — now comes back the same day, and the one line it can’t read it flags instead of guessing. We’ve since pointed the same engine at our leases and vendor contracts.', name: 'Robert C.', role: 'Principal Engineer', company: 'Property consultancy' },
 ];
 
 export const DOC_INTEL_FAQS: { q: string; a: string }[] = [
-  { q: 'Can it handle handwritten documents?', a: 'Yes. The engine uses a handwriting-specific AI model — separate from the standard OCR pipeline — that handles printed handwriting, mixed handwriting and print, and partially filled forms. Accuracy depends on legibility, but on typical inspection forms and professional correspondence we see 90–96% field accuracy before the QA pass.' },
-  { q: 'What if a document doesn\'t match the expected format?', a: 'Non-standard documents are flagged rather than silently processed. The QA agent identifies extraction outputs that don\'t match the expected schema, and those documents are routed to human review with the extracted data pre-filled — so the reviewer edits rather than re-keys from scratch.' },
-  { q: 'Is this only for reserve studies?', a: 'No. The reserve study is the use case we have built and run in production. The underlying architecture — document intake, AI extraction, domain model, QA, formatted output — is replicable to any document-heavy workflow. We have adapted it for insurance claims, mortgage underwriting, and legal discovery. If your workflow involves extracting structured data from unstructured documents, the engine applies.' },
-  { q: 'Where does client document data go?', a: 'Client documents are processed within your own environment or a dedicated tenant in a cloud environment you control. We do not store client documents on shared infrastructure. The engine runs inside your data boundary — which is what professional service firm compliance and client confidentiality agreements require.' },
-  { q: 'How accurate is the extraction?', a: 'On clean PDFs: 99%+ field accuracy. On standard scanned documents: 97–99%. On handwritten forms with good legibility: 90–96%. Every extraction is scored per field; low-confidence reads are flagged rather than passed through. Before go-live, we run a validation pass on your actual documents and report the accuracy side-by-side with your ground truth.' },
+  { q: 'What kinds of documents can it read?', a: 'Any document your business runs on — commercial leases, loan agreements, tax returns, audit and KYC files, insurance claims, vendor contracts, and more — in almost any format: clean PDFs, faxed and scanned pages, phone photos, handwritten forms, and email attachments. One engine covers legal, finance, compliance and tax rather than four separate tools.' },
+  { q: 'What does “ask your documents” actually mean?', a: 'Instead of opening files one by one, anyone on your team types a plain-language question — “which leases auto-renew before December?”, “any KYC files missing a 2024 refresh?” — and gets an answer in seconds, with every claim pinned to the exact document and page. It works across your whole archive at once, spanning legal, finance, compliance and tax.' },
+  { q: 'How do I know the answers are trustworthy and not made up?', a: 'This is what “safe RAG” gives you. The engine answers only from your own documents — never the open internet — and every answer links back to the exact source page, so anyone can verify it and an auditor can trace it. Where it is not confident, it flags the item for a person rather than guessing. It is the opposite of a generic chatbot that sounds confident and cites nothing.' },
+  { q: 'Where does our document data go? Is anything sent to public AI?', a: 'Nothing is sent to a public AI service. Your documents are processed and indexed inside your own environment or a dedicated tenant you control, never on shared infrastructure. The retrieval layer that answers questions runs inside your data boundary — which is what compliance and client-confidentiality agreements require.' },
+  { q: 'Can it handle handwriting and bad scans?', a: 'Yes. A handwriting-specific model reads printed handwriting, mixed handwriting and print, and partially filled forms, while OCR and vision models handle faxed, stamped and low-quality scans that legacy tools choke on. Every value is confidence-scored; anything it cannot read confidently is flagged for a person rather than silently accepted — typically 90–96% field accuracy on legible forms before that review.' },
+  { q: 'Is this only for reserve studies?', a: 'No — the reserve study is one proven example. The same pipeline — read anything, sort by department, index privately, answer with citations, human sign-off — applies to any document-heavy workflow across legal, finance, compliance and tax. If your work involves finding facts in unstructured documents, the engine applies.' },
 ];
 
 export const DOC_INTEL_NUDGE = {
-  title: 'See it run on your actual documents',
-  body: 'Send us 10 representative documents from your workflow. We run the engine, show you the extraction accuracy and report output side-by-side — before you commit to anything.',
+  title: 'See it answer your own documents',
+  body: 'Send us 10–20 representative documents from your workflow. We read and index them, then let you ask questions live and show you every answer cited to its source page — before you commit to anything.',
   cta: 'Book a Free Demo',
 };
 

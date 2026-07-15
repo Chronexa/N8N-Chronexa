@@ -14,17 +14,18 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/document-intelligence-engine`;
-const TITLE = 'AI Document Intelligence Engine — OCR, Extraction & Automated Reports | Chronexa';
+const TITLE = 'AI Document Intelligence — Ask Your Documents, Get Cited Answers | Chronexa';
 const DESCRIPTION =
-  'Chronexa\'s Document Intelligence Engine ingests any volume of PDFs, scanned images, photos, and handwritten forms — extracts every field with a per-field confidence score, runs the domain financial model automatically, and delivers a formatted report in hours instead of weeks.';
+  'Chronexa\'s Document Intelligence Engine reads every document your business runs on — leases, loan files, tax returns, audit and compliance files — across legal, finance, compliance and tax, and turns them into a private knowledge base you can simply ask. Plain-language questions return answers in seconds, each cited to the exact source page, grounded only in your own documents with nothing sent to public AI.';
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    'AI document processing', 'OCR automation AI', 'document intelligence software',
-    'reserve study automation', 'unstructured document extraction', 'AI OCR handwriting',
-    'document data extraction AI', 'automated report generation', 'PDF extraction AI',
+    'document intelligence software', 'ask your documents AI', 'safe RAG', 'cited AI answers',
+    'private document AI', 'AI document processing', 'OCR automation AI', 'legal document AI',
+    'financial document extraction', 'compliance document review AI', 'tax document automation',
+    'AI OCR handwriting', 'document data extraction AI',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website' },
@@ -43,7 +44,7 @@ const jsonLd = {
     {
       '@type': 'Service',
       name: 'AI Document Intelligence Engine',
-      serviceType: 'AI document processing and data extraction',
+      serviceType: 'AI document intelligence, retrieval and cited question-answering',
       provider: { '@type': 'Organization', name: site.name, url: site.url },
       description: DESCRIPTION,
       url: URL,
@@ -65,9 +66,9 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* 1 — Hero: one real reserve study built on screen, inside a bright app window */}
+      {/* 1 — Hero: a cross-vertical archive turned into cited answers, live on screen */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
-        <h1 className={styles.srOnly}>Any document, any format — extracted, calculated, and delivered as a report in hours.</h1>
+        <h1 className={styles.srOnly}>Any document, any department — read, indexed, and answerable with a citation in seconds.</h1>
         <DocIntelScene />
       </section>
 
