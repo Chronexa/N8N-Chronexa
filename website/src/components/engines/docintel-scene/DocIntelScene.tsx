@@ -3,14 +3,28 @@
 /**
  * DocIntelScene — the Document Intelligence Engine hero demo.
  *
- * One reserve study (Willow Creek HOA, 47 documents) built on screen inside a
- * bright, familiar app window. The wow-moment is HANDWRITING: a photographed,
- * handwritten inspection sheet read correctly on screen, field by field, with
- * per-field confidence. Low-confidence reads route to a named engineer's tray.
- * Loops while in view; the stepper scrubs to any beat.
+ * NOT an app window. An open dark stage where real tools enter as bright
+ * windows and dock into a conveyor: Google Drive (intake) → a green classifier
+ * node → a document viewer (the HANDWRITING hero) → Excel (visible formulas) →
+ * a finished report that files BACK into Drive (full circle). After the reserve-
+ * study pass, a fast montage coda re-fires the chain for two other verticals
+ * (insurance, mortgage) to prove versatility.
  *
- * Design rule (2026-07-11): client-facing surfaces are friendly software —
- * tool logos, named humans, plain English. No terminal chrome.
+ * THE WOW is HANDWRITING: a photographed handwritten inspection sheet read on
+ * screen, each scrawled line lifting into a clean field with a confidence score
+ * — and the one field it is unsure of routes to Robert, it does not guess.
+ *
+ * ATTRIBUTION (client mandate): Chronexa owns no AI or OCR product. The orb is
+ * "AI agent · Claude" — the reading/extraction is Claude + vision models the
+ * engine orchestrates; Google Drive, Excel and the report template are the
+ * firm's own tools.
+ *
+ * Movie structure: setup (Collect → Classify), the hero (Read), the model
+ * (Compute), the trust peak (Check — flags to Robert), the payoff (Deliver →
+ * back to Drive), versatility (montage), resolution (wide shot). Loops (~50s).
+ *
+ * Green (#67B035) is reserved for Chronexa (orb, threads, node, rail); amber
+ * marks the human-review moments only (the 61% field + the 2 QA flags).
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -20,188 +34,217 @@ import styles from './DocIntelScene.module.css';
 
 // ─── Scene data ───────────────────────────────────────────────────────────────
 
-type SheetKey = 'r1' | 'r2' | 'r3';
-type TrayKey = 't1' | 't2' | 't3';
-type SlotKey = 'docs' | 'fields' | 'comps' | 'reserve' | 'flags' | 'report';
-type ViewKey = 'files' | 'sheet' | 'table' | 'model' | 'qa' | 'report';
+type WinKey = 'drive' | 'viewer' | 'excel' | 'report';
+type Mode = 'hidden' | 'focus' | 'docked';
+type NodeMode = 'hidden' | 'focus' | 'docked';
+type OrbPos = 'collect' | 'classify' | 'read' | 'compute' | 'check' | 'deliver' | 'wide';
+type ThreadKey = 't0' | 't1' | 't2' | 't3' | 't4' | 's1' | 's2' | 's3' | 's4' | 's5';
 
-const STEPS = ['Collect', 'Read', 'Organise', 'Calculate', 'Check', 'Deliver'] as const;
+const STEPS = ['Collect', 'Classify', 'Read', 'Compute', 'Check', 'Deliver'] as const;
 
-const FILES = [
-  { name: '2026 inspection photos — 18 JPGs (from a phone)', src: 'from Google Drive', ico: 1, lab: 'JPG' },
-  { name: 'Handwritten assessment sheets — 3', src: 'photographed on-site', ico: 2, lab: 'HW' },
-  { name: '2024 reserve study (prior year)', src: 'from SharePoint', ico: 3, lab: 'PDF' },
-  { name: 'HOA financials — 3 years', src: 'from Box', ico: 4, lab: 'XLS' },
-];
-const DOC_ICO_CLASS = [styles.docC1, styles.docC2, styles.docC3, styles.docC4];
-
-const SHEET_ROWS: { key: SheetKey; text: string; chip: string; tone: 'green' | 'amber' }[] = [
-  { key: 'r1', text: 'HVAC unit 14 — 8 yrs, cond. fair', chip: '94% ✓', tone: 'green' },
-  { key: 'r2', text: 'Roof section C — patched 2023', chip: '97% ✓', tone: 'green' },
-  { key: 'r3', text: 'Pool pump 3 — replaced?, $14,200', chip: '61% → flagged', tone: 'amber' },
+const CAPTIONS: { lead: string; amber?: string }[] = [
+  { lead: 'It takes documents in any shape — PDFs, scans, phone photos, handwriting — from wherever they live.' },
+  { lead: 'It sorts the pile by type, so each document goes to the right specialist reader.' },
+  { lead: 'The hard part: it reads a photo of a handwritten sheet at 94% — and flags the one field it isn’t sure of.' },
+  { lead: 'It runs your own model — the same spreadsheet math — and every figure traces back to a source document.' },
+  { lead: 'It checks its own work and hands Robert ', amber: 'the 2 judgement calls — not a full re-review.' },
+  { lead: 'Out comes a finished report in your firm’s own format — back in your Drive, ready for the PE stamp.' },
 ];
 
-const TABLE_ROWS = [
-  { name: 'HVAC', qty: '23 units', note: 'avg 8.2 yrs' },
-  { name: 'Roofing', qty: '180,000 sq ft', note: 'installed 2018' },
-  { name: 'Pool equipment', qty: '4 systems', note: '2 near end of life' },
-  { name: 'Paving', qty: '42,000 sq ft', note: 'condition fair' },
+const DRIVE_FILES: { name: string; kind: string }[] = [
+  { name: '18 site photos — iPhone (JPG)', kind: 'Photos' },
+  { name: '3 handwritten assessment sheets', kind: 'Handwritten' },
+  { name: '2024 reserve study — prior year', kind: 'PDF' },
+  { name: 'HOA financials — 3 years', kind: 'PDF' },
 ];
 
-const QA_ROWS: { key: string; tone: 'green' | 'amber'; text: string }[] = [
-  { key: 'q1', tone: 'green', text: '845 of 847 data points validated' },
-  { key: 'q2', tone: 'amber', text: 'Unit 14: reported life 12 yrs vs expected 8' },
-  { key: 'q3', tone: 'amber', text: 'Pool pump 3: $14,200 vs RS Means $8,800' },
+const CLASS_CHIPS = ['Photos ×18', 'Handwritten ×3', 'PDFs ×24', 'Prior-year ×1'];
+
+/** The handwritten inspection sheet, read line by line into clean fields. */
+const HAND_ROWS: { raw: string; clean: string; conf: string; amber: boolean }[] = [
+  { raw: 'HVAC unit 14 — 8 yrs, cond. fair', clean: 'HVAC #14 · age 8 · fair', conf: '94%', amber: false },
+  { raw: 'Roof section C — patched 2023', clean: 'Roof C · patched 2023', conf: '97%', amber: false },
+  { raw: 'Pool pump 3 — approx $14,200', clean: 'Pool pump 3 · $14,200', conf: '88%', amber: false },
+  { raw: 'p.34 f.4 — (smudged) ……', clean: 'Flagged for Robert', conf: '61%', amber: true },
+];
+
+const MODEL_ROWS: { lab: string; val: string }[] = [
+  { lab: '30-year need', val: '$2.1M' },
+  { lab: 'Funded today', val: '61% ($1.28M)' },
+  { lab: 'Annual contribution', val: '$124,000' },
+];
+const TIMELINE_CHIPS = ['HVAC → Year 4 · $380k', 'Roof → Year 7 · $540k'];
+
+const QA_FLAGS: { text: string; fix: string }[] = [
+  { text: 'HVAC Unit 14 — reported life 12 yrs vs expected 8', fix: 'confirmed 8 yrs — inspector typo' },
+  { text: 'Pool pump 3 — $14,200 vs RS Means $8,800', fix: 'premium pump — quote verified' },
 ];
 
 const REPORT_ROWS = [
+  'Reserve Study — 89 pages',
   '30-year funding plan',
-  'Excel model attached — auditable formulas',
+  'Excel model attached — auditable',
   'Certification page → ready for PE stamp',
 ];
 
-const SLOTS: { key: SlotKey; label: string; amber?: boolean }[] = [
-  { key: 'docs', label: 'Documents in' },
-  { key: 'fields', label: 'Fields read' },
-  { key: 'comps', label: 'Components structured' },
-  { key: 'reserve', label: 'Reserve required' },
-  { key: 'flags', label: 'Flags for Robert', amber: true },
-  { key: 'report', label: 'Report' },
+const MONTAGE = [
+  'Insurance claim · 40–80 pp → adjuster report',
+  'Mortgage file · appraisal + tax returns → underwriting summary',
 ];
 
-const TRAY_ITEMS: { key: TrayKey; text: string; fix: string }[] = [
-  { key: 't1', text: 'Page 34, field 4 — handwriting read at 61% confidence.', fix: 'Confirmed from the photo — $14,200 ✓' },
-  { key: 't2', text: 'Unit 14: reported life 12 yrs vs expected 8.', fix: 'Confirmed 8 yrs — inspector error ✓' },
-  { key: 't3', text: 'Pool pump 3: $14,200 vs RS Means $8,800.', fix: 'Quote verified — premium pump ✓' },
+const FINE_LOGOS: { src: string; alt: string }[] = [
+  { src: '/logos/gdrive.svg', alt: 'Google Drive' },
+  { src: '/logos/sharepoint.png', alt: 'SharePoint' },
+  { src: '/logos/box.png', alt: 'Box' },
+  { src: '/logos/excel.svg', alt: 'Excel' },
+  { src: '/logos/rsmeans.png', alt: 'RS Means' },
+];
+
+const THREAD_PATHS: { key: ThreadKey; d: string }[] = [
+  { key: 't0', d: 'M170,300 C260,320 340,336 420,344' },   // drive → classifier
+  { key: 't1', d: 'M470,300 C500,320 520,336 540,344' },   // classifier → viewer
+  { key: 't2', d: 'M300,330 C420,352 560,360 640,350' },   // viewer → excel
+  { key: 't3', d: 'M660,330 C740,352 820,356 880,350' },   // excel → report
+  { key: 't4', d: 'M880,300 C700,240 400,210 200,300' },   // report → back to drive
+  { key: 's1', d: 'M488,296 C400,268 250,205 150,300' },
+  { key: 's2', d: 'M480,306 C380,330 240,344 150,352' },
+  { key: 's3', d: 'M514,296 C640,268 760,215 852,300' },
+  { key: 's4', d: 'M518,306 C640,330 800,344 878,350' },
+  { key: 's5', d: 'M512,312 C600,392 690,452 720,500' },
 ];
 
 // ─── Scene state ──────────────────────────────────────────────────────────────
 
 interface SceneState {
-  step: number; // 0–5 = beats, 6 = receipt
-  connected: { gd: boolean; sp: boolean; bx: boolean; rs: boolean; xl: boolean };
+  step: number;
+  capIdx: number;
+  orbPos: OrbPos;
+  orbSay: string;
+  win: Record<WinKey, Mode>;
+  classMode: NodeMode;
+  // collect
   filesIn: number;
-  moreIn: boolean;
-  view: ViewKey;
-  hl: Partial<Record<SheetKey, 'green' | 'amber'>>;
-  tableIn: number;
-  tableFoot: boolean;
+  spConnected: boolean;
+  boxConnected: boolean;
+  // classify
+  classChipsIn: number;
+  // read
+  readIn: number;   // clean fields revealed
+  scanRow: number;  // which handwritten row the scan is on (-1 = off)
+  // compute
+  formula: number;  // 0 none, 1 SLN, 2 RS Means
   modelIn: number;
-  calcReq: number; // $M, counts up to 2.1
-  calcFunded: number; // %, counts up to 61
-  chipIn: number;
-  qaIn: number;
+  timelineIn: number;
+  // check
+  qaValidated: boolean;
+  flagsIn: number;
+  robertIn: boolean;
+  flagsResolved: number;
+  // deliver
   reportIn: number;
-  pages: number; // report page counter, ticks to 89
-  slots: Partial<Record<SlotKey, string>>;
-  trayIn: Record<TrayKey, boolean>;
-  trayResolved: Record<TrayKey, boolean>;
-  trayCount: string;
-  ringPct: number;
-  ringLabel: string;
-  toast: string;
-  toastDone: boolean;
-  engMeta: string;
+  pageCount: number;
+  reportFiled: boolean;
+  // montage
+  montage: number; // 0 off, 1 insurance, 2 mortgage
+  // tissue + finale
+  threads: Record<ThreadKey, boolean>;
+  wide: boolean;
+  pulse: boolean;
   receipt: boolean;
-  paneTitle: string;
 }
+
+const NO_THREADS: Record<ThreadKey, boolean> = {
+  t0: false, t1: false, t2: false, t3: false, t4: false,
+  s1: false, s2: false, s3: false, s4: false, s5: false,
+};
 
 const INITIAL: SceneState = {
   step: 0,
-  connected: { gd: false, sp: false, bx: false, rs: false, xl: false },
+  capIdx: 0,
+  orbPos: 'collect',
+  orbSay: '',
+  win: { drive: 'hidden', viewer: 'hidden', excel: 'hidden', report: 'hidden' },
+  classMode: 'hidden',
   filesIn: 0,
-  moreIn: false,
-  view: 'files',
-  hl: {},
-  tableIn: 0,
-  tableFoot: false,
+  spConnected: false,
+  boxConnected: false,
+  classChipsIn: 0,
+  readIn: 0,
+  scanRow: -1,
+  formula: 0,
   modelIn: 0,
-  calcReq: 0,
-  calcFunded: 0,
-  chipIn: 0,
-  qaIn: 0,
+  timelineIn: 0,
+  qaValidated: false,
+  flagsIn: 0,
+  robertIn: false,
+  flagsResolved: 0,
   reportIn: 0,
-  pages: 0,
-  slots: {},
-  trayIn: { t1: false, t2: false, t3: false },
-  trayResolved: { t1: false, t2: false, t3: false },
-  trayCount: '0 items',
-  ringPct: 0,
-  ringLabel: 'waiting for documents',
-  toast: 'Starting the engine…',
-  toastDone: false,
-  engMeta: 'reviews every flag',
+  pageCount: 0,
+  reportFiled: false,
+  montage: 0,
+  threads: { ...NO_THREADS },
+  wide: false,
+  pulse: false,
   receipt: false,
-  paneTitle: 'Documents coming in',
 };
 
-/** Cumulative end-state per beat — lets the stepper scrub to any point. */
+/** Cumulative end-state per beat — lets the rail scrub to any point. */
 const APPLY: ((s: SceneState) => SceneState)[] = [
   (s) => ({
     ...s,
-    connected: { ...s.connected, gd: true, sp: true, bx: true },
-    filesIn: FILES.length, moreIn: true,
-    slots: { ...s.slots, docs: '47' },
-    ringPct: 12, ringLabel: '47 documents in',
+    win: { ...s.win, drive: 'focus' },
+    filesIn: DRIVE_FILES.length, spConnected: true, boxConnected: true,
+    orbPos: 'collect', capIdx: 0,
   }),
   (s) => ({
     ...s,
-    view: 'sheet',
-    hl: { r1: 'green', r2: 'green', r3: 'amber' },
-    trayIn: { ...s.trayIn, t1: true }, trayCount: '1 item',
-    slots: { ...s.slots, fields: '847 · 94% handwriting' },
-    ringPct: 34, ringLabel: '847 fields read',
-    paneTitle: 'Reading the handwritten sheet',
+    win: { ...s.win, drive: 'docked' },
+    classMode: 'focus', classChipsIn: CLASS_CHIPS.length,
+    threads: { ...s.threads, t0: true },
+    orbPos: 'classify', capIdx: 1,
   }),
   (s) => ({
     ...s,
-    view: 'table', tableIn: TABLE_ROWS.length, tableFoot: true,
-    slots: { ...s.slots, comps: '18' },
-    ringPct: 52, ringLabel: '18 categories',
-    paneTitle: 'Structuring the data',
+    classMode: 'docked',
+    win: { ...s.win, viewer: 'focus' },
+    readIn: HAND_ROWS.length, scanRow: -1,
+    threads: { ...s.threads, t0: false, t1: true },
+    orbPos: 'read', capIdx: 2,
   }),
   (s) => ({
     ...s,
-    view: 'model',
-    connected: { ...s.connected, rs: true },
-    modelIn: 3, calcReq: 2.1, calcFunded: 61, chipIn: 2,
-    slots: { ...s.slots, reserve: '$2.1M' },
-    ringPct: 72, ringLabel: '$2.1M computed',
-    paneTitle: 'Running the reserve model',
+    win: { ...s.win, viewer: 'docked', excel: 'focus' },
+    formula: 2, modelIn: MODEL_ROWS.length, timelineIn: TIMELINE_CHIPS.length,
+    threads: { ...s.threads, t1: false, t2: true },
+    orbPos: 'compute', capIdx: 3,
   }),
   (s) => ({
     ...s,
-    view: 'qa', qaIn: QA_ROWS.length,
-    trayIn: { t1: true, t2: true, t3: true }, trayCount: '3 items',
-    slots: { ...s.slots, flags: '2' },
-    ringPct: 88, ringLabel: '2 flags',
-    paneTitle: 'Checking every number',
+    qaValidated: true, flagsIn: QA_FLAGS.length, robertIn: true, flagsResolved: QA_FLAGS.length,
+    orbPos: 'check', capIdx: 4,
   }),
   (s) => ({
     ...s,
-    view: 'report',
-    connected: { ...s.connected, xl: true },
-    reportIn: 1 + REPORT_ROWS.length, pages: 89,
-    trayResolved: { t1: true, t2: true, t3: true }, trayCount: '0 open',
-    slots: { ...s.slots, report: '89 pages' },
-    ringPct: 100, ringLabel: 'report ready',
-    engMeta: 'signed off — 2 judgement calls, not a re-review',
-    paneTitle: 'Assembling the deliverable',
+    win: { drive: 'docked', viewer: 'docked', excel: 'docked', report: 'docked' },
+    classMode: 'docked',
+    reportIn: REPORT_ROWS.length, pageCount: 89, reportFiled: true,
+    threads: {
+      ...s.threads, t2: false, t3: false, t4: false,
+      s1: true, s2: true, s3: true, s4: true, s5: true,
+    },
+    wide: true, orbPos: 'wide', orbSay: '14 days of typing → 4 hours.', capIdx: 5,
   }),
 ];
-
-const FINAL_TOAST = '4 hours instead of 14 days — with a full audit trail';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function DocIntelScene() {
   const shellRef = useRef<HTMLDivElement>(null);
-  const windowRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const inView = useInView(shellRef, { amount: 0.2 });
   const reduced = useReducedMotion();
 
   const [s, setS] = useState<SceneState>(INITIAL);
-
   const timersRef = useRef<number[]>([]);
   const tokenRef = useRef(0);
 
@@ -211,29 +254,29 @@ export default function DocIntelScene() {
     timersRef.current = [];
   }, []);
 
-  /** Flying amber chip from a flagged field to Robert's tray. */
-  const ghost = useCallback((fromId: string, text: string) => {
-    const win = windowRef.current;
-    if (!win) return;
-    const from = win.querySelector<HTMLElement>(`[data-fid="${fromId}"]`);
-    const to = win.querySelector<HTMLElement>('[data-traycount]');
+  /** Flying chip: a value lifting off the handwritten sheet, or the report filing back to Drive. */
+  const fly = useCallback((fromSel: string, toSel: string, text: string, amber?: boolean) => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const from = stage.querySelector<HTMLElement>(fromSel);
+    const to = stage.querySelector<HTMLElement>(toSel);
     if (!from || !to) return;
-    const wr = win.getBoundingClientRect();
+    const wr = stage.getBoundingClientRect();
     const a = from.getBoundingClientRect();
     const b = to.getBoundingClientRect();
     const g = document.createElement('span');
-    g.className = styles.ghost;
+    g.className = amber ? `${styles.ghost} ${styles.ghostAmber}` : styles.ghost;
     g.textContent = text;
-    g.style.left = `${a.right - wr.left - 80}px`;
-    g.style.top = `${a.top - wr.top}px`;
-    win.appendChild(g);
+    g.style.left = `${a.left - wr.left + a.width / 2 - 30}px`;
+    g.style.top = `${a.top - wr.top + a.height / 2}px`;
+    stage.appendChild(g);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        g.style.transform = `translate(${b.left - a.right + 80}px, ${b.top - a.top}px)`;
+        g.style.transform = `translate(${b.left - a.left + (b.width - a.width) / 2}px, ${b.top - a.top + (b.height - a.height) / 2}px)`;
         g.style.opacity = '0';
       });
     });
-    window.setTimeout(() => g.remove(), 700);
+    window.setTimeout(() => g.remove(), 780);
   }, []);
 
   const goTo = useCallback((start: number) => {
@@ -247,7 +290,6 @@ export default function DocIntelScene() {
     const patch = (p: Partial<SceneState> | ((prev: SceneState) => Partial<SceneState>)) =>
       setS((prev) => ({ ...prev, ...(typeof p === 'function' ? p(prev) : p) }));
 
-    // Scrub: land on the cumulative state of every beat before `start`.
     let base = INITIAL;
     for (let i = 0; i < start; i++) base = APPLY[i](base);
     setS({ ...base, step: start });
@@ -255,128 +297,106 @@ export default function DocIntelScene() {
     if (reduced) {
       let fin = INITIAL;
       APPLY.forEach((f) => { fin = f(fin); });
-      setS({ ...fin, step: 6, receipt: true, toastDone: true, toast: FINAL_TOAST });
+      setS({ ...fin, step: 6, receipt: true, pulse: false });
       return;
     }
 
     const playBeat = (i: number, done: () => void) => {
       patch({ step: i });
       if (i === 0) {
-        patch({ paneTitle: 'Documents coming in', toast: 'Collecting Willow Creek’s documents from Google Drive, SharePoint and Box…', toastDone: false });
-        at(200, () => patch((p) => ({ connected: { ...p.connected, gd: true } })));
-        at(600, () => patch((p) => ({ connected: { ...p.connected, sp: true } })));
-        at(1000, () => patch((p) => ({ connected: { ...p.connected, bx: true } })));
-        FILES.forEach((_, k) => at(500 + k * 450, () => patch({ filesIn: k + 1 })));
-        at(2600, () => patch((p) => ({
-          moreIn: true, ringPct: 12, ringLabel: '47 documents in',
-          slots: { ...p.slots, docs: '47' },
-          toast: '47 documents in — 312 pages, 18 phone photos, 3 handwritten sheets', toastDone: true,
-        })));
-        at(5000, done);
+        patch({ capIdx: 0, orbPos: 'collect', orbSay: '' });
+        at(200, () => patch((p) => ({ win: { ...p.win, drive: 'focus' } })));
+        at(500, () => patch({ spConnected: true }));
+        at(800, () => patch({ boxConnected: true }));
+        DRIVE_FILES.forEach((_, k) => at(700 + k * 420, () => patch({ filesIn: k + 1 })));
+        at(700 + DRIVE_FILES.length * 420 + 200, () => patch({
+          orbSay: 'Every file — even a phone photo of a handwritten sheet — pulled in and deduplicated.',
+        }));
+        at(4700, done);
       } else if (i === 1) {
-        patch({ paneTitle: 'Reading the handwritten sheet', toast: 'Opening the handwritten assessment sheet — photographed on-site…', toastDone: false, view: 'sheet', hl: {} });
-        at(900, () => patch({
-          hl: { r1: 'green' },
-          toast: 'Reading the handwritten sheet — 94% confidence, photographed on an iPhone', toastDone: true,
-        }));
-        at(2300, () => patch((p) => ({ hl: { ...p.hl, r2: 'green' as const } })));
-        at(3600, () => patch((p) => ({
-          hl: { ...p.hl, r3: 'amber' as const },
-          toast: 'One field read at 61% confidence — set aside for Robert, not guessed', toastDone: true,
+        patch({ capIdx: 1 });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, drive: 'docked' }, classMode: 'focus',
+          threads: { ...p.threads, t0: true },
         })));
-        at(4400, () => {
-          ghost('r3', '→ for Robert');
-          patch((p) => ({ trayIn: { ...p.trayIn, t1: true }, trayCount: '1 item' }));
-        });
-        at(5800, () => patch((p) => ({
-          ringPct: 34, ringLabel: '847 fields read',
-          slots: { ...p.slots, fields: '847 · 94% handwriting' },
-          toast: '847 fields read across 312 pages — every one with a confidence score', toastDone: true,
-        })));
-        at(9000, done);
+        at(600, () => patch({ orbPos: 'classify', orbSay: 'Sorting 47 files — each type to its own reader.' }));
+        CLASS_CHIPS.forEach((_, k) => at(1000 + k * 380, () => patch({ classChipsIn: k + 1 })));
+        at(3800, done);
       } else if (i === 2) {
-        patch({ paneTitle: 'Structuring the data', toast: 'Organising 847 data points into component categories…', toastDone: false, view: 'table', tableIn: 0, tableFoot: false });
-        TABLE_ROWS.forEach((_, k) => at(500 + k * 550, () => patch({ tableIn: k + 1 })));
-        at(2700, () => patch({ tableFoot: true }));
-        at(3300, () => patch((p) => ({
-          ringPct: 52, ringLabel: '18 categories',
-          slots: { ...p.slots, comps: '18' },
-          toast: '18 categories structured — ready for the financial model', toastDone: true,
+        // READ — the handwriting hero
+        patch({ capIdx: 2 });
+        at(150, () => patch((p) => ({
+          classMode: 'docked', win: { ...p.win, viewer: 'focus' },
+          threads: { ...p.threads, t0: false, t1: true }, readIn: 0, scanRow: -1,
         })));
-        at(5200, done);
+        at(650, () => patch({ orbPos: 'read', orbSay: 'Reading the handwriting — photographed on-site.' }));
+        HAND_ROWS.forEach((row, k) => {
+          const t0 = 1100 + k * 1500;
+          at(t0, () => patch({ scanRow: k }));
+          at(t0 + 700, () => fly(`[data-hand="${k}"]`, `[data-field="${k}"]`, row.conf, row.amber));
+          at(t0 + 1150, () => patch({ readIn: k + 1 }));
+        });
+        const endRead = 1100 + HAND_ROWS.length * 1500;
+        at(endRead - 200, () => patch({ scanRow: -1, orbSay: '94% on handwriting — and it flags what it isn’t sure of.' }));
+        at(endRead + 500, done);
       } else if (i === 3) {
-        patch({ paneTitle: 'Running the reserve model', toast: 'Running the 30-year projection with RS Means cost data…', toastDone: false, view: 'model', modelIn: 0, calcReq: 0, calcFunded: 0, chipIn: 0 });
-        at(200, () => patch((p) => ({ connected: { ...p.connected, rs: true } })));
-        at(500, () => patch({ modelIn: 1, calcReq: 0.7 }));
-        at(850, () => patch({ calcReq: 1.4 }));
-        at(1200, () => patch({ calcReq: 2.1 }));
-        at(1700, () => patch({ modelIn: 2, calcFunded: 24 }));
-        at(2000, () => patch({ calcFunded: 45 }));
-        at(2300, () => patch({ calcFunded: 61 }));
-        at(2800, () => patch({ modelIn: 3 }));
-        at(3300, () => patch({ chipIn: 1 }));
-        at(3700, () => patch({ chipIn: 2 }));
-        at(4200, () => patch((p) => ({
-          ringPct: 72, ringLabel: '$2.1M computed',
-          slots: { ...p.slots, reserve: '$2.1M' },
-          toast: '$2.1M required over 30 years — every number traces to a source page', toastDone: true,
+        // COMPUTE — Excel with visible formulas
+        patch({ capIdx: 3 });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, viewer: 'docked', excel: 'focus' },
+          threads: { ...p.threads, t1: false, t2: true }, formula: 0, modelIn: 0, timelineIn: 0,
         })));
-        at(5800, done);
+        at(650, () => patch({ orbPos: 'compute', orbSay: 'Your Excel model — run automatically, every figure traceable.', formula: 1 }));
+        at(1400, () => patch({ formula: 2 }));
+        MODEL_ROWS.forEach((_, k) => at(1800 + k * 560, () => patch({ modelIn: k + 1 })));
+        TIMELINE_CHIPS.forEach((_, k) => at(3600 + k * 400, () => patch({ timelineIn: k + 1 })));
+        at(4900, done);
       } else if (i === 4) {
-        patch({ paneTitle: 'Checking every number', toast: 'Cross-checking against the prior study and RS Means benchmarks…', toastDone: false, view: 'qa', qaIn: 0 });
-        at(600, () => patch({ qaIn: 1 }));
-        at(1500, () => patch({ qaIn: 2 }));
-        at(2100, () => {
-          ghost('q2', '→ for Robert');
-          patch((p) => ({ trayIn: { ...p.trayIn, t2: true }, trayCount: '2 items' }));
-        });
-        at(3000, () => patch({ qaIn: 3 }));
-        at(3600, () => {
-          ghost('q3', '→ for Robert');
-          patch((p) => ({ trayIn: { ...p.trayIn, t3: true }, trayCount: '3 items' }));
-        });
-        at(4300, () => patch((p) => ({
-          ringPct: 88, ringLabel: '2 flags',
-          slots: { ...p.slots, flags: '2' },
-          toast: '845 of 847 validated — 2 need Robert’s judgement, not a re-review', toastDone: true,
-        })));
-        at(6000, done);
+        // CHECK — the trust peak, flags to Robert
+        patch({ capIdx: 4 });
+        at(300, () => patch({ orbPos: 'check', qaValidated: true, orbSay: 'It checks its own work first.' }));
+        at(900, () => patch({ flagsIn: 1 }));
+        at(1400, () => patch({ flagsIn: 2 }));
+        at(2000, () => patch({ robertIn: true, orbSay: 'Robert gets the 2 calls that need judgement.' }));
+        at(2800, () => patch({ flagsResolved: 1 }));
+        at(3400, () => patch({ flagsResolved: 2, orbSay: '' }));
+        at(4400, done);
       } else if (i === 5) {
-        patch({ paneTitle: 'Assembling the deliverable', toast: 'Robert reviews the flags — source photo and extracted value, side by side…', toastDone: false, view: 'report', reportIn: 0, pages: 0 });
-        at(700, () => patch((p) => ({ trayResolved: { ...p.trayResolved, t1: true } })));
-        at(1500, () => patch((p) => ({ trayResolved: { ...p.trayResolved, t2: true } })));
-        at(2300, () => patch({
-          trayResolved: { t1: true, t2: true, t3: true }, trayCount: '0 open',
-          engMeta: 'signed off — 2 judgement calls, not a re-review',
-        }));
-        at(2900, () => patch((p) => ({
-          connected: { ...p.connected, xl: true },
-          toast: 'Assembling the report — 89 pages, Excel model, certification page…', toastDone: false,
+        // DELIVER — report assembles, files back to Drive, then the montage coda
+        patch({ capIdx: 5 });
+        at(150, () => patch((p) => ({
+          win: { ...p.win, excel: 'docked', report: 'focus' },
+          threads: { ...p.threads, t2: false, t3: true },
         })));
-        at(3100, () => patch({ reportIn: 1, pages: 18 }));
-        at(3350, () => patch({ pages: 41 }));
-        at(3600, () => patch({ pages: 67 }));
-        at(3850, () => patch({ pages: 89 }));
-        at(4200, () => patch({ reportIn: 2 }));
-        at(4700, () => patch({ reportIn: 3 }));
-        at(5200, () => patch({ reportIn: 4 }));
-        at(5700, () => patch((p) => ({
-          ringPct: 100, ringLabel: 'report ready',
-          slots: { ...p.slots, report: '89 pages' },
-          toast: 'Ready for Robert’s PE stamp — 4 hours after the documents arrived', toastDone: true,
+        at(650, () => patch({ orbPos: 'deliver', orbSay: 'Formatted to your template — 89 pages.' }));
+        REPORT_ROWS.forEach((_, k) => at(1000 + k * 420, () => patch({ reportIn: k + 1 })));
+        for (let k = 1; k <= 18; k++) {
+          const v = Math.round((89 * k) / 18);
+          at(1200 + k * 55, () => patch({ pageCount: v }));
+        }
+        at(2700, () => patch((p) => ({ threads: { ...p.threads, t4: true } })));
+        at(2900, () => { fly('[data-fly="report"]', '[data-fly="drive"]', 'Reserve Study.pdf'); patch({ reportFiled: true, orbSay: 'Filed back in your Drive.' }); });
+        // montage coda — the same chain, two more verticals, fast
+        at(3900, () => patch({ montage: 1, orbSay: '' }));
+        at(5100, () => patch({ montage: 2 }));
+        at(6300, () => patch((p) => ({
+          montage: 0,
+          win: { drive: 'docked', viewer: 'docked', excel: 'docked', report: 'docked' },
+          classMode: 'docked' as NodeMode,
+          wide: true, pulse: true, orbPos: 'wide' as OrbPos, orbSay: '14 days of typing → 4 hours.',
+          threads: { ...p.threads, t3: false, t4: false, s1: true, s2: true, s3: true, s4: true, s5: true },
         })));
-        at(7000, done);
+        at(7900, done);
       } else {
         patch({ step: 6 });
-        at(300, () => patch({ receipt: true, toast: FINAL_TOAST, toastDone: true }));
-        at(6800, done);
+        at(400, () => patch({ receipt: true }));
+        at(6600, done);
       }
     };
 
     const run = (i: number) => {
       if (tokenRef.current !== myToken) return;
       if (i > 6) {
-        // Loop: reset to the opening state and replay from the first beat.
         timersRef.current.push(window.setTimeout(() => {
           if (tokenRef.current !== myToken) return;
           setS(INITIAL);
@@ -387,11 +407,9 @@ export default function DocIntelScene() {
       playBeat(i, () => run(i + 1));
     };
     run(start);
-  }, [ghost, reduced, stop]);
+  }, [fly, reduced, stop]);
 
   useEffect(() => {
-    // Kick off via a timer so no state updates happen synchronously in the
-    // effect body (react-hooks/set-state-in-effect).
     const id = window.setTimeout(() => {
       if (reduced || inView) goTo(0);
       else { stop(); setS(INITIAL); }
@@ -399,268 +417,268 @@ export default function DocIntelScene() {
     return () => { window.clearTimeout(id); stop(); };
   }, [inView, reduced, goTo, stop]);
 
+  const on = (b: boolean) => (b ? 'true' : 'false');
+  const cap = CAPTIONS[s.capIdx];
+
   return (
     <div className={styles.scene} ref={shellRef}>
-      <div className={styles.window} ref={windowRef} aria-label="Document Intelligence Engine — live demonstration">
-
-        {/* ── Window chrome ── */}
-        <div className={styles.chrome}>
-          <div className={styles.dots} aria-hidden="true"><span /><span /><span /></div>
-          <span className={styles.chromeTitle}>Chronexa · Document Intelligence Engine</span>
-          <span className={styles.livePill}><i aria-hidden="true" />Live run</span>
-        </div>
-
-        {/* ── Stepper ── */}
-        <div className={styles.stepper} role="tablist" aria-label="Pipeline steps">
+      <div
+        className={styles.stage}
+        ref={stageRef}
+        data-pulse={on(s.pulse)}
+        aria-label="Document Intelligence Engine — live demonstration"
+      >
+        {/* ── Progress rail ── */}
+        <div className={styles.rail} role="tablist" aria-label="Pipeline steps">
           {STEPS.map((name, i) => (
             <button
               key={name}
               type="button"
               role="tab"
               aria-selected={s.step === i}
-              className={styles.step}
+              className={styles.pill}
               data-state={i < s.step ? 'done' : i === s.step ? 'active' : 'idle'}
               onClick={() => goTo(i)}
             >
-              <span className={styles.stepDot}>{i < s.step ? '✓' : i + 1}</span>
-              <span className={styles.stepName}>{name}</span>
+              {name}
             </button>
           ))}
         </div>
 
-        {/* ── Body ── */}
-        <div className={styles.body}>
-          <aside className={styles.side}>
-            <div className={styles.sideCard}>
-              <div className={styles.clientRow}>
-                <span className={`${styles.avatar} ${styles.avatarWc}`}>WC</span>
-                <div>
-                  <div className={styles.clientName}>Willow Creek HOA</div>
-                  <div className={styles.clientMeta}>Reserve study · 2026</div>
-                </div>
-              </div>
-              <div className={styles.ringWrap}>
-                <div className={styles.ring}>
-                  <svg width="62" height="62" viewBox="0 0 62 62" aria-hidden="true">
-                    <circle className={styles.ringBg} cx="31" cy="31" r="26" />
-                    <circle
-                      className={styles.ringFg} cx="31" cy="31" r="26"
-                      style={{ strokeDashoffset: 163.4 * (1 - s.ringPct / 100) }}
-                    />
-                  </svg>
-                  <span className={styles.ringPct}>{s.ringPct}%</span>
-                </div>
-                <span className={styles.ringLabel}><b>Study progress</b><br />{s.ringLabel}</span>
-              </div>
+        <p className={styles.caption} role="status" aria-live="polite">
+          <span className={styles.capDot} aria-hidden="true" />
+          <span className={styles.capText}>
+            {cap.lead}
+            {cap.amber ? <span className={styles.capAmber}>{cap.amber}</span> : null}
+          </span>
+        </p>
+
+        {/* ── Montage banner (versatility coda) ── */}
+        <div className={styles.montage} data-show={on(s.montage > 0)}>
+          <span className={styles.montageDot} aria-hidden="true" />
+          <span className={styles.montageText}>
+            {s.montage === 1 ? MONTAGE[0] : s.montage === 2 ? MONTAGE[1] : ''}
+          </span>
+          <span className={styles.montageTag}>same engine</span>
+        </div>
+
+        {/* ── The desktop: threads + the AI orb + tool windows ── */}
+        <div className={styles.world} data-wide={on(s.wide)}>
+          <svg className={styles.threads} viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+            {THREAD_PATHS.map((t) => (
+              <path key={t.key} className={styles.thread} d={t.d} data-on={on(s.threads[t.key])} vectorEffect="non-scaling-stroke" />
+            ))}
+          </svg>
+
+          {/* The protagonist: the AI agent (Claude) orb */}
+          <div className={styles.orb} data-pos={s.orbPos}>
+            <span className={styles.orbChip}>
+              <span className={styles.orbDot} aria-hidden="true" />
+              <span className={styles.orbName}>AI agent</span>
+              <span className={styles.orbModel}>Claude</span>
+            </span>
+            <span className={styles.orbSay} data-on={on(s.orbSay !== '')}>
+              {s.orbSay || ' '}
+            </span>
+          </div>
+
+          {/* 0 · COLLECT — Google Drive intake */}
+          <div className={`${styles.win} ${styles.wDrive}`} data-mode={s.win.drive} data-fly="drive">
+            <div className={styles.tbar}>
+              <img src="/logos/gdrive.svg" alt="Google Drive" width={20} height={18} className={styles.tlogo} />
+              <span className={styles.tname}>Google Drive</span>
+              <span className={styles.tsub}>Willow Creek HOA</span>
+              <span className={styles.tick} aria-hidden="true" />
             </div>
-
-            <div className={styles.sideCard}>
-              <div className={styles.sideTitle}>Connected</div>
-              <div className={styles.appRow}>
-                <span className={`${styles.logo} ${styles.logoGd}`}>
-                  <svg width="15" height="14" viewBox="0 0 24 21" aria-hidden="true">
-                    <path fill="#4285F4" d="M15.5 0H8.5L20 21h4z" transform="scale(0.85)" />
-                    <path fill="#FBBC04" d="M8.5 0L0 15.5 3.5 21 12 6z" transform="scale(0.85)" />
-                    <path fill="#34A853" d="M3.5 21h13L20 15.5H7z" transform="scale(0.85)" />
-                  </svg>
-                </span>Google Drive
-                {s.connected.gd && <span className={styles.appStatus}>Connected</span>}
+            <div className={styles.winBody}>
+              <div className={styles.srcRow}>
+                <span className={styles.srcChip} data-on={on(true)}>Drive</span>
+                <span className={styles.srcChip} data-on={on(s.spConnected)}>
+                  <img src="/logos/sharepoint.png" alt="" width={11} height={11} />SharePoint
+                </span>
+                <span className={styles.srcChip} data-on={on(s.boxConnected)}>
+                  <img src="/logos/box.png" alt="" width={11} height={11} />Box
+                </span>
               </div>
-              <div className={styles.appRow}>
-                <span className={`${styles.logo} ${styles.logoSp}`}>SP</span>SharePoint
-                {s.connected.sp && <span className={styles.appStatus}>Connected</span>}
-              </div>
-              <div className={styles.appRow}>
-                <span className={`${styles.logo} ${styles.logoBx}`}>bx</span>Box
-                {s.connected.bx && <span className={styles.appStatus}>Connected</span>}
-              </div>
-              <div className={styles.appRow}>
-                <span className={`${styles.logo} ${styles.logoRs}`}>RS</span>RS Means cost data
-                {s.connected.rs && <span className={styles.appStatus}>Connected</span>}
-              </div>
-              <div className={styles.appRow}>
-                <span className={`${styles.logo} ${styles.logoXl}`}>X</span>Excel
-                {s.connected.xl && <span className={styles.appStatus}>Connected</span>}
-              </div>
-            </div>
-
-            <div className={styles.sideCard}>
-              <div className={styles.sideTitle}>Your engineer</div>
-              <div className={styles.engRow}>
-                <span className={`${styles.avatar} ${styles.avatarRc}`}>RC</span>
-                <div>
-                  <div className={styles.engName}>Robert C., Principal Engineer</div>
-                  <div className={styles.engMeta}>{s.engMeta}</div>
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <div className={styles.main}>
-            {/* ── Left: the work happening ── */}
-            <div className={styles.workL}>
-              <span className={styles.paneTitle}>{s.paneTitle}</span>
-
-              {s.view === 'files' && (
-                <div className={styles.docGrid}>
-                  {FILES.map((f, i) => (
-                    <div key={f.name} className={styles.docCard} data-in={i < s.filesIn ? 'true' : 'false'}>
-                      <span className={`${styles.docIco} ${DOC_ICO_CLASS[f.ico - 1]}`}>{f.lab}</span>
-                      <div className={styles.docText}>
-                        <div className={styles.docName}>{f.name}</div>
-                        <div className={styles.docSrc}>{f.src}</div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className={styles.docMore} data-in={s.moreIn ? 'true' : 'false'}>+43 more · 312 pages</div>
-                </div>
-              )}
-
-              {s.view === 'sheet' && (
-                <div className={styles.sheet}>
-                  <div className={styles.sheetHead}>Component Assessment — Building C <span className={styles.sheetSub}>(photographed on-site)</span></div>
-                  {SHEET_ROWS.map((r) => (
-                    <div key={r.key} className={styles.inkRow} data-fid={r.key} data-hl={s.hl[r.key] ?? ''}>
-                      <span className={styles.inkText}>{r.text}</span>
-                      <span className={styles.confChip} data-tone={r.tone}>{r.chip}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {s.view === 'table' && (
-                <div className={styles.dataTable}>
-                  <div className={styles.tableHead}>
-                    <span>Component</span><span>Quantity</span><span>Condition</span>
-                  </div>
-                  {TABLE_ROWS.map((r, i) => (
-                    <div key={r.name} className={styles.tableRow} data-in={i < s.tableIn ? 'true' : 'false'}>
-                      <span className={styles.tableName}>{r.name}</span>
-                      <span className={styles.tableQty}>{r.qty}</span>
-                      <span className={styles.tableNote}>{r.note}</span>
-                    </div>
-                  ))}
-                  <div className={styles.tableFoot} data-in={s.tableFoot ? 'true' : 'false'}>18 categories · 847 data points</div>
-                </div>
-              )}
-
-              {s.view === 'model' && (
-                <div className={styles.modelCard}>
-                  <div className={styles.modelRow} data-in={s.modelIn >= 1 ? 'true' : 'false'}>
-                    <span className={styles.modelVal}>${s.calcReq.toFixed(1)}M</span>
-                    <span className={styles.modelLab}>required over 30 years</span>
-                  </div>
-                  <div className={styles.modelRow} data-in={s.modelIn >= 2 ? 'true' : 'false'}>
-                    <span className={styles.modelVal}>{s.calcFunded}%</span>
-                    <span className={styles.modelLab}>funded today</span>
-                  </div>
-                  <div className={styles.modelRow} data-in={s.modelIn >= 3 ? 'true' : 'false'}>
-                    <span className={styles.modelVal}>$124,000</span>
-                    <span className={styles.modelLab}>annual contribution</span>
-                  </div>
-                  <div className={styles.chipRow}>
-                    <span className={styles.yearChip} data-in={s.chipIn >= 1 ? 'true' : 'false'}>HVAC → Year 4 · $380k</span>
-                    <span className={styles.yearChip} data-in={s.chipIn >= 2 ? 'true' : 'false'}>Roof → Year 7 · $540k</span>
-                  </div>
-                </div>
-              )}
-
-              {s.view === 'qa' && (
-                <div className={styles.qaCard}>
-                  {QA_ROWS.map((r, i) => (
-                    <div key={r.key} className={styles.qaRow} data-fid={r.key} data-tone={r.tone} data-in={i < s.qaIn ? 'true' : 'false'}>
-                      <span className={styles.qaMark}>{r.tone === 'green' ? '✓' : '!'}</span>
-                      <span className={styles.qaText}>{r.text}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {s.view === 'report' && (
-                <div className={styles.reportCard}>
-                  <div className={styles.reportHead} data-in={s.reportIn >= 1 ? 'true' : 'false'}>
-                    <span className={styles.reportTitle}>Reserve study — <span className={styles.pageCount}>{s.pages}</span> pages</span>
-                  </div>
-                  {REPORT_ROWS.map((r, i) => (
-                    <div key={r} className={styles.reportRow} data-in={i + 2 <= s.reportIn ? 'true' : 'false'}>
-                      <span className={styles.reportCheck}>{'✓'}</span>
-                      <span className={styles.reportText}>{r}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* ── Right: the study being built ── */}
-            <div className={styles.workR}>
-              <span className={styles.paneTitle}>The study being built</span>
-              <div className={styles.slotsCard}>
-                {SLOTS.map((sl) => (
-                  <div key={sl.key} className={styles.slotRow} data-filled={s.slots[sl.key] ? 'true' : 'false'} data-amber={sl.amber ? 'true' : 'false'}>
-                    <span className={styles.slotCheck}>{sl.amber ? '!' : '✓'}</span>
-                    <span className={styles.slotLab}>{sl.label}</span>
-                    <span className={styles.slotVal}>{s.slots[sl.key] ?? '—'}</span>
+              <div className={styles.fileList}>
+                {DRIVE_FILES.map((f, i) => (
+                  <div key={f.name} className={styles.fileRow} data-in={on(i < s.filesIn)}>
+                    <span className={styles.fileIco} data-kind={f.kind} aria-hidden="true" />
+                    <span className={styles.fileName}>{f.name}</span>
                   </div>
                 ))}
               </div>
+              <div className={styles.driveFoot}>47 documents · 312 pages · deduplicated</div>
+            </div>
+          </div>
 
-              <div className={styles.tray}>
-                <div className={styles.trayHead}>
-                  <span className={styles.trayTitle}>For Robert&rsquo;s judgement</span>
-                  <span className={styles.trayCount} data-traycount="true">{s.trayCount}</span>
-                </div>
-                <div className={styles.trayBody}>
-                  {TRAY_ITEMS.map((it) => (
-                    <div key={it.key} className={styles.trayItem} data-in={s.trayIn[it.key] ? 'true' : 'false'} data-resolved={s.trayResolved[it.key] ? 'true' : 'false'}>
-                      <span className={styles.trayMark}>!</span>
-                      <span className={styles.trayText}>{it.text}&nbsp;<span className={styles.trayFix}>{it.fix}</span></span>
-                    </div>
-                  ))}
-                </div>
+          {/* 1 · CLASSIFY — the green classifier node */}
+          <div className={`${styles.node} ${styles.classNode}`} data-mode={s.classMode}>
+            <span className={styles.nodeTag}>AI classifier</span>
+            <div className={styles.classChips}>
+              {CLASS_CHIPS.map((c, i) => (
+                <span key={c} className={styles.classChip} data-in={on(i < s.classChipsIn)}>{c}</span>
+              ))}
+            </div>
+            <span className={styles.classFoot}>21 component categories identified</span>
+          </div>
+
+          {/* 2 · READ — the handwriting hero */}
+          <div className={`${styles.win} ${styles.wViewer}`} data-mode={s.win.viewer}>
+            <div className={styles.tbar}>
+              <span className={styles.viewerGlyph} aria-hidden="true">✍</span>
+              <span className={styles.tname}>Document reader</span>
+              <span className={styles.tsub}>Building C · photographed on-site</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.viewerBody}>
+              {/* the photographed handwritten sheet */}
+              <div className={styles.sheet}>
+                <div className={styles.sheetHead}>Component Assessment — Bldg C</div>
+                {HAND_ROWS.map((r, i) => (
+                  <div key={r.raw} className={styles.handRow} data-hand={`${i}`} data-scan={on(s.scanRow === i)}>
+                    {r.raw}
+                  </div>
+                ))}
+              </div>
+              {/* the clean extracted fields */}
+              <div className={styles.fields}>
+                {HAND_ROWS.map((r, i) => (
+                  <div
+                    key={r.clean}
+                    className={styles.field}
+                    data-field={`${i}`}
+                    data-in={on(i < s.readIn)}
+                    data-amber={on(r.amber)}
+                  >
+                    <span className={styles.fieldText}>{r.clean}</span>
+                    <span className={styles.fieldConf}>{r.conf}{r.amber ? '' : ' ✓'}</span>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* ── Receipt overlay ── */}
-            <div className={styles.receipt} data-show={s.receipt ? 'true' : 'false'}>
-              <div className={styles.receiptCard}>
-                <svg className={styles.bigCheck} viewBox="0 0 54 54" aria-hidden="true">
-                  <circle cx="27" cy="27" r="24" />
-                  <path d="M17 28l7 7 14-15" />
-                </svg>
-                <p className={styles.receiptTitle}>A 14-day reserve study, delivered in 4 hours.</p>
-                <p className={styles.receiptSub}>Robert made 2 judgement calls. The engine did the other 845.</p>
-                <div className={styles.receiptRows}>
-                  <div className={styles.receiptRow}><span>Documents processed</span><b>47</b></div>
-                  <div className={styles.receiptRow}><span>Fields extracted</span><b>847 · 94% on handwriting</b></div>
-                  <div className={styles.receiptRow}><span>Reserve computed</span><b>$2.1M · fully auditable</b></div>
-                  <div className={styles.receiptRow}><span>Engineer review</span><b>2 flags</b></div>
-                  <div className={styles.receiptRow}>
-                    <span>Turnaround</span>
-                    <b><span className={styles.receiptHl}>4 hrs</span> <span className={styles.receiptOld}>14 days</span></b>
-                  </div>
-                </div>
-                <BookButton className={styles.receiptCta} location="document-intelligence-engine-scene-receipt">
-                  Run it on 10 of your documents →
-                </BookButton>
-                <span className={styles.receiptFine}>
-                  We show you extraction accuracy side-by-side with your ground truth — before you commit.<br />
-                  <b>PDFs, scans, photos, handwriting.</b>
+          {/* 3 · COMPUTE — Excel with visible formulas */}
+          <div className={`${styles.win} ${styles.wExcel}`} data-mode={s.win.excel}>
+            <div className={styles.tbar}>
+              <img src="/logos/excel.svg" alt="Microsoft Excel" width={20} height={20} className={styles.tlogo} />
+              <span className={styles.tname}>Reserve model</span>
+              <span className={styles.xRsmeans}>
+                <img src="/logos/rsmeans.png" alt="" width={12} height={12} />RS Means
+              </span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.formulaBar}>
+                <span className={styles.fx}>fx</span>
+                <span className={styles.formulaText}>
+                  {s.formula === 0 ? '' : s.formula === 1 ? '=SLN(replacement_cost, salvage, useful_life)' : '=RS_Means_index(component, region) · 30-yr projection'}
                 </span>
               </div>
+              <div className={styles.modelRows}>
+                {MODEL_ROWS.map((m, i) => (
+                  <div key={m.lab} className={styles.modelRow} data-in={on(i < s.modelIn)}>
+                    <span className={styles.modelLab}>{m.lab}</span>
+                    <span className={styles.modelVal}>{m.val}</span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.timeline}>
+                {TIMELINE_CHIPS.map((t, i) => (
+                  <span key={t} className={styles.tlChip} data-in={on(i < s.timelineIn)}>{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 4 · CHECK — QA panel + Robert's tray */}
+          <div className={styles.qaPanel} data-show={on(s.step === 4)}>
+            <div className={styles.qaValidated} data-in={on(s.qaValidated)}>
+              <span className={styles.qaCheck} aria-hidden="true">✓</span>845 of 847 data points validated
+            </div>
+            <div className={styles.qaTray}>
+              <div className={styles.qaTrayHead}>
+                <img src="/demo/robert.png" alt="Robert C." width={20} height={20} className={styles.robertAvatar} data-in={on(s.robertIn)} />
+                For Robert C. · Principal Engineer
+              </div>
+              {QA_FLAGS.map((f, i) => (
+                <div key={f.text} className={styles.qaFlag} data-in={on(i < s.flagsIn)} data-resolved={on(i < s.flagsResolved)}>
+                  <span className={styles.qaMark} aria-hidden="true">{i < s.flagsResolved ? '✓' : '!'}</span>
+                  <span className={styles.qaText}>
+                    {f.text}
+                    <span className={styles.qaFix}> — {f.fix}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 5 · DELIVER — the finished report */}
+          <div className={`${styles.win} ${styles.wReport}`} data-mode={s.win.report} data-fly="report">
+            <div className={styles.tbar}>
+              <span className={styles.reportGlyph} aria-hidden="true">▤</span>
+              <span className={styles.tname}>Reserve Study</span>
+              <span className={styles.tsub}>your firm’s template</span>
+              <span className={styles.tick} aria-hidden="true" />
+            </div>
+            <div className={styles.winBody}>
+              <div className={styles.reportHead}>
+                <span className={styles.pageBig}>{s.pageCount}</span>
+                <span className={styles.pageCap}>pages generated</span>
+              </div>
+              <div className={styles.reportRows}>
+                {REPORT_ROWS.map((r, i) => (
+                  <div key={r} className={styles.reportRow} data-in={on(i < s.reportIn)}>
+                    <span className={styles.reportCheck} aria-hidden="true">✓</span>{r}
+                  </div>
+                ))}
+              </div>
+              <div className={styles.reportFiled} data-in={on(s.reportFiled)}>→ filed back to Google Drive</div>
             </div>
           </div>
         </div>
 
-        {/* ── Toast ── */}
-        <div className={styles.toastWrap}>
-          <div className={styles.toast} data-done={s.toastDone ? 'true' : 'false'} role="status" aria-live="polite">
-            <span className={styles.toastSpin} aria-hidden="true" />
-            <span className={styles.toastCheck} aria-hidden="true">{'✓'}</span>
-            <span className={styles.toastText}>{s.toast}</span>
+        {/* ── Receipt overlay ── */}
+        <div className={styles.receipt} data-show={on(s.receipt)}>
+          <div className={styles.receiptCard}>
+            <p className={styles.receiptKicker}>A 14-day reserve study</p>
+            <p className={styles.receiptTitle}>Delivered in 4 hours. Robert made 2 judgement calls.</p>
+            <div className={styles.receiptRows}>
+              <div className={styles.receiptRow}><span>Documents processed</span><b>47</b></div>
+              <div className={styles.receiptRow}>
+                <span>Fields extracted</span>
+                <b>847 <span className={styles.receiptNote}>94% on handwriting</span></b>
+              </div>
+              <div className={styles.receiptRow}>
+                <span>Reserve computed</span>
+                <b className={styles.receiptHl}>$2.1M <span className={styles.receiptNote}>auditable</span></b>
+              </div>
+              <div className={styles.receiptRow}><span>Engineer review</span><b>2 flags</b></div>
+              <div className={styles.receiptRow}>
+                <span>Turnaround</span>
+                <b><s className={styles.receiptOld}>14 days</s> <span className={styles.receiptHl}>4 hrs</span></b>
+              </div>
+            </div>
+            <BookButton className={styles.receiptCta} location="document-intelligence-engine-scene-receipt">
+              Send us 10 of your documents →
+            </BookButton>
+            <span className={styles.receiptFine}>
+              <span className={styles.fineLogos}>
+                {FINE_LOGOS.map((l) => (
+                  <img key={l.src} src={l.src} alt={l.alt} width={14} height={14} />
+                ))}
+              </span>
+              Reserve studies, insurance claims, mortgage files, medical records — any workflow where paper becomes data.
+            </span>
           </div>
         </div>
       </div>
 
+      <p className={styles.orchNote}>
+        Chronexa doesn&rsquo;t sell an AI or an OCR product. We orchestrate Claude and vision models with the tools you already
+        run — Google Drive, your Excel model, your report template. We build the pipeline; you deliver in your own format.
+      </p>
       <p className={styles.hint}>Click a step above to jump · the run loops on its own</p>
     </div>
   );
