@@ -26,15 +26,15 @@ export const metadata: Metadata = {
 const FAQS: { q: string; a: string }[] = [
   {
     q: 'Where do the 40% and 3× benchmarks come from?',
-    a: 'They are the published benchmarks on our CPA & Tax Engine page, drawn from documented results in AI tax-document automation (benchmarks from Filed): roughly 40% less preparation time per return once intake, classification, extraction and return population are automated, and up to 3× staff capacity in busy season. The calculator deliberately models throughput at a conservative 30% — not the 3× best case — so the business case never depends on a ceiling number.',
+    a: 'Both are published benchmarks from Filed, an AI tax-document automation platform, cited on our CPA & Tax Engine page: roughly 40% less prep time per return, and up to 3× busy-season capacity industry-wide. We don&rsquo;t just borrow the number — a 12-person CPA firm we automated hit similar territory first-hand: tax-season overtime hours cut from 312 to 189 (39%), admin time down roughly 40%, document collection dropping from 47 days to 16. The calculator never assumes the 3× ceiling — it models a conservative realization rate that scales with how manual your current process is, so the business case never depends on a best-case number.',
   },
   {
     q: 'Does this include review time, or just prep?',
-    a: 'Just prep — intake, classification, data entry and population. Review is a separate gain: with a side-by-side review dashboard where every extracted value links to its source document, CPA review typically drops from 3–4 hours to 15–25 minutes per return. The calculator leaves that out, which makes its estimate more conservative, not less.',
+    a: 'Both, shown separately. Prep — document chasing, classification, data entry and population — drives the capacity number above. Review is modelled on its own: with a side-by-side dashboard where every extracted value links to its source document, CPA review typically drops from 3–4 hours to 15–25 minutes per return. That review-time saving is real and shown in the calculator, but it&rsquo;s added on top of the capacity number, never folded into it — which keeps the headline conservative rather than double-counted.',
   },
   {
     q: 'We are a small firm — does the math still hold?',
-    a: 'Yes. The model is linear, so it holds at 600 returns or 6,000. What changes at smaller firms is which constraint binds first: capacity per preparer matters most when hiring seasonal staff is hardest, which is exactly the small-firm situation.',
+    a: 'Yes, with one deliberate constraint built in: the calculator caps how much of the freed prep time your current headcount can realistically absorb before review and sign-off — not prep — becomes the bottleneck. At a firm with plenty of preparers relative to volume, that ceiling never binds and the math scales cleanly. At a small firm with high volume per preparer, the calculator will show your capacity gain leveling off — that is exactly the small-firm situation, where hiring seasonal staff is hardest, made visible in the number instead of hidden behind a flat percentage.',
   },
   {
     q: 'What does it take to actually capture this capacity?',
@@ -106,21 +106,30 @@ export default function Page() {
           <h2 className={styles.bodyTitle}>The math, in the open</h2>
           <p className={styles.prose}>
             No black box. Prep hours are your returns multiplied by your average prep time; automation removes 40% of
-            them (the published benchmark for automated intake, classification, extraction and pre-fill). Throughput is
-            modelled at a deliberately conservative 30% gain — the engine benchmark is 3× — and capacity revenue is
-            simply the added returns at your average fee.
+            them (the published benchmark for automated intake, classification, extraction and pre-fill). That freed
+            time only converts into added returns up to what your preparer headcount can actually absorb — beyond
+            that, review and sign-off time, not prep, is the real constraint. Within that ceiling, the realization rate
+            scales with how manual your process is today: firms with more prep hours per return have more room for
+            automation to compress. Capacity revenue is simply the added returns at your average fee.
           </p>
           <pre className={styles.formula}>
-{`hours freed      = returns × prep hours/return × 40%
-added returns    = returns × 30%   (conservative; benchmark is 3×)
-capacity revenue = added returns × average fee`}
+{`hours freed        = returns × prep hours/return × 40%
+capacity ceiling   = preparers × 200h   (headcount limit before review/sign-off binds)
+realization rate   = 45%, scaled to your prep hours vs. a 4h reference
+added returns      = min(hours freed, capacity ceiling) ÷ (prep hours × 60%) × realization rate
+capacity revenue   = added returns × average fee
+
+review hours saved = returns × (your review hours/return − 20 min)   (added on top, not counted above)`}
           </pre>
           <p className={styles.prose}>
-            With the defaults — a 10-preparer firm filing 600 returns at a $700 average fee — that is 180 additional
-            returns and $126,000 in added capacity revenue per season: the same worked example published on our CPA
-            &amp; Tax Engine page. Where the 40% comes from in practice: documents are pulled from your client portal
-            automatically, classified by type, extracted field-by-field with a verification pass, and pushed into your
+            With the defaults — a 10-preparer firm filing 600 returns at 4 prep hours and a $700 average fee — that is
+            180 additional returns and $126,000 in added capacity revenue per season: the same worked example
+            published on our CPA &amp; Tax Engine page. &ldquo;Prep hours&rdquo; is not one opaque number — it&rsquo;s four
+            stages, each shown in the calculator: documents pulled from your client portal automatically (no one chases
+            them by hand), classified by type, extracted field-by-field with a verification pass, and pushed into your
             tax software as a 90–94% pre-filled return. The preparer starts from a punch-list, not a blank organizer.
+            Review is the fifth stage and the most concrete one: a side-by-side dashboard that takes review from
+            hours to minutes per return, shown separately so it&rsquo;s never double-counted into the capacity number.
           </p>
         </div>
       </section>

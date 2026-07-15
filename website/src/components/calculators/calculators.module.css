@@ -82,6 +82,26 @@
 .assumption { font-size: 0.78rem; color: var(--text-muted-dark); line-height: var(--leading-snug); }
 .assumption a { color: var(--text-muted-dark); text-decoration: underline; }
 
+/* Task-by-task breakdown (CPA calculator: where the hours actually go) */
+.taskHeading {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted-dark); margin-top: 0.3rem;
+}
+.taskList { display: grid; gap: 0; }
+.taskRow {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+  gap: 0.5rem 0.75rem; font-size: 0.82rem; padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-dark);
+}
+.taskRow:last-child { border-bottom: none; }
+.taskStage { color: var(--text-dark); font-weight: 500; flex: 0 0 auto; }
+.taskAfter { color: var(--brand-green); font-weight: 500; text-align: right; }
+.reviewCallout {
+  font-size: 0.85rem; color: var(--text-dark); line-height: var(--leading-snug);
+  padding: 0.75rem 1rem; border-left: 2px solid var(--brand-green);
+  background: rgba(255, 255, 255, 0.04); border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
 /* ---- Lead capture ------------------------------------------------------- */
 .leadBox {
   grid-column: 1 / -1;

@@ -8,7 +8,7 @@ import styles from '../../components/calculators/calculators.module.css';
 const URL = `${site.url}/law-firm-billing-leakage-calculator`;
 const TITLE = 'Law Firm Billing Leakage Calculator — How Much Revenue Is Your Firm Losing? | Chronexa';
 const DESCRIPTION =
-  'Industry studies put revenue lost to manual billing failure at 26% of potential. Enter your lawyer count, blended rate and billable hours — see what your firm leaks per year, what is recoverable, and the workflows that close the gap.';
+  'Firms typically lose 15–30% of billable time to unlogged work. Enter your lawyer count, blended rate and billable hours — see what your firm leaks per year, what is recoverable, and the workflows that close the gap.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 const FAQS: { q: string; a: string }[] = [
   {
     q: 'Where does the 26% leakage figure come from?',
-    a: 'Industry studies of law-firm billing consistently attribute roughly 26% of potential revenue to manual billing failure: time reconstructed from memory at the end of the day, sessions logged short "to be safe", work that never reaches a timesheet at all, and pre-bill write-downs. The calculator applies that benchmark to your inputs; your firm’s actual rate depends on practice mix and timekeeping discipline, which is what an audit measures.',
+    a: 'It is Chronexa’s own modeled estimate — we’d rather say that plainly than borrow false precision from a study that doesn’t exist. It sits inside a documented range: industry estimates put collectible billable-hour loss to unbilled time and write-downs at 15–30%, and Clio’s Legal Trends Report — the most-cited benchmark in the industry — finds the average attorney captures just 2.5 of 8 billable hours a day and firms collect 93% of what they bill. We model 26%, near the middle of that range, specifically for time that is worked but never reaches a timesheet — reconstructed from memory, logged short "to be safe", or lost entirely to AI-assisted sessions. Your firm’s actual rate depends on practice mix and timekeeping discipline, which is what an audit measures.',
   },
   {
     q: 'Why does AI adoption make billing leakage worse?',
@@ -89,8 +89,8 @@ export default function Page() {
             <p className="eyebrow">Free calculator</p>
             <h1 className={styles.heroTitle}>How much revenue is your firm losing to billing leakage?</h1>
             <p className={styles.heroSub}>
-              Industry studies put revenue lost to manual billing failure at 26% of potential — time reconstructed
-              from memory, sessions logged short, AI-assisted work that never reaches a timesheet. Move the sliders.
+              Firms typically lose 15–30% of billable time to unlogged work — time reconstructed from memory, sessions
+              logged short, AI-assisted work that never reaches a timesheet. We model 26%. Move the sliders.
             </p>
           </div>
           <LeakageCalculator />
@@ -104,21 +104,24 @@ export default function Page() {
           <h2 className={styles.bodyTitle}>The math, in the open</h2>
           <p className={styles.prose}>
             No black box: the calculator multiplies your fee-earning lawyers by your blended billable rate and daily
-            billable hours across 250 working days to get potential annual billings. It then applies the 26% leakage
-            rate that industry studies attribute to manual billing failure, and models recovery at a deliberately
-            conservative 50% of the leak.
+            billable hours across 250 working days to get potential annual billings. It then applies a 26% leakage
+            rate — our own modeled estimate, set inside a documented range: industry estimates put collectible-hour
+            loss to unbilled time at 15–30%, and Clio&rsquo;s Legal Trends Report finds the average attorney captures
+            just 2.5 of 8 billable hours a day. Recovery is modeled at a deliberately conservative 50% of the leak.
           </p>
           <pre className={styles.formula}>
 {`potential  = lawyers × rate × billable hours/day × 250 days
-leakage    = potential × 26%   (industry benchmark)
+leakage    = potential × 26%   (modeled, inside the documented 15–30% range)
 recoverable = leakage × 50%    (conservative capture)`}
           </pre>
           <p className={styles.prose}>
-            Where leakage actually comes from: lawyers reconstructing their day at 6pm and rounding down &ldquo;to be
-            safe&rdquo;, work sessions that never reach the timesheet, pre-bill write-downs — and increasingly, AI-assisted
-            work, because no AI platform writes its usage to a billing system. A lawyer who spends 90 minutes with the
-            firm&rsquo;s AI assistant on a matter has done billable, supervised professional work that timekeeping was
-            never designed to see. The more efficient your lawyers get, the bigger that blind spot grows.
+            Where this leakage actually comes from: lawyers reconstructing their day at 6pm and rounding down &ldquo;to
+            be safe&rdquo;, work sessions that never reach the timesheet — and increasingly, AI-assisted work, because no
+            AI platform writes its usage to a billing system. A lawyer who spends 90 minutes with the firm&rsquo;s AI
+            assistant on a matter has done billable, supervised professional work that timekeeping was never designed
+            to see. The more efficient your lawyers get, the bigger that blind spot grows. This figure is specifically
+            about time that never reaches a bill — pre-bill write-downs and slow collections are real, separate drains
+            on realized revenue that this calculator does not attempt to model.
           </p>
         </div>
       </section>

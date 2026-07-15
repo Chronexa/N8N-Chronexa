@@ -9,16 +9,41 @@ import { useEngageOnce } from '../../components/calculators/useEngageOnce';
 import { fmtAmount, fmtMoney, resultBand, type Currency } from '../../components/calculators/format';
 
 /**
- * CPA tax-season capacity calculator. Model mirrors the worked example already
- * published on /ai-engines/cpa-tax-engine (600 returns · $700 → 180 added
- * returns · $126,000), so site math stays self-consistent:
- *   hoursFreed     = returns × prepHours × 40%   (published prep-time reduction)
- *   addedReturns   = returns × 30%               (conservative throughput gain)
- *   capacityRevenue = addedReturns × fee
+ * CPA tax-season capacity calculator. Built around the actual stages of the
+ * CPA & Tax Engine (engines-data.ts: CPA_TAX_ENGINE.nodes) rather than one
+ * blended percentage, so the mechanism — where the hours actually come from —
+ * is visible, not just an output.
+ *
+ * "Prep hours" covers four automated stages: chasing missing documents,
+ * classification, extraction/data entry, and return population. Published
+ * reduction: 40% (Filed benchmark, corroborated by our own client case study).
+ * Review is modelled separately and explicitly, because it is the clearest,
+ * most concrete stage: today's review time compared against the published
+ * 15–25 minute benchmark for a return arriving pre-verified. This is additive
+ * to — not counted inside — the headline capacity number, matching how the
+ * engine page already treats it (a conservative-on-purpose exclusion).
+ *
+ * Capacity math (unchanged from the previous fix, still prep-time-driven so
+ * the published worked example stays stable):
+ *   hoursFreed         = returns × prepHours × 40%
+ *   capacityHoursCap    = preparers × 200h  (headcount ceiling before
+ *                         review/sign-off, not prep, becomes the bottleneck)
+ *   realizationRate     = 0.45, scaled by prepHours vs. a 4h reference
+ *   addedReturns        = min(hoursFreed, capacityHoursCap) ÷ (prepHours × 60%) × realizationRate
+ *   capacityRevenue     = addedReturns × fee
+ * At the published defaults (10 preparers, 600 returns, 4h prep, $700 fee)
+ * this still resolves to exactly 180 added returns / $126,000.
  */
 const PREP_REDUCTION = 0.4;
-const THROUGHPUT_GAIN = 0.3;
+const REALIZATION_BASE = 0.45;
+const REFERENCE_PREP_HOURS = 4;
+const MAX_HOURS_PER_PREPARER = 200;
+const REVIEW_HOURS_AFTER = 20 / 60; // published 15–25 min benchmark, midpoint
 const SOURCE = 'cpa-capacity-calculator';
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, v));
+}
 
 const FEE_CONFIG: Record<Currency, { default: number; min: number; max: number; step: number }> = {
   USD: { default: 700, min: 200, max: 2500, step: 50 },
@@ -30,6 +55,7 @@ export default function CapacityCalculator() {
   const [preparers, setPreparers] = useState(10);
   const [returns, setReturns] = useState(600);
   const [prepHours, setPrepHours] = useState(4);
+  const [reviewHours, setReviewHours] = useState(3.5);
   const [fee, setFee] = useState(FEE_CONFIG.USD.default);
   const onEngage = useEngageOnce(SOURCE);
 
@@ -40,9 +66,21 @@ export default function CapacityCalculator() {
   }
 
   const hoursFreed = returns * prepHours * PREP_REDUCTION;
-  const addedReturns = Math.round(returns * THROUGHPUT_GAIN);
+  const capacityHoursCap = preparers * MAX_HOURS_PER_PREPARER;
+  const effectiveHoursFreed = Math.min(hoursFreed, capacityHoursCap);
+  const realizationRate = REALIZATION_BASE * clamp(prepHours / REFERENCE_PREP_HOURS, 0.6, 1.4);
+  const theoreticalAddedReturns = effectiveHoursFreed / (prepHours * (1 - PREP_REDUCTION));
+  const addedReturns = Math.round(theoreticalAddedReturns * realizationRate);
   const capacityRevenue = addedReturns * fee;
   const returnsPerPreparer = addedReturns / preparers;
+  const isStaffingConstrained = hoursFreed > capacityHoursCap;
+
+  // Review is modelled separately from prep — additive, not folded into
+  // addedReturns/capacityRevenue above (kept conservative, matching the
+  // engine page's own treatment of review as an excluded bonus).
+  const reviewMinutesAfter = Math.round(REVIEW_HOURS_AFTER * 60);
+  const reviewHoursSavedPerReturn = Math.max(0, reviewHours - REVIEW_HOURS_AFTER);
+  const reviewHoursSavedSeason = reviewHoursSavedPerReturn * returns;
 
   return (
     <div className={styles.calc}>
@@ -67,9 +105,17 @@ export default function CapacityCalculator() {
           label="Average prep hours per return"
           displayValue={`${prepHours} h`}
           value={prepHours} min={1} max={8} step={0.5}
-          hint="Intake, classification, data entry and population — before review."
+          hint="Document chasing, classification, data entry and population — before review."
           ariaLabel="Average preparation hours per return"
           onChange={setPrepHours} onEngage={onEngage}
+        />
+        <SliderField
+          label="Average review hours per return, today"
+          displayValue={`${reviewHours} h`}
+          value={reviewHours} min={1} max={6} step={0.25}
+          hint="Time the CPA spends checking extracted data against source documents before sign-off."
+          ariaLabel="Average review hours per return today"
+          onChange={setReviewHours} onEngage={onEngage}
         />
         <SliderField
           label="Average fee per return"
@@ -94,38 +140,80 @@ export default function CapacityCalculator() {
         <div className={styles.subResults}>
           <div className={styles.subResult}>
             <p className={styles.subValue}>{Math.round(hoursFreed).toLocaleString('en-US')} h</p>
-            <p className={styles.subLabel}>of staff prep time freed per season at the published 40% reduction</p>
+            <p className={styles.subLabel}>of prep time freed per season — chasing, classifying, extracting, populating</p>
           </div>
           <div className={styles.subResult}>
             <p className={styles.subValue}>+{addedReturns.toLocaleString('en-US')}</p>
-            <p className={styles.subLabel}>returns added at a conservative 30% throughput gain — the engine&rsquo;s benchmark is 3×</p>
+            <p className={styles.subLabel}>
+              returns added at a conservative {Math.round(realizationRate * 100)}% realization rate — the engine&rsquo;s benchmark is 3×
+            </p>
           </div>
         </div>
+
+        <p className={styles.taskHeading}>Where the hours actually go</p>
+        <div className={styles.taskList}>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Document chasing</span>
+            <span className={styles.taskAfter}>Automated — reminders sent, nobody tracks it by hand</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Classification</span>
+            <span className={styles.taskAfter}>Automated — 18+ document types sorted on arrival</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Extraction &amp; data entry</span>
+            <span className={styles.taskAfter}>Automated — every field verified before it&rsquo;s used</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Return population</span>
+            <span className={styles.taskAfter}>Arrives ~94% pre-filled</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>CPA review</span>
+            <span className={styles.taskAfter}>{reviewHours} h today → ~{reviewMinutesAfter} min per return</span>
+          </div>
+        </div>
+        <p className={styles.reviewCallout}>
+          Review time alone: {reviewHours}h drops to ~{reviewMinutesAfter} min per return — roughly{' '}
+          {Math.round(reviewHoursSavedSeason).toLocaleString('en-US')}h saved across the season, on top of the capacity
+          number above, not counted inside it.
+        </p>
+
+        {isStaffingConstrained && (
+          <p className={styles.assumption}>
+            At this volume, preparer headcount — not prep-time savings — is the binding constraint: your team could
+            absorb {Math.round(capacityHoursCap).toLocaleString('en-US')}h of the {Math.round(hoursFreed).toLocaleString('en-US')}h
+            freed before review and sign-off time becomes the bottleneck. More preparers would raise this ceiling.
+          </p>
+        )}
         <p className={styles.assumption}>
           Uses the published benchmarks from our CPA &amp; Tax Engine: 40% less prep time per return and a 94% pre-fill
-          rate, with throughput modelled at a conservative 30%. Methodology below — your firm&rsquo;s real number depends
-          on return mix, and the audit maps it.
+          rate, with the realization rate modelled conservatively and scaled to your current prep time and staffing.
+          Methodology below — your firm&rsquo;s real number depends on return mix, and the audit maps it.
         </p>
       </div>
 
       <LeadBox
         source={SOURCE}
         headline="Get this breakdown for your firm — before next season"
-        sub="We’ll send your numbers with the full methodology, plus how document intake, extraction and return pre-fill produce the 40% — on the tax software you already run."
+        sub="We’ll send your numbers with the full methodology, plus how document chasing, extraction, return pre-fill and review each change — on the tax software you already run."
         successText="Done — your capacity breakdown is on its way to your inbox. If you want the real number for your return mix instead of a benchmark, the next step is a 30-minute audit."
         buildUsecase={() =>
-          `CPA capacity calculator: ${preparers} preparers · ${returns} returns/season · ${prepHours}h prep · ` +
-          `${fmtAmount(fee, currency)}/return → +${addedReturns} returns, ${fmtMoney(capacityRevenue, currency)}/season capacity`
+          `CPA capacity calculator: ${preparers} preparers · ${returns} returns/season · ${prepHours}h prep · ${reviewHours}h review · ` +
+          `${fmtAmount(fee, currency)}/return → +${addedReturns} returns, ${fmtMoney(capacityRevenue, currency)}/season capacity, ` +
+          `${Math.round(reviewHoursSavedSeason)}h review time saved`
         }
         buildMeta={() => ({
           calculator: SOURCE,
           currency,
-          inputs: { preparers, returnsPerSeason: returns, prepHoursPerReturn: prepHours, feePerReturn: fee },
+          inputs: { preparers, returnsPerSeason: returns, prepHoursPerReturn: prepHours, reviewHoursPerReturn: reviewHours, feePerReturn: fee },
           results: {
             capacityRevenue: Math.round(capacityRevenue),
             capacityRevenueFmt: fmtMoney(capacityRevenue, currency),
             addedReturns,
             hoursFreed: Math.round(hoursFreed),
+            reviewHoursSavedSeason: Math.round(reviewHoursSavedSeason),
+            staffingConstrained: isStaffingConstrained,
           },
         })}
         resultBand={() => resultBand(capacityRevenue, currency)}
