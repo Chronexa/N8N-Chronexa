@@ -30,6 +30,23 @@
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+  position: relative;
+}
+
+/* Ambient stage light behind the window — shared "orchestration" depth,
+   kept as a soft glow rather than a grid so it fits the bright window. */
+.scene::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: min(94%, 940px);
+  height: 78%;
+  background: radial-gradient(ellipse at center, rgba(103,176,53,.16), transparent 68%);
+  filter: blur(26px);
+  pointer-events: none;
 }
 
 .window {
@@ -38,6 +55,7 @@
   border-radius: 18px;
   overflow: hidden;
   position: relative;
+  z-index: 1;
   box-shadow:
     0 0 0 1px rgba(255,255,255,.09),
     0 60px 140px -50px rgba(0,0,0,.9),
@@ -56,7 +74,29 @@
 .dots span:nth-child(1) { background: #F2605A; }
 .dots span:nth-child(2) { background: #F5BD4F; }
 .dots span:nth-child(3) { background: #61C554; }
-.chromeTitle { flex: 1; text-align: center; font-size: .78rem; font-weight: 600; color: var(--sub); }
+.chromeTitle { flex: 1; min-width: 0; text-align: center; font-size: .78rem; font-weight: 600; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── AI-agent identity (the protagonist, shared with the other scenes) ── */
+.agentChip {
+  display: inline-flex; align-items: center; gap: .4rem; flex: none;
+  padding: .24rem .5rem .24rem .52rem;
+  background: #fff; border: 1px solid var(--green-edge); border-radius: 999px;
+  box-shadow: 0 0 0 3px rgba(103,176,53,.07), var(--shadow-s);
+}
+.agentDot, .toastAgent {
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 35% 30%, #C6EBA4, var(--sc-green) 60%, #3F7A1F);
+  animation: agentBreath 2.2s ease-in-out infinite;
+}
+@keyframes agentBreath {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(78,147,39,.5), 0 0 8px 1px rgba(78,147,39,.4); }
+  50%      { box-shadow: 0 0 0 4px rgba(78,147,39,0), 0 0 12px 3px rgba(78,147,39,.6); }
+}
+.agentName { font-size: .68rem; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.agentModel {
+  font-size: .56rem; font-weight: 800; color: #fff; background: var(--sc-green);
+  border-radius: 999px; padding: .06rem .36rem; white-space: nowrap;
+}
 .livePill {
   display: inline-flex; align-items: center; gap: .35rem;
   font-size: .66rem; font-weight: 600; color: var(--sc-green);
@@ -463,8 +503,13 @@
 .receiptFine { font-size: .64rem; color: var(--faint); line-height: 1.6; }
 .receiptFine b { color: var(--sub); }
 
-/* hint under the window, on the dark page */
-.hint { font-size: .72rem; color: rgba(255,255,255,.38); text-align: center; }
+/* orchestrator clarity line + hint, under the window on the dark page */
+.orchNote {
+  position: relative; z-index: 1;
+  max-width: 66ch; margin: .35rem auto 0; text-align: center;
+  font-size: .84rem; line-height: 1.55; color: rgba(244,244,244,.72);
+}
+.hint { position: relative; z-index: 1; font-size: .72rem; color: rgba(255,255,255,.38); text-align: center; }
 
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 860px) {
@@ -479,6 +524,8 @@
   .stepName { font-size: .6rem; }
   .main { padding: .8rem .7rem; }
   .side { padding: .8rem .7rem; }
+  .chromeTitle { display: none; }
+  .agentName { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

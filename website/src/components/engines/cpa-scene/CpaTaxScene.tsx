@@ -55,7 +55,7 @@ const DOCS: Record<DocKey, { form: string; issuer: string; rows: { id: string; l
     form: 'Schedule K-1 (1065)', issuer: 'Stonegate Partners II LP',
     rows: [
       { id: 'k1b2', lab: 'Box 2 · Net rental income', val: '$31,400' },
-      { id: 'k1b20', lab: 'Box 20 · Code AH — see stmt.', val: 'attached' },
+      { id: 'k1b20', lab: 'Box 20 · Code Z — §199A stmt.', val: 'attached' },
     ],
   },
   b: {
@@ -392,10 +392,15 @@ export default function CpaTaxScene() {
     <div className={styles.scene} ref={shellRef}>
       <div className={styles.window} ref={windowRef} aria-label="CPA & Tax Engine — live demonstration">
 
-        {/* ── Window chrome ── */}
+        {/* ── Window chrome — the AI agent (Claude) is the operator ── */}
         <div className={styles.chrome}>
           <div className={styles.dots} aria-hidden="true"><span /><span /><span /></div>
-          <span className={styles.chromeTitle}>Chronexa · CPA &amp; Tax Engine</span>
+          <span className={styles.agentChip}>
+            <span className={styles.agentDot} aria-hidden="true" />
+            <span className={styles.agentName}>AI agent</span>
+            <span className={styles.agentModel}>Claude</span>
+          </span>
+          <span className={styles.chromeTitle}>Tax workspace · Marcus Chen</span>
           <span className={styles.livePill}><i aria-hidden="true" />Live run</span>
         </div>
 
@@ -643,6 +648,7 @@ export default function CpaTaxScene() {
         {/* ── Toast ── */}
         <div className={styles.toastWrap}>
           <div className={styles.toast} data-done={s.toastDone ? 'true' : 'false'} role="status" aria-live="polite">
+            <span className={styles.toastAgent} aria-hidden="true" />
             <span className={styles.toastSpin} aria-hidden="true" />
             <span className={styles.toastCheck} aria-hidden="true">{'✓'}</span>
             <span className={styles.toastText}>{s.toast}</span>
@@ -650,6 +656,11 @@ export default function CpaTaxScene() {
         </div>
       </div>
 
+      <p className={styles.orchNote}>
+        Chronexa doesn&rsquo;t sell an AI. We orchestrate the leading models &mdash; mostly Claude &mdash; inside your firm&rsquo;s
+        own tools: TaxDome, your document store, UltraTax CS and your EFIN. We build and run the pipeline; your CPA reviews
+        and signs every return.
+      </p>
       <p className={styles.hint}>Click a step above to jump · the run loops on its own</p>
     </div>
   );
