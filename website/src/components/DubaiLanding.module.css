@@ -1,6 +1,8 @@
-/* Hero — full-bleed cinematic skyline photo behind the text, same
+/* Hero: full-bleed cinematic skyline photo behind the text, same
    construction as the homepage Hero.tsx (absolute image + directional scrim
-   + left-anchored content column). Not a boxed side panel. */
+   + left-anchored content column). Not a boxed side panel.
+   --accent-on-surface is set to brand-green here so the outline CTA
+   (border + text) renders visibly against the dark photo background. */
 .hero {
   position: relative;
   min-height: min(84vh, 780px);
@@ -10,6 +12,7 @@
   padding-bottom: var(--spacing-lg);
   background-color: var(--bg-dark);
   color: var(--text-dark);
+  --accent-on-surface: var(--brand-green);
   overflow: hidden;
 }
 .heroPicture { position: absolute; inset: 0; z-index: 0; }
@@ -68,65 +71,33 @@
   }
 }
 
-/* Founder credibility band — real people, real credentials, not a metric tile */
-.foundersGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-top: var(--spacing-md); }
-.founderCard {
-  display: flex; align-items: center; gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-.founderImg { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.founderName { font-weight: 700; font-size: var(--step-0); }
-.founderRole { font-size: var(--step--1); color: var(--text-muted-light); }
-@media (max-width: 900px) { .foundersGrid { grid-template-columns: 1fr; } }
-
 /* Shared section head */
-.sectionHead { font-size: var(--step-3); margin: 0.4rem 0 var(--spacing-lg); max-width: 40ch; }
+.sectionHead { font-size: var(--step-3); margin: 0.4rem 0 var(--spacing-lg); max-width: 44ch; }
 
-/* Pain points */
-.painGrid {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm) var(--spacing-lg);
-}
-.painItem {
-  display: flex; align-items: flex-start; gap: 0.6rem;
-  font-size: var(--step-0); color: var(--text-light);
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid var(--border-light);
-}
-.painMark { color: var(--brand-green); font-weight: 700; flex-shrink: 0; }
-@media (max-width: 700px) { .painGrid { grid-template-columns: 1fr; } }
-
-/* Automations grid */
+/* Services grid: icon + title + real description + example + impact line */
 .autoGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); }
 .autoCard {
+  display: flex;
+  flex-direction: column;
   padding: var(--spacing-md);
   background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
+.autoIcon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--brand-green-soft); color: var(--brand-green-ink);
+  margin-bottom: var(--spacing-sm);
+}
 .autoTitle { font-size: var(--step-0); font-weight: 700; margin-bottom: 0.5rem; }
-.autoBody { font-size: var(--step--1); color: var(--text-muted-light); }
+.autoBody { font-size: var(--step--1); color: var(--text-muted-light); margin-bottom: 0.6rem; }
+.autoExample { font-size: var(--step--1); color: var(--text-light); font-style: italic; margin-bottom: 0.6rem; }
+.autoImpact { display: flex; align-items: flex-start; gap: 0.4rem; font-size: var(--step--1); font-weight: 600; color: var(--brand-green-ink); margin-top: auto; padding-top: 0.6rem; border-top: 1px solid var(--border-light); }
+.impactMark { flex-shrink: 0; }
 @media (max-width: 900px) { .autoGrid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .autoGrid { grid-template-columns: 1fr; } }
-
-/* Industries — dark accent band */
-.industriesEyebrow { color: var(--brand-green); }
-.industriesHead { font-size: var(--step-3); margin: 0.4rem 0 var(--spacing-lg); max-width: 36ch; color: var(--text-dark); }
-.industriesGrid { display: flex; flex-wrap: wrap; gap: 0.65rem; }
-.industryChip {
-  display: inline-block;
-  font-size: var(--step--1);
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--border-dark-strong);
-  border-radius: var(--radius-pill);
-  color: var(--text-dark);
-  background: var(--surface-glass);
-}
 
 /* Why + included */
 .whyGrid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--spacing-xl); align-items: start; }
@@ -139,6 +110,21 @@
 .includedBtn { width: 100%; text-align: center; justify-content: center; }
 .guarantee { font-size: var(--step--1); color: var(--text-muted-light); text-align: center; margin-top: var(--spacing-sm); }
 @media (max-width: 900px) { .whyGrid { grid-template-columns: 1fr; } }
+
+/* Technology & tools: dark accent band, answers "what can you orchestrate" */
+.toolsEyebrow { color: var(--brand-green); }
+.toolsHead { font-size: var(--step-3); margin: 0.4rem 0 var(--spacing-sm); max-width: 36ch; color: var(--text-dark); }
+.toolsSub { color: var(--text-muted-dark); max-width: 56ch; margin-bottom: var(--spacing-md); }
+.toolsGrid { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.toolChip {
+  display: inline-block;
+  font-size: var(--step--1);
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--border-dark-strong);
+  border-radius: var(--radius-pill);
+  color: var(--text-dark);
+  background: var(--surface-glass);
+}
 
 /* Process steps */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); }
