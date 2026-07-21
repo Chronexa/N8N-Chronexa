@@ -5,20 +5,31 @@ import styles from '../../components/calculators/calculators.module.css';
 import SliderField from '../../components/calculators/SliderField';
 import CurrencyToggle from '../../components/calculators/CurrencyToggle';
 import LeadBox from '../../components/calculators/LeadBox';
+import ComparisonPanel from '../../components/calculators/ComparisonPanel';
+import HeroBar from '../../components/calculators/HeroBar';
 import { useEngageOnce } from '../../components/calculators/useEngageOnce';
 import { fmtMoney, fmtRate, resultBand, type Currency } from '../../components/calculators/format';
+import { LEGAL_REG_GAPS } from '../../components/engines/engines-data';
 
 /**
  * Billing-leakage calculator (legal lead magnet). Results live and ungated.
  * Model (mirrored in the methodology section):
  *   potential = lawyers × rate × billableHours/day × 250 days
- *   leakage   = potential × 26%  (industry benchmark for manual billing failure)
+ *   leakage   = potential × 26%  (modeled, inside the documented 15–30% range)
  *   recovery  = leakage × 50%    (conservative capture assumption)
+ *
+ * The comparison panel below reuses LEGAL_REG_GAPS' "billing" entry — the
+ * same before/after sequence published on the Legal & Regulatory Engine page
+ * — instead of duplicating the copy, so the two pages can't drift apart.
  */
 const LEAKAGE = 0.26;
+const LEAKAGE_LOW = 0.15;
+const LEAKAGE_HIGH = 0.3;
 const RECOVERY = 0.5;
 const WORK_DAYS = 250;
 const SOURCE = 'billing-leakage-calculator';
+
+const BILLING_GAP = LEGAL_REG_GAPS.find((g) => g.id === 'billing')!;
 
 const RATE_CONFIG: Record<Currency, { default: number; min: number; max: number; step: number }> = {
   USD: { default: 350, min: 100, max: 1500, step: 25 },
@@ -40,8 +51,11 @@ export default function LeakageCalculator() {
 
   const potential = lawyers * rate * hours * WORK_DAYS;
   const leakage = potential * LEAKAGE;
+  const leakageLow = potential * LEAKAGE_LOW;
+  const leakageHigh = potential * LEAKAGE_HIGH;
   const recoverable = leakage * RECOVERY;
   const hoursLostPerWeek = hours * 5 * LEAKAGE;
+  const hoursLostPerWeekRecovered = hoursLostPerWeek * (1 - RECOVERY);
 
   return (
     <div className={styles.calc}>
@@ -82,6 +96,10 @@ export default function LeakageCalculator() {
             of potential billings never reaching an invoice, across {lawyers.toLocaleString('en-US')} lawyers
           </p>
         </div>
+        <p className={styles.subLabel}>
+          Modeled at 26%, inside the documented 15–30% range — as low as {fmtMoney(leakageLow, currency)}, as high
+          as {fmtMoney(leakageHigh, currency)} depending on your firm&rsquo;s timekeeping discipline.
+        </p>
         <div className={styles.subResults}>
           <div className={styles.subResult}>
             <p className={styles.subValue}>{fmtMoney(recoverable, currency)}</p>
@@ -92,11 +110,28 @@ export default function LeakageCalculator() {
             <p className={styles.subLabel}>lost per lawyer, per week — work done but never logged</p>
           </div>
         </div>
+
+        <HeroBar
+          label="Hours lost per lawyer, per week"
+          beforeValue={hoursLostPerWeek}
+          beforeLabel={`${hoursLostPerWeek.toLocaleString('en-US', { maximumFractionDigits: 1 })} h`}
+          afterValue={hoursLostPerWeekRecovered}
+          afterLabel={`${hoursLostPerWeekRecovered.toLocaleString('en-US', { maximumFractionDigits: 1 })} h`}
+        />
+
         <p className={styles.assumption}>
-          Assumes {WORK_DAYS} working days and the 26% leakage rate industry studies attribute to manual billing failure.
-          Methodology below. Your firm&rsquo;s real number depends on practice mix — the audit maps it precisely.
+          Assumes {WORK_DAYS}{' '}working days. Methodology below. Your firm&rsquo;s real number depends on practice
+          mix and timekeeping discipline — the audit maps it precisely.
         </p>
       </div>
+
+      <ComparisonPanel
+        title="How automated time capture changes a single AI-assisted session"
+        beforeSteps={BILLING_GAP.before}
+        afterSteps={BILLING_GAP.after}
+        outcome={BILLING_GAP.outcome}
+        source="Same before/after sequence published on the Legal & Regulatory Engine page."
+      />
 
       <LeadBox
         source={SOURCE}

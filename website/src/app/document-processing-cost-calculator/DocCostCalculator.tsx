@@ -5,6 +5,8 @@ import styles from '../../components/calculators/calculators.module.css';
 import SliderField from '../../components/calculators/SliderField';
 import CurrencyToggle from '../../components/calculators/CurrencyToggle';
 import LeadBox from '../../components/calculators/LeadBox';
+import ComparisonPanel from '../../components/calculators/ComparisonPanel';
+import HeroBar from '../../components/calculators/HeroBar';
 import { useEngageOnce } from '../../components/calculators/useEngageOnce';
 import { fmtMoney, fmtRate, resultBand, type Currency } from '../../components/calculators/format';
 
@@ -15,11 +17,31 @@ import { fmtMoney, fmtRate, resultBand, type Currency } from '../../components/c
  *                midpoint 50% highlighted)
  * External cross-checks cited in the FAQ: APQC ~$21 median per manual invoice,
  * Ardent Partners $15–40 for manual-heavy AP shops.
+ *
+ * The hero bar and comparison panel below don't derive from the sliders —
+ * they're the one real, published client result (DOC_INTEL_ROI in
+ * engines-data.ts: a reserve-study pipeline, 14 days to 4 hours) shown as
+ * proof of mechanism, same role the CPA calculator's review-time bar plays.
  */
 const SAVE_LOW = 0.4;
 const SAVE_MID = 0.5;
 const SAVE_HIGH = 0.6;
 const SOURCE = 'document-processing-cost-calculator';
+
+const COMPARE_BEFORE = [
+  'Every document opened, read and re-typed by hand — invoices, claims, forms, statements, contracts',
+  'Scanned, faxed or handwritten pages get set aside for someone to puzzle over',
+  'Each document filed manually, with no way to search across the pile',
+  'A question about the archive means re-reading everything by hand',
+];
+const COMPARE_AFTER = [
+  'Every document pulled in automatically — PDFs, scans, phone photos, handwritten forms, email attachments',
+  'OCR and AI vision read even faxed or handwritten content, with a confidence score on every field',
+  'Every document classified and routed automatically — legal, finance, compliance and tax',
+  'A plain-language question gets a cited answer in seconds, traced to the exact source page',
+];
+const COMPARE_OUTCOME =
+  'The reserve-study pipeline this pattern comes from: 14 days of intake-to-report work compressed to 4 hours, at 94% extraction accuracy on handwritten forms.';
 
 const COST_CONFIG: Record<Currency, { default: number; min: number; max: number; step: number }> = {
   USD: { default: 30, min: 15, max: 80, step: 5 },
@@ -102,11 +124,56 @@ export default function DocCostCalculator() {
             <p className={styles.subLabel}>freed per month — staff redeployed from re-keying to exceptions and review</p>
           </div>
         </div>
+
+        <p className={styles.taskHeading}>Where the touch time actually goes</p>
+        <div className={styles.taskList}>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Document intake</span>
+            <span className={styles.taskAfter}>Every format and source pulled in and deduplicated automatically</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>AI + OCR reading</span>
+            <span className={styles.taskAfter}>Reads scans, photos and handwriting — flags what it can&rsquo;t confirm, never guesses</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Classification</span>
+            <span className={styles.taskAfter}>Sorted across legal, finance, compliance and tax automatically</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Private, cited index</span>
+            <span className={styles.taskAfter}>Indexed inside your tenant — every answer traced to its source page</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Plain-language Q&amp;A</span>
+            <span className={styles.taskAfter}>A question gets a cited answer in seconds, not a search through folders</span>
+          </div>
+          <div className={styles.taskRow}>
+            <span className={styles.taskStage}>Human review</span>
+            <span className={styles.taskAfter}>A named reviewer confirms before anything is filed or sent</span>
+          </div>
+        </div>
+
+        <HeroBar
+          label="One real client result: reserve-study document turnaround"
+          beforeValue={14 * 24}
+          beforeLabel="14 days"
+          afterValue={4}
+          afterLabel="4 hours"
+        />
+
         <p className={styles.assumption}>
           Uses the 40–60% handling-time reduction published on our document and finance automation pages — consistent
-          with our first-hand client result of a 14-day document turnaround cut to 4 hours. Methodology below.
+          with our first-hand client result above. Methodology below.
         </p>
       </div>
+
+      <ComparisonPanel
+        title="How document handling changes once every format is read automatically"
+        beforeSteps={COMPARE_BEFORE}
+        afterSteps={COMPARE_AFTER}
+        outcome={COMPARE_OUTCOME}
+        source="Synthesized from the Document Intelligence Engine's published pipeline."
+      />
 
       <LeadBox
         source={SOURCE}

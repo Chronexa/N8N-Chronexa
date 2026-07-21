@@ -120,6 +120,25 @@ savings     = annual cost × 40–60%   (midpoint 50% shown)`}
             at 94% extraction accuracy on handwritten forms, with every extracted field carrying a confidence score and
             low-confidence reads routed to a human.
           </p>
+
+          <h3 className={styles.methodSubhead}>How to use this calculator</h3>
+          <ol className={styles.howToList}>
+            <li className={styles.howToItem}>Enter your monthly document volume — invoices, claims, forms, statements, contracts.</li>
+            <li className={styles.howToItem}>Enter the full touch time per document: open, read, extract, re-key, file, route.</li>
+            <li className={styles.howToItem}>Enter your loaded hourly cost — salary plus benefits and overhead, per hour.</li>
+            <li className={styles.howToItem}>Read your annual cost, the savings band, and the before/after below for what changes.</li>
+          </ol>
+
+          <div className={styles.caveatBox}>
+            <span className={styles.caveatLabel}>When this doesn&rsquo;t fully apply</span>
+            <p>
+              This model assumes documents follow patterns extraction can learn — invoices, claims, forms, statements,
+              contracts. At very low volume (a few hundred documents a month), the fixed cost of setting up extraction
+              may take longer to pay back. And documents that need a genuine judgment call rather than reading and
+              re-keying values won&rsquo;t see the same handling-time reduction, though they still benefit from being
+              searchable and cited once indexed.
+            </p>
+          </div>
         </div>
       </section>
 

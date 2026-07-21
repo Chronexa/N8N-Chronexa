@@ -5,8 +5,27 @@ import styles from '../../components/calculators/calculators.module.css';
 import SliderField from '../../components/calculators/SliderField';
 import CurrencyToggle from '../../components/calculators/CurrencyToggle';
 import LeadBox from '../../components/calculators/LeadBox';
+import ComparisonPanel from '../../components/calculators/ComparisonPanel';
+import HeroBar from '../../components/calculators/HeroBar';
 import { useEngageOnce } from '../../components/calculators/useEngageOnce';
 import { fmtAmount, fmtMoney, resultBand, type Currency } from '../../components/calculators/format';
+
+const COMPARE_BEFORE = [
+  'Staff check the client portal for new documents, one client at a time',
+  'Missing documents chased by email, tracked in someone’s head or a spreadsheet',
+  'Every file sorted and classified by hand — W-2, 1099, K-1, brokerage composite',
+  'Every field read off the document and retyped into the tax software',
+  'Preparer reviews the finished return line by line for hours',
+];
+const COMPARE_AFTER = [
+  'Documents pulled from the client portal automatically, gaps chased for you',
+  '18+ document types classified on arrival',
+  'Thousands of fields extracted and verified, low-confidence reads flagged',
+  'Return arrives ~94% pre-filled — the preparer starts from a punch-list',
+  'CPA review drops to ~15–25 minutes with a side-by-side source dashboard',
+];
+const COMPARE_OUTCOME =
+  'The same benchmark this calculator models: 40% less prep time per return, review down from hours to minutes.';
 
 /**
  * CPA tax-season capacity calculator. Built around the actual stages of the
@@ -39,6 +58,7 @@ const REALIZATION_BASE = 0.45;
 const REFERENCE_PREP_HOURS = 4;
 const MAX_HOURS_PER_PREPARER = 200;
 const REVIEW_HOURS_AFTER = 20 / 60; // published 15–25 min benchmark, midpoint
+const BAND_SPREAD = 0.2; // mid ± 20%, same relative spread as the document-processing calculator's 40/50/60 band
 const SOURCE = 'cpa-capacity-calculator';
 
 function clamp(v: number, lo: number, hi: number): number {
@@ -71,6 +91,8 @@ export default function CapacityCalculator() {
   const realizationRate = REALIZATION_BASE * clamp(prepHours / REFERENCE_PREP_HOURS, 0.6, 1.4);
   const theoreticalAddedReturns = effectiveHoursFreed / (prepHours * (1 - PREP_REDUCTION));
   const addedReturns = Math.round(theoreticalAddedReturns * realizationRate);
+  const addedReturnsLow = Math.round(addedReturns * (1 - BAND_SPREAD));
+  const addedReturnsHigh = Math.round(addedReturns * (1 + BAND_SPREAD));
   const capacityRevenue = addedReturns * fee;
   const returnsPerPreparer = addedReturns / preparers;
   const isStaffingConstrained = hoursFreed > capacityHoursCap;
@@ -145,7 +167,8 @@ export default function CapacityCalculator() {
           <div className={styles.subResult}>
             <p className={styles.subValue}>+{addedReturns.toLocaleString('en-US')}</p>
             <p className={styles.subLabel}>
-              returns added at a conservative {Math.round(realizationRate * 100)}% realization rate — the engine&rsquo;s benchmark is 3×
+              returns added ({addedReturnsLow.toLocaleString('en-US')}–{addedReturnsHigh.toLocaleString('en-US')} band)
+              at a conservative {Math.round(realizationRate * 100)}% realization rate — the engine&rsquo;s benchmark is 3×
             </p>
           </div>
         </div>
@@ -173,10 +196,17 @@ export default function CapacityCalculator() {
             <span className={styles.taskAfter}>{reviewHours} h today → ~{reviewMinutesAfter} min per return</span>
           </div>
         </div>
-        <p className={styles.reviewCallout}>
-          Review time alone: {reviewHours}h drops to ~{reviewMinutesAfter} min per return — roughly{' '}
-          {Math.round(reviewHoursSavedSeason).toLocaleString('en-US')}h saved across the season, on top of the capacity
-          number above, not counted inside it.
+
+        <HeroBar
+          label="CPA review time, per return"
+          beforeValue={reviewHours}
+          beforeLabel={`${reviewHours} h`}
+          afterValue={REVIEW_HOURS_AFTER}
+          afterLabel={`~${reviewMinutesAfter} min`}
+        />
+        <p className={styles.assumption}>
+          Review alone: roughly {Math.round(reviewHoursSavedSeason).toLocaleString('en-US')}h saved across the season —
+          on top of the capacity number above, not counted inside it.
         </p>
 
         {isStaffingConstrained && (
@@ -192,6 +222,14 @@ export default function CapacityCalculator() {
           Methodology below — your firm&rsquo;s real number depends on return mix, and the audit maps it.
         </p>
       </div>
+
+      <ComparisonPanel
+        title="How a return moves through the engine, start to sign-off"
+        beforeSteps={COMPARE_BEFORE}
+        afterSteps={COMPARE_AFTER}
+        outcome={COMPARE_OUTCOME}
+        source="Synthesized from the CPA & Tax Engine's published six-stage pipeline."
+      />
 
       <LeadBox
         source={SOURCE}

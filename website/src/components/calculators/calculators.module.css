@@ -102,6 +102,51 @@
   background: rgba(255, 255, 255, 0.04); border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
+/* ---- Comparison panel (Before / After a named workflow) ------------------ */
+.compareWrap {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border-dark);
+  padding-top: var(--spacing-sm);
+  display: grid;
+  gap: var(--spacing-sm);
+}
+.compareTitle { font-size: 0.92rem; color: var(--text-dark); font-family: var(--font-display); }
+.compareGrid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); }
+.compareCol {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+}
+.compareHead {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.5rem;
+}
+.compareHead[data-kind='before'] { color: var(--color-alert); }
+.compareHead[data-kind='after'] { color: var(--brand-green); }
+.compareSteps {
+  display: grid; gap: 0.4rem; padding-left: 1.1rem;
+  font-size: 0.82rem; color: var(--text-muted-dark); line-height: var(--leading-snug);
+}
+.compareSteps li::marker { color: var(--text-muted-dark); }
+.compareOutcome {
+  font-size: 0.85rem; color: var(--text-dark); line-height: var(--leading-snug);
+  padding: 0.75rem 1rem; border-left: 2px solid var(--brand-green);
+  background: rgba(255, 255, 255, 0.04); border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.compareSource { font-size: 0.72rem; color: var(--text-muted-dark); }
+
+/* ---- Hero comparison bar (one dramatic, real, absolute number) ----------- */
+.heroBar { display: grid; gap: 0.5rem; }
+.heroBarLabel { font-size: 0.85rem; color: var(--text-dark); font-weight: 500; }
+.heroBarRow { display: grid; grid-template-columns: 6.5rem 1fr auto; align-items: center; gap: 0.6rem; }
+.heroBarTag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted-dark); }
+.heroBarTrack { height: 7px; border-radius: var(--radius-pill); background: var(--border-dark); overflow: hidden; }
+.heroBarFill { display: block; height: 100%; border-radius: var(--radius-pill); transition: width 0.5s ease; }
+.heroBarFill[data-kind='before'] { background: var(--color-alert); }
+.heroBarFill[data-kind='after'] { background: linear-gradient(90deg, var(--brand-green), var(--brand-green-hover)); }
+.heroBarValue { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dark); white-space: nowrap; text-align: right; min-width: 3.5rem; }
+
 /* ---- Lead capture ------------------------------------------------------- */
 .leadBox {
   grid-column: 1 / -1;
@@ -145,6 +190,26 @@
   max-width: 70ch;
   overflow-x: auto;
 }
+.methodSubhead { font-size: var(--step-1); font-family: var(--font-display); color: var(--text-light); margin-top: var(--spacing-md); }
+.howToList { counter-reset: howto; list-style: none; margin-top: var(--spacing-sm); display: grid; gap: 0.75rem; padding: 0; max-width: 70ch; }
+.howToItem { counter-increment: howto; display: flex; gap: 0.75rem; align-items: baseline; color: var(--text-light); line-height: var(--leading-normal); }
+.howToItem::before {
+  content: counter(howto); font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-on-surface);
+  border: 1px solid var(--border-light); border-radius: var(--radius-pill);
+  width: 1.6rem; height: 1.6rem; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.caveatBox {
+  margin-top: var(--spacing-sm); padding: 1rem 1.25rem; background: var(--bg-sunken);
+  border: 1px solid var(--border-light); border-radius: var(--radius-md); max-width: 70ch;
+}
+.caveatLabel {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--color-alert); display: block; margin-bottom: 0.4rem;
+}
+.caveatBox p { color: var(--text-light); line-height: var(--leading-normal); margin: 0; }
+
 .fixGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-top: var(--spacing-md); }
 .fixCard {
   display: block;
@@ -179,6 +244,8 @@
 }
 @media (max-width: 620px) {
   .subResults { grid-template-columns: 1fr; }
+  .compareGrid { grid-template-columns: 1fr; }
+  .heroBarRow { grid-template-columns: 5rem 1fr auto; }
   .leadForm { flex-direction: column; }
   .leadBtn { width: 100%; }
 }

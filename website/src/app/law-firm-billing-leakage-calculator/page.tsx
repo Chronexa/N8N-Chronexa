@@ -123,6 +123,25 @@ recoverable = leakage × 50%    (conservative capture)`}
             about time that never reaches a bill — pre-bill write-downs and slow collections are real, separate drains
             on realized revenue that this calculator does not attempt to model.
           </p>
+
+          <h3 className={styles.methodSubhead}>How to use this calculator</h3>
+          <ol className={styles.howToList}>
+            <li className={styles.howToItem}>Enter your fee-earning lawyer count — partners, associates and any billing staff.</li>
+            <li className={styles.howToItem}>Enter your blended billable rate across that group, not just partner rate.</li>
+            <li className={styles.howToItem}>Enter typical billable hours per lawyer per day — most firms land between 5 and 7.</li>
+            <li className={styles.howToItem}>Read the leak and recoverable figures, and the before/after below for how automated time capture changes it.</li>
+          </ol>
+
+          <div className={styles.caveatBox}>
+            <span className={styles.caveatLabel}>When this doesn&rsquo;t fully apply</span>
+            <p>
+              This model is built for hourly billing, where leakage converts directly into lost revenue. On fixed-fee
+              or contingency work, the same failure shows up differently — as unmeasured effort and margin erosion
+              you can&rsquo;t see in a billing report. If your firm mixes both, apply the calculator only to the
+              hourly share of your practice; the fixed-fee share needs a different diagnostic; ask us and we&rsquo;ll
+              point you to it.
+            </p>
+          </div>
         </div>
       </section>
 

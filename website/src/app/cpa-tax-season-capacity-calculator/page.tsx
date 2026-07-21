@@ -131,6 +131,25 @@ review hours saved = returns × (your review hours/return − 20 min)   (added o
             Review is the fifth stage and the most concrete one: a side-by-side dashboard that takes review from
             hours to minutes per return, shown separately so it&rsquo;s never double-counted into the capacity number.
           </p>
+
+          <h3 className={styles.methodSubhead}>How to use this calculator</h3>
+          <ol className={styles.howToList}>
+            <li className={styles.howToItem}>Enter your preparer headcount and returns filed per season.</li>
+            <li className={styles.howToItem}>Enter your average prep hours per return — intake through population, before review.</li>
+            <li className={styles.howToItem}>Enter your average review hours per return today, and your average fee.</li>
+            <li className={styles.howToItem}>Read the capacity number, the review-time bar, and the before/after below for what actually changes.</li>
+          </ol>
+
+          <div className={styles.caveatBox}>
+            <span className={styles.caveatLabel}>When this doesn&rsquo;t fully apply</span>
+            <p>
+              This model is built around individual and small-business return volume, where documents follow
+              recognizable patterns — W-2s, 1099s, K-1s, brokerage statements. Firms whose practice is mostly complex
+              trusts, estates or first-year business returns — where judgment, not data entry, dominates the time —
+              will see a smaller version of this gain. Firms already running a lean, largely paperless process today
+              have less headroom left to compress.
+            </p>
+          </div>
         </div>
       </section>
 
