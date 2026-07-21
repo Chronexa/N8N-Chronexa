@@ -14,7 +14,7 @@ import styles from '../ai-engines.module.css';
 const URL = `${site.url}/ai-engines/sales-engine`;
 const TITLE = 'AI Sales Engine — Automated Outbound, Lead Research & Sequences | Chronexa';
 const DESCRIPTION =
-  'The AI Sales Engine is a team of AI agents that runs your outbound end-to-end: it sources buyers, researches and qualifies each account, writes personalised email sequences, and sends them through your stack — with one-click human approval. Live in 2–4 weeks.';
+  'The AI Sales Engine runs the top of your outbound: it sources buyers, researches and qualifies each account, and drafts personalised sequences that send through your own stack — with a human approving every send. Dedicated sending domains, SPF/DKIM/DMARC and CRM suppression are set up first, so volume never costs you your inbox placement. Live in 2–4 weeks.';
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -139,11 +139,11 @@ export default function Page() {
               {/* Testimonials */}
               <section className={styles.bodySection} id="testimonials">
                 <p className="eyebrow">Proof</p>
-                <h2 className={styles.bodyTitle}>What teams say</h2>
+                <h2 className={styles.bodyTitle}>How we prove it — before you commit</h2>
                 <div className={styles.tGrid}>
                   {SALES_TESTIMONIALS.map((t) => (
                     <figure key={t.name} className={styles.tCard}>
-                      <blockquote className={styles.tQuote}>“{t.quote}”</blockquote>
+                      <blockquote className={styles.tQuote}>{t.quote}</blockquote>
                       <figcaption className={styles.tWho}>
                         <span className={styles.tName}>{t.name}</span>
                         <span className={styles.tMeta}>{t.role} · {t.company}</span>

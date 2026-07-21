@@ -91,7 +91,7 @@ const MATTERS: { text: string; amber: boolean }[] = [
 
 // 2 · WORK · Window A — precedents (the firm's own memory surfaced)
 const PRECEDENTS: { title: string; sub: string; own: boolean }[] = [
-  { title: 'SEC v. Salman (2016)', sub: 'tipper-tippee liability', own: false },
+  { title: 'Salman v. United States (2016)', sub: 'tipper-tippee liability', own: false },
   { title: 'Your own 2022 10b5-1 guidance memo', sub: 'surfaced from the archive', own: true },
   { title: 'Prior matter #3841', sub: 'same client, same issue (2023)', own: false },
 ];

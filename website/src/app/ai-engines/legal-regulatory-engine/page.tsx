@@ -17,7 +17,7 @@ import styles from '../ai-engines.module.css';
 const URL = `${site.url}/ai-engines/legal-regulatory-engine`;
 const TITLE = 'AI Workflow Orchestration for Law Firms — Legal & Regulatory Engine | Chronexa';
 const DESCRIPTION =
-  'Your firm already has AI — the engine connects it to daily work. Regulatory changes matched to live matters in 15 minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.';
+  'Your firm already has AI — the engine connects it to daily work. Regulatory changes matched to live matters the day they publish, AI-tool time captured into billing as it happens, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review. Privileged content stays in your tenant, never goes to public AI, and every citation links back to the source document.';
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -45,7 +45,7 @@ const jsonLd = {
     {
       '@type': 'Service',
       name: 'AI Legal & Regulatory Engine',
-      serviceType: 'AI regulatory monitoring and legal matter analysis',
+      serviceType: 'AI regulatory monitoring, legal workflow orchestration and matter analysis',
       provider: { '@type': 'Organization', name: site.name, url: site.url },
       description: DESCRIPTION,
       url: URL,
@@ -204,11 +204,11 @@ export default function Page() {
               {/* Testimonials */}
               <section className={styles.bodySection} id="testimonials">
                 <p className="eyebrow">Proof</p>
-                <h2 className={styles.bodyTitle}>What legal teams say</h2>
+                <h2 className={styles.bodyTitle}>How we prove it — before you commit</h2>
                 <div className={styles.tGrid}>
                   {LEGAL_REG_TESTIMONIALS.map((t) => (
                     <figure key={t.name} className={styles.tCard}>
-                      <blockquote className={styles.tQuote}>&ldquo;{t.quote}&rdquo;</blockquote>
+                      <blockquote className={styles.tQuote}>{t.quote}</blockquote>
                       <figcaption className={styles.tWho}>
                         <span className={styles.tName}>{t.name}</span>
                         <span className={styles.tMeta}>{t.role} · {t.company}</span>

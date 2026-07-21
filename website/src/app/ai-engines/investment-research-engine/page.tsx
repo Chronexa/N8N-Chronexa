@@ -13,17 +13,17 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/investment-research-engine`;
-const TITLE = 'AI Investment Research Engine — Portfolio Signals, Execution & Monitoring | Chronexa';
+const TITLE = 'AI Investment Research & Portfolio Operations — Human-Approved, Audit-Logged | Chronexa';
 const DESCRIPTION =
-  'Chronexa\'s AI Investment Research Engine connects to every brokerage via Plaid and Yodlee, scans news and earnings signals, runs XGBoost and LSTM models to surface exact entry and exit points, and presents human-approved orders to your broker — while monitoring risk metrics in real time.';
+  'Chronexa\'s Investment Research Engine unifies your book across every custodian, runs your research and your own models on live data, and turns what the PM approves into logged orders — every trade human-authorised, every position private to you and never sent to public AI. It removes the hours between signal and action; it makes no promise about returns.';
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    'AI investment research', 'portfolio automation AI', 'XGBoost trading signals',
-    'algorithmic portfolio management', 'Plaid portfolio integration', 'AI quant research',
-    'automated portfolio rebalancing', 'investment signal generation', 'RIA automation AI',
+    'investment research automation', 'portfolio operations AI', 'RIA workflow automation',
+    'trade approval audit trail', 'custodian data integration', 'tax-aware rebalancing',
+    'investment compliance automation', 'private AI for investment firms', 'Addepar Orion automation',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website' },
@@ -42,7 +42,7 @@ const jsonLd = {
     {
       '@type': 'Service',
       name: 'AI Investment Research Engine',
-      serviceType: 'AI portfolio research and signal generation',
+      serviceType: 'AI investment research operations and human-approved execution',
       provider: { '@type': 'Organization', name: site.name, url: site.url },
       description: DESCRIPTION,
       url: URL,
@@ -66,7 +66,7 @@ export default function Page() {
 
       {/* 1 — Full-canvas hero */}
       <section className={`section-dark ${styles.canvasHeroSection}`}>
-        <h1 className={styles.srOnly}>Portfolio research, ML signals, and human-approved execution — automated end to end.</h1>
+        <h1 className={styles.srOnly}>Your whole book in one live view — research, your own models, and human-approved, audit-logged execution.</h1>
         <InvestScene />
       </section>
 
@@ -165,11 +165,11 @@ export default function Page() {
               {/* Testimonials */}
               <section className={styles.bodySection} id="testimonials">
                 <p className="eyebrow">Proof</p>
-                <h2 className={styles.bodyTitle}>What investment teams say</h2>
+                <h2 className={styles.bodyTitle}>How we prove it — before you commit</h2>
                 <div className={styles.tGrid}>
                   {INV_RESEARCH_TESTIMONIALS.map((t) => (
                     <figure key={t.name} className={styles.tCard}>
-                      <blockquote className={styles.tQuote}>&ldquo;{t.quote}&rdquo;</blockquote>
+                      <blockquote className={styles.tQuote}>{t.quote}</blockquote>
                       <figcaption className={styles.tWho}>
                         <span className={styles.tName}>{t.name}</span>
                         <span className={styles.tMeta}>{t.role} · {t.company}</span>

@@ -13,16 +13,16 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/customer-support-engine`;
-const TITLE = 'AI Customer Support Engine — Multi-Agent CS, Voice & HITL | Chronexa';
+const TITLE = 'AI Customer Support Engine — Resolves Tickets, Escalates With Context | Chronexa';
 const DESCRIPTION =
-  'Chronexa\'s Customer Support Engine indexes your entire knowledge base, classifies every incoming query in under a second, routes it to the right specialist agent — technical, billing, debug, or feature — and escalates to a human with full context when needed. Voice and text, all channels.';
+  'Chronexa\'s Customer Support Engine answers email, chat and voice from your own knowledge base and live system data, takes real actions like applying a credit, and escalates to a human with full context when it is not confident. Answers are grounded and source-attached, it writes in your brand voice, and a customer can always reach a person.';
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    'AI customer support automation', 'multi-agent customer service AI', 'AI help desk automation',
-    'voice agent customer support', 'HITL customer support AI', 'AI ticket routing',
+    'AI customer support automation', 'ticket deflection vs resolution', 'AI help desk automation',
+    'voice agent customer support', 'human escalation support AI', 'AI ticket routing',
     'automated customer service', 'AI support knowledge base', 'customer support AI software',
   ],
   alternates: { canonical: URL },
@@ -165,11 +165,11 @@ export default function Page() {
               {/* Testimonials */}
               <section className={styles.bodySection} id="testimonials">
                 <p className="eyebrow">Proof</p>
-                <h2 className={styles.bodyTitle}>What support teams say</h2>
+                <h2 className={styles.bodyTitle}>How we prove it — before you commit</h2>
                 <div className={styles.tGrid}>
                   {CS_TESTIMONIALS.map((t) => (
                     <figure key={t.name} className={styles.tCard}>
-                      <blockquote className={styles.tQuote}>&ldquo;{t.quote}&rdquo;</blockquote>
+                      <blockquote className={styles.tQuote}>{t.quote}</blockquote>
                       <figcaption className={styles.tWho}>
                         <span className={styles.tName}>{t.name}</span>
                         <span className={styles.tMeta}>{t.role} · {t.company}</span>

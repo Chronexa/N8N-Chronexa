@@ -49,7 +49,7 @@ export const SALES_ENGINE: EngineDef = {
   status: 'live',
   icon: 'send',
   promise:
-    'Finds the right buyers, researches and qualifies each one, writes the outreach, and runs multichannel sequences — every day, on autopilot.',
+    'Finds the right buyers, researches and qualifies each one, and drafts the outreach with a real reason attached — every day, behind proper domain setup and CRM suppression, with a human approving every send.',
   nodes: [
     {
       id: 'capture', tag: 'Source', label: 'Capture Leads', icon: 'database',
@@ -121,7 +121,9 @@ export const SALES_FAQS: { q: string; a: string }[] = [
   { q: 'Do I have to switch my email tool or CRM?', a: 'No. The engine is tool-agnostic. It connects to the lead sources, email platform and CRM you already use — the tools shown are examples; we wire it to yours.' },
   { q: 'How is this different from Apollo, Clay or Instantly on their own?', a: 'Those are pieces of the puzzle — a data source, an enrichment tool, a sender. The engine connects them and adds the research, qualification, writing and approval layer in between, so the whole thing runs end-to-end instead of you stitching steps together by hand.' },
   { q: 'Can I keep control of what gets sent?', a: 'Yes — that’s the point of the approval step. Nothing leaves until a human approves it. You can review everything, sample-check, or auto-approve trusted segments — your call.' },
-  { q: 'How many emails a day can it send safely?', a: 'It scales to your domains and sending limits. We set safe daily volumes and warm-up so your deliverability stays healthy — quality outreach, not blast.' },
+  { q: 'How do you protect our domain and inbox placement?', a: 'This is the part most outbound programmes get wrong, so we treat it as setup, not an afterthought. We send from dedicated domains — never your primary corporate domain — with SPF, DKIM and DMARC properly aligned, mailboxes warmed gradually, and every list verified to keep bounces and spam traps out. Volume ramps only as far as placement, bounce and complaint data support, inside per-domain and per-mailbox limits, and we hold to the bulk-sender requirements Google and Yahoo enforce (authentication, easy one-click unsubscribe, and complaint rates kept under their threshold). If the data says slow down, we slow down — the domain matters more than the target.' },
+  { q: 'Will it email people we are already talking to?', a: 'No — the engine checks every account against your CRM before contact and suppresses open opportunities, current customers, recently-closed-lost accounts, and anyone already sitting in another rep’s sequence. Emailing a live deal or an existing client is the fastest way to lose trust in a system like this, so suppression is wired in at the start, not bolted on.' },
+  { q: 'What happens when someone replies?', a: 'Replies go to your team, in your inbox — the engine does not hold sales conversations. It routes the reply to the right rep with the research and the thread attached, and handles the mechanical cases automatically: out-of-office detection and re-queueing, unsubscribe and opt-out honoured immediately, and bounced addresses removed from the list. A human takes every real conversation from the first reply onward.' },
 ];
 
 /** The roadmap shown on the hub. Sales links to its page; the rest are honest
@@ -137,11 +139,11 @@ export interface RoadmapItem {
 
 export const ENGINE_ROADMAP: RoadmapItem[] = [
   { name: 'Sales Engine', kicker: 'Outbound & pipeline', status: 'live', icon: 'send', promise: SALES_ENGINE.promise, href: '/ai-engines/sales-engine' },
-  { name: 'CPA & Tax Engine', kicker: 'Tax compliance & filing', status: 'live', icon: 'doc', promise: 'Ingests every client document, extracts all fields including K-1s and brokerage composites, pre-fills the return in your tax software, and routes a reviewer-ready file — with flagged items — to your CPA.', href: '/ai-engines/cpa-tax-engine' },
-  { name: 'Investment Research Engine', kicker: 'Capital markets & portfolio AI', status: 'live', icon: 'chart', promise: 'Connects to every brokerage via Plaid and Yodlee, scans news and earnings signals, runs XGBoost and LSTM models to surface exact entry and exit points, and presents human-approved orders to your broker — while monitoring risk in real time.', href: '/ai-engines/investment-research-engine' },
+  { name: 'CPA & Tax Engine', kicker: 'Tax compliance & filing', status: 'live', icon: 'doc', promise: 'Ingests every client document, extracts the fields — including the K-1s and brokerage composites other tools leave manual — pre-fills the return in your tax software, and routes a reviewer-ready file to your CPA with every uncertain item flagged rather than guessed.', href: '/ai-engines/cpa-tax-engine' },
+  { name: 'Investment Research Engine', kicker: 'Portfolio research & execution, operated', status: 'live', icon: 'chart', promise: 'Unifies your book across every custodian into one live view, runs your research and your own models on live data, and turns what the PM approves into logged orders — every trade human-authorised, every position private to you. It makes no promise about returns.', href: '/ai-engines/investment-research-engine' },
   { name: 'Document Intelligence Engine', kicker: 'Any document → a cited answer', status: 'live', icon: 'layers', promise: 'Reads every document your business runs on — leases, loan files, tax returns, audit and compliance files — across legal, finance, compliance and tax, then lets anyone ask a plain-language question and get an answer cited to the exact page, grounded only in your own documents. Nothing is sent to public AI.', href: '/ai-engines/document-intelligence-engine' },
-  { name: 'Legal & Regulatory Engine', kicker: 'Alerts, billing, knowledge & diligence', status: 'live', icon: 'shield', promise: 'Closes the four operational gaps in a modern firm: regulatory changes matched to live matters in minutes, AI-tool time captured into billing automatically, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review.', href: '/ai-engines/legal-regulatory-engine' },
-  { name: 'Customer Support Engine', kicker: 'Omnichannel CS · voice + text', status: 'live', icon: 'inbox', promise: 'Indexes your entire knowledge base, classifies every incoming query in under a second, routes it to the right specialist agent — technical, billing, debug, or feature — and escalates to a human with full context when needed. Voice and text, all channels.', href: '/ai-engines/customer-support-engine' },
+  { name: 'Legal & Regulatory Engine', kicker: 'Alerts, billing, knowledge & diligence', status: 'live', icon: 'shield', promise: 'Closes the four operational gaps in a modern firm: regulatory changes matched to live matters the day they publish, AI-tool time captured into billing as it happens, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed review — privileged content staying in your tenant, every citation linked to its source.', href: '/ai-engines/legal-regulatory-engine' },
+  { name: 'Customer Support Engine', kicker: 'Omnichannel CS · voice + text', status: 'live', icon: 'inbox', promise: 'Answers email, chat and voice from your own knowledge base and live system data, takes real actions like applying a credit, and escalates to a human with full context when it is not confident. Answers are grounded and source-attached, it writes in your brand voice, and a customer can always reach a person.', href: '/ai-engines/customer-support-engine' },
 ];
 
 /** Universal stages every engine shares — the "how an AI engine works" explainer. */
@@ -171,7 +173,7 @@ export const CPA_TAX_ENGINE: EngineDef = {
   status: 'live',
   icon: 'doc',
   promise:
-    'Ingests every client document, extracts all fields including K-1s and non-standard brokerage composites, pre-fills the return in your tax software, and routes a reviewer-ready file — with flagged items — to your CPA.',
+    'Ingests every client document, extracts the fields — including the K-1s and non-standard brokerage composites other tools leave manual — pre-fills the return in your tax software, and routes a reviewer-ready file to your CPA with every uncertain item flagged rather than guessed.',
   nodes: [
     {
       id: 'intake', tag: 'Intake', label: 'Document Intake', icon: 'inbox',
@@ -225,7 +227,7 @@ export const CPA_TAX_ENGINE: EngineDef = {
       caption: 'CPA approves — filed via IRS MeF.',
       activity: 'Reviewer sign-off complete · return filed via IRS MeF',
       detail: 'The preparer sees a review dashboard: source document and extracted value side by side, every flagged item with context, and a single-click approval flow. Nothing is filed until the CPA approves. After approval the return moves to e-signature and IRS MeF submission through the firm\'s existing tax software — nothing bypasses your compliance chain.',
-      gives: 'A CPA review that takes 15–25 minutes instead of 3–4 hours, because every repetitive decision has already been resolved.',
+      gives: 'A review that starts on the judgement calls instead of the data entry — the repetitive work already resolved, the uncertain items already flagged.',
     },
   ],
 };
@@ -254,7 +256,7 @@ export const CPA_TAX_OUTPUTS: Record<string, string[]> = {
     '✓ W-2 Box 1: $287,400 — PDF text match',
     '✓ 1099-B: $1.2M gross proceeds — 127 lots',
     '✓ K-1 Box 2 rental income: $31,400 — Stonegate',
-    '⚠ K-1 Box 20 Code AH — unrecognised entry',
+    '⚠ K-1 Box 20 §199A (Code Z) — statement attached, flagged',
     '⚠ 1099-B lot 43: cost basis missing',
     '✓ 124 of 127 lots auto-verified',
   ],
@@ -296,9 +298,9 @@ export const CPA_TAX_PROBLEM: { intro: string; pains: string[]; closing: string 
   intro:
     'Every US CPA firm runs the same gauntlet from January through April 15. The bottleneck is not tax judgement — it\'s the 3–6 hours of data entry, document-chasing, and classification that happen before any judgement begins. That labour is expensive, error-prone, and can\'t be hired away.',
   pains: [
-    '58% of clients submit documents after February 15 — compressing the real work into six weeks (CPA Practice Advisor, n=438, 2026).',
+    'Client documents arrive late — the bulk of them well after mid-February — compressing the real work into the last six weeks of the season.',
     'A complex 1040 with K-1s and brokerage composites requires 3–6 hours of data entry before any tax analysis begins.',
-    '70% of CPAs reported making or catching near-miss errors in the final 48 hours before April 15.',
+    'The final 48 hours before April 15 are when tired staff make the errors the signing CPA is personally liable for.',
     'SurePrep 1040SCAN — the industry\'s leading scan tool — covers ~700 financial institutions. Any other brokerage gets only summary data, not full extraction.',
     'State K-1s receive zero automated data capture in UltraTax CS; they are indexed to the parent Federal K-1 and left blank (Thomson Reuters documentation).',
     '55,152 accounting degrees awarded in 2023–24 — down 6.6% year-over-year. The staffing shortage is structural. The talent pipeline will not recover at the pace firms need (Journal of Accountancy, Oct 2025).',
@@ -332,23 +334,21 @@ export const CPA_TAX_INTEGRATION: {
 
 export const CPA_TAX_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '40%', label: 'average reduction in prep time per return' },
-    { value: '3×', label: 'capacity gain per staff member during busy season' },
-    { value: '94%', label: 'return pre-fill rate on standard individual returns' },
+    { value: 'Pre-filled', label: 'the preparer opens an organised return, not a stack of PDFs' },
+    { value: 'Flagged', label: 'every low-confidence item surfaced — never silently accepted' },
+    { value: 'Parallel run', label: 'validated on 20 of your live returns before you commit' },
     { value: '3–5 wks', label: 'to go live — no multi-month implementation' },
   ],
   narrative:
-    'At an average billing rate of $250–$500 per hour, every hour of prep time eliminated is a direct margin gain — reinvested in advisory work or dropped to the bottom line. For a 10-person firm filing 600 returns per season, a 30% throughput gain means roughly 180 additional returns without a new hire. At the industry\'s average $700 per return, that is $126,000 in added capacity revenue per season from the same team. The 40% and 3× figures are benchmarks from Filed, a comparable automation platform. Chronexa provides a parallel-run on 20 live returns before full deployment — you validate results before committing.',
+    'The economics are easy to reason about and easy for you to verify. At a $250–$500 blended billing rate, every hour of prep time removed is margin you either reinvest in advisory work or keep. We are deliberately not printing a percentage here: the comparable figures in this market come from other vendors’ deployments rather than ours, and your own mix of 1040s, partnership returns and brokerage composites will drive the result far more than any benchmark. So we run a parallel test on 20 of your live returns before full deployment — engine and preparer working the same files side by side — and you get your own throughput number to decide on. The signing CPA still reviews and signs every return.',
 };
 
-/**
- * PLACEHOLDER testimonials — must be replaced with real attributable quotes
- * before this page goes to production.
- */
+/** Honest proof panel — a "how we prove it" parallel run, NOT client quotes.
+ *  Replace with real attributable client quotes once available. */
 export const CPA_TAX_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We were burning 3–4 hours per complex return on data entry alone. Now the preparer opens a pre-filled file with flagged items already organised. The first tax season running the engine, we processed 22% more returns with the same staff.', name: 'James Holbrook', role: 'Managing Partner', company: 'Holbrook & Associates CPA' },
-  { quote: 'The K-1 extraction alone justified the investment. Every other tool we tested couldn\'t touch state K-1s — they were entirely manual. The engine handles our partnership clients end-to-end.', name: 'Priya Nair', role: 'Tax Manager', company: 'Sterling Ridge Tax Group' },
-  { quote: 'We had a data scare three years ago and have been paranoid about client data security since. The WISP documentation and US-hosted architecture weren\'t just checkbox items — they were a genuine selling point when I took it to the partners.', name: 'David Schreiber', role: 'Firm Administrator', company: 'Schreiber Financial Group' },
+  { quote: 'We run a parallel test on 20 of your live returns — the engine and your preparer work the same files side by side, and you compare the output line by line before anything changes in your workflow.', name: 'Parallel run on 20 live returns', role: 'before full deployment', company: 'your returns, your comparison' },
+  { quote: 'That test gives you your own throughput number — how much prep time actually came out of your mix of 1040s, K-1s and brokerage composites — instead of a percentage borrowed from another firm’s deployment.', name: 'Your throughput, measured', role: 'your mix, not a benchmark', company: 'no borrowed statistics' },
+  { quote: 'Before any client data moves we walk your partners through the §7216 consent position, the US-hosted architecture, the WISP documentation and the retention policy — the review your firm has to pass anyway.', name: 'Your security review first', role: '§7216 · US-hosted · WISP', company: 'reviewed before data moves' },
 ];
 
 export const CPA_TAX_FAQS: { q: string; a: string }[] = [
@@ -357,6 +357,7 @@ export const CPA_TAX_FAQS: { q: string; a: string }[] = [
   { q: 'What happens with K-1s from late-filing partnerships?', a: 'The Gap Detection agent identifies missing K-1s based on prior-year return data and sends targeted reminders to the client. When the K-1 arrives — in September after an extension — it is processed automatically and the return is updated. The preparer is notified. No manual tracking required.' },
   { q: 'Is sending client tax data to a third-party AI tool legal under IRC §7216?', a: 'Yes — with conditions. IRC §7216 and 26 CFR §301.7216-2 permit disclosure of tax return information to third-party service providers without taxpayer consent, as long as the purpose is tax return preparation. The engine is deployed on US-hosted infrastructure, which avoids the separate written-consent requirement that applies to processors located outside the United States. Chronexa provides a standard service agreement that satisfies the §7216 service-provider conditions.' },
   { q: 'We already use SurePrep 1040SCAN — what does the engine add?', a: '1040SCAN is strong for W-2s and brokerage statements from its ~700-institution coverage list. But it explicitly does not capture state K-1 data, and any brokerage not on the list gets only summary amounts — not line-item detail. Crypto CSVs, multi-state allocations, Schedule E worksheets, and non-standard documents remain largely manual. The engine handles the edge cases that represent the majority of your most expensive prep hours — the complex clients who, incidentally, also pay the highest fees.' },
+  { q: 'Is our client data used to train AI models? What about retention and SOC 2?', a: 'No client data is ever used to train models — not ours, and not any provider\'s. Returns and source documents are processed inside US-hosted infrastructure dedicated to your firm, never on shared infrastructure, and are retained only for the period your engagement letter and record-retention policy specify, then deleted on that schedule. We support your firm\'s security review with the WISP documentation, the §7216 service-provider agreement, and our current security posture and audit status — ask us directly and we will tell you exactly where we stand rather than point at a badge.' },
 ];
 
 export const CPA_TAX_NUDGE = {
@@ -382,19 +383,21 @@ export const SALES_OUTPUTS: Record<string, string[]> = {
 };
 
 export const SALES_WHATIS: string[] = [
-  'The Sales Engine is an AI sales automation system — a coordinated team of AI agents that runs your entire outbound motion end to end. Instead of buying another point tool or hiring another SDR, you get a system that sources prospects, researches every account, qualifies for fit, writes personalised sequences, and sends them through your existing stack — continuously, and under your control.',
-  'It is not a chatbot and not a single “AI SDR” gimmick. It is production-grade revenue infrastructure: specialised agents, a human-approval gate, and full visibility — built to fill pipeline predictably while your team stays focused on closing.',
+  'The Sales Engine runs the top of your outbound motion — sourcing, research, qualification, writing and sending — through the stack you already pay for. It finds accounts that match your ICP, researches each one for a real reason to reach out, drafts the sequence, and holds it for your approval before anything sends. Replies come back to your team, in your inbox, where a human takes over.',
+  'Be precise about the boundary, because “end to end” is usually oversold. The engine does the research-and-drafting work that eats your reps’ week, and a person approves every send. It does not close deals, it does not handle objections, and it does not pretend a bot can hold a sales conversation. Your reps get their selling time back — this is not a replacement for them.',
+  'Two things we treat as non-negotiable, because they are what actually kill outbound programmes: your domain reputation and your CRM. Volume only ramps behind dedicated sending domains, aligned SPF, DKIM and DMARC, mailbox warm-up and list verification — and every account is checked against your CRM before contact, so the engine never emails an open opportunity, a current customer, or someone already sitting in another rep’s sequence.',
 ];
 
 export const SALES_HOWITWORKS_INTRO =
-  'Six specialised agents work in sequence, each handing structured data to the next — the same way your best SDR would work an account, but at scale and without the manual lift. Here is exactly what happens, and what you get from each step.';
+  'Six specialised steps work in sequence, each handing structured data to the next — the way your best SDR would work an account, but at scale and without the manual lift. A person approves before anything reaches a prospect. Here is exactly what happens at each step, and what you get from it.';
 
 export const SALES_PROBLEM: { intro: string; pains: string[]; closing: string } = {
   intro: 'If you sell B2B, you already know outbound works — when it is done well. The problem is that doing it well does not scale with headcount.',
   pains: [
-    'Reps lose 60–70% of their week to list-building, research and admin instead of selling.',
-    'Generic, un-researched blasts burn your domain reputation and your brand.',
+    'Reps spend more of the week on list-building, research and admin than on actually selling — we measure the real split from your own CRM activity during the pilot.',
+    'Generic, un-researched blasts burn your domain reputation and your brand — and once inbox placement drops, it takes weeks to earn back.',
     'Pipeline is feast-or-famine — volume depends on who felt motivated to prospect this week.',
+    'Nobody checks the list against the CRM, so prospecting emails land on open opportunities, current customers, and people already in another rep’s sequence.',
     'Every new tool adds another silo your team has to stitch together by hand.',
   ],
   closing: 'The Sales Engine removes the manual layer between your tools, so the work happens on its own — researched, personalised, and approved by you before anything sends.',
@@ -408,45 +411,44 @@ export const SALES_INTEGRATION: {
 } = {
   timeline: 'Most teams are live in 2–4 weeks — not months.',
   phases: [
-    { phase: 'Scope & success metrics', time: 'Week 1', detail: 'We map your ICP, your messaging and the single outcome we will measure.' },
-    { phase: 'Connect your stack', time: 'Week 1–2', detail: 'We wire the engine to your lead sources, email platform and CRM.' },
-    { phase: 'Pilot & tune', time: 'Week 2–3', detail: 'A controlled run with your approval on every send while we tune fit and copy.' },
-    { phase: 'Scale safely', time: 'Week 3–4', detail: 'Ramp volume with deliverability guardrails. You own the system end to end.' },
+    { phase: 'Scope & success metrics', time: 'Week 1', detail: 'We map your ICP, your messaging, and the one outcome we will measure — booked meetings, not activity.' },
+    { phase: 'Connect your stack & set up sending', time: 'Week 1–2', detail: 'We wire the engine to your lead sources, sending platform and CRM — and set sending up properly: dedicated sending domains, SPF, DKIM and DMARC aligned, mailbox warm-up started, and list verification in the pipeline.' },
+    { phase: 'Pilot & tune', time: 'Week 2–3', detail: 'A controlled run at low volume with your approval on every send, while we tune fit and copy — watching inbox placement, bounce and spam-complaint rates before touching volume.' },
+    { phase: 'Scale safely', time: 'Week 3–4', detail: 'Ramp only as far as placement and reply data support, inside per-domain and per-mailbox limits. You own the system end to end.' },
   ],
   prerequisites: [
     'A defined ICP — a clear picture of who your best customers are.',
     'Access to at least one lead source (Apollo, Clay, ZoomInfo, or a list).',
-    'An email sending platform and domain(s) for outreach.',
+    'A sending platform and domain(s) — we set up dedicated sending domains and authentication if you do not have them.',
+    'CRM access, so the engine can suppress open opportunities, current customers and active sequences.',
     'A few examples of messaging that already sounds like you.',
   ],
-  note: 'No engineering team required on your side. We build, test and hand it over with documentation and support.',
+  note: 'No engineering team required on your side. We build, test and hand it over with documentation and support — and we will not ramp volume past what your domain reputation safely supports, whatever the target.',
 };
 
 export const SALES_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '10+ hrs', label: 'saved per rep, every week' },
-    { value: '3–5×', label: 'more researched accounts touched' },
+    { value: 'Meetings', label: 'the one number we optimise — not accounts touched' },
+    { value: 'Researched', label: 'every account goes out with a specific reason attached' },
+    { value: 'Every send', label: 'approved by a human before it reaches a prospect' },
     { value: '2–4 wks', label: 'to live, not months' },
-    { value: '100%', label: 'of sends human-approved' },
   ],
   narrative:
-    'The math is simple. When each rep gets back a day or more every week and every prospect is properly researched, the same team books more qualified meetings — without adding headcount or burning the domain. The engine pays for itself in pipeline, then keeps compounding.',
+    'We will not quote you a reply rate. The honest answer is that it depends on your list, your offer and your domain history — and any vendor quoting one before seeing your data is guessing. What we commit to is the measurement: during the pilot we track booked meetings, positive reply rate and cost per meeting against whatever you are doing today, from your own CRM, and you decide from there. The mechanism is not complicated — reps stop losing their week to list-building and research, every account goes out with a specific reason attached, and volume only ramps as far as your deliverability safely allows.',
 };
 
-/**
- * PLACEHOLDER testimonials — fabricated to show the final design and tone.
- * Replace with real, attributable client quotes before this goes to production.
- */
+/** Honest proof panel — a "how we prove it" pilot, NOT customer quotes.
+ *  Replace with real attributable client quotes once available. */
 export const SALES_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We replaced three disconnected tools and half an SDR’s week with one engine. Our reps stopped building lists, and our qualified-meeting rate climbed inside the first month.', name: 'Maya R.', role: 'VP Revenue', company: 'B2B logistics SaaS' },
-  { quote: 'What sold me was control. Nothing goes out without our approval, but we are not lifting a finger to research or write. It feels like we hired a research team that never sleeps.', name: 'Daniel K.', role: 'Founder & CEO', company: 'Series B fintech' },
-  { quote: 'Pipeline used to be feast or famine. Now it is predictable — the same team, far more researched outreach going out every single day.', name: 'Aisha N.', role: 'Head of Sales', company: 'Enterprise data platform' },
+  { quote: 'We run the engine on your real ICP and a slice of your actual list, and you approve every send — so you see the research quality and the copy before a single prospect is contacted at volume.', name: 'Run on your own ICP', role: 'Weeks 2–3 of the pilot', company: 'you approve every send' },
+  { quote: 'We measure booked meetings, positive reply rate and cost per meeting against what you are doing today, from your own CRM — not against a benchmark from somebody else’s campaign.', name: 'Measured in your CRM', role: 'your baseline, your numbers', company: 'meetings, not activity' },
+  { quote: 'Before volume goes anywhere near your main domain we set up dedicated sending domains, align SPF, DKIM and DMARC, warm the mailboxes and verify the list — then watch inbox placement as we ramp.', name: 'Your domain protected first', role: 'authentication · warm-up · verification', company: 'placement watched as we ramp' },
 ];
 
 export const SALES_NUDGE = {
-  title: 'Book your free demo',
-  body: 'See the Sales Engine run on your ICP — and walk away with a build estimate in 30 minutes. No slides, just your pipeline.',
-  cta: 'Book a Free Audit',
+  title: 'See it run on your ICP',
+  body: 'In 30 minutes we run the engine against your real ICP and show you the accounts it finds, the research it attaches and the sequence it drafts — plus exactly how we would protect your domain. No slides.',
+  cta: 'Book a Free Demo',
 };
 
 // ============================================================================
@@ -504,65 +506,65 @@ export const INV_RESEARCH_ENGINE: EngineDef = {
   id: 'investment-research',
   slug: 'investment-research-engine',
   name: 'Investment Research Engine',
-  kicker: 'Capital markets & portfolio AI',
+  kicker: 'Portfolio research & execution, operated',
   status: 'live',
   icon: 'chart',
   promise:
-    'Connects to every brokerage via Plaid and Yodlee, scans news and earnings signals, runs XGBoost and LSTM models to surface exact entry and exit points, and presents human-approved orders to your broker — while monitoring risk metrics in real time.',
+    'Unifies your book across every custodian into one live view, runs your research and your own models on live data automatically, and turns what the PM approves into logged orders — every trade human-authorised, every position private to you. It removes the hours between a signal and an action; it does not make the call, and it makes no promise about returns.',
   nodes: [
     {
-      id: 'ingest', tag: 'Connect', label: 'Data Ingest', icon: 'database',
-      tools: ['Plaid', 'Yodlee', 'IBKR API', 'Schwab API', 'Fidelity API'],
-      stat: '$2.4M AUM synced',
-      caption: 'Syncing live portfolio positions and account data across all connected brokerages.',
-      activity: '3 accounts synced · 47 holdings · latest prices pulled',
-      detail: 'Connects via Plaid and Yodlee to every linked brokerage and bank account. Pulls current holdings, transaction history, cost basis, and real-time balances — no manual export, no CSV upload. The engine always starts with live portfolio state, so every signal and risk metric is calculated against what you actually hold right now.',
-      gives: 'A complete, live picture of the portfolio before any research or analysis begins.',
+      id: 'ingest', tag: 'Connect', label: 'Unify the book', icon: 'database',
+      tools: ['Schwab API', 'Fidelity API', 'IBKR API', 'Addepar', 'Orion'],
+      stat: 'one live view',
+      caption: 'Pulling every account across every custodian into a single live view.',
+      activity: 'All custodians synced · holdings, lots, cost basis and cash in one place',
+      detail: 'Connects directly to your custodians and portfolio systems — Schwab, Fidelity, IBKR, and aggregators like Addepar or Orion — not consumer account-aggregation rails. It pulls holdings, lots and cost basis, and cash across every account into one live view, with no morning export and no CSV. Everything downstream runs against what you actually hold right now.',
+      gives: 'A single live view of the whole book — every account, before any research begins.',
     },
     {
-      id: 'research', tag: 'Research', label: 'Market Research', icon: 'search',
-      tools: ['News APIs', 'SEC EDGAR', 'Earnings transcripts', 'Analyst feeds', 'Sentiment model'],
-      stat: '247 signals scanned',
-      caption: 'Scanning news, earnings, and sentiment signals across every held position.',
-      activity: '247 signals scanned · 14 high-conviction triggers identified',
-      detail: 'A research agent scans news, earnings call transcripts, SEC filings, and analyst commentary across every held position and watchlist ticker. Sentiment is quantified on a rolling basis and signals are calibrated to your specific holdings — not generic market headlines, but events that historically precede price moves in the securities you own.',
-      gives: 'A prioritised signal feed — what matters to your portfolio right now, ranked by conviction.',
+      id: 'research', tag: 'Research', label: 'Systematic research', icon: 'search',
+      tools: ['News APIs', 'SEC EDGAR', 'Earnings transcripts', 'Analyst feeds', 'Your research notes'],
+      stat: 'scanned, ranked, cited',
+      caption: 'Reading news, filings and transcripts across every holding — each item linked to its source.',
+      activity: 'News, 10-Qs and transcripts scanned across every holding · material items flagged with a source link',
+      detail: 'A research agent reads news, earnings-call transcripts, SEC filings and analyst commentary across every holding and watchlist name, and surfaces what is material — each item linked back to the filing or transcript it came from, so the analyst reads the evidence rather than a summary they cannot check. It does the morning read; the analyst forms the view.',
+      gives: 'A prioritised, cited research feed for every position — the reading done, the judgment still yours.',
     },
     {
-      id: 'signal', tag: 'Model', label: 'Signal Generation', icon: 'chart',
-      tools: ['XGBoost', 'LSTM', 'Regression ensemble', 'Kelly criterion', '10-year backtest'],
-      stat: 'Entry signal · 0.89 confidence',
-      caption: 'Running XGBoost and LSTM models to identify entry and exit signals.',
-      activity: 'NVDA: entry signal · XGBoost confidence 0.89 · Kelly fraction 4.2%',
-      detail: 'Gradient boosting (XGBoost) and LSTM neural networks trained on 10 years of price, volume, and sentiment data produce entry and exit signals with a confidence score per signal. The Kelly criterion sizes each position so you are never overexposed. Signals are probabilistic decision inputs, not instructions — every one is human-reviewed before any order is placed.',
-      gives: 'A ranked list of actionable signals — entry price, exit target, position size, confidence score.',
+      id: 'signal', tag: 'Models', label: 'Your models & rules', icon: 'chart',
+      tools: ['Your signal models', 'Rules engine', 'Position-sizing', 'Backtest harness'],
+      stat: 'candidates for review',
+      caption: 'Running the models and rules your team already uses — automatically, on live data.',
+      activity: 'Models run · each candidate shown with the rule that triggered it, sized to your policy',
+      detail: 'The engine runs the models and rules your team already uses — a factor screen, a mean-reversion rule, or your own ML — on live data automatically, instead of only when someone remembers to refresh a spreadsheet. Each candidate is shown with the rule that triggered it and sized to your written limits (fractional Kelly, or your own sizing method). These are decision inputs the PM reviews — never instructions, and never a claim about what a security will do.',
+      gives: 'Your own models, run continuously on live data — each candidate shown with its trigger and sized to your policy.',
     },
     {
-      id: 'execute', tag: 'Execute', label: 'Order Execution', icon: 'send',
-      tools: ['IBKR API', 'Alpaca', 'Schwab API', 'TD Ameritrade', 'Human approval gate'],
-      stat: 'Order queued · human approved',
-      caption: 'Human-approved orders routed to the broker via API.',
-      activity: 'BUY 40 NVDA @ market · $14,800 · queued for approval',
-      detail: 'Every signal generates a draft order — ticker, direction, size, order type. Nothing routes to the broker until a human approves it. Once approved, the order executes via your broker API. Partial fills, rejections, and fill confirmations are logged and fed back into the portfolio state for the monitoring step.',
-      gives: 'Approved orders placed in seconds, with a full audit trail of who approved what and when.',
+      id: 'execute', tag: 'Execute', label: 'Human-approved execution', icon: 'send',
+      tools: ['Broker / OMS API', 'Human approval gate', 'Audit log', 'Fill reconciliation'],
+      stat: 'nothing routes without a yes',
+      caption: 'Only what a named person approves is routed — every action timestamped.',
+      activity: 'Draft orders queued · awaiting PM approval · every approval recorded',
+      detail: 'Every candidate the PM accepts becomes a draft order — ticker, direction, size, order type. Nothing routes to the broker until a named person approves it. Once approved, it executes via your broker or OMS, and fills, partials and rejections are reconciled back to the book. Who approved what, and when, is recorded for every single order.',
+      gives: 'Approved orders placed in seconds — with a complete, timestamped record of who authorised each one.',
     },
     {
-      id: 'monitor', tag: 'Monitor', label: 'Portfolio Monitor', icon: 'layers',
-      tools: ['Real-time P&L', 'Beta tracker', 'Drawdown alert', 'Sharpe calculator', 'Sector exposure'],
-      stat: 'Sharpe (30d): 1.84',
-      caption: 'Monitoring P&L, risk metrics, and drawdown continuously.',
-      activity: 'Beta: 1.12 · Sharpe: 1.84 · Max DD: -3.2% · no alerts triggered',
-      detail: 'Continuous monitoring of portfolio-level risk metrics — beta, Sharpe ratio, max drawdown, sector concentration, and correlation. Threshold breaches trigger immediate alerts. The monitor feeds current portfolio state back into the signal model, so every research cycle starts with live data — not what the portfolio looked like when the market opened.',
-      gives: 'Live risk visibility — you know the portfolio\'s health at every moment, not just when you log in.',
+      id: 'monitor', tag: 'Monitor', label: 'Risk vs your limits', icon: 'layers',
+      tools: ['Live P&L', 'Exposure limits', 'Drawdown alerts', 'Concentration', 'Correlation'],
+      stat: 'watched continuously',
+      caption: 'Exposure, drawdown and concentration checked continuously against your policy.',
+      activity: 'Beta, exposure, drawdown and concentration checked against your written limits · breaches alert immediately',
+      detail: 'Portfolio-level risk — exposure, beta, drawdown, sector concentration, correlation — is watched continuously against the limits written in your investment policy, not spot-checked when someone logs in. A breach triggers an immediate alert, and the current state feeds back into the next research cycle so it always runs on live data.',
+      gives: 'Continuous risk visibility against your own limits — a breach reaches you the moment it happens.',
     },
     {
-      id: 'rebalance', tag: 'Rebalance', label: 'Rebalance & Report', icon: 'spark',
-      tools: ['Drift detection', 'Tax-loss harvesting', 'Rebalance scheduler', 'Client report'],
-      stat: '3 trades to rebalance',
-      caption: 'Drift detected — rebalance plan and tax-loss opportunities identified.',
-      activity: 'Tech sector: 34% → target 28% · 3 sell orders queued · tax-loss: $4,200',
-      detail: 'When sector or position drift exceeds the configured threshold, the rebalance engine calculates the minimum set of trades to restore target allocation. Tax-loss harvesting opportunities are flagged automatically. The rebalance plan is presented for approval — not executed automatically — and the resulting report is formatted for client delivery.',
-      gives: 'A rebalance plan that is tax-aware, minimal in turnover, and client-ready — without a spreadsheet.',
+      id: 'rebalance', tag: 'Rebalance', label: 'Tax-aware rebalance & report', icon: 'spark',
+      tools: ['Drift detection', 'Tax-lot analysis', 'Rebalance scheduler', 'Client report'],
+      stat: 'minimal turnover',
+      caption: 'Drift computed against target — a minimal-turnover, tax-aware plan queued for approval.',
+      activity: 'Drift vs target computed · minimal-turnover trade set and tax-lot opportunities queued for approval',
+      detail: 'When allocation drifts past your threshold, the engine computes the minimum set of trades to return to target and flags tax-lot harvesting opportunities lot by lot, not as a rough estimate. The plan is presented for approval, never executed on its own, and the result is formatted into a client-ready report.',
+      gives: 'A tax-aware, minimal-turnover rebalance plan and a client-ready report — without the spreadsheet.',
     },
   ],
 };
@@ -619,13 +621,13 @@ export const INV_RESEARCH_OUTPUTS: Record<string, string[]> = {
 };
 
 export const INV_RESEARCH_WHATIS: string[] = [
-  'The Investment Research Engine is a multi-agent system that connects directly to your portfolio via Plaid and Yodlee, runs continuous news and sentiment research, generates entry and exit signals using XGBoost and LSTM models, and presents human-approved orders to your broker — all without manual data pulling or spreadsheet work.',
-  'Think of it as a research analyst and risk manager working in parallel, 24 hours a day. It reads the news, models the signal, calculates the position size, and brings you a draft order — while you stay in control of every execution decision. Nothing trades without your approval.',
-  'This matters for compliance: the engine generates signals and draft orders, but every trade requires human sign-off before routing to a broker. Every decision is logged with the timestamp and approver identity — which is what institutional risk and compliance frameworks require, whether you are an SEC-registered RIA or a family office.',
+  'The Investment Research Engine is an operations layer for a research and portfolio team. It pulls your whole book across every custodian into one live view, runs your research and your own models on that live data automatically, and turns what the PM approves into logged orders — every execution human-authorised, every position private to you. It removes the hours between a signal and an action. It does not decide what to buy.',
+  'Be clear on what it is not: it is not an “AI that beats the market,” and it makes no promise about returns. It surfaces candidates and organises the evidence — cited back to the filing, the transcript, or the model rule that triggered — and the portfolio manager exercises discretion on every one. The value is speed and rigour on the operational work, not a claim to alpha. The models it runs are your models; where we name techniques like gradient boosting or fractional-Kelly sizing, those are implementation details, not the pitch.',
+  'That design is what makes it usable at a regulated firm. Every trade is human-authorised before it routes, and who approved what — and when — is logged for your books and records. Your holdings, signals and client data stay inside your own environment and are never sent to a public AI service or used to train anyone’s model — the control an RIA’s compliance function needs before any model touches the book.',
 ];
 
 export const INV_RESEARCH_HOWITWORKS_INTRO =
-  'Six agents work in sequence — data always flows from live sources, never from a cached spreadsheet. Each agent is specialised: the LSTM that models price signals is different from the Kelly calculator that sizes positions. Here is exactly what happens at each step.';
+  'Six steps take the desk from a scattered morning to a decision-ready view — data always from live sources, never a cached spreadsheet. Each step is specialised, and a person stays in control of every trade. Here is exactly what happens, and where the judgment stays yours.';
 
 export const INV_RESEARCH_PROBLEM: { intro: string; pains: string[]; closing: string } = {
   intro:
@@ -650,49 +652,51 @@ export const INV_RESEARCH_INTEGRATION: {
 } = {
   timeline: 'Most teams are live in 2–3 weeks.',
   phases: [
-    { phase: 'Connect data sources', time: 'Week 1', detail: 'Authenticate Plaid and Yodlee to your brokerage accounts. Map holdings and cost basis. Validate data against your own records before any model runs.' },
-    { phase: 'Configure signal model', time: 'Week 1–2', detail: 'Load your watchlist and portfolio. Set risk parameters — sector limits, max position size, drawdown thresholds. Run the first backtest against your actual holdings on 10 years of historical data.' },
-    { phase: 'Approval gate + execution', time: 'Week 2', detail: 'Connect to your broker API. Wire the human approval gate. Run 10 live signals through the approval flow before any live orders are placed.' },
-    { phase: 'Monitor and calibrate', time: 'Week 2–3', detail: 'Run live for two weeks with daily review. Adjust signal thresholds and Kelly fraction based on observed performance before full deployment.' },
+    { phase: 'Connect custodians & systems', time: 'Week 1', detail: 'Authenticate your custodians and portfolio systems — Schwab, Fidelity, IBKR, and Addepar or Orion. Map holdings and lots. Validate every position against your own records before anything runs.' },
+    { phase: 'Load your models & policy', time: 'Week 1–2', detail: 'Bring in your watchlist, your signal models or rules, and your written investment policy — sector limits, position caps, drawdown tolerance. Where you want a backtest, we run your rules against your own history so you see how they would have behaved before anything is live.' },
+    { phase: 'Approval gate + execution', time: 'Week 2', detail: 'Connect your broker or OMS and wire the human approval gate. Run draft orders through the approval flow before any live order is placed.' },
+    { phase: 'Monitor and calibrate', time: 'Week 2–3', detail: 'Run live with daily review. Tune thresholds and limits against what you actually observe before full rollout.' },
   ],
   prerequisites: [
-    'Portfolio held at any major US brokerage (IBKR, Schwab, Fidelity, TD Ameritrade, Alpaca) — Plaid-connected.',
-    'A defined investment policy — sector limits, maximum position size, drawdown tolerance.',
+    'Portfolios held at your custodians (Schwab, Fidelity, IBKR, Alpaca) or aggregated in Addepar or Orion.',
+    'A written investment policy — sector limits, position caps, drawdown tolerance.',
     'A designated approver for orders — PM, CIO, or compliance officer.',
-    'Historical portfolio data for the backtest — prior-year statements or a brokerage export.',
+    'Your models or rules, and historical data if you want them backtested — even if they live in a spreadsheet today.',
   ],
-  note: 'No Bloomberg terminal required. The engine works with publicly available market data feeds and your brokerage\'s own API — tools you already have access to.',
+  note: 'Your holdings, signals and client data never leave your environment and are never used to train anyone’s model. The engine runs inside a tenant you control — the requirement any RIA’s compliance and client agreements impose before an AI system touches the book.',
 };
 
 export const INV_RESEARCH_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '2 hrs', label: 'saved per day on manual data pulling and research' },
-    { value: '90 sec', label: 'from signal to human-reviewed draft order' },
-    { value: '10 yrs', label: 'of historical data in the signal model backtest' },
-    { value: '2–3 wks', label: 'to go live on your live portfolio' },
+    { value: 'One live book', label: 'every custodian in a single view — no morning export' },
+    { value: 'Hours/day', label: 'returned from data pulling to research and clients' },
+    { value: 'Every trade', label: 'human-approved and logged for your books and records' },
+    { value: 'Your tenant', label: 'positions and signals never sent to public AI' },
   ],
   narrative:
-    'For a mid-size RIA or family office managing $50M–$500M, the compounding value is time: two hours per day returned to the portfolio manager means 500 hours per year redirected from data pulling to judgment calls and client relationships. On a $100M portfolio, one well-timed signal identified by the model and acted on in seconds — instead of spotted an hour later — can represent more than the engine\'s annual cost. The model is backtested against your actual holdings before go-live, so you see the historical Sharpe and win rate before committing to live capital.',
+    'The return here is operational, not a performance claim. The hours a PM and analysts lose every morning to pulling positions, stitching spreadsheets and re-running models by hand come back — redirected to research, client conversations and judgment. It also removes a class of quiet risk: a broken Excel formula in a rebalance, a limit breach noticed late, a trade decision with no clean audit trail. We do not promise returns and we never will. What we can show you, before you commit, is the engine running your own models on your own book in a read-only pilot.',
 };
 
-/** PLACEHOLDER — replace with real attributable quotes before production. */
+/** Honest proof panel — a "how we prove it" pilot, NOT customer quotes.
+ *  Replace with real attributable client quotes once available. */
 export const INV_RESEARCH_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We were running three separate spreadsheets just to get a clean morning view of our positions. The engine replaced all of that — live data, signals ready by 8 AM, and we haven\'t touched Excel for portfolio data in four months.', name: 'Vikram S.', role: 'Portfolio Manager', company: 'Mid-size RIA, $180M AUM' },
-  { quote: 'The XGBoost model surfaced a re-entry signal three hours before I would have manually identified it. That one trade justified the first quarter\'s cost.', name: 'James L.', role: 'CIO', company: 'Single-family office' },
-  { quote: 'The approval gate was non-negotiable for us — our compliance requires every trade decision to be human-authorised and logged. The audit trail the engine produces has simplified our quarterly compliance review.', name: 'Priya M.', role: 'Chief Compliance Officer', company: 'SEC-registered investment advisor' },
+  { quote: 'We connect to a read-only copy of your book and run the engine on your real positions and your own models — you watch it work before anything is ever wired to a broker.', name: 'Run on your own book', role: 'Week 1 of the pilot', company: 'read-only · no commitment' },
+  { quote: 'Where you have a signal model or rule, we backtest it against your own history and show you how it would have behaved — your numbers, not ours. We publish no performance claims of our own.', name: 'Validated on your history', role: 'your rules, your data', company: 'no alpha promised' },
+  { quote: 'Every draft order, approval and limit check is logged from day one, so your compliance team sees the exact audit trail they will keep — before you commit to anything.', name: 'The audit trail you keep', role: 'human-approved & logged', company: 'built for RIA books-and-records' },
 ];
 
 export const INV_RESEARCH_FAQS: { q: string; a: string }[] = [
-  { q: 'Does the engine place trades automatically?', a: 'No. Every signal generates a draft order, and nothing routes to the broker until a human approves it. The approval can be one click in a dashboard or a Slack message — your choice. The audit log records who approved, at what time, and what the signal was. This is a hard design constraint, not an option — it is what institutional compliance requires.' },
-  { q: 'Which brokerages does it connect to?', a: 'Any brokerage supported by Plaid or Yodlee for portfolio data — which covers the major US custodians including IBKR, Schwab, Fidelity, TD Ameritrade, and Alpaca. Order execution connects via the broker\'s own API.' },
-  { q: 'How is the ML model trained and validated?', a: 'XGBoost and LSTM models are trained on 10 years of historical price, volume, and sentiment data. Before go-live, we run a full backtest against your actual holdings and watchlist — you see the historical Sharpe ratio, win rate, and max drawdown the signal model would have produced. You validate the model before it runs on live capital.' },
-  { q: 'Is this suitable for a registered investment advisor?', a: 'Yes. The engine is designed for SEC-registered advisors. Every trade decision is human-authorised and audit-logged. The engine does not provide investment advice; it generates signals as decision inputs for the PM. The PM retains full discretion and accountability — which is what Form ADV and GIPS compliance require.' },
-  { q: 'What happens if the market moves against a signal?', a: 'Stop-loss levels are built into every signal output. If a position moves against the entry by the configured stop, the monitor triggers an alert and queues an exit order for human approval. The engine surfaces the decision — it does not override your stop-loss policy.' },
+  { q: 'Does the engine place trades automatically?', a: 'No. Every candidate the PM accepts becomes a draft order, and nothing routes to the broker until a named person approves it. The approval can be one click in a dashboard or a message in Slack — your choice — and the audit log records who approved, when, and what the order was. This is a hard design constraint, not an option.' },
+  { q: 'Which custodians and systems does it connect to?', a: 'It connects directly to your custodians and portfolio systems — Schwab, Fidelity, IBKR, Alpaca, and aggregators like Addepar or Orion — for holdings, lots and cash, and executes through your broker or OMS. It is built for how a firm actually custodies assets, not consumer account-aggregation.' },
+  { q: 'Does the engine promise returns or "alpha"?', a: 'No, and it never will. The engine runs your models and rules — not a black box we claim beats the market — and organises research cited to its source. Where you want a backtest, we run your rules against your own history so you see how they would have behaved; we publish no performance figures of our own. It is an operations and risk layer, not an alpha claim.' },
+  { q: 'Is this suitable for a registered investment adviser?', a: 'Yes — it is built for SEC-registered advisers. Every trade is human-authorised and logged, your data stays in your own tenant, and the engine provides decision inputs, not investment advice; the adviser retains full discretion and accountability. The human-approval audit trail is designed to support your books-and-records obligations, and your compliance team reviews the setup before go-live.' },
+  { q: 'Where does our portfolio data go? Is anything sent to public AI?', a: 'Nothing is sent to a public AI service. Your holdings, signals, models and client data are processed inside your own environment or a dedicated tenant you control, and are never used to train anyone’s model. For a book of business, that data boundary is the entire point.' },
+  { q: 'What happens if the market moves against a position?', a: 'Stop levels come from your own policy, not ours. If a position breaches a stop you have set, the monitor alerts you and queues an exit order for approval the moment it triggers. The engine surfaces the decision — it does not override your risk rules or act on its own.' },
 ];
 
 export const INV_RESEARCH_NUDGE = {
-  title: 'See a backtest on your actual holdings',
-  body: 'We connect to your portfolio, run the signal model against 10 years of historical data, and show you the Sharpe ratio and win rate — before you go live. No commitment required.',
+  title: 'See it run on your own book',
+  body: 'We connect to a read-only copy of your portfolio, run the engine on your real positions and your own models, and show you exactly what it surfaces and how the approval trail looks — before anything ever touches a broker.',
   cta: 'Book a Free Demo',
 };
 
@@ -895,10 +899,12 @@ export const DOC_INTEL_ROI: { stats: { value: string; label: string }[]; narrati
     'The cost is not the software — it is the hours your team spends reading and searching, and the risk of a missed clause or a filing that slips a deadline. When any question against your whole archive returns a cited answer in seconds, a compliance review that took days becomes an afternoon, and an auditor’s request is answered on the call. The reserve-study example — two engineers and two weeks compressed into hours — is the same pattern applied to one vertical: read everything once, then ask it anything, with a person signing off on the judgment calls.',
 };
 
-/** PLACEHOLDER — replace with real attributable quotes before production. */
+/** Honest proof panel — a "how we prove it" pilot, NOT client quotes.
+ *  Replace with real attributable client quotes once available. */
 export const DOC_INTEL_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'My team used to open contracts one by one to answer a single question. Now we just ask it — “which leases auto-renew before December” — and get the answer with the clause and page number attached. Because it only reads our own documents and cites every line, our auditors accept it.', name: 'Nadia R.', role: 'Head of Compliance', company: 'Financial services firm' },
-  { quote: 'Reserve studies were our proof it works. A job that took two engineers two weeks — reading handwritten sheets, keying data, running the model — now comes back the same day, and the one line it can’t read it flags instead of guessing. We’ve since pointed the same engine at our leases and vendor contracts.', name: 'Robert C.', role: 'Principal Engineer', company: 'Property consultancy' },
+  { quote: 'Send us 10–20 of your own documents — including your worst scans and your handwriting — and we read and index them, then let you ask questions live and watch every answer cite its source page.', name: 'Run on your own documents', role: 'before you commit', company: 'your files, your questions' },
+  { quote: 'You see the accuracy on your documents and, just as importantly, what it flagged rather than guessed — the uncertain lines routed to a person instead of quietly filled in.', name: 'Accuracy you can check', role: 'flagged, not guessed', company: 'measured on your data' },
+  { quote: 'Everything runs inside a tenant you control: nothing goes to a public AI service, nothing trains anyone’s model, and every answer links back to the page it came from for your auditors.', name: 'Private and citable', role: 'your tenant · every answer cited', company: 'nothing to public AI' },
 ];
 
 export const DOC_INTEL_FAQS: { q: string; a: string }[] = [
@@ -952,16 +958,16 @@ export const LEGAL_REG_ENGINE: EngineDef = {
     {
       id: 'monitor', tag: 'Monitor', label: 'Regulatory Monitor', icon: 'database',
       tools: ['SEC EDGAR', 'SEBI', 'RBI', 'IRS', 'FINRA', 'Federal Register', 'Custom feeds'],
-      stat: '14 sources monitored',
-      caption: 'Monitoring 14 regulatory feeds — new rules and amendments flagged instantly.',
-      activity: 'SEC Release 33-11138 detected · Rule 10b5-1 amendment · effective Feb 2026',
+      stat: 'your feeds, watched',
+      caption: 'Monitoring your regulatory feeds — new rules and amendments flagged the moment they publish.',
+      activity: 'New release detected · classified by type, jurisdiction and effective date · matched to live matters',
       detail: 'The engine monitors regulatory publication feeds — SEC EDGAR, SEBI, RBI, IRS, FINRA, Federal Register, and custom jurisdictional feeds — in near real-time. When a new release, amendment, guidance letter, or enforcement action is published, it is ingested, parsed, and classified by type, jurisdiction, and effective date. No paralegal needs to check a bookmarked webpage.',
       gives: 'Zero-lag regulatory awareness — your firm knows about a rule change the moment it is published.',
     },
     {
       id: 'impact', tag: 'Analyse', label: 'Impact Analysis', icon: 'spark',
       tools: ['Matter matching', 'Portfolio cross-reference', 'Client exposure map', 'Partner ranking'],
-      stat: '7 matters affected',
+      stat: 'matched to live matters',
       caption: 'Cross-referencing the rule change against active matters and client portfolios.',
       activity: '7 active matters affected · 3 exec trading plans flagged · 2 portfolios at risk',
       detail: 'Every new regulatory change is cross-referenced against your active matter list, client portfolio positions, and internal policy documents. The impact analysis identifies which clients are exposed, which matters are affected, and the nature of the exposure — in plain English, not legalese. Partners are ranked by how many of their active matters are affected and notified in order of priority.',
@@ -970,25 +976,25 @@ export const LEGAL_REG_ENGINE: EngineDef = {
     {
       id: 'precedent', tag: 'Research', label: 'Precedent Search', icon: 'search',
       tools: ['RAG / Vector DB', 'Internal matter history', 'Case law feeds', 'Enforcement actions'],
-      stat: '12 precedents matched',
-      caption: 'Searching the indexed precedent database for relevant guidance and prior rulings.',
-      activity: '12 precedents matched · 4 SEC enforcement actions · internal 2023 memo surfaced',
-      detail: 'A RAG agent searches the firm\'s vector database of indexed precedents — past rulings, internal guidance memos, court judgments, and regulatory enforcement actions — to surface what the firm already knows about this type of issue. The search is semantic, not keyword-based: it finds structurally similar precedents even when the terminology differs. New judgments are indexed automatically, so the knowledge base compounds with every event.',
-      gives: 'The firm\'s institutional knowledge on this issue — surfaced in seconds rather than requested from a senior partner.',
+      stat: 'your own precedents, surfaced',
+      caption: 'Searching your indexed precedents for relevant guidance and prior rulings.',
+      activity: 'Prior rulings, enforcement actions and an internal memo surfaced — each linked to the source document',
+      detail: 'A retrieval agent searches the firm\'s indexed precedents — past rulings, internal guidance memos, court judgments, and regulatory enforcement actions — to surface what the firm already knows about this type of issue. The search is semantic, not keyword-based: it finds structurally similar precedents even when the terminology differs. Critically, every result is returned as a link to the actual document in your system. The engine surfaces authority you already hold; it does not generate case law, and it will not invent a citation.',
+      gives: 'The firm\'s institutional knowledge on this issue — surfaced in seconds, every result traceable to the source document.',
     },
     {
       id: 'draft', tag: 'Draft', label: 'Guidance Memo', icon: 'pen',
       tools: ['Claude', 'Internal style guide', 'Partner review queue', 'Client alert templates'],
-      stat: 'Memo ready in 4 min',
+      stat: 'draft for partner review',
       caption: 'Drafting a partner-ready memo with affected matters and numbered action items.',
-      activity: 'Partner memo drafted · 3 action items · 2 client alert emails queued for approval',
-      detail: 'The engine drafts a structured guidance memo: the regulatory change in plain English, the impact on each affected matter, relevant precedents, and a numbered action item list for the responsible partner. The memo follows the firm\'s internal style guide and is formatted for partner review — a decision-ready document, not a summary dump. Client alert drafts are queued for partner approval before sending.',
-      gives: 'A partner-ready memo and draft client alerts — written in 4 minutes, ready for review rather than from a blank page.',
+      activity: 'Partner memo drafted · 3 action items · client alerts queued for approval',
+      detail: 'The engine drafts a structured guidance memo: the regulatory change in plain English, the impact on each affected matter, relevant precedents, and a numbered action item list for the responsible partner. The memo follows the firm\'s internal style guide and is formatted for partner review — a decision-ready document, not a summary dump. Every authority it cites is linked to the source document the engine actually retrieved; anything it cannot ground in a real document is flagged rather than written. Nothing goes to a client until a partner approves it.',
+      gives: 'A partner-ready draft with every citation linked to its source — ready for review, never a blank page and never an invented authority.',
     },
     {
       id: 'update', tag: 'Log', label: 'Matter Update & Billing', icon: 'shield',
       tools: ['Clio', 'iManage', 'Elite 3E', 'NetDocuments', 'Billable time logger'],
-      stat: '1.2 hrs auto-logged',
+      stat: 'time captured, not reconstructed',
       caption: 'Updating active matters and logging billable research time automatically.',
       activity: 'Matter #4472 updated · 1.2 hrs logged · partners notified · dockets updated',
       detail: 'Every regulatory event that affects an active matter generates an automatic update in your practice management system — Clio, iManage, Elite 3E, or NetDocuments. Billable research time is logged against the matter: the engine\'s monitoring, analysis, and drafting time is captured and attributed. Partners are notified via their preferred channel. Client dockets are updated with the regulatory event and the firm\'s response.',
@@ -997,9 +1003,9 @@ export const LEGAL_REG_ENGINE: EngineDef = {
     {
       id: 'index', tag: 'Learn', label: 'Index & Learn', icon: 'book',
       tools: ['Vector DB', 'Embedding model', 'Judgment feed', 'Precedent classifier'],
-      stat: '4,218 docs indexed',
-      caption: 'Embedding the new ruling into the precedent database for future searches.',
-      activity: 'SEC Release 33-11138 indexed · 847-token embedding · 4,218 total docs in DB',
+      stat: 'indexed on ingest',
+      caption: 'Embedding the new ruling into your precedent base for future searches.',
+      activity: 'New release embedded and indexed · searchable in the next precedent query',
       detail: 'Every new regulatory document, enforcement action, court judgment, and internal memo is embedded and indexed into the firm\'s vector database. The next precedent search will surface it. Over time, the firm\'s institutional knowledge compounds: the more the engine runs, the better the precedent search becomes. New hires inherit the full knowledge base immediately — and it does not walk out the door when a partner leaves.',
       gives: 'A knowledge base that gets better with every regulatory event and never loses institutional memory.',
     },
@@ -1008,7 +1014,7 @@ export const LEGAL_REG_ENGINE: EngineDef = {
 
 export const LEGAL_REG_OUTPUTS: Record<string, string[]> = {
   monitor: [
-    'SEC Release No. 33-11138 detected',
+    'New SEC release detected',
     'Rule 10b5-1 — trading plan amendments',
     'Effective date: Feb 27, 2026',
     'Jurisdiction: US federal · SEC enforcement',
@@ -1025,7 +1031,7 @@ export const LEGAL_REG_OUTPUTS: Record<string, string[]> = {
   ],
   precedent: [
     '12 precedents matched · relevance score 0.87+',
-    'SEC v. Salman (2016) — tipper-tippee liability',
+    'Salman v. United States (2016) — tipper-tippee liability',
     'Internal memo: 10b5-1 guidance (2022) — surfaced',
     '4 SEC enforcement actions: 2019–2024',
     'Prior matter #3841: same client, same issue — 2023',
@@ -1048,7 +1054,7 @@ export const LEGAL_REG_OUTPUTS: Record<string, string[]> = {
     '→ Compliance calendar: event recorded',
   ],
   index: [
-    '→ SEC Release 33-11138 embedded · 847 tokens',
+    '→ New release embedded and indexed',
     '→ Classification: securities law · Rule 10b5-1',
     '→ Linked to: 7 affected matters',
     '→ Linked to: 12 matched precedents',
@@ -1060,7 +1066,8 @@ export const LEGAL_REG_OUTPUTS: Record<string, string[]> = {
 export const LEGAL_REG_WHATIS: string[] = [
   'We don\'t sell AI tools. The serious firms have already shipped them — an internal AI assistant, a RAG system over the document store, an enterprise cloud DMS. The expensive problem now is operational: that AI isn\'t connected to the daily workflows where legal work actually happens. Alerts go out days late, AI-assisted time goes unbilled, hard-won precedents get buried in folders, and reports are still written by hand.',
   'The Legal & Regulatory Engine is the connection layer. It is four workflows that make your existing stack work end-to-end: regulatory changes matched to live matters and turned into draft client alerts in minutes; AI-tool usage captured into the billing system automatically; closed-matter precedents extracted and fed back into the firm\'s knowledge base; and completed document reviews turned into client-ready diligence report drafts.',
-  'We presented this four-gap analysis to the digital leadership of one of India\'s largest full-service law firms. Their response: every gap is real. No two firms run the same practice mix or the same stack — which is why each workflow is built on the DMS, review platform and billing system you already run, not on a platform you have to migrate to. The engine does not practice law; judgment stays with partners. It handles the monitoring, capture, extraction and drafting around that judgment.',
+  'Two questions every partner asks first, answered plainly. Confidentiality: the engine runs inside your own environment or a dedicated tenant you control. Privileged matter content is never sent to a public AI service and is never used to train anyone\'s model, and access mirrors the permissions already set in your DMS. Accuracy: it retrieves from documents your firm already holds and links every authority it cites back to that source, so any citation can be checked in one click — and anything it cannot ground in a real document is flagged rather than written. It will not invent an authority.',
+  'The four-gap framework came out of proposal work with the digital leadership of one of India\'s largest full-service firms, who confirmed every gap was real. The workflows themselves are jurisdiction-agnostic — whether your feeds are SEC, FINRA and the Federal Register or SEBI, RBI and MCA — and each is built on the DMS, review platform and billing system you already run, not a platform you have to migrate to. The engine does not practice law; judgment stays with partners. It handles the monitoring, capture, extraction and drafting around that judgment.',
 ];
 
 /** The Four Operational Intelligence Gaps — the framework from our law-firm
@@ -1107,7 +1114,7 @@ export const LEGAL_REG_GAPS: LegalGapDef[] = [
     id: 'billing',
     name: 'The AI Usage Billing Gap',
     workflow: 'AI Billing Capture',
-    gap: 'Lawyers use the firm\'s AI tools daily, but that time never reaches the billing system — even Harvey only announced billing integration in late 2025, and it isn\'t built yet. Industry studies put revenue lost to manual billing failures at 26%. The more your lawyers use AI, the more revenue silently leaks.',
+    gap: 'Lawyers use the firm\'s AI tools daily, but that time never reaches the billing system — the major legal-AI platforms still leave the capture step to the lawyer. Time reconstructed from memory at the end of the day is systematically under-billed, and the more your lawyers use AI, the more revenue silently leaks. How much it is costing you is a question we answer from your own timekeeping data, not an industry average.',
     before: [
       'Lawyer uses the AI assistant for 90 minutes on a matter',
       'Finishes, moves to the next task',
@@ -1122,7 +1129,7 @@ export const LEGAL_REG_GAPS: LegalGapDef[] = [
       'Lawyer approves in one click',
       'Every prompt and output logged to the matter file',
     ],
-    outcome: 'Closes the 26% billing-leakage loop automatically — and creates the AI audit trail your governance committee wants anyway.',
+    outcome: 'Closes the AI-time billing leak automatically — and creates the AI audit trail your governance committee wants anyway.',
   },
   {
     id: 'knowledge',
@@ -1181,7 +1188,7 @@ export const LEGAL_REG_PROBLEM: { intro: string; pains: string[]; closing: strin
     'Firms at the top of the market have already solved the hard problem — they bought or built the AI. Internal assistants, RAG over the document store, enterprise cloud DMS. What remains is operational: none of it is wired into the workflows where the work actually happens.',
   pains: [
     'When a regulator publishes a circular, lawyers still read it manually and work out which of 500+ active matters are affected — clients sometimes hear about the change from the news first.',
-    'Lawyers use AI tools daily, but that time never reaches the billing system. Industry studies put revenue lost to manual billing failures at 26%.',
+    'Lawyers use AI tools daily, but that time never reaches the billing system — reconstructed at the end of the day, it is systematically under-billed.',
     'A hard-won clause from a deal that closed today never flows back into the knowledge system — six months later, another team re-invents it from scratch.',
     'After a 5,000–10,000-document review in Relativity, a senior associate still writes the 40-page diligence report by hand — 16–24 hours per deal.',
     'Institutional knowledge walks out the door when a senior partner leaves — nothing captured, nothing searchable.',
@@ -1214,19 +1221,21 @@ export const LEGAL_REG_INTEGRATION: {
 
 export const LEGAL_REG_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '15 min', label: 'from regulatory publication to a draft client alert — down from 3–4 days' },
-    { value: '26%', label: 'of potential revenue lost to billing leakage — the gap auto-capture closes' },
-    { value: '20h → 5h', label: 'senior-associate time per diligence report, with same-day delivery' },
-    { value: '20–30%', label: 'less research time on repeat matters once precedents flow back automatically' },
+    { value: 'Same day', label: 'from regulatory publication to a draft client alert — instead of days later' },
+    { value: 'Captured', label: 'AI-assisted time logged as it happens, not reconstructed at day’s end' },
+    { value: 'Drafted', label: 'diligence reports and memos start from your review output, not a blank page' },
+    { value: 'Compounding', label: 'every closed matter feeds the precedent base instead of a folder' },
   ],
   narrative:
-    'Take a 100-lawyer practice as the unit of math. Billing capture alone: at two hours of AI-assisted work per lawyer per day and a $300–400 blended rate, recovering even half of the 26% industry leakage is worth millions a year — it is usually the workflow that pays for the entire engine. Diligence reports: 20 M&A or litigation matters a year at 15 hours saved per report is 300 hours of senior-associate time recovered annually, as capacity or as billings. Regulatory alerts are the retention play: for time-sensitive changes — SEBI FPI norms, RBI lending rules, SEC rule amendments — being first to the client\'s inbox instead of third is what keeps the relationship. Exact numbers depend on matter volume, practice mix and current workflows; the discovery call maps them precisely.',
+    'The value shows up in three places, and all three are measurable on your own data rather than an industry average. Billing capture is usually the one that pays for the engine: AI-assisted work logged against the matter as it happens, instead of reconstructed from memory at the end of the day — we quantify the gap from your own timekeeping records during the pilot. Diligence and memo drafting converts senior-associate hours from writing into reviewing, on the matters you already run. And regulatory alerting is the retention play: for time-sensitive changes — an SEC rule amendment, an RBI lending circular, a SEBI norm — being first into the client’s inbox instead of third is what keeps the relationship. Exact numbers depend on matter volume, practice mix and current workflows; the discovery call maps them against your figures, not ours.',
 };
 
-/** PLACEHOLDER — replace with real attributable quotes before production. */
+/** Honest proof panel — a "how we prove it" pilot, NOT client quotes.
+ *  Replace with real attributable client quotes once available. */
 export const LEGAL_REG_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We were monitoring SEBI, RBI, and the IRS manually — a paralegal spent three hours every morning just checking feeds. The engine does it in real time, matches to our active matters, and by the time the paralegal sits down, the memo is already drafted for review.', name: 'Aditya K.', role: 'Managing Partner', company: 'Corporate legal firm, Mumbai & New York' },
-  { quote: 'The precedent search was the part I didn\'t expect to work as well as it did. We had a new SEC matter and the engine surfaced a 2019 internal memo from a prior matter — same client, same issue — that I had completely forgotten existed. That alone saved a week of research.', name: 'Sarah L.', role: 'Senior Associate', company: 'Securities litigation practice' },
+  { quote: 'Pick the gap that hurts most and we run that one workflow on five of your real regulatory events, matched against your actual matter list — with a partner reviewing every output before anything counts.', name: 'Run on your own matters', role: 'Weeks 3–4 of the pilot', company: 'partner review on every output' },
+  { quote: 'Before go-live we quantify the billing gap from your own timekeeping records — what AI-assisted time was logged versus what was actually worked. Your numbers decide the business case, not an industry benchmark.', name: 'Measured on your timekeeping', role: 'your data, not a benchmark', company: 'no industry averages' },
+  { quote: 'Every authority the engine cites links back to the document it retrieved from your own systems, so a partner can check any line in one click — and privileged content never leaves your environment.', name: 'Checkable, and privileged', role: 'grounded citations · your tenant', company: 'nothing to public AI' },
 ];
 
 export const LEGAL_REG_FAQS: { q: string; a: string }[] = [
@@ -1234,7 +1243,8 @@ export const LEGAL_REG_FAQS: { q: string; a: string }[] = [
   { q: 'Can it really capture AI-tool usage into our billing system?', a: 'Yes — that is the AI Billing Capture workflow. A background timer tracks AI-tool sessions per matter and creates a draft time entry ("AI-assisted analysis, 92 minutes, Matter #5821") in your billing or practice-management system — Elite 3E, Aderant, Clio or equivalent. The lawyer approves, edits or discards it in one click; nothing is billed without human sign-off. It also logs every prompt and output to the matter file, which doubles as the AI audit trail your governance committee wants anyway.' },
   { q: 'Does it work with iManage, NetDocuments and Relativity?', a: 'Yes. The workflows trigger from the systems you already run: matter tagging and final-document events from iManage or NetDocuments, completed-review exports from Relativity, and write-back into your billing platform. No rip-and-replace — the engine\'s entire point is connecting the stack you have.' },
   { q: 'Which regulators can the engine monitor?', a: 'Any regulator that publishes via a structured feed, RSS, email list, or web publication. We have built integrations for SEC EDGAR, SEBI, RBI, IRS, FINRA, the Federal Register, ESMA, FCA, and MAS. If your practice covers a jurisdiction not on this list, we can add custom monitoring for any regulatory publication source.' },
-  { q: 'Does the engine have access to our client files?', a: 'The engine accesses your matter list and the metadata associated with each matter — client name, practice area, relevant jurisdictions — for impact matching. It does not access the full content of matter files unless you explicitly connect a document management system for the precedent index. Access controls mirror your existing DMS permissions.' },
+  { q: 'What happens to privileged client material? Is anything sent to public AI?', a: 'Nothing is sent to a public AI service, and nothing is used to train anyone\'s model. The engine runs inside your own environment or a dedicated tenant you control, never on shared infrastructure. By default it touches only your matter list and matter metadata — client, practice area, jurisdiction — for impact matching; it reads full matter content only if you explicitly connect your DMS for the precedent index, and then access mirrors the permissions already set in iManage or NetDocuments, so nobody sees through the engine what they could not already see. Data residency is configurable to the jurisdiction your client agreements require, and we will complete your firm\'s security and outside-counsel-guideline review before go-live.' },
+  { q: 'How do you stop it inventing case citations?', a: 'By never letting it write authority from memory. The engine retrieves from documents your firm already holds and from primary regulatory sources, and every authority in a draft is rendered as a link back to the specific document it came from — so a partner can verify any line in one click. If it cannot ground a proposition in a retrieved document, it flags the gap instead of filling it. It is a retrieval-and-drafting layer over your own material, not a model asked to recall case law, and a partner still reviews and signs everything before it leaves the firm.' },
   { q: 'How does the precedent search stay current?', a: 'Every regulatory event, judgment, and internal memo processed by the engine is automatically embedded and added to the vector database. The knowledge base grows with every event — no manual maintenance, no periodic updates. A ruling processed today is searchable for the next event that comes in tomorrow.' },
   { q: 'Can the guidance memo match our firm\'s writing style?', a: 'Yes. We configure the memo template and tone from a set of 10–20 existing partner memos from your firm. The drafts come out in your house style — not a generic legal summary. Partners review and edit, but they are editing rather than writing from scratch.' },
   { q: 'Is this suitable for an in-house legal team?', a: 'Yes. In-house teams at regulated companies — financial services, pharma, energy — use the same architecture to monitor their regulatory environment, cross-reference against internal policy documents and contracts, and produce compliance updates for the General Counsel. The matter list is replaced by a policy and contract inventory.' },
@@ -1309,7 +1319,7 @@ export const CS_ENGINE: EngineDef = {
     {
       id: 'respond', tag: 'Resolve', label: 'Specialist Response', icon: 'spark',
       tools: ['KB retrieval', 'Live system data', 'Account API', 'ElevenLabs voice', 'Claude'],
-      stat: '73% first-touch resolved',
+      stat: 'resolved on first touch',
       caption: 'Specialist agents resolving queries with KB knowledge and live system data.',
       activity: 'Billing: $42 credit applied · Debug: API P99 = 2.1s — incident #4821 open',
       detail: 'Each specialist agent composes a response combining KB knowledge with live data. The Billing Agent does not just explain the overage — it applies the credit and confirms the resolution. The Debug Agent does not just acknowledge the API issue — it checks the live incident log, confirms the issue is known, and gives an estimated resolution time. Responses are specific and actionable — not templated non-answers.',
@@ -1327,9 +1337,9 @@ export const CS_ENGINE: EngineDef = {
     {
       id: 'learn', tag: 'Improve', label: 'Resolution & Learning', icon: 'database',
       tools: ['Resolution logger', 'KB update pipeline', 'CSAT scorer', 'Pattern detector'],
-      stat: 'KB updated · CSAT 4.7/5',
+      stat: 'KB updated · outcome logged',
       caption: 'Logging every resolution and feeding new patterns back into the knowledge base.',
-      activity: 'Resolution logged · CSAT: 4.7/5 · new pattern indexed · threshold adjusted',
+      activity: 'Resolution logged · satisfaction survey sent · new pattern indexed · threshold adjusted',
       detail: 'Every resolved ticket — by an agent or a human — is logged with the resolution, query type, and CSAT score. Novel queries the agent handled successfully are automatically indexed into the KB so the same question is answered faster next time. Patterns in escalations are detected and used to adjust confidence thresholds. The system improves with every ticket.',
       gives: 'A support system that gets measurably better every month — higher first-touch resolution, lower escalation rate, improving CSAT.',
     },
@@ -1388,9 +1398,10 @@ export const CS_OUTPUTS: Record<string, string[]> = {
 };
 
 export const CS_WHATIS: string[] = [
-  'The Customer Support Engine is a multi-agent system that handles every incoming support query — across email, chat, and voice — by routing it to the right specialist agent, responding with live system data and KB knowledge, escalating to a human with full context when confidence is low, and learning from every resolution.',
-  'It is not a single chatbot with a large FAQ. It is a coordinated team of specialist agents: a Technical Agent, a Billing Agent, a Debug Agent that checks live system status in real time, a Feature Request Agent, and a Voice Agent for phone support. Each is good at one job. HITL escalation is designed in — not a workaround.',
-  'The key difference from a standard help desk chatbot: when the Debug Agent tells a customer their API is slow, it has actually checked the live incident log 30 seconds ago. When the Billing Agent applies a $42 credit, it has actually applied it. Actions, not answers.',
+  'The Customer Support Engine handles incoming support across email, chat and voice: it routes each query to the right specialist agent, answers using your live system data and your knowledge base, escalates to a human with full context when it is not confident, and learns from every resolution. To be precise about the word, because the industry is not: we count a ticket as *resolved* only when the customer’s issue is actually fixed and they do not come back — not merely *deflected* away from an agent.',
+  'It is not a single chatbot with a large FAQ. It is a coordinated team of specialist agents: a Technical Agent, a Billing Agent, a Debug Agent that checks live system status in real time, a Feature Request Agent, and a Voice Agent for phone support. Each is good at one job, and escalation to a human is designed in — not a workaround.',
+  'The key difference from a standard help-desk chatbot: when the Debug Agent tells a customer their API is slow, it has actually checked the live incident log 30 seconds ago. When the Billing Agent applies a $42 credit, it has actually applied it. Actions, not answers.',
+  'Three controls decide whether a system like this is safe in front of your customers, so they are configured before go-live rather than after. Grounding: answers come from your documented knowledge and live system state with the source attached, and the agent is built to fetch a human rather than improvise a policy it cannot find. Voice: it writes in your brand voice, configured from your style guide and your approved responses — not a generic bot register. Escape hatch: a customer can always reach a person, and asking for one is honoured immediately, on every channel.',
 ];
 
 export const CS_HOWITWORKS_INTRO =
@@ -1401,7 +1412,7 @@ export const CS_PROBLEM: { intro: string; pains: string[]; closing: string } = {
     'Customer support at scale has a fundamental tension: personalised, accurate support requires human judgment, but the volume of queries makes human-first response economically unsustainable.',
   pains: [
     'First-response time degrades as volume grows — customers wait hours for issues that should resolve in minutes.',
-    'Tier 1 agents spend 60–70% of their time on repetitive queries — billing questions, API documentation requests, known issues — that do not require human judgment.',
+    'Tier 1 agents spend most of their week on repetitive queries — billing questions, documentation requests, known issues — that do not need human judgment; we measure the actual share from your own ticket history.',
     'Context is lost on every handoff — the customer re-explains the issue to each new agent they are transferred to.',
     'The knowledge base is always out of date — product updates ship faster than documentation is written.',
     'Voice support requires a human on every call — hold times grow, agents burn out, and the customer experience degrades.',
@@ -1421,7 +1432,7 @@ export const CS_INTEGRATION: {
   phases: [
     { phase: 'Build the knowledge base', time: 'Week 1', detail: 'Index your existing product docs, KB articles, and past ticket resolutions. The first build takes 2–3 days; ongoing indexing is automatic from that point.' },
     { phase: 'Configure specialist agents', time: 'Week 1–2', detail: 'Set up Technical, Billing, Debug, and Feature agents. Connect the Debug Agent to your live system monitoring. Connect the Billing Agent to your billing platform.' },
-    { phase: 'HITL and escalation rules', time: 'Week 2', detail: 'Configure confidence thresholds, escalation routing, and human agent handoff format. Run 50 historical tickets through the system and validate resolution accuracy.' },
+    { phase: 'Guardrails, escalation & brand voice', time: 'Week 2', detail: 'Configure grounding rules, escalation routing and the human-handoff format, and tune the brand voice from your style guide and approved responses. Replay historical tickets through the system and validate every answer against how your team actually answered them.' },
     { phase: 'Voice agent and go-live', time: 'Week 2–3', detail: 'Deploy the Voice Agent for phone support. Run parallel with your existing support queue for one week. Go live when CSAT from agent-handled tickets matches your human baseline.' },
   ],
   prerequisites: [
@@ -1430,33 +1441,39 @@ export const CS_INTEGRATION: {
     'Access to your billing platform API — for the Billing Agent to take real actions.',
     'Access to your live monitoring or status page — for the Debug Agent to check real system state.',
     'Your current support tool — Zendesk, Intercom, Freshdesk, or equivalent — for ticket integration.',
+    'Your style guide or a set of approved responses — so the agent answers in your brand voice.',
+    'Your data-handling requirements — what customer PII the agent may see, and your retention policy.',
   ],
-  note: 'The voice agent requires a phone number and a telephony provider — Twilio, VAPI, or ElevenLabs. If you don\'t have one, we provision it as part of the setup.',
+  note: 'Customer data is processed inside your own environment or a dedicated tenant you control, and is never used to train anyone\'s model. The voice agent requires a phone number and a telephony provider — Twilio, VAPI, or ElevenLabs — which we provision as part of the setup if you don\'t have one.',
 };
 
 export const CS_ROI: { stats: { value: string; label: string }[]; narrative: string } = {
   stats: [
-    { value: '73%', label: 'of queries resolved on first touch, without a human' },
-    { value: '8 sec', label: 'average first-response time — across all channels' },
-    { value: '3×', label: 'agent capacity increase — same team, higher volume' },
+    { value: 'Your tickets', label: 'resolution rate measured on your own history — not a benchmark' },
+    { value: 'Minutes', label: 'to a first response at any hour, instead of a queue overnight' },
+    { value: 'Full context', label: 'every escalation reaches a human already briefed' },
     { value: '2–3 wks', label: 'to go live across email, chat, and voice' },
   ],
   narrative:
-    'For a SaaS company handling 500–2,000 support tickets per month, the math is direct: if 73% of tickets are resolved without a human agent, a team of 4 agents can handle the volume that previously required 12 — or the same 4 agents can absorb 3× growth without hiring. At a fully-loaded support agent cost of $60,000–$80,000 per year, a 3× capacity gain represents $120,000–$240,000 in deferred hiring cost annually. CSAT typically improves simultaneously — because response time drops from hours to seconds.',
+    'We are not going to quote you a resolution rate. It depends entirely on your product, your ticket mix and how good your documentation is — and a vendor quoting one before reading your tickets is selling you somebody else’s result. What we do instead is replay a week of your real historical tickets through the engine and show you exactly what it would have resolved, what it would have escalated, and where it would have been wrong. That gives you a defensible capacity number calculated from your own volume and your own fully-loaded agent cost — and it tells you, before you commit, whether this is worth doing at all.',
 };
 
-/** PLACEHOLDER — replace with real attributable quotes before production. */
+/** Honest proof panel — a "how we prove it" pilot, NOT customer quotes.
+ *  Replace with real attributable client quotes once available. */
 export const CS_TESTIMONIALS: { quote: string; name: string; role: string; company: string }[] = [
-  { quote: 'We were at 6-hour average first response. Three weeks after going live, we were under 2 minutes for 73% of tickets. The other 27% reached a human with full context already packaged — those agents closed faster too.', name: 'Kiran P.', role: 'Head of Customer Success', company: 'B2B SaaS, 800 tickets/month' },
-  { quote: 'The voice agent was the thing I thought would fail. Our customers prefer to call. The agent handles 60% of calls to resolution without transferring. The ones it does transfer, it hands off with a full briefing — the caller doesn\'t have to repeat themselves.', name: 'Nadia R.', role: 'VP Operations', company: 'SMB-focused software company' },
+  { quote: 'We replay a week of your real historical tickets through the engine and show you what it would have resolved, what it would have escalated, and — most importantly — where it would have got it wrong.', name: 'Replayed on your tickets', role: 'before anything goes live', company: 'your history, not a benchmark' },
+  { quote: 'It runs in parallel with your existing queue, and goes live only when satisfaction on agent-handled tickets matches the baseline your human team already sets.', name: 'Parallel run to your baseline', role: 'the go-live gate', company: 'your CSAT decides' },
+  { quote: 'Answers are grounded in your documented knowledge and live system state with the source attached, a sample is human-reviewed every week, and any customer who asks for a person gets one immediately.', name: 'Guardrails you can inspect', role: 'grounded · QA-sampled · always an escape hatch', company: 'wrong answers are the risk we design against' },
 ];
 
 export const CS_FAQS: { q: string; a: string }[] = [
-  { q: 'Will customers know they are talking to an AI?', a: 'That is your choice to configure. We can make the agent transparent about being AI, or deploy it with a persona name. What we do not do is have the agent actively claim to be human when directly asked. On voice, agents sound conversational and natural — but the quality of disclosure is a policy decision your team makes, not ours.' },
-  { q: 'What happens when the AI gets something wrong?', a: 'The confidence threshold is the primary guard. When the agent is not confident, it escalates to a human rather than sending a low-quality answer. When an agent makes an error and a human corrects it, the corrected resolution is logged and the KB is updated — so the same error is less likely next time. CSAT scores and escalation rates are monitored continuously to catch systematic failures early.' },
+  { q: 'Will customers know they are talking to an AI?', a: 'That is your choice to configure. We can make the agent transparent about being AI, or deploy it with a persona name. What we do not do is have the agent actively claim to be human when directly asked. On voice, agents sound conversational and natural — but the disclosure policy is a decision your team makes, not ours.' },
+  { q: 'What stops it giving a customer a confidently wrong answer?', a: 'A confidence score alone is a weak guard — language models are routinely confident and wrong — so it is not what we rely on. Answers are grounded: the agent responds from your documented knowledge and live system state, with the source attached, and where it cannot find grounding it fetches a human instead of improvising a policy. Before go-live we replay your historical tickets and compare its answer to how your team actually answered, so you see the error rate rather than trusting a threshold. After go-live a sample of conversations is human-reviewed every week, escalation and repeat-contact rates are monitored for drift, and any corrected answer is logged back into the knowledge base. And a customer who asks for a person always gets one.' },
+  { q: 'Can it sound like us rather than a generic bot?', a: 'Yes, and this is configured before launch, not tuned afterwards. We build the voice from your style guide and a set of your own approved responses, so the register, the greeting, the apology language and the sign-off match how your team already writes. You review and sign off the tone on real sample tickets during the pilot, and you can lock exact wording for sensitive replies — refunds, outages, cancellations — so those never get improvised.' },
+  { q: 'Where does customer data go?', a: 'Customer conversations and any PII are processed inside your own environment or a dedicated tenant you control, never on shared infrastructure, and are never used to train anyone\'s model. You define what the agent is allowed to see and how long anything is retained, and we complete your security review before go-live.' },
   { q: 'Can the Billing Agent actually take actions — apply credits, issue refunds?', a: 'Yes — within the permissions you configure. You set action limits: up to $X credit without human approval, refunds above $Y always require a human. The Billing Agent operates within those limits. Every action it takes is logged with the query context and the agent\'s reasoning.' },
   { q: 'Does the voice agent work for complex technical support?', a: 'The Voice Agent handles Tier 1 volume well — billing questions, basic how-to, known incident notifications. Complex technical debugging that requires screen sharing or log access is designed to route to a human quickly with full context. The value is eliminating the Tier 1 calls that should never have reached a human in the first place.' },
-  { q: 'How long does it take to build a good knowledge base?', a: 'The initial build takes 2–3 days with your existing documentation. Quality improves rapidly as resolved tickets are indexed — with 200+ past tickets, the KB has enough coverage for the most common query types. With 1,000+ past tickets, first-touch resolution typically reaches 65–75%. The KB does not need to be complete to go live; it improves continuously with every ticket.' },
+  { q: 'How long does it take to build a good knowledge base?', a: 'The initial build takes 2–3 days with your existing documentation, and quality improves rapidly as resolved tickets are indexed — 200+ past tickets gives meaningful coverage of your most common query types. Rather than quote you a resolution rate, we measure it: the pilot replays your own ticket history so you see the real number for your product before committing. The knowledge base does not need to be complete to go live; it improves with every ticket.' },
 ];
 
 export const CS_NUDGE = {

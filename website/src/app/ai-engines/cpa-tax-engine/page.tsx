@@ -171,11 +171,11 @@ export default function Page() {
               {/* Testimonials */}
               <section className={styles.bodySection} id="testimonials">
                 <p className="eyebrow">Proof</p>
-                <h2 className={styles.bodyTitle}>What tax teams say</h2>
+                <h2 className={styles.bodyTitle}>How we prove it — before you commit</h2>
                 <div className={styles.tGrid}>
                   {CPA_TAX_TESTIMONIALS.map((t) => (
                     <figure key={t.name} className={styles.tCard}>
-                      <blockquote className={styles.tQuote}>&ldquo;{t.quote}&rdquo;</blockquote>
+                      <blockquote className={styles.tQuote}>{t.quote}</blockquote>
                       <figcaption className={styles.tWho}>
                         <span className={styles.tName}>{t.name}</span>
                         <span className={styles.tMeta}>{t.role} · {t.company}</span>

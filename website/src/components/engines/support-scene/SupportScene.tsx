@@ -92,9 +92,9 @@ const CUSTOMER_MSG =
 
 // 5 · LEARN — the closing card
 const CLOSE_LINES = [
-  'Ticket #88421 resolved · CSAT 4.7/5',
+  'Ticket #88421 resolved · satisfaction survey sent',
   'New pattern indexed → the next one resolves faster',
-  'First-touch resolution this week: 73%',
+  'Weekly QA sample queued for human review',
 ];
 
 const FINE_LOGOS: { src: string; alt: string }[] = [
@@ -788,10 +788,10 @@ export default function SupportScene() {
             <p className={styles.receiptTitle}>First response in 8 seconds. Resolved with real actions.</p>
             <div className={styles.receiptRows}>
               <div className={styles.receiptRow}><span>First response</span><b className={styles.receiptHl}>8 sec</b></div>
-              <div className={styles.receiptRow}><span>Resolved without a human</span><b className={styles.receiptHl}>73%</b></div>
               <div className={styles.receiptRow}><span>Real actions taken</span><b>credit + incident check</b></div>
-              <div className={styles.receiptRow}><span>Escalations arrive briefed</span><b className={styles.receiptHl}>100%</b></div>
-              <div className={styles.receiptRow}><span>CSAT</span><b>4.7/5</b></div>
+              <div className={styles.receiptRow}><span>Answer grounded in</span><b>your KB + live status</b></div>
+              <div className={styles.receiptRow}><span>Escalations arrive briefed</span><b className={styles.receiptHl}>always</b></div>
+              <div className={styles.receiptRow}><span>Customer can reach a human</span><b>any time they ask</b></div>
             </div>
             <BookButton className={styles.receiptCta} location="customer-support-engine-scene-receipt">
               Run a week of your tickets →
