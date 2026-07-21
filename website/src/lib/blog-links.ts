@@ -1,4 +1,4 @@
-import { services, useCasesByFunction, useCasesByIndustry } from './taxonomy';
+import { services, useCasesByFunction, useCasesByIndustry, geoPages } from './taxonomy';
 import { CALCULATORS, type CalculatorDef } from '../components/calculators/registry';
 
 /**
@@ -6,11 +6,14 @@ import { CALCULATORS, type CalculatorDef } from '../components/calculators/regis
  * post links "up" to a money page with keyword-rich anchor text (hub-and-spoke
  * internal linking). Topic match is keyword-based on title + category + slug.
  */
-const ALL = [...services, ...useCasesByFunction, ...useCasesByIndustry];
+const ALL = [...services, ...useCasesByFunction, ...useCasesByIndustry, ...geoPages];
 const LABEL = new Map(ALL.map((i) => [i.slug, i.title || i.navLabel]));
 
 // First match wins ordering; multiple rules can contribute (deduped, capped at 3).
 const RULES: [RegExp, string[]][] = [
+  // Geo first: a UAE/Dubai post should link its regional money page ahead of the
+  // generic vertical pages, then let the vertical rules below fill the remaining slots.
+  [/dubai|\buae\b|emirates|abu dhabi|\bgcc\b|middle east/i, ['ai-automation-agency-dubai']],
   [/invoice|billing|reconcil|accounts payable|accounts receivable|\bap\b|\bar\b|expense|month-?end|close|ledger|bookkeep/i, ['finance-automation', 'document-processing-automation']],
   [/\btax\b|cpa|accounting|\b1099\b|w-?2/i, ['cpa-tax-document-automation', 'finance-automation']],
   [/legal|law firm|contract|due diligence|clause|litigation|matter intake|imanage|netdocuments/i, ['legal-due-diligence-automation', 'document-processing-automation']],

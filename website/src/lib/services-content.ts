@@ -943,6 +943,84 @@ export const SERVICES: ServiceContent[] = [
     ],
     related: ['legal-due-diligence-automation', 'financial-services-automation', 'cpa-tax-document-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
   },
+  {
+    slug: 'ai-automation-agency-dubai',
+    metaTitle: 'AI Automation Agency Dubai & UAE | Chronexa',
+    metaDescription:
+      'AI automation agency for Dubai and UAE enterprises — custom AI and n8n workflows deployed in your own environment, fixed-price with a 90-day ROI guarantee.',
+    h1: 'AI Automation Agency in Dubai & the UAE',
+    answer:
+      'Chronexa is an AI automation agency working with enterprises across Dubai, Abu Dhabi and the wider UAE. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence and n8n workflow automation — deployed inside the environment you already run, so regulated data stays under your control. Engagements are fixed-price and backed by a 90-day ROI guarantee.',
+    heroSub:
+      'Custom AI and workflow automation for UAE finance, legal, tax and professional-services teams — built inside your own environment, scoped and fixed-price, with a 90-day ROI guarantee.',
+    serviceName: 'AI Automation Agency Dubai',
+    serviceType: 'AI automation agency & consultancy',
+    schemaDescription:
+      'AI automation agency for Dubai and UAE enterprises — custom AI systems and n8n workflow automation across finance, legal, tax and professional services, deployed on the client’s own infrastructure.',
+    roi: [
+      { value: 'In-region', label: 'Self-hosted deployment — data stays inside your environment' },
+      { value: 'Fixed-price', label: 'Scoped to the outcome before you commit' },
+      { value: '90-day', label: 'ROI guarantee — or we keep working free' },
+    ],
+    callout:
+      'Most AI automation in the UAE is bought as another SaaS login on someone else’s cloud. That is a fine trade for low-risk ops work — but if you are a DIFC or ADGM-regulated firm, a law practice, or an accounting firm handling client financials, the question a regulator asks is not which tool you used. It is where the data sat, who could see it, and whether you can show the trail.',
+    sections: [
+      {
+        heading: 'Choosing an AI automation agency in Dubai',
+        level: 2,
+        body: [
+          'The UAE market is full of agencies reselling off-the-shelf automations on a vendor’s cloud. For marketing ops or a WhatsApp auto-reply, that is often enough. For a regulated firm it is the wrong shape: your data leaves your boundary, the workflow is rented rather than owned, and there is rarely an audit trail that survives scrutiny.',
+          'The differentiator is not the tooling — most agencies use the same handful of platforms. It is whether the work can be built inside infrastructure you control, integrated with the systems you already run, and handed over as an asset you own. That is the gap Chronexa is built for: engineer-led, custom AI automation for UAE enterprises where the data is sensitive and the process actually matters.',
+        ],
+      },
+      {
+        heading: 'Built for UAE regulated and professional-services firms',
+        level: 2,
+        body: [
+          'Our depth concentrates where generic agencies cannot go: finance and accounting teams preparing for VAT and the UAE’s e-invoicing regime, law firms automating document and matter workflows, wealth managers and advisory firms handling client onboarding and compliance, and tax practices drowning in document intake. Each is built from real engagements, deployed with role-based access and a full audit trail.',
+          'Because deployments run inside your own environment — self-hosted in-region if that is what your compliance position requires — sensitive client data never has to leave your control or train a public model. For UAE firms weighing AI adoption against data-residency obligations, that is usually the deciding factor.',
+        ],
+      },
+      {
+        heading: 'Workflow automation and n8n as the on-ramp',
+        level: 3,
+        body: [
+          'Not every problem needs a bespoke enterprise build. For higher-volume, lower-risk work — lead routing, document intake, reporting, internal ops — we ship fast workflow automation on n8n that you own outright, self-hosted on your infrastructure rather than rented per task. It is the pragmatic starting point for most Dubai and Abu Dhabi engagements, and a common route in is migrating an existing Zapier or Make setup off per-task pricing.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Free automation audit', body: 'We review your workflows and identify where AI saves the most time and cost, and what your data-residency position requires.' },
+      { title: 'Scope & fixed price', body: 'We define deliverables, ROI targets, and a fixed price in AED or USD before you commit.' },
+      { title: 'Build on your infrastructure', body: 'We build inside your environment, integrate with your existing stack, and validate against real data with human review where it matters.' },
+      { title: 'Deploy & measure', body: 'Go live with training, audit trails, and reporting against the ROI targets agreed up front.' },
+    ],
+    whyCustom: [
+      'Deployed inside your own environment — client data stays contained and never trains a public model.',
+      'Domain depth in regulated and professional services (finance, legal, tax, advisory), not generic ops automation.',
+      'Fixed-price and outcome-scoped, with ROI agreed before the build and a 90-day guarantee.',
+      'You own the workflows and the infrastructure they run on — not another per-seat subscription.',
+    ],
+    included: [
+      'Free AI workflow audit',
+      'Custom, secure build inside your environment',
+      'Self-hosted n8n deployment & migration from Zapier / Make',
+      'Document intelligence & RAG knowledge engines',
+      'CRM, ERP & accounting-system integrations',
+      'Security, access control & audit trails',
+      '90-day ROI guarantee',
+      'Ongoing optimization & support',
+    ],
+    faqs: [
+      { q: 'Do you work with companies based in Dubai and Abu Dhabi?', a: 'Yes — we deliver for clients across Dubai, Abu Dhabi and the wider UAE and GCC. Engagements run remotely with scheduled working sessions in your timezone, and everything is documented so your team is never dependent on us to operate it.' },
+      { q: 'Can our data stay inside the UAE?', a: 'Yes. We most often self-host on infrastructure you control, which means you choose the region your data sits in. For firms with data-residency obligations this is usually the deciding factor, and it is settled during scoping rather than after the build.' },
+      { q: 'What kind of AI automation do UAE firms usually start with?', a: 'Most start with a high-volume, low-risk workflow — document intake, lead routing, reporting, or client onboarding — then extend into the regulated work once the pattern is proven. We scope the first build to pay for itself before you commit to a larger programme.' },
+      { q: 'Can you migrate our existing Zapier or Make workflows to n8n?', a: 'Yes — moving off per-task pricing to self-hosted n8n is one of our most common engagements. We rebuild and harden the workflows, validate them against real data, then cut over without downtime.' },
+      { q: 'How long does an engagement take?', a: 'A focused workflow typically goes live in 4–6 weeks; a larger enterprise system such as a private RAG knowledge engine usually runs a couple of months. You get a written scope and timeline before any build begins.' },
+      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome, quoted in AED or USD. ${GUARANTEE} Book a free audit for a clear price and ROI estimate.` },
+    ],
+    related: ['n8n-automation-services', 'financial-services-automation', 'legal-due-diligence-automation', 'cpa-tax-document-automation', 'us-ai-automation-agency'],
+  },
 
   /* ============================ SERVICES (capabilities) ============================ */
   {
@@ -4020,6 +4098,11 @@ export const SOLUTIONS: Record<string, SolutionCard[]> = {
     { title: 'Custom AI automation', body: 'n8n and AI systems built around the workflows your US B2B team runs.', roiImpact: 'Built around your workflows' },
     { title: 'Document & revenue ops', body: 'From document processing to RevOps, delivered by one partner.', roiImpact: 'One team across many workflows' },
     { title: 'Secure & owned', body: 'Deployed on infrastructure you own, audit-ready from day one.', roiImpact: 'Data sovereignty by default' },
+  ],
+  'ai-automation-agency-dubai': [
+    { title: 'Custom AI & workflow automation', body: 'n8n and AI systems built around the processes your UAE team actually runs.', roiImpact: 'Built around your workflows' },
+    { title: 'Document & compliance workflows', body: 'Document intake, client onboarding and reporting handled end to end.', roiImpact: 'One team across many workflows' },
+    { title: 'Deployed in your region', body: 'Self-hosted on infrastructure you control, audit-ready from day one.', roiImpact: 'Data residency by default' },
   ],
 };
 

@@ -45,6 +45,7 @@ const CLASSIFY: Record<string, Meta> = {
 
   // Geo
   'us-ai-automation-agency': { kind: 'geo', navLabel: 'US AI Automation Agency', order: 1 },
+  'ai-automation-agency-dubai': { kind: 'geo', navLabel: 'AI Automation Agency Dubai', order: 2 },
 
   // Integrations — tool-specific landing pages (Layer-A "moat" keywords). Kept OUT of the
   // mega-nav and /solutions on purpose; reached via their parent pillar's related[], the
