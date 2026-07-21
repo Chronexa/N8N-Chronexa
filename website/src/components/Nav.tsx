@@ -38,6 +38,17 @@ const LIVE_ENGINES = ENGINE_ROADMAP.filter(
   (e): e is RoadmapItem & { href: string } => e.status === 'live' && !!e.href,
 );
 
+// Tight one-line descriptors for the mega-menu — the full `promise` paragraphs
+// belong on the pages, not the nav (they turned the menu into a wall of text).
+const ENGINE_NAV_BLURB: Record<string, string> = {
+  'Sales Engine': 'AI outbound, human-approved',
+  'CPA & Tax Engine': 'Reviewer-ready returns in hours',
+  'Investment Research Engine': 'Research & execution, human-approved',
+  'Document Intelligence Engine': 'Ask your documents, cited answers',
+  'Legal & Regulatory Engine': 'Regulatory alerts, billing & knowledge',
+  'Customer Support Engine': 'Grounded answers, every channel',
+};
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function Nav() {
@@ -130,13 +141,14 @@ export default function Nav() {
             <div className={styles.engineGrid}>
               {LIVE_ENGINES.map((e) => (
                 <Link key={e.name} href={e.href} className={styles.engineCard} onClick={close}>
-                  <div className={styles.engineCardTop}>
-                    <span className={styles.engineCardIcon}><EngIco type={e.icon} /></span>
-                    <span className={styles.engineCardName}>{e.name}</span>
-                    <span className={styles.badgeLive}>Live</span>
-                  </div>
-                  <p className={styles.engineCardBlurb}>{e.promise}</p>
-                  <span className={styles.engineCardCta}>Explore <span aria-hidden="true">→</span></span>
+                  <span className={styles.engineCardIcon}><EngIco type={e.icon} /></span>
+                  <span className={styles.engineCardText}>
+                    <span className={styles.engineCardName}>
+                      {e.name}
+                      <span className={styles.engineCardArrow} aria-hidden="true">→</span>
+                    </span>
+                    <span className={styles.engineCardBlurb}>{ENGINE_NAV_BLURB[e.name] ?? e.kicker}</span>
+                  </span>
                 </Link>
               ))}
             </div>

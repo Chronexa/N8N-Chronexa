@@ -141,16 +141,16 @@
 .engineGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.35rem;
+  gap: 0.1rem 0.5rem;
   padding: var(--spacing-sm);
 }
 
-/* Live engine card */
+/* Live engine card — a clean row: icon + name + one-line descriptor. */
 .engineCard {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.65rem 0.7rem;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.62rem 0.7rem;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   background: transparent;
@@ -161,14 +161,9 @@
   background: var(--neutral-50, #fafafa);
   border-color: var(--border-light);
 }
-
-.engineCardTop {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 .engineCardIcon {
-  width: 26px; height: 26px;
+  width: 30px; height: 30px;
+  margin-top: 1px;
   flex: none;
   border-radius: var(--radius-sm);
   background: var(--brand-green-soft);
@@ -177,41 +172,33 @@
   align-items: center;
   justify-content: center;
 }
+.engineCardText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.14rem;
+  min-width: 0;
+}
 .engineCardName {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
   font-size: var(--step--1);
   font-weight: 600;
   color: var(--text-light);
-  flex: 1;
-  line-height: 1.2;
+  line-height: 1.25;
 }
-.engineCardBlurb {
-  font-size: 0.76rem;
-  color: var(--text-muted-light);
-  line-height: 1.45;
-  margin: 0;
-  padding-left: calc(26px + 0.5rem);
-}
-.engineCardCta {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--brand-green-ink);
-  padding-left: calc(26px + 0.5rem);
-  transition: gap var(--transition-fast);
-}
-.engineCard:hover .engineCardCta { text-decoration: underline; }
-
-/* Live badge */
-.badgeLive {
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.12rem 0.4rem;
-  border-radius: var(--radius-pill);
+.engineCardArrow {
   color: var(--brand-green);
-  background: var(--brand-green-soft);
-  border: 1px solid var(--brand-green-line);
-  flex: none;
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+.engineCard:hover .engineCardArrow { opacity: 1; transform: translateX(0); }
+.engineCardBlurb {
+  font-size: 0.75rem;
+  color: var(--text-muted-light);
+  line-height: 1.35;
+  margin: 0;
 }
 
 /* ── Mobile toggle ─────────────────────────────────────────────────────────── */
@@ -267,7 +254,6 @@
   /* AI Engines on mobile: single column */
   .enginePanel { min-width: 0; }
   .engineGrid { grid-template-columns: 1fr; padding: 0.5rem 0 0 0.5rem; }
-  .engineCardBlurb, .engineCardCta { padding-left: 0; }
 
   .panelFooter { background: transparent; border-top: none; padding: 0.4rem 0 0 0.5rem; }
 
