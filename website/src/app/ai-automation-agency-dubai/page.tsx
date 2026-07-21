@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import ServiceArticle from '../../components/ServiceArticle';
+import DubaiLanding from '../../components/DubaiLanding';
 import { getService } from '../../lib/services-content';
 import { serviceMetadata } from '../../lib/seo';
 
@@ -11,5 +11,5 @@ export const metadata: Metadata = serviceMetadata(SLUG);
 
 export default function Page() {
   if (!data) notFound();
-  return <ServiceArticle data={data} />;
+  return <DubaiLanding data={data} />;
 }
