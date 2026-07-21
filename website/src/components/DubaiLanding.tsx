@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './DubaiLanding.module.css';
-import { site } from '../lib/site';
+import { site, founders } from '../lib/site';
 import { type ServiceContent } from '../lib/services-content';
 import BookButton from './BookButton';
 import TrackView from './TrackView';
@@ -10,7 +10,7 @@ import ScrollDepth from './ScrollDepth';
 const PAIN_POINTS = [
   'Leads sit in a shared inbox until someone remembers to reply',
   'The same customer details get typed into three different systems',
-  'WhatsApp messages, invoices and reports pile up faster than your team can handle them',
+  'WhatsApp messages, invoices and reports pile up faster than your team can clear them',
   'Reports get rebuilt by hand every week from numbers scattered across tools',
   'Growth means hiring more people to do the same manual work — not less',
 ];
@@ -65,56 +65,55 @@ export default function DubaiLanding({ data }: { data: ServiceContent }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      {/* Hero — image right, broad copy left. This page is a sales page for
-          any Dubai/UAE business, not a regulated-industry explainer. */}
-      <section className={styles.hero}>
-        <div className={`container ${styles.heroGrid}`}>
-          <div className={styles.heroCopy}>
-            <nav className={styles.crumbs} aria-label="Breadcrumb">
-              <Link href="/">Home</Link><span aria-hidden="true">/</span>
-              <span aria-current="page">{data.serviceName}</span>
-            </nav>
-            <p className={styles.kindPill}>AI Automation Agency · Dubai &amp; UAE</p>
-            <h1 className={styles.h1}>{data.h1}</h1>
-            <p className={`heroDescription ${styles.heroSub}`}>{data.heroSub}</p>
-            <div className={styles.heroActions}>
-              <BookButton location="dubai-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
-              <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
-            </div>
-          </div>
-          <div className={styles.heroImageWrap}>
-            <Image
-              src="/images/dubai-skyline-hero.jpg"
-              alt="Dubai skyline, illustrated"
-              width={1536}
-              height={1024}
-              priority
-              sizes="(max-width: 900px) 100vw, 560px"
-              className={styles.heroImage}
-            />
+      {/* Hero — full-bleed skyline photo behind the text, same construction as
+          the homepage hero (absolute image + directional scrim + left-anchored
+          content column), not a boxed side panel. */}
+      <section className={styles.hero} aria-labelledby="dubai-hero-title">
+        <picture className={styles.heroPicture}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/dubai-skyline-hero.jpg" alt="" className={styles.heroImg} fetchPriority="high" decoding="async" />
+        </picture>
+        <div className={styles.heroOverlay} aria-hidden="true" />
+        <div className={`container ${styles.heroContainer}`}>
+          <nav className={styles.crumbs} aria-label="Breadcrumb">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span>
+            <span aria-current="page">{data.serviceName}</span>
+          </nav>
+          <p className={styles.kindPill}>AI Automation Agency · Dubai &amp; UAE</p>
+          <h1 id="dubai-hero-title" className={styles.heroTitle}>We automate the work slowing your Dubai business down.</h1>
+          <p className={styles.heroDescription}>Workflow automation, AI agents and document processing — built for your business, not a template. Fixed-price, with a 90-day ROI guarantee.</p>
+          <div className={styles.heroActions}>
+            <BookButton location="dubai-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+            <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
         </div>
       </section>
 
-      {/* Stat strip */}
-      <section className={styles.statBand}>
+      {/* Who's behind this — real founders, real credentials. No client
+          metrics for this market yet, so credibility comes from the people. */}
+      <section className="section-light">
         <div className="container">
-          <div className={styles.statGrid}>
-            {data.roi.map((r) => (
-              <div className={styles.stat} key={r.label}>
-                <div className={styles.statValue}>{r.value}</div>
-                <div className={styles.statLabel}>{r.label}</div>
-              </div>
+          <p className="eyebrow">Who&apos;s behind this</p>
+          <h2 className={styles.sectionHead}>Built by engineers and operators, not a call center</h2>
+          <div className={styles.foundersGrid}>
+            {founders.map((f) => (
+              <article className={styles.founderCard} key={f.name}>
+                <Image src={f.image} alt={f.name} width={72} height={72} className={styles.founderImg} />
+                <div>
+                  <p className={styles.founderName}>{f.name}</p>
+                  <p className={styles.founderRole}>{f.role} · {f.credential}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pain points — broad, cross-industry */}
-      <section className="section-light">
+      {/* Pain points — specific, not a rhetorical-question gimmick */}
+      <section className="section-light" style={{ paddingTop: 0 }}>
         <div className="container">
-          <p className="eyebrow">Sound familiar?</p>
-          <h2 className={styles.sectionHead}>Whatever runs your business today, this is usually the problem</h2>
+          <p className="eyebrow">Where the hours actually go</p>
+          <h2 className={styles.sectionHead}>The manual work eating your team&apos;s week</h2>
           <ul className={styles.painGrid}>
             {PAIN_POINTS.map((p) => (
               <li className={styles.painItem} key={p}>
@@ -126,11 +125,11 @@ export default function DubaiLanding({ data }: { data: ServiceContent }) {
         </div>
       </section>
 
-      {/* What we automate — broad functional grid, any industry */}
-      <section className="section-light" style={{ paddingTop: 0 }}>
+      {/* What we build — broad functional grid, any industry */}
+      <section className="section-light">
         <div className="container">
-          <p className="eyebrow">What we automate</p>
-          <h2 className={styles.sectionHead}>Built for any Dubai or UAE business</h2>
+          <p className="eyebrow">What we build</p>
+          <h2 className={styles.sectionHead}>Workflow automation, AI agents, and the integrations between them</h2>
           <div className={styles.autoGrid}>
             {AUTOMATIONS.map((a) => (
               <article className={styles.autoCard} key={a.title}>

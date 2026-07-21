@@ -958,9 +958,9 @@ export const SERVICES: ServiceContent[] = [
     schemaDescription:
       'AI automation agency for Dubai and UAE businesses of any size or industry — workflow automation, AI agents, document processing and system integrations, with an optional self-hosted deployment for regulated teams.',
     roi: [
-      { value: '$12M+', label: 'ROI generated for clients to date' },
       { value: 'Fixed-price', label: 'Scoped to the outcome before you commit' },
       { value: '90-day', label: 'ROI guarantee — or we keep working free' },
+      { value: 'Self-hosted', label: 'Option to keep data inside your own environment' },
     ],
     callout:
       'Whatever runs your business today — Zoho, HubSpot, WhatsApp, Excel, a homegrown system, or nothing at all yet — the automation question is the same: what is still done by hand that shouldn’t be? Finance and legal teams often need it self-hosted for data residency; most businesses just need it to work reliably and pay for itself. We build both.',
