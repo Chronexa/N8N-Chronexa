@@ -69,7 +69,7 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
           <p className="heroDescription">{data.heroSub}</p>
           <p className={styles.answer}>{data.answer}</p>
           <div className={styles.heroActions}>
-            <BookButton location="usecase-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+            <BookButton location="usecase-hero">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
             <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
         </div>
@@ -237,7 +237,7 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
         <div className={`container ${styles.closingCta}`}>
           <h2 className={styles.closingTitle}>Ready to put {data.serviceName} to work?</h2>
           <p className={styles.closingSub}>15 minutes to see if this is worth building for you — no pressure if it isn&apos;t.</p>
-          <BookButton location="usecase-footer">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+          <BookButton location="usecase-footer">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
         </div>
       </section>
     </>

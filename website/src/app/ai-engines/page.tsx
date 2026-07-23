@@ -42,7 +42,7 @@ export default function Page() {
             </p>
             <div className={styles.heroCtas}>
               <Link href="/ai-engines/sales-engine" className="btn-primary">Explore the Sales Engine →</Link>
-              <BookButton className="btn-outline" location="ai-engines-hub-hero">Book a Free Audit</BookButton>
+              <BookButton className="btn-outline" location="ai-engines-hub-hero">Book a Discovery Call.</BookButton>
             </div>
           </div>
         </div>

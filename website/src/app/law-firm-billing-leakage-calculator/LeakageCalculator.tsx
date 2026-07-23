@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import styles from '../../components/calculators/calculators.module.css';
 import SliderField from '../../components/calculators/SliderField';
-import CurrencyToggle from '../../components/calculators/CurrencyToggle';
 import LeadBox from '../../components/calculators/LeadBox';
 import ComparisonPanel from '../../components/calculators/ComparisonPanel';
 import HeroBar from '../../components/calculators/HeroBar';
@@ -37,17 +36,11 @@ const RATE_CONFIG: Record<Currency, { default: number; min: number; max: number;
 };
 
 export default function LeakageCalculator() {
-  const [currency, setCurrency] = useState<Currency>('USD');
-  const [lawyers, setLawyers] = useState(100);
-  const [rate, setRate] = useState(RATE_CONFIG.USD.default);
+  const currency = 'USD';
+  const [lawyers, setLawyers] = useState(25);
+  const [rate, setRate] = useState(450);
   const [hours, setHours] = useState(6);
   const onEngage = useEngageOnce(SOURCE);
-
-  function switchCurrency(c: Currency) {
-    onEngage();
-    setCurrency(c);
-    setRate(RATE_CONFIG[c].default);
-  }
 
   const potential = lawyers * rate * hours * WORK_DAYS;
   const leakage = potential * LEAKAGE;
@@ -61,7 +54,6 @@ export default function LeakageCalculator() {
     <div className={styles.calc}>
       {/* Inputs */}
       <div className={styles.inputs}>
-        <CurrencyToggle currency={currency} onSwitch={switchCurrency} />
         <SliderField
           label="Fee-earning lawyers"
           displayValue={lawyers.toLocaleString('en-US')}
@@ -89,25 +81,18 @@ export default function LeakageCalculator() {
 
       {/* Results — live, ungated */}
       <div className={styles.results} aria-live="polite">
-        <p className={styles.resultKicker}>Estimated revenue leaking annually</p>
+        <p className={styles.resultKicker}>Annual Revenue Recoverable With AI</p>
         <div>
-          <p className={styles.resultBig}>{fmtMoney(leakage, currency)}</p>
+          <p className={styles.resultBig}>{fmtMoney(recoverable, currency)}</p>
           <p className={styles.resultBigLabel}>
-            of potential billings never reaching an invoice, across {lawyers.toLocaleString('en-US')} lawyers
+            conservatively recovered per year (capturing half the estimated leak)
           </p>
         </div>
-        <p className={styles.subLabel}>
-          Modeled at 26%, inside the documented 15–30% range — as low as {fmtMoney(leakageLow, currency)}, as high
-          as {fmtMoney(leakageHigh, currency)} depending on your firm&rsquo;s timekeeping discipline.
-        </p>
+        
         <div className={styles.subResults}>
           <div className={styles.subResult}>
-            <p className={styles.subValue}>{fmtMoney(recoverable, currency)}</p>
-            <p className={styles.subLabel}>conservatively recoverable per year (capturing half the leak)</p>
-          </div>
-          <div className={styles.subResult}>
-            <p className={styles.subValue}>{hoursLostPerWeek.toLocaleString('en-US', { maximumFractionDigits: 1 })} h</p>
-            <p className={styles.subLabel}>lost per lawyer, per week — work done but never logged</p>
+            <p className={`${styles.subValue} ${styles.resultAlert}`}>{fmtMoney(leakage, currency)}</p>
+            <p className={styles.subLabel}>Total revenue leaking annually (Modeled at 26% of potential billings)</p>
           </div>
         </div>
 
@@ -135,7 +120,7 @@ export default function LeakageCalculator() {
 
       <LeadBox
         source={SOURCE}
-        headline="Get this breakdown for your firm — plus the fix"
+        headline="Get your firm's custom leakage report & the 4 workflows to fix it"
         sub="We’ll send your numbers with the full methodology, and the four workflows — billing capture first — that close the leak on the systems your firm already runs."
         successText="Done — the breakdown for your numbers and the four workflows that close the leak are on their way to your inbox. If you would rather see your real number than an estimate, the next step is a 30-minute audit."
         buildUsecase={() =>

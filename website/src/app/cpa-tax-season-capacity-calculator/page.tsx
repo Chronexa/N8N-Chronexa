@@ -3,20 +3,23 @@ import Link from 'next/link';
 import CtaBand from '../../components/CtaBand';
 import { site } from '../../lib/site';
 import CapacityCalculator from './CapacityCalculator';
+import CPAArticle from './CPAArticle';
+import CalcNudge from '../../components/CalcNudge';
 import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/cpa-tax-season-capacity-calculator`;
-const TITLE = 'CPA Tax Season Capacity Calculator — Returns You Could Add Without Hiring | Chronexa';
+const TITLE = 'CPA Firm Capacity Planner: Model Your Tax Season Bottleneck | Chronexa';
 const DESCRIPTION =
-  'Document automation cuts prep time per return by 40%. Enter your preparers, return volume, prep hours and average fee — see how many returns your current team could add next season, and what that capacity is worth.';
+  'Hiring more juniors will not solve your capacity problem. You need to fix the Partner Review Bottleneck. Enter your partner count, hours, and rework rate \u2014 calculate your firm\u2019s true max throughput and the revenue you are leaving on the table.';
+
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords: [
-    'CPA tax season capacity calculator', 'tax firm capacity planning', 'tax preparation automation ROI',
-    'CPA firm capacity', 'returns per preparer', 'tax document automation savings',
-    'accounting firm busy season staffing', 'tax prep time per return',
+    'tax season staffing model', 'CPA firm capacity planning', 'tax return margin analysis',
+    'reducing review loops', 'CPA firm throughput simulator', 'partner review bottleneck',
+    'accounting firm capacity', 'tax season automation ROI', 'rework loop rate CPA',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website', images: [site.ogImage] },
@@ -84,15 +87,13 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* 1 — Dark hero with the live calculator */}
-      <section className="section-dark">
+      <section className="section-muted">
         <div className="container">
           <div className={styles.heroInner}>
-            <p className="eyebrow">Free calculator</p>
-            <h1 className={styles.heroTitle}>How many returns is your team leaving on the table next season?</h1>
+            <p className="eyebrow">Free Simulator — No email required</p>
+            <h1 className={styles.heroTitle}>CPA Firm Capacity Planner: Model Your Tax Season Bottleneck</h1>
             <p className={styles.heroSub}>
-              Automated document intake, extraction and return pre-fill cut prep time per return by about 40%. That
-              freed time is capacity — returns your current team could file without a single seasonal hire. Move the
-              sliders.
+              Hiring more juniors won&rsquo;t solve your capacity problem. The constraint is your partners&rsquo; review time. Move the sliders to calculate your firm&rsquo;s true max throughput and the exact revenue your current rework loop is preventing you from capturing.
             </p>
           </div>
           <CapacityCalculator />
@@ -187,7 +188,10 @@ review hours saved = returns × (your review hours/return − 20 min)   (added o
         </div>
       </section>
 
-      {/* 4 — FAQ */}
+      {/* 4 — SEO Article + Audit CTAs */}
+      <CPAArticle />
+
+      {/* 5 — FAQ */}
       <section className="section-light" style={{ paddingTop: 0 }}>
         <div className="container">
           <p className="eyebrow">FAQ</p>
@@ -204,6 +208,11 @@ review hours saved = returns × (your review hours/return − 20 min)   (added o
       </section>
 
       <CtaBand />
+      <CalcNudge
+        headline="Seen a number that stops you?"
+        sub="We'll model your exact review bottleneck and show the unlock — free 30-min audit, no commitment."
+        location="cpa-nudge"
+      />
     </>
   );
 }

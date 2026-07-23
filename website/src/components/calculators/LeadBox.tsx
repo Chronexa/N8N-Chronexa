@@ -70,7 +70,7 @@ export default function LeadBox({
         <div className={styles.leadSuccess}>
           <p className={styles.leadSuccessText}>{successText}</p>
           <BookButton className="btn-primary" location={`${source}-success`}>
-            Book a Free Audit
+            Book a Discovery Call.
           </BookButton>
         </div>
       ) : (

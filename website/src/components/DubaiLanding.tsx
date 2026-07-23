@@ -112,7 +112,7 @@ export default function DubaiLanding({ data }: { data: ServiceContent }) {
           <h1 id="dubai-hero-title" className={styles.heroTitle}>We automate the work slowing your Dubai business down.</h1>
           <p className={styles.heroDescription}>{data.heroSub}</p>
           <div className={styles.heroActions}>
-            <BookButton location="dubai-hero">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+            <BookButton location="dubai-hero">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
             <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function DubaiLanding({ data }: { data: ServiceContent }) {
         <div className={`container ${styles.closingCta}`}>
           <h2 className={styles.closingTitle}>Ready to see what we&apos;d automate for you?</h2>
           <p className={styles.closingSub}>15 minutes to see if this is worth building for your business. No pressure if it isn&apos;t.</p>
-          <BookButton location="dubai-footer">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+          <BookButton location="dubai-footer">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
         </div>
       </section>
     </>

@@ -50,7 +50,7 @@ export default function ContactPage() {
             rest easy. We&apos;ll review your workflows and suggest where AI can save time &amp; cost.
           </p>
           <div className={styles.bookRow}>
-            <BookButton location="contact-intro">Book a Free Audit <span aria-hidden="true">→</span></BookButton>
+            <BookButton location="contact-intro">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
             <span className={styles.bookNote}>Free 30-min call · pick a time that works</span>
           </div>
           <ul className={styles.meta}>

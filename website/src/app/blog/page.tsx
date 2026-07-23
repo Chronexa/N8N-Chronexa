@@ -56,7 +56,7 @@ export default async function BlogIndexPage() {
           <p className="heroDescription" style={{ marginBottom: 'var(--spacing-lg)' }}>
             {posts.length} articles.{' '}
             <Link href="/contact" style={{ textDecoration: 'underline' }}>
-              Building AI automation for your firm? Book a free audit →
+              Building AI automation for your firm? Book a discovery call. →
             </Link>
           </p>
 

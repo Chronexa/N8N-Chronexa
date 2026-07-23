@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Principles from '../../components/Principles';
+import Story from '../../components/Story';
 import Team from '../../components/Team';
 import Numbers from '../../components/Numbers';
 import CtaBand from '../../components/CtaBand';
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
     type: 'website',
   },
 };
+
+import styles from './AboutHero.module.css';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -38,30 +41,44 @@ export default function AboutPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
-      <section className="section-dark" style={{ paddingTop: 'calc(var(--nav-height) + var(--spacing-xl))' }}>
-        <div className="container">
-          <p className="eyebrow">About Chronexa</p>
-          <h1 style={{ maxWidth: '26ch' }}>An engineer-led AI automation agency for law firms, CPA practices, and finance teams</h1>
-          <p className="heroDescription" style={{ marginTop: 'var(--spacing-sm)', maxWidth: '65ch' }}>
-            We design, build, and maintain custom, secure AI systems for enterprises in regulated
-            industries — finance, legal, tax and dealmaking — deployed inside the environment you
-            already run, scoped at a fixed price, and engineered to grow with you for years. We act
-            as your technical co-founders, not a vendor that takes a ticket and disappears.
+      <section className={`section-dark ${styles.heroSection}`}>
+        <div className={styles.glow}></div>
+        <div className={`container ${styles.content}`}>
+          <p className={styles.eyebrow}>About Chronexa</p>
+          <h1 className={styles.headline}>
+            We build the engines that power <span className={styles.gradientText}>regulated enterprises.</span>
+          </h1>
+          <p className={styles.subheadline}>
+            Chronexa is an engineer-led automation agency. We architect, build, and deploy custom infrastructure directly into your environment. You own the assets, and your data stays secure.
           </p>
-          <p className="heroDescription" style={{ marginTop: 'var(--spacing-md)', maxWidth: '65ch' }}>
-            Unlike off-the-shelf SaaS, everything we build is an asset you own, deployed inside your
-            environment so sensitive data stays contained. Agentic systems, RAG knowledge engines,
-            document intelligence, and deep integrations — engineered to production standards. For
-            high-volume, lower-risk work we also ship fast n8n workflow automation you own outright.
-          </p>
-          <p className="heroDescription" style={{ marginTop: 'var(--spacing-md)', maxWidth: '65ch' }}>
-            Founded in {company.foundingYear}, Chronexa is {company.teamDescriptor} with deep,
-            hands-on experience across document intelligence, sales and revenue operations, legal,
-            insurance, financial services, accounting, and research — serving B2B clients in the US,
-            UK, and India.
-          </p>
+          <a href={site.booking} target="_blank" rel="noopener noreferrer" className={styles.cta}>
+            Book a Discovery Call.
+          </a>
+
+          <div className={styles.grid}>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>100% Data Ownership</h3>
+              <p className={styles.cardText}>
+                Deployed inside your environment. Your sensitive data never leaves your control.
+              </p>
+            </div>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>Built for ROI</h3>
+              <p className={styles.cardText}>
+                We don't build toys. Every system is scoped at a fixed price and engineered for measurable returns.
+              </p>
+            </div>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>Technical Co-founders</h3>
+              <p className={styles.cardText}>
+                We aren't just vendors. We are a senior team of engineers and operators sitting at your side.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
+
+      <Story />
 
       <section className="section-light">
         <div className="container">

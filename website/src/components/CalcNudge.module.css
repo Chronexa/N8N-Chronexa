@@ -1,0 +1,82 @@
+/* Sticky bottom audit nudge bar */
+.nudge {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #0b1f14;
+  border-top: 2px solid var(--brand-green);
+  padding: 1rem 0;
+  animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.25);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.copy {
+  display: grid;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.nudgeHead {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.nudgeSub {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+  max-width: 55ch;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.nudgeBtn {
+  white-space: nowrap;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.4rem;
+}
+
+.dismiss {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+.dismiss:hover { color: #ffffff; }
+
+@media (max-width: 620px) {
+  .inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .nudgeBtn { width: 100%; text-align: center; }
+  .actions { width: 100%; justify-content: space-between; }
+}

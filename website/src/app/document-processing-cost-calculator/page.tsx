@@ -3,20 +3,22 @@ import Link from 'next/link';
 import CtaBand from '../../components/CtaBand';
 import { site } from '../../lib/site';
 import DocCostCalculator from './DocCostCalculator';
+import APArticle from './APArticle';
+import CalcNudge from '../../components/CalcNudge';
 import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/document-processing-cost-calculator`;
-const TITLE = 'Document Processing Cost Calculator — What Manual Handling Really Costs | Chronexa';
+const TITLE = 'AP Automation ROI Calculator: Early Payment Discount & Cost Per Invoice | Chronexa';
 const DESCRIPTION =
-  'Manual document handling costs $10–$40 per document once you count the full touch time. Enter your monthly volume, minutes per document and staff cost — see your annual cost and the 40–60% that automation removes.';
+  'Data entry is cheap. Missed opportunities are expensive. If invoices sit in an approval queue for more than 10 days, you forfeit the 2/10 Net 30 discount. On a $20M spend base, that’s $400k a year. See your firm’s full AP Cash Velocity opportunity.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords: [
-    'document processing cost calculator', 'invoice processing cost', 'cost per invoice',
-    'document automation ROI', 'AP automation savings calculator', 'manual data entry cost',
-    'document processing automation', 'OCR automation savings',
+    'cost per invoice benchmark', 'Days Payable Outstanding DPO optimization', 'AP automation ROI',
+    'capture early payment discounts', 'accounts payable automation calculator', '2/10 Net 30 discount',
+    'invoice processing cost', 'working capital optimization', 'AP cash velocity',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website', images: [site.ogImage] },
@@ -84,15 +86,15 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* 1 — Dark hero with the live calculator */}
-      <section className="section-dark">
+      <section className="section-muted">
         <div className="container">
           <div className={styles.heroInner}>
-            <p className="eyebrow">Free calculator</p>
-            <h1 className={styles.heroTitle}>What is manual document processing actually costing you?</h1>
+            <p className="eyebrow">Free Simulator — No email required</p>
+            <h1 className={styles.heroTitle}>AP Automation ROI Calculator: Early Payment Discount &amp; Cost Per Invoice</h1>
             <p className={styles.heroSub}>
-              Every document a person opens, reads, re-keys and files costs real staff time — typically $10–$40 each
-              once you count the full touch. Multiply by your monthly volume and the number stops looking small. Move
-              the sliders.
+              Data entry is cheap. Missed opportunities are expensive. If invoices sit in an approval queue for more than
+              10 days, you forfeit the &ldquo;2/10 Net 30&rdquo; early payment discount. On a $20M spend base, that&rsquo;s
+              $400,000 a year. Move the sliders to see your firm&rsquo;s full AP Cash Velocity opportunity.
             </p>
           </div>
           <DocCostCalculator />
@@ -175,11 +177,14 @@ savings     = annual cost × 40–60%   (midpoint 50% shown)`}
         </div>
       </section>
 
-      {/* 4 — FAQ */}
+      {/* 4 — SEO Article + Audit CTAs */}
+      <APArticle />
+
+      {/* 5 — FAQ */}
       <section className="section-light" style={{ paddingTop: 0 }}>
         <div className="container">
           <p className="eyebrow">FAQ</p>
-          <h2 className={styles.bodyTitle}>Document processing costs, answered</h2>
+          <h2 className={styles.bodyTitle}>AP automation costs, answered</h2>
           <div className={styles.faqList}>
             {FAQS.map((f) => (
               <details key={f.q} className={styles.faqItem}>
@@ -192,6 +197,11 @@ savings     = annual cost × 40–60%   (midpoint 50% shown)`}
       </section>
 
       <CtaBand />
+      <CalcNudge
+        headline="Is your AP process forfeiting early payment discounts?"
+        sub="We'll audit your invoice approval chain and calculate your exact cash velocity opportunity — free, in 30 minutes."
+        location="ap-nudge"
+      />
     </>
   );
 }

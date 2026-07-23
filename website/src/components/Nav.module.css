@@ -44,14 +44,20 @@
 
 .cta {
   background-color: var(--brand-green);
-  color: var(--bg-dark);
-  padding: 0.6rem 1.25rem;
-  border-radius: var(--radius-pill);
+  color: var(--color-white);
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
   font-weight: 600;
   font-size: var(--step--1);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  box-shadow: var(--shadow-sm), 0 4px 12px -4px rgba(103, 176, 53, 0.4);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
-.cta:hover { background-color: var(--brand-green-hover); transform: translateY(-1px); color: var(--bg-dark); }
+.cta:hover { 
+  background-color: var(--brand-green-hover); 
+  transform: translateY(-2px); 
+  color: var(--color-white); 
+  box-shadow: var(--shadow-md), 0 8px 16px -6px rgba(103, 176, 53, 0.5);
+}
 
 /* ── Dropdown item wrapper ─────────────────────────────────────────────────── */
 .item { position: relative; display: inline-flex; align-items: center; }

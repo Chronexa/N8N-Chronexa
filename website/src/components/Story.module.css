@@ -1,0 +1,100 @@
+.section {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.intro {
+  max-width: 80ch;
+  margin-bottom: var(--spacing-xl);
+}
+
+.introText {
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--text-muted-dark);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.card {
+  background: var(--bg-body);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardRole {
+  font-size: var(--step--1);
+  color: var(--brand-green-ink);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardName {
+  font-size: var(--step-1);
+  margin-bottom: var(--spacing-sm);
+}
+
+.cardText {
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted-dark);
+}
+
+.philosophy {
+  background: var(--brand-green-ink);
+  color: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.philosophy h3 {
+  color: white;
+  margin-bottom: var(--spacing-sm);
+}
+
+.philosophy p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+.philosophyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.philosophyList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--step--1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.checkIcon {
+  color: var(--brand-green);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .philosophy {
+    grid-template-columns: 1fr;
+  }
+}

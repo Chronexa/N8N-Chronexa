@@ -166,7 +166,7 @@ export default function Nav() {
         <Link href="/blog"         className={styles.link} onClick={close}>Blog</Link>
         <Link href="/about"        className={styles.link} onClick={close}>About</Link>
 
-        <BookButton className={styles.cta} location="nav" onClick={close}>Book a Free Audit</BookButton>
+        <BookButton className={styles.cta} location="nav" onClick={close}>Book a Discovery Call.</BookButton>
       </nav>
     </header>
   );

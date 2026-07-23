@@ -2,21 +2,24 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import CtaBand from '../../components/CtaBand';
 import { site } from '../../lib/site';
-import LeakageCalculator from './LeakageCalculator';
+import LegalROICalculator from './LegalROICalculator';
+import LegalROIBlog from './LegalROIBlog';
+import CalcNudge from '../../components/CalcNudge';
+import BookButton from '../../components/BookButton';
 import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/law-firm-billing-leakage-calculator`;
-const TITLE = 'Law Firm Billing Leakage Calculator — How Much Revenue Is Your Firm Losing? | Chronexa';
+const TITLE = 'Law Firm Realization Rate Calculator: Stop Revenue Leakage | Chronexa';
 const DESCRIPTION =
-  'Firms typically lose 15–30% of billable time to unlogged work. Enter your lawyer count, blended rate and billable hours — see what your firm leaks per year, what is recoverable, and the workflows that close the gap.';
+  'Most firms focus on Billable Hours. Elite firms focus on Realization Rate. See exactly how much revenue your firm is losing to pre-bill write-downs and WIP leakage — and how much AI narrative coaching can recover immediately.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords: [
-    'law firm billing leakage', 'billing leakage calculator', 'legal billing leakage',
-    'law firm revenue leakage', 'automated time capture law firm', 'unbilled hours law firm',
-    'legal billing automation ROI', 'law firm time capture',
+    'attorney realization rates', 'WIP write-downs', 'law firm profitability metrics', 'legal billing hygiene',
+    'law firm realization rate calculator', 'billing leakage calculator', 'pre-bill write-downs',
+    'legal billing automation ROI', 'law firm time capture', 'ABA realization rate benchmark',
   ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website', images: [site.ogImage] },
@@ -83,17 +86,18 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* 1 — Dark hero with the live calculator */}
-      <section className="section-dark">
+      <section className="section-muted">
         <div className="container">
           <div className={styles.heroInner}>
-            <p className="eyebrow">Free calculator</p>
-            <h1 className={styles.heroTitle}>How much revenue is your firm losing to billing leakage?</h1>
+            <p className="eyebrow">Free Simulator — No email required</p>
+            <h1 className={styles.heroTitle}>
+              Law Firm Realization Rate Calculator: Stop Revenue Leakage
+            </h1>
             <p className={styles.heroSub}>
-              Firms typically lose 15–30% of billable time to unlogged work — time reconstructed from memory, sessions
-              logged short, AI-assisted work that never reaches a timesheet. We model 26%. Move the sliders.
+              Most firms focus on Billable Hours. Elite firms focus on Realization Rate. The ABA benchmark for top-performing firms is 93%. Move the sliders to see exactly how much your firm is burning in pre-bill write-downs — and how much is immediately recoverable.
             </p>
           </div>
-          <LeakageCalculator />
+          <LegalROICalculator />
         </div>
       </section>
 
@@ -179,7 +183,37 @@ recoverable = leakage × 50%    (conservative capture)`}
         </div>
       </section>
 
-      {/* 4 — FAQ */}
+      {/* 3 — SEO Article */}
+      <LegalROIBlog />
+
+      {/* 4 — Dark Audit CTA */}
+      <section className="section-light" style={{ paddingTop: 0 }}>
+        <div className="container" style={{ maxWidth: '80ch', margin: '0 auto' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #0b281b 0%, #0f3d28 100%)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'var(--spacing-lg)',
+            display: 'grid',
+            gap: '1rem',
+          }}>
+            <p className="eyebrow" style={{ color: 'var(--brand-green)' }}>Free Workflow Audit</p>
+            <h3 style={{ fontSize: 'var(--step-3)', color: '#ffffff', margin: 0, lineHeight: 1.2 }}>
+              See what this number means for your firm specifically.
+            </h3>
+            <p style={{ color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, maxWidth: '55ch', margin: 0 }}>
+              In a 30-minute call, we map your firm&rsquo;s exact billing and narrative workflow, identify the top 3 write-down sources, and show you the realization rate improvement your firm can achieve before the next billing cycle.
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem', margin: 0 }}>
+              No commitment. If we can&rsquo;t find revenue worth more than it costs to recover it, you keep the analysis and owe us nothing.
+            </p>
+            <BookButton location="legal-article-bottom" className="btn-primary">
+              Book the Free Audit Call &rarr;
+            </BookButton>
+          </div>
+        </div>
+      </section>
+
+      {/* 5 — FAQ */}
       <section className="section-light" style={{ paddingTop: 0 }}>
         <div className="container">
           <p className="eyebrow">FAQ</p>
@@ -196,6 +230,11 @@ recoverable = leakage × 50%    (conservative capture)`}
       </section>
 
       <CtaBand />
+      <CalcNudge
+        headline="Seen a number that matters?"
+        sub="We'll map exactly where your firm's write-downs are originating — in a free 30-minute audit."
+        location="legal-nudge"
+      />
     </>
   );
 }
