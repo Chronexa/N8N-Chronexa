@@ -143,7 +143,8 @@ const nextConfig: NextConfig = {
       { source: "/blog/why-scaling-lead-outreach-with-humans-is-financial-suicide", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/xai-funding-20b-series-e-signals-new-compute-era", destination: "/blog", permanent: true },
       { source: "/blog/ai-powered-invoice-processing-services-for-mid-market-companies", destination: "/blog/ai-invoice-processing-mid-market-guide", permanent: true },
-      { source: "/blog/build-vs-buy-ai-automation-cost-comparison", destination: "/blog/build-vs-buy-ai-automation-costs", permanent: true },
+      // (2026-07-25: retargeted — old destination build-vs-buy-ai-automation-costs pruned below)
+      { source: "/blog/build-vs-buy-ai-automation-cost-comparison", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
       { source: "/blog/legal-document-automation-for-regulated-industries", destination: "/blog/legal-contract-review-automation-guide", permanent: true },
       { source: "/blog/n8n-vs-zapier-for-enterprise-automation-a-real-cost-analysis", destination: "/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams", permanent: true },
       { source: "/blog/top-ai-automation-agencies-usa-2025", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
@@ -154,6 +155,18 @@ const nextConfig: NextConfig = {
       { source: "/blog/n8n-vs-make-vs-zapier-comparison", destination: "/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams", permanent: true },
       { source: "/blog/how-to-choose-ai-automation-company", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
       { source: "/blog/ai-automation-roi-us-businesses-2025-benchmarks", destination: "/blog/ai-automation-roi-benchmarks-law-accounting-financial-services-2025", permanent: true },
+
+      // --- SEO strategy v2 prune (2026-07-25): 9 posts with 0 impressions in 90d, >45d old. ---
+      // --- Approved by Ankit. Sanity docs deleted same day; each 301s to nearest survivor. ---
+      { source: "/blog/fixing-the-legal-operations-nightmare-with-ai-workflows", destination: "/legal-due-diligence-automation", permanent: true },
+      { source: "/blog/build-vs-buy-vs-productized-service-fintech-kyc-automation-decision-guide", destination: "/blog/reduce-kyc-processing-cost-ai-automation", permanent: true },
+      { source: "/blog/how-fintech-companies-cut-kyc-processing-time-from-14-days-to-2-days", destination: "/blog/reduce-kyc-processing-cost-ai-automation", permanent: true },
+      { source: "/blog/how-to-automate-legal-document-processing-without-losing-control", destination: "/document-processing-automation", permanent: true },
+      { source: "/blog/legal-tech-automation-12-n8n-workflows-for-law-firms", destination: "/blog/n8n-workflows-law-firms-billing-intake-communication", permanent: true },
+      { source: "/blog/custom-mcp-servers-claude-private-data", destination: "/secure-ai-deployment", permanent: true },
+      { source: "/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure", destination: "/document-processing-automation", permanent: true },
+      { source: "/blog/ai-powered-ma-due-diligence-case-study", destination: "/blog/ai-for-private-equity-deal-lifecycle", permanent: true },
+      { source: "/blog/build-vs-buy-ai-automation-costs", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
     ];
   },
 };

@@ -15,3 +15,6 @@ dist/
 marketing-ops/
 marketing-ops.tar.gz
 cover-samples/
+
+# internal SEO/keyword strategy — private business docs, never push (repo is PUBLIC)
+seo/
