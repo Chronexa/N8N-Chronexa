@@ -10,7 +10,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://chronexa.io",
   title: "Custom Enterprise AI for Law Firms, CPA Practices & Finance Teams | Chronexa",
   description:
-    "Chronexa builds custom, secure AI systems for law firms, CPA practices, and finance teams. We deploy inside your own environment, owned by you, scoped at a fixed price with a 90-day ROI guarantee.",
+    "Chronexa is an AI automation agency that builds custom AI infrastructure inside your own environment — intelligent document processing, sales and support automation, secure private-LLM deployments — for financial services, legal, insurance and private equity. Growth without adding headcount: fixed-price scopes, systems you own outright.",
   tagline: "Custom Enterprise AI for Regulated Industries",
   email: "info@chronexa.io",
   locality: "IXC, India",

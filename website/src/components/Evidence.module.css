@@ -1,0 +1,152 @@
+.head {
+  max-width: 64ch;
+  margin-bottom: var(--spacing-lg);
+}
+.heading {
+  font-size: var(--step-4);
+  text-wrap: balance;
+  margin-block: var(--spacing-xs) var(--spacing-sm);
+}
+.sub {
+  color: var(--text-muted-light);
+  line-height: 1.6;
+  max-width: 58ch;
+}
+.keyGreen { color: var(--accent-on-surface); font-weight: 700; }
+.keyAmber { color: var(--accent-amber); font-weight: 700; }
+
+.panel {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── 1 · The lead number ─────────────────────────────────────────────────── */
+.heroStat {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color var(--transition-fast);
+}
+.heroStat:hover,
+.heroStat:focus-visible { background: var(--bg-light); }
+.heroStat:hover .heroStatLink span,
+.heroStat:hover .heroStatLink { text-decoration: underline; text-underline-offset: 3px; }
+
+.heroNum {
+  font-size: clamp(4rem, 9vw, 7.5rem);
+  flex-shrink: 0;
+}
+.heroStatLabel {
+  font-size: var(--step-0);
+  color: var(--text-muted-light);
+  max-width: 44ch;
+  line-height: 1.55;
+}
+.heroStatLink {
+  color: var(--accent-on-surface);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── 2 · Delivery grid — hairline cells, not floating cards ──────────────── */
+/* 1px gaps let the panel's border colour show through as the grid lines. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: var(--bg-card);
+  padding: var(--spacing-md);
+  transition: background-color var(--transition-fast);
+}
+.cell:hover,
+.cell:focus-visible { background: var(--bg-light); }
+.cellNum { font-size: var(--step-3); }
+.cellLabel {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.5;
+  flex: 1;
+  margin: 0;
+}
+.cellClient {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-on-surface);
+}
+
+/* ── 3 · The research strip ──────────────────────────────────────────────── */
+.research {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-light);
+}
+.researchLabel {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-bottom: var(--spacing-sm);
+}
+.researchList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+.researchList li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+/* Amber: the industry's voice, not ours — see the accent system note in globals. */
+.researchList strong {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 600;
+  font-size: var(--step-2);
+  color: var(--accent-amber);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.researchText {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.5;
+  flex: 1;
+}
+.source {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-light-strong);
+}
+.source:hover { color: var(--accent-on-surface); }
+
+/* ── Breakpoints ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .heading { font-size: var(--step-3); }
+  .heroStat { padding: var(--spacing-md); }
+  .grid { grid-template-columns: 1fr; }
+  .research { padding: var(--spacing-md); }
+  .researchList { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .heroStat { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm); }
+  .grid { grid-template-columns: 1fr; }
+  .researchList { grid-template-columns: 1fr; }
+}

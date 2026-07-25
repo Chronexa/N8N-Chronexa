@@ -183,7 +183,7 @@ export default function ServiceArticle({ data }: { data: ServiceContent }) {
                 ))}
               </ul>
               <BookButton className={`btn-primary ${styles.asideBtn}`} location="service-sidebar">Get a Quote</BookButton>
-              <p className={styles.guarantee}>90-day ROI guarantee · fixed price</p>
+              <p className={styles.guarantee}>Free audit · fixed price agreed before the build</p>
             </div>
           </aside>
         </div>

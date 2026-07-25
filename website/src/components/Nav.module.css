@@ -43,7 +43,8 @@
 .item[data-open="true"] .caret { transform: rotate(180deg); }
 
 .cta {
-  background-color: var(--brand-green);
+  /* Same ink-green as .btn-primary — one brand green for every booking CTA. */
+  background-color: var(--brand-green-ink);
   color: var(--color-white);
   padding: 0.65rem 1.25rem;
   border-radius: var(--radius-md);

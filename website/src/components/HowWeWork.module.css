@@ -1,0 +1,181 @@
+.heading {
+  font-size: var(--step-4);
+  color: var(--text-light);
+  max-width: 22ch;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.15;
+}
+.sub {
+  font-size: var(--step-0);
+  color: var(--text-muted-light);
+  max-width: 62ch;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ── The horizontal pipeline ─────────────────────────────────────────────── */
+.track {
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* The thread runs through the node centres. Nodes are 56px, so their centre is
+   28px down from the top of each column — the wire sits there. */
+.wire {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: translateY(-1px);
+  overflow: visible;
+  z-index: 0;
+}
+.wire line {
+  stroke: var(--accent-on-surface);
+  stroke-width: 2;
+  opacity: 0.45;
+  vector-effect: non-scaling-stroke;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* The node — sits ON the thread, so it needs an opaque ring to punch through it. */
+.node {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--bg-card);
+  border: 1.5px solid var(--brand-green-line);
+  color: var(--accent-on-surface);
+  box-shadow: 0 0 0 6px var(--bg-light); /* masks the wire behind the node */
+}
+.glyph { width: 24px; height: 24px; }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--spacing-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.card:hover {
+  border-color: var(--brand-green-line);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.num {
+  font-family: var(--font-display);
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--accent-on-surface);
+  line-height: 1;
+  opacity: 0.55;
+  margin-bottom: var(--spacing-xs);
+}
+.stepTitle {
+  font-size: var(--step-1);
+  color: var(--text-light);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+}
+.stepBody {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-md);
+  flex: 1;
+}
+
+/* The concrete takeaway — a two-line block chip so each stage reads as an
+   outcome, not just an activity. (The old inline pill wrapped mid-phrase at
+   narrow card widths and read as broken.) */
+.artifact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-self: stretch;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
+  background: var(--brand-green-soft);
+  color: var(--text-light);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.artifactLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-on-surface);
+}
+/* The human-decision step carries the amber code (approval = human voice). */
+.artifactAmber { background: var(--accent-amber-soft); }
+.artifactAmber .artifactLabel { color: var(--accent-amber); }
+
+.callout {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-left: 2px solid var(--accent-on-surface);
+  background: color-mix(in srgb, var(--brand-green) 6%, transparent);
+  font-size: var(--step-0);
+  color: var(--text-muted-light);
+  line-height: 1.6;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  max-width: 70ch;
+}
+.callout strong { color: var(--text-light); font-weight: 700; }
+
+/* ── Tablet: 2×2 ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .heading { font-size: var(--step-3); }
+  .steps { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg) var(--spacing-md); }
+  /* A horizontal wire can't cleanly cross a 2×2 wrap, so drop it below the row. */
+  .wire { display: none; }
+}
+
+/* ── Phone: vertical thread down the left, cards to the right ─────────────── */
+@media (max-width: 560px) {
+  .sub { margin-bottom: var(--spacing-lg); }
+  .steps { grid-template-columns: 1fr; gap: var(--spacing-md); position: relative; }
+  /* Continuous vertical thread behind the node column. */
+  .steps::before {
+    content: "";
+    position: absolute;
+    left: 27px;
+    top: 28px;
+    bottom: 28px;
+    width: 2px;
+    background: var(--accent-on-surface);
+    opacity: 0.35;
+  }
+  .step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  .node { flex: 0 0 56px; }
+  .card { margin-top: 0; }
+}

@@ -7,21 +7,45 @@
   position: relative;
   overflow: hidden;
 }
-.band::before {
-  content: '';
+
+/* The vista photograph under a directional scrim — heavier on the left behind
+   the copy, clearing toward the right where the landscape reads. */
+.vista {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 120%, var(--brand-green-soft), transparent 60%);
-  pointer-events: none;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.85;
+}
+.vistaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    color-mix(in srgb, var(--bg-dark) 90%, transparent) 0%,
+    color-mix(in srgb, var(--bg-dark) 72%, transparent) 55%,
+    color-mix(in srgb, var(--bg-dark) 52%, transparent) 100%);
 }
 
-.vista { position: absolute; inset: 0; object-fit: cover; object-position: center; z-index: 0; opacity: 0.5; }
-.vistaOverlay {
-  position: absolute; inset: 0; z-index: 0;
-  background: linear-gradient(to bottom,
-    color-mix(in srgb, var(--bg-dark) 90%, transparent),
-    color-mix(in srgb, var(--bg-dark) 78%, transparent));
+/* One thread crossing the band, drawn in by the sitewide reveal system. */
+.thread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
+.threadPath {
+  fill: none;
+  stroke: var(--brand-green);
+  stroke-width: 1.5;
+  opacity: 0.45;
+  vector-effect: non-scaling-stroke;
+}
+:global(.reveal-ready) .threadPath {
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  transition: stroke-dashoffset 1.8s var(--ease-out) 0.25s;
+}
+.thread:global(.is-visible) .threadPath { stroke-dashoffset: 0; }
 
 /* Two columns: messaging left, audit form right. */
 .inner {
@@ -42,6 +66,9 @@
   margin-bottom: var(--spacing-sm);
 }
 .guarantee span { color: var(--brand-green); font-weight: 700; margin-right: 0.4rem; }
+/* Booking sits above the form — the people who scrolled this far are the
+   hottest traffic on the page and shouldn't have to wait for a reply. */
+.actions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm); }
 .mail { font-size: var(--step--1); color: var(--text-muted-dark); }
 .mail a { color: var(--brand-green); font-weight: 600; }
 

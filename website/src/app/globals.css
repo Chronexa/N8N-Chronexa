@@ -1,6 +1,15 @@
 /* ============================================================================
    Chronexa Design System — globals.css
-   High-contrast brutalist-lite. Deep black / creamy off-white / neon green.
+
+   Editorial authority, light-primary. Warm paper is the reading surface; deep
+   near-black is punctuation, used only at the hero, the engine demo and the
+   closing CTA. One accent — Chronexa green — carried as a system rather than a
+   decoration: it is the thread and the nodes, the same grammar the engine
+   scenes use to draw an orchestrated workflow.
+
+   Type is a pair, not a palette: Fraunces (editorial serif, WONK on at display
+   sizes) for headlines, Host Grotesk for everything else.
+
    Vanilla CSS (no Tailwind). Fonts are loaded via next/font in layout.tsx.
    ============================================================================ */
 
@@ -59,8 +68,8 @@
   --surface-glass: rgba(255, 255, 255, 0.04);
 
   /* ---- Typography ----------------------------------------------------- */
-  /* --font-sans (Inter) + --font-display (Fraunces) are provided by next/font. */
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* --font-sans (Host Grotesk) + --font-display (Fraunces) come from next/font. */
+  --font-sans: var(--font-host), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, "Times New Roman", serif;
   --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
 
@@ -76,7 +85,9 @@
   --leading-tight: 1.08;
   --leading-snug: 1.25;
   --leading-normal: 1.6;
-  --tracking-tight: -0.03em;
+  /* Eased from -0.03em when the body face moved from Inter to Host Grotesk —
+     Host Grotesk sets wider, so the old negative tracking read cramped. */
+  --tracking-tight: -0.018em;
   --tracking-wide: 0.12em;
 
   /* ---- Spacing scale -------------------------------------------------- */
@@ -146,15 +157,21 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 /* Display headlines (page + section titles) carry the editorial serif. Card
-   titles / small UI headings (h3–h6) stay in the grotesk for legibility. */
+   titles / small UI headings (h3–h6) stay in the grotesk for legibility.
+
+   WONK is Fraunces' alternate-letterform axis — the single most distinctive
+   thing the face can do, and the reason it was chosen over a safer serif. It
+   is on for h1/h2 only: characterful at 3rem, noisy at body size. SOFT rounds
+   the terminals slightly so the headlines read warm rather than severe. */
 h1, h2 {
   font-family: var(--font-display);
   font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
   font-weight: 500;
   line-height: var(--leading-snug);
 }
-h1 { font-size: var(--step-5); font-weight: 560; letter-spacing: -0.018em; line-height: 1.06; }
-h2 { font-size: var(--step-4); letter-spacing: -0.014em; }
+h1 { font-size: var(--step-5); font-weight: 560; letter-spacing: -0.016em; line-height: 1.06; }
+h2 { font-size: var(--step-4); letter-spacing: -0.012em; }
 h3 { font-size: var(--step-2); letter-spacing: -0.02em; }
 h4 { font-size: var(--step-1); letter-spacing: -0.01em; }
 p  { text-wrap: pretty; }
@@ -237,6 +254,68 @@ a { color: inherit; text-decoration: none; transition: color var(--transition-fa
   color: var(--text-light);
   padding-block: var(--spacing-xl);
 }
+
+/* Vertical rhythm by role, not by default. Every band used to carry identical
+   padding, which tells the reader that everything matters equally — it reads as
+   a list rather than an argument. The sections that do the persuading get air;
+   connective strips get almost none.
+
+   These MUST stay below the surface classes above: same specificity, so source
+   order decides, and .section-dark would otherwise win the padding back. */
+.section-major { padding-block: var(--spacing-2xl); }
+.section-tight { padding-block: var(--spacing-lg); }
+
+/* ============================================================================
+   The thread — Chronexa's signature structural device
+   ----------------------------------------------------------------------------
+   The engine scenes already speak a visual language: specialised agents as
+   NODES, connected by green THREADS, with a human gate marked in amber. That
+   grammar was trapped inside the demo. This brings it into the page itself.
+
+   A hairline green thread runs down the margin for the length of the content,
+   passing through a node at the start of every section — so the page is drawn
+   the way the product works: stages, connected, in sequence. It also does real
+   structural work: it survives the dark→light band transitions, which is what
+   stops a stack of full-width bands reading as separate documents.
+
+   Rules that keep this a system rather than a gimmick:
+     • 1px, low opacity. If you notice it before the content, it's too loud.
+     • It runs sections 3–10 only. The hero and the closing CTA sit outside the
+       pipeline, so the thread has a real start and a real end.
+     • It brightens for exactly one section (the engine demo), the way the
+       scenes brighten a thread when the agent acts.
+     • Desktop only — below 1024px there is no margin to live in, and a thread
+       crossing content is decoration.
+   ============================================================================ */
+@media (min-width: 1024px) {
+  .section-light,
+  .section-dark,
+  .section-muted { position: relative; }
+
+  .section-light::before,
+  .section-dark::before,
+  .section-muted::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* Sits ~20px outboard of the text column: container's outer edge on wide
+       viewports, collapsing toward the gutter as the container hits its max. */
+    left: calc(max(0px, (100% - var(--container-max)) / 2) + var(--container-pad) - 20px);
+    width: 1px;
+    background: var(--accent-on-surface);
+    opacity: 0.28;
+    pointer-events: none;
+  }
+  .section-dark::before { opacity: 0.35; }
+
+  /* The one live segment — the section where the product is actually running. */
+  .section-live::before {
+    opacity: 0.9;
+    box-shadow: 0 0 8px 0 var(--brand-green-glow);
+  }
+}
+
 
 /* Eyebrow / kicker label — small tracked caps with a short leading rule. */
 .eyebrow {
@@ -340,3 +419,140 @@ a { color: inherit; text-decoration: none; transition: color var(--transition-fa
 .link-arrow:hover { color: var(--brand-green); }
 .link-arrow svg, .link-arrow span[aria-hidden] { transition: transform var(--transition-fast); }
 .link-arrow:hover svg, .link-arrow:hover span[aria-hidden] { transform: translateX(3px); }
+
+/* ---- The eyebrow's node on the thread -------------------------------------
+   Every section opens with an eyebrow, so the eyebrow is where the thread gets
+   its node — the same grammar the engine scenes use (agents as nodes, joined by
+   green threads). Below 1024px there is no thread, so the eyebrow keeps its
+   original leading dash.
+
+   This MUST stay after the `.eyebrow` rule above: same specificity, so source
+   order decides which of the two ::before definitions wins. */
+@media (min-width: 1024px) {
+  .eyebrow { position: relative; }
+  .eyebrow::before {
+    position: absolute;
+    left: -26px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: var(--accent-on-surface);
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   Composed-panel system (2026-07 overhaul)
+   ----------------------------------------------------------------------------
+   The five ingredients the rebuilt homepage sections are made of — the same
+   ones that make an enterprise page read as designed rather than templated:
+
+     • .accent-phrase — ONE green italic serif phrase inside a headline.
+       Never more than one per heading; the trick dies with repetition.
+     • .display-num   — huge tabular serif numbers, paired with <CountUp/>.
+     • .panel         — hairline-bordered composition container. Sections stop
+       being stacks of floating cards and become one drawn object.
+     • .grid-texture  — graph-paper overlay for visual panels (pure CSS, themes
+       via --grid-line).
+     • --panel-grad-* — soft warm gradient grounds that do the job of the
+       blurred photography enterprise sites float their UI over.
+   ============================================================================ */
+:root {
+  /* Sage-cream — default ground for light visual panels */
+  --panel-grad-a:
+    radial-gradient(90% 90% at 85% 8%, rgba(197, 216, 168, 0.50) 0%, transparent 62%),
+    radial-gradient(80% 80% at 8% 92%, rgba(238, 224, 186, 0.55) 0%, transparent 58%),
+    linear-gradient(150deg, #F2F1E6 0%, #EAEDDD 100%);
+  /* Cream-gold — warmer alternate so adjacent panels don't twin */
+  --panel-grad-b:
+    radial-gradient(80% 90% at 15% 10%, rgba(214, 228, 189, 0.45) 0%, transparent 60%),
+    radial-gradient(90% 80% at 90% 90%, rgba(233, 213, 170, 0.60) 0%, transparent 55%),
+    linear-gradient(140deg, #F5F0E1 0%, #EFE9D8 100%);
+  /* Deep green-black — dark ground for the closing CTA */
+  --panel-grad-c:
+    radial-gradient(120% 130% at 18% 0%, #1C2818 0%, transparent 55%),
+    radial-gradient(100% 100% at 100% 100%, #14200F 0%, transparent 50%),
+    linear-gradient(160deg, #121410 0%, #0E0F0D 100%);
+  --grid-line: rgba(26, 24, 20, 0.055);
+
+  /* Second accent — amber, used SEMANTICALLY, never decoratively:
+     amber = the human / external voice (approval gates, industry research),
+     green = our own delivery and the machine doing work. The engine scenes
+     already speak this code (amber human-gate), so the page now matches. */
+  --accent-amber: #B7791F;
+  --accent-amber-soft: rgba(217, 154, 43, 0.12);
+  --accent-amber-line: rgba(217, 154, 43, 0.45);
+}
+.section-dark { --grid-line: rgba(255, 255, 255, 0.06); }
+
+.accent-phrase {
+  color: var(--accent-on-surface);
+  font-style: italic;
+  /* A touch more SOFT than the base headline: the italic carries the warmth. */
+  font-variation-settings: "WONK" 1, "SOFT" 8;
+}
+
+.display-num {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-on-surface);
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.grid-texture {
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 28px);
+}
+
+/* ---- Segmented tab control (engine demo + router share this) ------------- */
+.seg-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.seg-tabs::-webkit-scrollbar { display: none; }
+.section-dark .seg-tabs { border-color: var(--border-dark); background: var(--surface-glass); }
+
+.seg-tab {
+  flex: 0 0 auto;
+  padding: 0.55rem 1.05rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--step--1);
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-muted-light);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.section-dark .seg-tab { color: var(--text-muted-dark); }
+.seg-tab:hover { color: var(--text-light); }
+.section-dark .seg-tab:hover { color: var(--text-dark); }
+.seg-tab[aria-selected="true"] {
+  background: var(--brand-green-ink);
+  color: var(--text-on-fill);
+}
+.section-dark .seg-tab[aria-selected="true"] {
+  background: var(--brand-green);
+  color: var(--bg-dark);
+}

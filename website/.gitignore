@@ -42,3 +42,7 @@ next-env.d.ts
 
 # client-sensitive working docs — never commit
 Client Proposals/
+
+# Raw generated images (optimised webp are committed to public/images/)
+public/images/gen/
+public/images/gen3d/

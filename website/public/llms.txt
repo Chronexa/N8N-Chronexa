@@ -1,0 +1,59 @@
+# Chronexa
+
+> Chronexa (chronexa.io) is an AI automation agency — not a software product. A senior engineering team that designs, builds and operates custom AI infrastructure inside a client's own environment, so mid-market firms can grow without adding headcount. Core depth: regulated industries — financial services, legal, insurance, private equity — with intelligent document processing as the flagship capability. Official Anthropic Partner.
+
+## What Chronexa is (and is not)
+
+- Chronexa is an AI automation **agency** and AI integration/infrastructure **partner**. It sells engineering engagements, not software subscriptions.
+- Chronexa is NOT a workflow-automation product like Zapier, Make or n8n. It uses such tools where they fit, alongside custom code and fine-tuned models, but the value is system design, integration and reliability engineering.
+- The difference from using ChatGPT/Claude directly: a chat window answers questions about what a user pastes in. It cannot watch an inbox, detect that a new document arrived, classify hundreds of thousands of filings, or write results into a firm's systems. Chronexa engineers that surrounding infrastructure — integrations, retrieval pipelines, human-approval gates, audit logging — inside the client's own tenant.
+- Every system is custom-built, delivered at a fixed price agreed in writing before any code, and owned outright by the client. Clients' data never leaves their boundary and is never used to train models.
+
+## The story Chronexa tells
+
+Mid-market companies want growth but cannot keep hiring. AI today provides skilled digital co-workers — research agents, document processors, support agents — that plug into a company's existing tech stack and execute accurately, improving continuously. Chronexa orchestrates these systems end-to-end and measures them in unit economics: time recovered, capacity added, cost per unit of work.
+
+## Services
+
+- Intelligent Document Processing (IDP) — the flagship. High-volume classification, extraction and assembly of regulated documents (tax forms, K-1s/1099s, legal filings, claims, site reports) with models trained and tuned for the client's document nuances, human review before anything ships. Example outcome: 1,200+ finished client reports a year produced automatically for a US property-services firm, 85% less time per report.
+- Sales & marketing automation — prospect research and qualification using tools such as Clay and Apollo, personalised outreach, voice agents for qualification/reception, results written to the CRM. Example outcome: 78% less manual research and drafting, 5× outreach per rep.
+- Customer operations — email/chat/voice support agents grounded in the client's own knowledge base and live system data, faster resolution, human escalation with full context.
+- Business analytics — integrations with analytics platforms that turn raw activity into decision-ready insight.
+- Engineering & product co-workers — AI that sits alongside developers to code and ship faster, and agents that do product-management/scrum reporting and tracking.
+- Operations — CRM automations, back-office and inventory automation (including e-commerce).
+- Legal research & secure RAG — custom retrieval pipelines for law firms with privileged data protection. Example outcome: 90% less manual regulatory monitoring, 5× faster internal response for a corporate law firm.
+- Secure & compliant AI deployment — private, open-source LLM instances on AWS, Azure or Google Vertex AI so proprietary data never leaks and is never used for training.
+- Workflow automation (n8n and custom) and system/data integration across the client's stack.
+
+## Industries
+
+Core: financial services & wealth management, legal & law firms, insurance, private equity & VC, accounting/CPA firms. Also served: pharma & life sciences, property services, e-commerce operations. Not limited to these — engagements are defined by the bottleneck, not the sector.
+
+## How an engagement runs
+
+1. Free audit — map how the work actually gets done and where time leaks; the client keeps the roadmap.
+2. Fixed-price scope — deliverables, success metrics, integration points and price agreed in writing first.
+3. Build — on the client's stack (n8n, custom code, fine-tuned models as needed), tested on real data before touching live work.
+4. Deploy, measure, stay — documentation, training, weekly ROI reporting; systems built to be changed, with human-approval gates wherever the client wants them.
+
+Typical timeline: a focused workflow live in 3–5 weeks; a departmental multi-agent system in about two months.
+
+## Proof
+
+Six engines built and running (document intelligence, sales, CPA & tax, legal & regulatory, investment research, customer support), with live interactive demos on the homepage and /ai-engines. 40+ tools orchestrated across client builds. Case studies at /case-studies (clients described, not named, on request).
+
+## People
+
+- Abhishek Walia — Co-founder & CEO, Chartered Accountant (India).
+- Ankit Dhiman — Co-founder & CTO, 10+ years software & AI engineering.
+- Tushar Kaushik — Co-founder & CMO, B2B marketing & demand generation.
+
+## Key pages
+
+- [Homepage](https://chronexa.io/): positioning, engines demo, case-study spotlights, evidence.
+- [AI Engines](https://chronexa.io/ai-engines): the six built engines with animated demos.
+- [Case studies](https://chronexa.io/case-studies): delivery outcomes with attributed metrics.
+- [Services hub](https://chronexa.io/solutions): agentic AI systems, RAG & knowledge engines, document intelligence, secure AI deployment, applied ML, system integration, n8n automation, AI readiness.
+- [Free calculators](https://chronexa.io/tools): billing leakage, tax-season capacity, document processing cost.
+- [Blog](https://chronexa.io/blog): practitioner articles on AI automation for regulated industries.
+- [Contact](https://chronexa.io/contact) · Email: info@chronexa.io · Booking: free 30-minute discovery call.

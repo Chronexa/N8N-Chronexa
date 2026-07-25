@@ -74,6 +74,27 @@
   flex-direction: column;
   max-width: min(560px, 100%);
 }
+/* Anthropic partnership pill — the first credibility signal, above the H1.
+   Sized down and low-contrast so it supports the headline rather than competing. */
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  align-self: flex-start;
+  margin-bottom: var(--spacing-sm);
+  padding: 0.4em 0.85em;
+  border: 1px solid var(--brand-green-line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-dark) 55%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--brand-green);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
 /* Restrained, elegant — not overwhelming. */
 .heroTitle {
   font-size: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
@@ -91,6 +112,51 @@
 }
 
 .heroActions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); }
+
+/* Attributed-stat strip under the CTAs — the "this is real" beat, at the one
+   point every visitor reaches. Numbers in neon green (this is a dark surface);
+   labels quiet. */
+.heroStats {
+  display: flex;
+  gap: clamp(1.1rem, 2.5vw, 2rem);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid color-mix(in srgb, var(--text-dark) 18%, transparent);
+}
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+.heroStat + .heroStat {
+  border-left: 1px solid color-mix(in srgb, var(--text-dark) 14%, transparent);
+  padding-left: clamp(1.1rem, 2.5vw, 2rem);
+}
+.heroStatNum { font-size: var(--step-3); }
+.heroStatLabel {
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--text-dark) 74%, transparent);
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* The secondary CTA is green-on-video, and the footage runs bright amber at the
+   right of frame — the scrim thins out exactly where this button sits. Give it
+   a dark translucent backing so it stays legible on the brightest frame instead
+   of relying on the video staying dark. */
+.heroActions :global(.btn-outline) {
+  background-color: color-mix(in srgb, var(--bg-dark) 62%, transparent);
+  backdrop-filter: blur(6px);
+  border-color: color-mix(in srgb, var(--brand-green) 70%, transparent);
+  color: var(--text-dark);
+}
+.heroActions :global(.btn-outline):hover {
+  background-color: var(--brand-green);
+  color: var(--bg-dark);
+  border-color: var(--brand-green);
+}
 
 @media (max-width: 860px) {
   .hero { min-height: 0; }

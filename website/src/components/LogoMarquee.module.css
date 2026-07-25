@@ -8,15 +8,12 @@
 }
 
 .badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
   margin-bottom: var(--spacing-md);
+  text-align: center;
   font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--brand-green);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--text-dark) 62%, transparent);
   text-transform: uppercase;
 }
 

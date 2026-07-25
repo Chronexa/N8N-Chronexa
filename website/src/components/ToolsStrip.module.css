@@ -1,0 +1,86 @@
+.headRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--spacing-lg);
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+.head {
+  max-width: 58ch;
+}
+.headArt {
+  width: 360px;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+@media (max-width: 900px) {
+  .headRow { grid-template-columns: 1fr; }
+  .headArt { display: none; }
+}
+.heading {
+  font-size: var(--step-4);
+  text-wrap: balance;
+  margin-block: var(--spacing-xs) var(--spacing-sm);
+}
+.sub {
+  color: var(--text-muted-light);
+  line-height: 1.6;
+  max-width: 56ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+/* Outlined, not filled — visually subordinate to the booking CTA by design. */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: transparent;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.card:hover,
+.card:focus-visible {
+  border-color: var(--brand-green-line);
+  background: var(--bg-card);
+}
+
+/* The benchmark number leads — a card that opens with a claim, not a label. */
+.big {
+  font-size: var(--step-3);
+  margin-bottom: 0.4rem;
+}
+.rest {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.45;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cardTitle {
+  font-size: var(--step-1);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--spacing-xs);
+}
+
+.desc {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.55;
+  flex: 1;
+  margin-bottom: var(--spacing-sm);
+}
+
+.cta {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--text-light);
+}

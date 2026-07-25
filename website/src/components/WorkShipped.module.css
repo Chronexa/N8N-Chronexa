@@ -3,72 +3,258 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--spacing-md);
-  margin-top: var(--spacing-2xl);
   margin-bottom: var(--spacing-lg);
 }
 .heading { font-size: var(--step-4); }
-.headLink { color: var(--text-dark); font-size: var(--step--1); }
+.headLink { color: var(--text-light); font-size: var(--step--1); }
 
-.workGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
+/* ── The spotlight panel ─────────────────────────────────────────────────── */
+.spotlight {
+  box-shadow: var(--shadow-md);
+  position: relative;
 }
 
-.workCard {
-  background: var(--neutral-900);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-lg);
+.slide {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+}
+
+/* Left — the story */
+.copy {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  transition: border-color var(--transition), transform var(--transition);
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
 }
-.workCard:hover { border-color: var(--brand-green); transform: translateY(-3px); }
-
-.workCardTop { padding: var(--spacing-md); flex-grow: 1; }
-.workLabel {
-  font-size: var(--step--1);
-  color: var(--brand-green);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-bottom: var(--spacing-sm);
-}
-
-.workMetric {
-  font-size: var(--step-2);
+.labelChip {
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--brand-green);
-  line-height: 1;
-  margin-bottom: var(--spacing-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
 }
-
-.workCardTop h3 { font-size: var(--step-1); margin-bottom: 0.5rem; }
-
-.workBody {
-  font-size: var(--step--1);
-  color: var(--text-muted-dark);
+.title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 500;
+  font-size: var(--step-3);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.body {
+  font-size: var(--step-0);
+  color: var(--text-muted-light);
+  line-height: 1.6;
+  max-width: 48ch;
   margin: 0;
 }
-
-.workCardBottom {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-top: 1px solid var(--border-dark);
-  font-size: var(--step--1);
-  color: var(--text-muted-dark);
+.stats {
   display: flex;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xs);
+}
+.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.statNum { font-size: var(--step-3); }
+.statLabel { font-size: var(--step--1); color: var(--text-muted-light); }
+.read { color: var(--text-light); margin-top: var(--spacing-xs); }
+
+/* Right — the code-built pipeline window on a warm gradient ground */
+.visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  border-left: 1px solid var(--border-light);
+  overflow: hidden;
+}
+.gradA { background: var(--panel-grad-a); }
+.gradB { background: var(--panel-grad-b); }
+.visualGrid {
+  position: absolute;
+  inset: 0;
+  /* Grid fades out toward the lower-left so it reads as drafting-paper corner,
+     not wallpaper. */
+  mask-image: radial-gradient(130% 130% at 82% 18%, black 28%, transparent 78%);
+}
+
+.window {
+  position: relative;
+  width: min(390px, 100%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.windowBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-light);
+}
+.windowBar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--neutral-300);
+  opacity: 0.7;
+}
+.windowBar span {
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted-light);
+  letter-spacing: 0.02em;
+}
+
+.rows { list-style: none; margin: 0; padding: 0.35rem 0 0; }
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.9rem;
+}
+.rows li + li { border-top: 1px solid color-mix(in srgb, var(--border-light) 55%, transparent); }
+.rowText {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.35;
+}
+.tick {
+  width: 16px;
+  height: 16px;
+  color: var(--accent-on-surface);
+  flex-shrink: 0;
+}
+/* Tool-agnostic pipeline stage — same footprint as a small LogoChip. */
+.glyphChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 27px;
+  height: 25px;
+  padding: 0 0.4rem;
+  background: var(--color-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: var(--brand-green-ink);
+  flex-shrink: 0;
+}
+
+/* The human gate — amber, straight from the engine-scene grammar. */
+.gate { background: var(--accent-amber-soft); }
+.gate .rowText { font-weight: 600; }
+.gateDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-amber);
+  box-shadow: 0 0 0 4px var(--accent-amber-soft);
+  flex-shrink: 0;
+  margin-inline: 3px;
+}
+
+/* The headline metric as a floating dark badge — overlaps the window edge. */
+.overlayCard {
+  position: absolute;
+  right: clamp(0.9rem, 5%, 2rem);
+  bottom: clamp(0.9rem, 7%, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-dark-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.overlayNum { font-size: var(--step-3); color: var(--brand-green); }
+.overlaySmall { font-size: 0.75rem; color: var(--text-muted-dark); }
+
+/* ── Controls ────────────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+}
+.dots { display: flex; align-items: center; gap: 8px; }
+.dot,
+.dotActive {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  background: var(--border-light-strong);
+  transition: background-color var(--transition-fast), width var(--transition-fast);
+}
+.dotActive { width: 22px; background: var(--accent-on-surface); }
+
+.arrows { display: flex; gap: 8px; }
+.arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light-strong);
+  background: var(--bg-card);
+  display: grid;
+  place-items: center;
+  color: var(--text-light);
+  transition: border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+.arrowPrev svg { transform: scaleX(-1); }
+.arrow:hover {
+  border-color: var(--brand-green-ink);
+  color: var(--accent-on-surface);
+  transform: translateY(-1px);
 }
 
 .footnote {
-  margin-top: var(--spacing-lg);
-  text-align: center;
+  margin-top: var(--spacing-md);
   font-size: var(--step--1);
-  color: var(--text-muted-dark);
+  color: var(--text-muted-light);
   font-style: italic;
 }
 
-@media (max-width: 900px) {
-  .head { flex-direction: column; align-items: flex-start; }
-  .workGrid { grid-template-columns: 1fr; }
+/* ── Breakpoints ─────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .head { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm); }
+  .slide { grid-template-columns: 1fr; min-height: 0; }
+  .copy { padding: var(--spacing-md); }
+  .visual {
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    min-height: 380px;
+    padding: var(--spacing-md);
+  }
+}
+@media (max-width: 560px) {
+  .stats { gap: var(--spacing-md); }
+  /* Clear space below the window so the metric badge overlaps only its corner,
+     never the human-gate row's text. */
+  .visual { padding-bottom: 5rem; }
+  .overlayCard { padding: 0.65rem 0.85rem; bottom: 0.8rem; }
+  .overlayNum { font-size: var(--step-2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow:hover { transform: none; }
+  .dot, .dotActive { transition: none; }
 }

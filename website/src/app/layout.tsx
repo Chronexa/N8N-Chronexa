@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Host_Grotesk, Fraunces } from "next/font/google";
 import "./globals.css";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -11,20 +11,31 @@ import ChatWidget from "../components/ChatWidget";
 import ExitIntent from "../components/ExitIntent";
 import { site, founders, company } from "../lib/site";
 
-const inter = Inter({
+// Body / UI face. Replaced Inter (2026-07): Inter is the most recognisable
+// "un-art-directed" default on the web, and to a buyer comparing three vendors
+// a distinctive face reads as "someone competent made decisions here". Host
+// Grotesk is a variable grotesk with more character at text sizes and enough
+// warmth to sit beside Fraunces without fighting it.
+const hostGrotesk = Host_Grotesk({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-host",
+  weight: "variable", // wght is its only axis, so `axes` isn't accepted here
 });
 
 // Editorial display serif for headlines (the "not-an-AI-template" signal).
-// Variable across weight + optical size; opsz auto-tunes contrast at large sizes.
+// Variable across weight, optical size and the two style axes: opsz auto-tunes
+// contrast at large sizes, SOFT rounds the terminals, and WONK enables Fraunces'
+// distinctive alternate letterforms. WONK is switched on for display headings
+// only (see globals.css) — it is characterful at 3rem and noisy at 1rem.
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-fraunces",
-  axes: ["opsz", "SOFT"],
+  axes: ["opsz", "SOFT", "WONK"],
+  // Italic loaded for `.accent-phrase` — the one green italic phrase inside a
+  // headline. Without it the browser fakes a slant, which reads cheap at 3rem.
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -82,7 +93,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  colorScheme: "light dark",
+  // We ship one theme — warm paper, with dark used as deliberate punctuation.
+  // Declaring "light dark" without a dark stylesheet makes form controls and
+  // scrollbars render dark against a light page for dark-preference users.
+  colorScheme: "light",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FBFAF7" },
     { media: "(prefers-color-scheme: dark)", color: "#0E0F0D" },
@@ -100,8 +114,30 @@ const orgSchema = {
       url: site.url,
       email: site.email,
       description: site.description,
+      slogan: site.tagline,
       logo: `${site.url}/images/logo.png`,
       foundingDate: company.foundingYear,
+      // What we sell — an agency's service catalogue, so answer engines describe
+      // us as an engineering partner, never as a software product.
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "AI automation agency services",
+        itemListElement: [
+          "Intelligent Document Processing (IDP)",
+          "Agentic AI Systems",
+          "RAG & Knowledge Engines",
+          "Secure & Compliant AI Deployment (private LLMs on AWS, Azure, Google Vertex AI)",
+          "Sales & Marketing Automation",
+          "Customer Support Automation",
+          "Applied ML & Data Science",
+          "System & Data Integration",
+          "Workflow Automation (n8n and custom)",
+          "AI Readiness Assessment",
+        ].map((name) => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name, provider: { "@id": `${site.url}/#organization` } },
+        })),
+      },
       founder: founders.map((f) => ({
         "@type": "Person",
         name: f.name,
@@ -156,7 +192,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en" className={`${hostGrotesk.variable} ${fraunces.variable}`}>
       <head>
         <script
           type="application/ld+json"

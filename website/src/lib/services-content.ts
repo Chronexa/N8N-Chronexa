@@ -41,7 +41,7 @@ export type ServiceContent = {
 };
 
 const GUARANTEE =
-  'Every engagement is fixed-price with ROI targets agreed up front, backed by our 90-day ROI guarantee.';
+  'Every engagement is fixed-price, with the success metrics and the price agreed before any code is written.';
 
 export const SERVICES: ServiceContent[] = [
   {
@@ -245,20 +245,20 @@ export const SERVICES: ServiceContent[] = [
   },
   {
     slug: 'cpa-tax-document-automation',
-    metaTitle: 'AI Tax Automation for CPA & Accounting Firms | Chronexa',
+    metaTitle: 'AI Automation for CPA & Accounting Firms | Chronexa',
     metaDescription:
-      'AI tax automation for CPA firms: an AI copilot that chases client documents, reads W-2s, 1099s and K-1s, runs intake, and drafts returns — so you scale tax season without adding headcount.',
-    h1: 'AI Tax Automation for CPA & Accounting Firms',
+      'AI automation for CPA firms across the whole client lifecycle: onboarding, engagement letters, document collection, W-2/1099/K-1 extraction and return drafting — alongside your staff, on your own cloud.',
+    h1: 'AI Automation for CPA & Accounting Firms',
     heroSub:
-      'An AI tax copilot that handles the document chase, intake, and extraction — reading W-2s, 1099s, K-1s and brokerage statements — so your preparers do review and advisory, not data entry.',
+      'From the first client meeting to the filed return: AI that runs onboarding, chases documents, reads W-2s, 1099s and K-1s, and keeps every engagement tracked — sitting alongside your staff so they do review and advisory, not data entry.',
     answer:
-      'AI tax automation gives a CPA firm a copilot for the busywork of tax season: it chases clients for missing documents, runs the intake form, reads and extracts data from W-2s, 1099s, K-1s and brokerage statements, and drafts the return for a preparer to review — letting a firm process far more returns without hiring more staff.',
+      'AI automation gives a CPA firm leverage across the whole client lifecycle: it captures intake meetings and drafts the engagement letter, chases clients for missing documents, reads and extracts data from W-2s, 1099s, K-1s and brokerage statements, drafts the return for a preparer to review, and keeps every engagement’s status visible — letting a firm serve far more clients without adding headcount. It works alongside your team, not instead of it.',
     callout:
-      'The bottleneck in tax season is not preparing returns — it is chasing clients for documents and keying them in. That manual cycle caps how many clients a firm can serve and burns preparers out on work that should be review, not typing.',
-    serviceName: 'AI Tax & Accounting Automation',
+      'The bottleneck is rarely the accounting — it is everything around it: onboarding meetings that never get written up, engagement letters that take a week, clients chased for documents by hand, and data keyed in twice. That manual cycle caps how many clients a firm can serve and burns staff out on work that should be review, not typing.',
+    serviceName: 'AI Automation for CPA & Accounting Firms',
     serviceType: 'AI automation for CPA & accounting firms',
     schemaDescription:
-      'AI tax automation for CPA firms: client-document chasing, intake, AI extraction of W-2s/1099s/K-1s, reconciliation, and return drafting with audit-ready logging.',
+      'AI automation for CPA firms across the client lifecycle: onboarding and engagement-letter automation, client-document chasing, AI extraction of W-2s/1099s/K-1s, reconciliation, return drafting, and engagement tracking with audit-ready logging.',
     roi: [
       { value: '84%', label: 'Less manual client follow-up & document chasing (CPA-firm build)' },
       { value: '3×', label: 'More documents processed per staff member' },
@@ -266,56 +266,85 @@ export const SERVICES: ServiceContent[] = [
     ],
     sections: [
       {
-        heading: 'The real bottleneck: chasing clients, not preparing returns',
+        heading: 'Where the hours actually go in an accounting firm',
+        level: 2,
+        body: [
+          'Ask a partner where the firm’s time disappears and the answer is rarely “doing the accounting.” It goes to everything around it: onboarding meetings that someone has to write up, engagement letters that sit in a partner’s inbox for a week, clients chased by hand for the missing 1099, data keyed from PDFs into the tax software, and nobody quite sure which client is waiting on whom. Each step is small; together they cap how many clients the firm can serve.',
+          'That is the shape of the problem we automate — not one tool, but the connective work across the client lifecycle: acquire, onboard, serve, retain. Your team keeps every judgment call. The system does the reading, chasing, drafting, and tracking in between.',
+        ],
+      },
+      {
+        heading: 'Client onboarding: from first meeting to signed engagement letter',
+        level: 2,
+        body: [
+          'Onboarding a new client is where firms leak the most goodwill: multiple meetings, notes that live in someone’s head, an engagement letter that takes days to draft, and a document checklist sent as a one-off email. We automate that path end to end — meetings are captured and summarized into a structured record, the engagement letter is drafted from your firm’s own templates and priced scope, the intake form runs itself, and the client gets a live document checklist that follows up automatically.',
+          'The partner still reviews and signs everything. The difference is the elapsed time: what took two weeks of back-and-forth compresses into days, and every step of it is on the record instead of in an inbox.',
+        ],
+      },
+      {
+        heading: 'Tax season capacity: the document chase and the data entry',
         level: 2,
         body: [
           'Every CPA knows the tax-season pattern: the work is not the return, it is getting the documents. Staff spend weeks emailing clients for the missing 1099, the brokerage statement, the K-1 that hasn’t arrived — then re-keying whatever finally shows up. It’s manual, it’s repetitive, and it’s the exact thing that caps how many clients a firm can take on.',
-          'For a mid-sized accounting practice, we replaced that cycle. An AI-driven intake system chases clients automatically for outstanding documents, reads what comes back, and feeds clean data into the preparer’s workflow. The result: 84% less time spent on manual follow-up and document chasing, and 3× more documents processed per staff member — without adding headcount in peak season.',
+          'For a mid-sized accounting practice, we replaced that cycle. An AI-driven intake system chases clients automatically for outstanding documents, reads what comes back — W-2s, 1099s, K-1s, consolidated brokerage statements, each extracted against the schema for its form type — and feeds clean data into the preparer’s workflow. Private-equity fund K-1s, notoriously manual to break apart, are a strong fit: the system pulls the line items and routes anything ambiguous to a human. The result: 84% less time on manual follow-up and 3× more documents processed per staff member, without adding headcount in peak season.',
         ],
       },
       {
-        heading: 'An AI copilot for the accountant, not a replacement',
+        heading: 'Alongside your staff, not instead of them',
         level: 2,
         body: [
-          'The system reads the documents a firm actually deals with — W-2s, 1099s, K-1s, consolidated brokerage statements — and extracts the fields against the schema for each form type, not as a one-off chat. Private-equity fund K-1s, which are notoriously manual to break apart, are a strong fit: the copilot pulls the line items and routes anything ambiguous to a human.',
-          'From there it supports the rest of the engagement: running the client intake form, drafting the return for review, and surfacing tax-saving angles and compliance checks the preparer can act on. The accountant stays in control and does the high-value work; the copilot does the chasing, reading, and first-pass drafting.',
+          'Partners are hiring, not looking to cut their teams — and an AI pitch that sounds like “replace your associates” deserves the skepticism it gets. This is built the other way around: the system does the reading, filing, chasing, and first-pass drafting, and your people spend their hours on review, judgment, and the client relationship. The accountant stays in control of every number that ships.',
+          'In practice that means the copilot drafts the return and surfaces tax-saving angles and compliance checks; the preparer reviews and decides. Response times improve, error rates drop, and the same team serves more clients — that is the actual unit economics of AI in a firm, and none of it requires anyone to lose their job.',
         ],
       },
       {
-        heading: 'Built on your stack, with the controls finance work demands',
-        level: 3,
+        heading: 'Nothing dropped: engagement status your whole firm can see',
+        level: 2,
         body: [
-          'It runs behind the tools your firm already uses — QuickBooks, Xero, Hubdoc, document portals and practice-management software — so nobody has to learn a new platform. Client financial data stays inside your environment with role-based access and full audit logging on every document, because tax and financial data cannot be handed to an uncontrolled public AI tool.',
+          'After onboarding, the quiet killer is tracking: which documents arrived, what was discussed with whom, which engagement is stuck waiting on the client, which deadline is next. The system keeps that ledger automatically — every document, communication, and status change lands in your practice-management stack, visible to partners and staff alike — so client questions get answered from the record, not from memory, and nothing slips between team members.',
+        ],
+      },
+      {
+        heading: 'Security: your stack, your cloud, your controls',
+        level: 2,
+        body: [
+          'It runs behind the tools your firm already uses — QuickBooks, Xero, Hubdoc, document portals and practice-management software — so nobody has to learn a new platform. And because client tax data cannot be handed to an uncontrolled public AI tool, we deploy on infrastructure you control: dedicated model instances via OpenAI, Google Vertex, AWS or Azure, inside your own cloud, with role-based access and full audit logging on every document. Your client data never leaves your environment and never trains a public model — which is also what your FTC Safeguards Rule written security plan will ask of any vendor you bring in.',
         ],
       },
     ],
     process: [
-      { title: 'Map your tax workflow', body: 'We document how documents are requested, arrive, get categorized, and flow into your accounting and prep stack.' },
-      { title: 'Build intake & extraction', body: 'Automated client document-chasing plus schema-based AI extraction for W-2s, 1099s, K-1s and statements, with review queues for exceptions.' },
-      { title: 'Validate on real returns', body: 'We test against your actual documents and tune until accuracy meets your bar, with human-in-the-loop on low-confidence items.' },
-      { title: 'Deploy for the season', body: 'Go live inside your environment with audit-ready logging and the capacity to absorb peak volume.' },
+      { title: 'Map your client lifecycle', body: 'We document how clients are onboarded, how documents are requested and arrive, and how work flows through your accounting and prep stack — where the hours actually go.' },
+      { title: 'Build onboarding, intake & extraction', body: 'Meeting capture and engagement-letter drafting, automated client document-chasing, and schema-based AI extraction for W-2s, 1099s, K-1s and statements, with review queues for exceptions.' },
+      { title: 'Validate on real engagements', body: 'We test against your actual documents and templates and tune until accuracy meets your bar, with human-in-the-loop on low-confidence items.' },
+      { title: 'Deploy on your cloud', body: 'Go live inside your environment — dedicated model instances, audit-ready logging, and the capacity to absorb peak-season volume.' },
     ],
     whyCustom: [
-      'Automates the real bottleneck — the document chase and intake — not just data entry.',
+      'Covers the whole lifecycle — onboarding, document chase, extraction, tracking — not just data entry.',
+      'Sits alongside your staff: they keep review, judgment and the client relationship; it does the chasing, reading and drafting.',
       'Reads the forms a firm actually handles (W-2, 1099, K-1, brokerage statements) against a defined schema.',
       'Runs behind QuickBooks/Xero/Hubdoc so your team keeps their tools.',
-      'Client financial data stays in your environment with audit logging — no uncontrolled public AI.',
+      'Deploys on your own cloud (OpenAI dedicated, Vertex, AWS, Azure) with audit logging — client data never leaves your environment.',
     ],
     included: [
+      'Onboarding meeting capture & structured records',
+      'Engagement-letter drafting from your templates',
       'Automated client document-chasing & intake',
       'AI extraction of W-2s, 1099s, K-1s & brokerage statements',
       'PE-fund K-1 line-item breakdown',
       'Return drafting & tax-saving / compliance checks',
       'QuickBooks / Xero / Hubdoc integration',
       'Automated reconciliation',
+      'Engagement-status tracking across the firm',
       'Exception handling & human-in-the-loop review',
       'Audit-ready logging',
     ],
     faqs: [
+      { q: 'Will this replace our staff?', a: 'No — and it isn’t designed to. It does the reading, chasing, filing and first-pass drafting; your accountants keep review, judgment and the client relationship. Firms use the freed hours to serve more clients with the same team, not to cut the team.' },
       { q: 'What does the AI actually do during tax season?', a: 'It chases clients for missing documents, reads what comes back (W-2s, 1099s, K-1s, brokerage statements), extracts the data against each form’s schema, and drafts the return for a preparer to review. For one CPA firm this cut manual follow-up by 84% and tripled documents processed per staff member.' },
+      { q: 'Can it help outside tax season?', a: 'Yes — that’s the point of automating the lifecycle, not just the season. Onboarding, engagement letters, document collection, reconciliation and engagement tracking run year-round; tax season is simply when the capacity gain is most visible.' },
       { q: 'Can it handle private-equity fund K-1s?', a: 'Yes — K-1s are one of the most manual documents in tax prep, so they are a strong fit. The copilot pulls the line items and routes anything ambiguous to a human.' },
       { q: 'Which accounting systems do you integrate with?', a: 'QuickBooks Online, Xero and Hubdoc are most common, plus document portals and practice-management tools. If your firm relies on a specific platform, we can almost always connect it.' },
-      { q: 'Is our clients’ financial data secure?', a: 'Yes. The system runs inside your environment with role-based access and full audit trails; sensitive data never leaves systems you control or trains a public model. We work under NDA.' },
+      { q: 'Is our clients’ financial data secure?', a: 'Yes. The system deploys on infrastructure you control — dedicated model instances via OpenAI, Google Vertex, AWS or Azure — with role-based access and full audit trails. Client data never leaves your environment or trains a public model, and we work under NDA.' },
       { q: 'Do our accountants need to learn new software?', a: 'No. The automation runs behind the tools they already use; your team focuses on review and advisory.' },
       { q: 'How long does it take to set up?', a: 'Most firms are live in 4–6 weeks — well ahead of peak season if you start early.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
@@ -872,19 +901,19 @@ export const SERVICES: ServiceContent[] = [
     slug: 'us-ai-automation-agency',
     metaTitle: 'AI Automation Agency for Enterprises (US) | Chronexa',
     metaDescription:
-      'A US AI automation agency for regulated enterprises — custom, secure AI systems for finance, legal, tax and dealmaking, built on your stack and backed by a 90-day ROI guarantee.',
+      'A US AI automation agency for regulated enterprises — custom, secure AI systems for finance, legal, tax and dealmaking, built on your stack and scoped at a fixed price before any build begins.',
     h1: 'AI Automation Agency for Regulated US Enterprises',
     answer:
-      'Chronexa is an AI automation agency and consultancy for US enterprises in regulated industries. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the environment you already run, scoped and fixed-price, and backed by a 90-day ROI guarantee.',
+      'Chronexa is an AI automation agency and consultancy for US enterprises in regulated industries. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the environment you already run, scoped and fixed-price, with the success metrics agreed before any build begins.',
     heroSub:
-      'A US AI automation agency for finance, legal, tax and dealmaking teams — custom, secure AI built inside your environment, scoped and fixed-price, with a 90-day ROI guarantee.',
+      'A US AI automation agency for finance, legal, tax and dealmaking teams — custom, secure AI built inside your environment, scoped and fixed-price, with the success metrics agreed up front.',
     serviceName: 'AI Automation Agency',
     serviceType: 'AI automation agency & consultancy',
     schemaDescription:
       'AI automation agency and consultants for US enterprises in regulated industries — custom, secure AI systems across legal, finance, tax, and dealmaking, deployed on the client’s own stack.',
     roi: [
       { value: 'Secure', label: 'Built inside your environment — data stays contained' },
-      { value: '90-day', label: 'ROI guarantee — or we keep working free' },
+      { value: 'Fixed-price', label: 'Scope, success metrics and price agreed before any build' },
       { value: '$12M+', label: 'ROI generated for clients to date' },
     ],
     sections: [
@@ -920,7 +949,7 @@ export const SERVICES: ServiceContent[] = [
     whyCustom: [
       'Custom systems built inside your environment — data stays contained, never trains a public model.',
       'Domain depth in regulated industries (legal, finance, tax, dealmaking), not generic ops automation.',
-      'Fixed-price and outcome-scoped, with ROI agreed before the build and a 90-day guarantee.',
+      'Fixed-price and outcome-scoped, with the success metrics agreed before the build starts.',
       'You own the assets, built on your stack — not another subscription.',
     ],
     included: [
@@ -930,14 +959,14 @@ export const SERVICES: ServiceContent[] = [
       'RAG / agentic systems & document intelligence',
       'CRM, ERP, DMS & API integrations',
       'Security, access control & audit trails',
-      '90-day ROI guarantee',
+      'Fixed-price scope agreed before the build',
       'Ongoing optimization & support',
     ],
     faqs: [
       { q: 'What kind of AI automation agency is Chronexa?', a: 'An engineer-led agency and consultancy that builds custom, secure AI systems for US enterprises in regulated industries — finance, legal, tax and dealmaking — deployed inside your own environment rather than on a vendor’s cloud.' },
       { q: 'How is this different from a typical AI automation agency?', a: 'Most agencies resell off-the-shelf workflows on their cloud. We build bespoke systems on your stack with the security, auditability and domain depth regulated industries require — and for lower-risk work we also offer fast n8n workflow automation you own.' },
       { q: 'How fast can you deliver?', a: 'A focused workflow goes live in a few weeks; a full enterprise system (e.g. a private RAG with regulatory monitoring) is typically a couple of months. You get a written scope and timeline before any build begins.' },
-      { q: 'What is the 90-day ROI guarantee?', a: "If you don't hit the agreed ROI targets within 90 days, we work for free until you do, or refund your setup costs." },
+      { q: 'How do we know it will pay off before we commit?', a: 'Two ways. The audit is free — if we cannot find automation worth more than it costs to build, you owe us nothing and you keep the roadmap. And the build itself is fixed-price against success metrics we agree in writing before any code is written, so the cost is known and the target is explicit rather than assumed.' },
       { q: 'Do you build on our existing tools, securely?', a: 'Yes. We build on the stack you already run (CRM, ERP, DMS, accounting) and deploy inside your environment with role-based access and audit trails, so sensitive data never leaves your boundary.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
     ],
@@ -947,19 +976,19 @@ export const SERVICES: ServiceContent[] = [
     slug: 'ai-automation-agency-dubai',
     metaTitle: 'AI Automation Agency Dubai & UAE | Chronexa',
     metaDescription:
-      'AI automation agency for Dubai and UAE businesses. Workflow automation, AI agents and document processing, fixed price, with a 90-day ROI guarantee.',
+      'AI automation agency for Dubai and UAE businesses. Workflow automation, AI agents and document processing, at a fixed price agreed before the build starts.',
     h1: 'AI Automation Agency for Dubai & UAE Businesses',
     answer:
-      'Chronexa builds workflow automation, AI agents, and document processing for businesses across Dubai, Abu Dhabi and the wider UAE. We connect the tools you already use, automate the manual work in between, and price every engagement fixed and up front, backed by a 90-day ROI guarantee.',
+      'Chronexa builds workflow automation, AI agents, and document processing for businesses across Dubai, Abu Dhabi and the wider UAE. We connect the tools you already use, automate the manual work in between, and price every engagement fixed and up front, with the success metrics agreed in writing before the build starts.',
     heroSub:
-      'Workflow automation, AI agents and document processing, built around the tools you already use. Fixed price, with a 90-day ROI guarantee.',
+      'Workflow automation, AI agents and document processing, built around the tools you already use. Fixed price, agreed before the build starts.',
     serviceName: 'AI Automation Agency Dubai',
     serviceType: 'AI automation agency & consultancy',
     schemaDescription:
       'AI automation agency for Dubai and UAE businesses. Workflow automation, AI agents, document processing and system integration, with an optional self-hosted deployment.',
     roi: [
       { value: 'Fixed-price', label: 'Agreed before the build starts, no surprises' },
-      { value: '90-day', label: 'ROI guarantee, or we keep working at no extra cost' },
+      { value: 'Free audit', label: 'No opportunity worth building? You owe nothing, and keep the roadmap' },
       { value: 'Self-hosted', label: 'Available if your data needs to stay in one place' },
     ],
     callout:
@@ -990,7 +1019,7 @@ export const SERVICES: ServiceContent[] = [
     whyCustom: [
       'We work in your business hours. Based in India, our team overlaps with the UAE working day and can turn work around while you sleep.',
       'Fixed price, agreed before we start. You know the cost before you commit, not after.',
-      'A 90-day ROI guarantee. If it has not paid for itself in 90 days, we keep working at no extra charge until it does.',
+      'A free audit before you commit. If we cannot find automation worth more than it costs to build, you owe us nothing and you keep the roadmap.',
       'We build on what you already run. No forcing your team onto a new CRM or accounting system first.',
       'The people who scope the project are the ones who build it. No handoff to a different team halfway through.',
     ],
@@ -1001,7 +1030,7 @@ export const SERVICES: ServiceContent[] = [
       'Document processing and data extraction',
       'CRM and WhatsApp Business API integration',
       'Self-hosted deployment, where needed',
-      '90-day ROI guarantee',
+      'Fixed price agreed before the build',
       'Ongoing support after launch',
     ],
     faqs: [
