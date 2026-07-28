@@ -9,6 +9,40 @@
  */
 export type ServiceFaq = { q: string; a: string };
 
+/** A hero stat on a sales page. String values render as words, numbers count up. */
+export type SalesStat = { value: number | string; suffix?: string; label: string };
+
+export type SalesCaseSpotlight = {
+  slug: string;
+  label: string;
+  title: string;
+  body: string;
+  stats: { value: number; suffix: string; label: string }[];
+  window: { title: string; rows: { file: string; name: string; text: string }[]; gate: string };
+  overlay: { big: string; small: string };
+};
+
+/**
+ * Present only on rebuilt "sales" pages (2026-07 services audit) — its presence
+ * switches the route from the article templates to ServiceSalesPage. Every
+ * stat must be a number already attributed on the site; nothing invented.
+ */
+export type SalesBlock = {
+  /** Trailing substring of h1 rendered in the serif accent style. */
+  heroAccent?: string;
+  stats: SalesStat[];
+  scene: 'docintel' | 'legal';
+  sceneTitle: string;
+  sceneCaption: string;
+  /** Tool logos (files in /public/logos) a buyer recognises as their stack. */
+  stack: { file: string; name: string }[];
+  /** Solution-card title → logo files shown on that card. */
+  solutionLogos?: Record<string, string[]>;
+  calculator?: { heading: string; sub: string };
+  pricingLine: string;
+  caseSpotlight: SalesCaseSpotlight;
+};
+
 export type ServiceContent = {
   slug: string;
   metaTitle: string;
@@ -38,6 +72,8 @@ export type ServiceContent = {
   proof?: { slug: string; label: string };
   /** Related service slugs to cross-link. */
   related: string[];
+  /** Sales-page data — presence switches the route to ServiceSalesPage. */
+  sales?: SalesBlock;
 };
 
 const GUARANTEE =
@@ -146,6 +182,59 @@ export const SERVICES: ServiceContent[] = [
     ],
     proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
     related: ['ai-for-large-law-firms', 'ai-for-mid-size-law-firms', 'ai-for-small-law-firms', 'regulatory-filing-monitoring-automation', 'law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
+    sales: {
+      heroAccent: 'Regulated Law Firms',
+      stats: [
+        { value: 90, suffix: '%', label: 'less time on manual regulatory monitoring — corporate litigation firm' },
+        { value: 5, suffix: '×', label: 'faster internal response to regulatory change' },
+        { value: 100, suffix: '%', label: 'audit-trail coverage on every AI action' },
+      ],
+      scene: 'legal',
+      sceneTitle: 'Legal & Regulatory Engine — live run',
+      sceneCaption:
+        'This is the engine class this page describes, running: regulatory alerts matched to matters, knowledge answered with citations, billing caught before it leaks. Illustrative run — the build is always yours.',
+      stack: [
+        { file: 'imanage.png', name: 'iManage' },
+        { file: 'netdocuments.png', name: 'NetDocuments' },
+        { file: 'sebi.png', name: 'SEBI' },
+        { file: 'rbi.png', name: 'RBI' },
+        { file: 'thomsonreuters.png', name: 'Thomson Reuters' },
+        { file: 'word.svg', name: 'Word' },
+        { file: 'outlook.png', name: 'Outlook' },
+        { file: 'slack.svg', name: 'Slack' },
+      ],
+      solutionLogos: {
+        'Due diligence & contract review': ['imanage.png', 'netdocuments.png', 'word.svg'],
+        'Matter intake & classification': ['outlook.png', 'gdrive.svg'],
+        'Compliance & audit trail': ['sebi.png', 'rbi.png'],
+      },
+      calculator: {
+        heading: 'How much is unbilled work costing the firm?',
+        sub: 'Most firms leak billable hours between matter work and the timesheet. Run your own numbers — the full breakdown lands in your inbox.',
+      },
+      pricingLine:
+        'Fixed-price, agreed before any code is written. Engagements run $10K–$150K depending on scope — most firms start with a single workflow at the lower end, and the audit that precedes it is free.',
+      caseSpotlight: {
+        slug: 'how-leading-law-firm-automated-regulatory-intelligence',
+        label: 'AI research agent · Legal',
+        title: 'Regulatory intelligence, on the day it publishes.',
+        body: 'Regulatory feeds matched to live matters automatically, with response drafts prepared for lawyer review — so the firm answers in hours, not weeks, and nothing in scope slips past.',
+        stats: [
+          { value: 90, suffix: '%', label: 'less manual monitoring' },
+          { value: 5, suffix: '×', label: 'faster internal response' },
+        ],
+        window: {
+          title: 'Regulatory watch — daily run',
+          rows: [
+            { file: 'sebi.png', name: 'SEBI', text: 'New circulars and orders scanned' },
+            { file: 'rbi.png', name: 'RBI', text: 'Matched against live matters' },
+            { file: 'word.svg', name: 'Word', text: 'Client alerts drafted' },
+          ],
+          gate: 'Partner approval → sent',
+        },
+        overlay: { big: '5×', small: 'faster response' },
+      },
+    },
   },
   {
     slug: 'insurance-claims-triage-automation',
@@ -735,6 +824,59 @@ export const SERVICES: ServiceContent[] = [
     ],
     proof: { slug: 'how-reservestudy-automated-report-production-with-ai', label: 'How ReserveStudy.com cut report creation time from days to minutes' },
     related: ['cpa-tax-document-automation', 'legal-due-diligence-automation', 'insurance-claims-triage-automation'],
+    sales: {
+      heroAccent: 'Regulated Industries',
+      stats: [
+        { value: 1200, suffix: '+', label: 'client reports a year, produced automatically — US property-services firm' },
+        { value: 85, suffix: '%', label: 'less time per report' },
+        { value: '4 hrs', label: 'per report — was three weeks' },
+      ],
+      scene: 'docintel',
+      sceneTitle: 'Document Intelligence Engine — live run',
+      sceneCaption:
+        'This is the engine class this page describes, running: documents arrive, get classified and extracted, every answer cited back to its source, a human approving the flags. Illustrative run — the build is always yours.',
+      stack: [
+        { file: 'gmail.svg', name: 'Gmail' },
+        { file: 'gdrive.svg', name: 'Google Drive' },
+        { file: 'sharepoint.png', name: 'SharePoint' },
+        { file: 'box.png', name: 'Box' },
+        { file: 'word.svg', name: 'Word' },
+        { file: 'excel.svg', name: 'Excel' },
+        { file: 'imanage.png', name: 'iManage' },
+        { file: 'netdocuments.png', name: 'NetDocuments' },
+      ],
+      solutionLogos: {
+        'Extraction & classification': ['gdrive.svg', 'word.svg', 'excel.svg'],
+        'RAG grounding & traceability': ['claude.svg', 'openai.svg'],
+        'Human-in-the-loop & STP': ['slack.svg', 'outlook.png'],
+      },
+      calculator: {
+        heading: 'What does document processing cost you today?',
+        sub: 'Invoices are the highest-volume document pipeline most firms run — put your own numbers in and see what the current process leaves on the table. The full breakdown lands in your inbox.',
+      },
+      pricingLine:
+        'Fixed-price, agreed before any code is written. Engagements run $10K–$150K depending on scope — most firms start with a single document workflow at the lower end, and the audit that precedes it is free.',
+      caseSpotlight: {
+        slug: 'how-reservestudy-automated-report-production-with-ai',
+        label: 'Intelligent document processing · Property services',
+        title: 'Report production: three weeks to four hours.',
+        body: 'Site photos, PDFs, spreadsheets and field notes — thousands of files per engagement — classified, extracted, modelled and assembled into a 50+ page client report automatically, then reviewed by an analyst before it ships. 1,200+ times a year.',
+        stats: [
+          { value: 85, suffix: '%', label: 'less time per report' },
+          { value: 1200, suffix: '+', label: 'reports a year' },
+        ],
+        window: {
+          title: 'Document pipeline — report run',
+          rows: [
+            { file: 'gdrive.svg', name: 'Google Drive', text: 'Photos, PDFs and field notes received' },
+            { file: 'excel.svg', name: 'Excel', text: 'Measurements extracted and modelled' },
+            { file: 'word.svg', name: 'Word', text: '50+ page report assembled' },
+          ],
+          gate: 'Analyst review → shipped to client',
+        },
+        overlay: { big: '4 hrs', small: 'was 3 weeks' },
+      },
+    },
   },
   {
     slug: 'sales-revenue-automation',
