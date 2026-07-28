@@ -167,6 +167,12 @@ const nextConfig: NextConfig = {
       { source: "/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure", destination: "/document-processing-automation", permanent: true },
       { source: "/blog/ai-powered-ma-due-diligence-case-study", destination: "/blog/ai-for-private-equity-deal-lifecycle", permanent: true },
       { source: "/blog/build-vs-buy-ai-automation-costs", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
+
+      // --- Duplicate-post consolidation (2026-07-25): each pair kept the higher-ranking page. ---
+      { source: "/blog/ai-for-wealth-management-build-vs-buy", destination: "/blog/off-the-shelf-ai-vs-custom-workflows-ria-build-vs-buy-guide", permanent: true },
+      { source: "/blog/custom-ai-agents-vs-off-the-shelf-professional-services", destination: "/blog/off-the-shelf-ai-vs-custom-workflows-ria-build-vs-buy-guide", permanent: true },
+      { source: "/blog/ria-client-onboarding-automation-compliance", destination: "/blog/client-onboarding-automation-ria-custom-workflows", permanent: true },
+      { source: "/blog/n8n-workflows-cpa-firms-document-collection-deadline", destination: "/blog/tax-document-collection-automation-cpa-firms", permanent: true },
     ];
   },
 };
