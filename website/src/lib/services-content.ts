@@ -31,16 +31,22 @@ export type SalesBlock = {
   /** Trailing substring of h1 rendered in the serif accent style. */
   heroAccent?: string;
   stats: SalesStat[];
-  scene: 'docintel' | 'legal';
-  sceneTitle: string;
-  sceneCaption: string;
+  /** Animated "engine scene" — a bespoke, hand-built visual (see docintel-scene/legal-scene).
+   *  Omit until that scene has been designed with Ankit; the "See it run" section is skipped. */
+  scene?: 'docintel' | 'legal';
+  sceneTitle?: string;
+  sceneCaption?: string;
+  /** Which embedded calculator to mount. Defaults to `scene` when omitted, so existing
+   *  pages (where scene and calculator share a key) don't need to set this explicitly. */
+  calculatorKey?: 'docintel' | 'legal' | 'startup';
   /** Tool logos (files in /public/logos) a buyer recognises as their stack. */
   stack: { file: string; name: string }[];
   /** Solution-card title → logo files shown on that card. */
   solutionLogos?: Record<string, string[]>;
   calculator?: { heading: string; sub: string };
   pricingLine: string;
-  caseSpotlight: SalesCaseSpotlight;
+  /** Requires a real, live /case-studies/[slug] page — omit until one exists for this page. */
+  caseSpotlight?: SalesCaseSpotlight;
 };
 
 export type ServiceContent = {
@@ -4153,6 +4159,115 @@ export const SERVICES: ServiceContent[] = [
     ],
     related: ['secure-ai-deployment', 'financial-services-automation', 'document-processing-automation'],
   },
+  {
+    slug: 'ai-growth-systems-for-startups',
+    metaTitle: 'AI Growth Systems for Growth-Stage Startups | Chronexa',
+    metaDescription:
+      'Custom AI automation for growth-stage Indian startups — content and acquisition, lead research, support triage, and reporting systems built into the tools your team already runs, at a fixed price.',
+    h1: 'AI Growth Systems for Growth-Stage Startups',
+    heroSub:
+      'For Series A/B founders in Bangalore, Mumbai and Delhi-NCR: automation that removes the acquisition, retention and operations bottlenecks slowing you down — so you scale output without scaling headcount in lockstep.',
+    answer:
+      'AI Growth Systems are custom-built automations that take on the repetitive work behind acquisition, retention and operations — content production, lead research, support, reporting — so a growth-stage startup keeps growing without hiring in lockstep for every function that gets loaded. Chronexa builds them into the tools you already run, at a fixed price agreed before any code is written.',
+    callout:
+      'Every startup hits the same wall. Product-market fit is real, demand is real, and the team that got you here can\'t keep up with what got you here. The founder\'s instinct is to hire — but hiring is a 2-3 month cycle before someone is even fully ramped, and by then the bottleneck has moved. A growth system closes the gap in weeks, on the exact function that\'s capped, and keeps absorbing volume as you grow.',
+    serviceName: 'AI Growth Systems for Startups',
+    serviceType: 'Custom AI automation for growth-stage startups',
+    schemaDescription:
+      'Custom AI automation for growth-stage Indian startups — content and acquisition engines, lead research, support triage, and reporting systems built into the tools founders already run.',
+    roi: [
+      { value: '60–70%', label: 'of current work hours are automatable with today\'s AI — McKinsey, The Economic Potential of Generative AI, 2023' },
+      { value: '25 hrs/week', label: 'reclaimed by marketers using automation tools — Zapier, State of Business Automation, 2021' },
+      { value: '16 hrs/week', label: 'reclaimed by support teams using automation tools — Zapier, State of Business Automation, 2021' },
+    ],
+    sections: [
+      {
+        heading: 'The problem: growth outpaces the systems built to handle it',
+        level: 2,
+        body: [
+          'Series A and B is when a company stops asking whether this works and starts asking how fast it can go. But the operating model that got you to product-market fit — a handful of people doing everything by hand — was never built for 3x the pipeline, 3x the support volume, 3x the reporting. Marketing can\'t produce enough content to keep CAC down. Sales can\'t personalize outreach at the volume the pipeline demands. Support tickets pile up faster than the team can close them. Every new customer creates more manual work, not less.',
+          'The founder\'s instinct is to hire. But in Bangalore or Mumbai, a mid-level growth marketer alone runs roughly ₹8–13 lakh a year before you\'ve trained them or seen a single result — and that\'s one role, in one function, while two or three others are also capped. Hiring is real leverage eventually. In the first 90 days, it\'s a cost you\'re paying before the bottleneck even moves.',
+        ],
+      },
+      {
+        heading: 'Why this isn\'t a bigger-team problem — it\'s a systems problem',
+        level: 3,
+        body: [
+          'Traditional startups scale by adding a person to whichever function gets overloaded next. AI-first startups scale by building a system once that absorbs the repeatable part of that function\'s work, so the same team handles a growing load. McKinsey estimates that today\'s automation technology can take on 60–70% of the hours employees currently spend on their jobs — the repeatable 60–70%, not the judgment calls. That\'s the part a growth system should be doing, freeing your team for the 30–40% that actually needs a person: the strategy, the relationship, the judgment call.',
+          'That\'s the shift worth naming directly: not hiring faster, and not buying another per-seat SaaS tool that caps out exactly when your volume gets interesting — but a system built into the stack you already run, that keeps absorbing volume as you grow.',
+        ],
+      },
+    ],
+    process: [
+      { title: 'Find the real bottleneck', body: 'A short working session on your metrics — CAC, activation, support volume, whatever\'s capped — to find the one function where automation pays back fastest, not a wishlist of ten.' },
+      { title: 'Design the system', body: 'We map the workflow into the tools you already run — HubSpot, Notion, WhatsApp, your CRM, whatever it is — and agree the build, timeline and price before any code is written.' },
+      { title: 'Build & integrate', body: 'The system goes live inside your stack — not a new login your team has to adopt, not a black-box SaaS you can\'t change.' },
+      { title: 'Iterate on real usage', body: 'Two weeks of real usage tells you more than any spec. We tune the system against what actually happens, then hand you a system you own.' },
+    ],
+    workflows: [
+      'Automated content production & scheduling pipeline',
+      'Lead enrichment + personalized outreach drafting',
+      'WhatsApp / Intercom support triage & draft-response',
+      'Weekly growth metrics rollup from your existing tools',
+    ],
+    whyCustom: [
+      'A ChatGPT subscription or generic AI wrapper doesn\'t know your funnel, your ICP, or your existing stack — it answers one prompt at a time and forgets everything after.',
+      'Off-the-shelf automation tools charge per seat or per task and cap out exactly when your volume gets interesting — you\'re renting a system, not compounding one you own.',
+      'A system built into your actual stack removes the manual re-entry step off-the-shelf tools leave behind.',
+      'Fixed-price and outcome-scoped — you know the cost before you commit, unlike a subscription that scales with your growth.',
+    ],
+    included: [
+      'A free audit that finds your highest-payback bottleneck before you spend anything',
+      'A fixed-price build agreed before any code is written',
+      'Integration into the tools your team already uses',
+      'Two weeks of iteration against real usage after go-live',
+      'Documentation and handover — you own the system, not a subscription to it',
+    ],
+    faqs: [
+      { q: 'Why not just hire the extra person?', a: 'Hiring is real leverage for a growth-stage startup over the long run, but it isn\'t instant leverage — a new performance marketer, SDR, or support hire in Bangalore or Mumbai typically takes two to three months before they\'re fully ramped and producing independent results, and the fully-loaded cost keeps growing every time you add headcount to the same function. An AI growth system works differently: instead of adding a person to absorb more volume, we build a system that takes on the repeatable share of that function\'s work — content production, lead research, support triage, reporting — so the same team handles a growing load without a proportional increase in headcount. That system keeps absorbing more volume as your Series A or Series B startup scales, so you\'re not back at the same hiring decision three months later when the next bottleneck shows up. Most founders end up doing both — hiring where judgment and relationships matter, and automating where the work is repeatable — but the order matters: automate the repeatable share first, then hire for what\'s left.' },
+      { q: 'How long does this take to build?', a: 'Most first AI growth systems go live in two to four weeks once the scope is agreed on the discovery call — a single workflow such as content production, lead enrichment, or support triage tends to land at the faster end, while a multi-step pipeline that touches several tools takes closer to four weeks. The exact timeline depends on the complexity of the workflow and how many systems it needs to connect to, which is exactly what the discovery call and the scoping conversation are for. In practice, this isn\'t a one-and-done project for most growth-stage startups — Chronexa typically continues as an ongoing engagement, adding the next system once the first one is live and proven, rather than treating startup automation as a single fixed deliverable.' },
+      { q: 'Do you replace our team?', a: 'No. An AI growth system is built to take on the repetitive, high-volume share of a function\'s work — drafting outbound, triaging support tickets, assembling a weekly report — so your existing team spends its time on the parts of the job that actually need a person: the judgment calls, the relationships with customers and investors, and the strategic decisions that come from understanding your specific market. Growth-stage startups that adopt AI-first systems aren\'t running with fewer people; they\'re running the same team against a much larger volume of customers, leads, and tickets than a comparable startup still doing everything manually. The goal is more output per employee, not headcount reduction — the team you already have becomes the team that can handle three times the load.' },
+      { q: 'Which AI models do you use?', a: 'Chronexa is model-agnostic and picks the right model for each part of the system rather than defaulting to one vendor. For content generation, reasoning, and conversational tasks — drafting outbound emails, summarizing support tickets, writing weekly reports — we typically use Claude or GPT-class large language models, chosen for the specific task and cost profile. For structured tasks like lead scoring, churn prediction, or classification, a purpose-built machine learning model usually outperforms a general-purpose LLM on both accuracy and cost, so we use the right tool for that part of the pipeline instead of forcing everything through one model. This also means your AI growth system isn\'t locked into a single AI provider — if a better or cheaper model becomes available for a given task, we can swap it in without rebuilding the system around it.' },
+      { q: 'How secure is this with our customer data?', a: 'Every AI growth system we build is deployed inside your own environment and connected to the tools you already run — your CRM, your support inbox, your WhatsApp Business account — rather than routing your customer or product data through a public chat tool where you have no control over what happens to it. Every action the system takes is logged, so you have a full audit trail of what was read, what was generated, and what was sent, which matters as much for your own peace of mind as it does if an investor or enterprise customer ever asks how your startup handles AI and data governance. For growth-stage startups that are starting to sell into larger, more security-conscious customers, this is also a preparation step — building automation the right way from Series A onward is considerably easier than retrofitting security and audit trails onto a pile of ad-hoc point-tool automations later.' },
+      { q: 'Will this integrate with tools we already use?', a: 'Yes — the whole point of an AI growth system is that it plugs into the stack your team already runs instead of asking you to adopt a new tool on top of everything else. That typically means your CRM such as HubSpot, Notion or your internal docs, Slack, WhatsApp Business, Intercom or your support inbox, and whatever sales-intelligence tools like Apollo or Clay your team already uses for prospecting. If there\'s a tool in your stack that isn\'t on this list, that\'s a normal part of the discovery call — we scope the build around the systems you actually have, rather than handing you a generic template that assumes a stack you don\'t run.' },
+      { q: 'What does it cost?', a: 'There\'s no single fixed price for AI automation for startups, because the cost depends entirely on the scope of the bottleneck we\'re solving — a single content-production workflow costs meaningfully less than a multi-step pipeline touching sales, support, and reporting together. Chronexa works the way most serious automation and AI agencies work: you start with a discovery call, we scope the specific workflow and stack involved, and you receive a proposal with a fixed price and clear success metrics agreed before any code is written, so you know exactly what you\'re paying for and what it\'s supposed to deliver before you commit to anything. Compared to a subscription-based SaaS tool, the honest framing is that a fixed-price build is a cost tied to a specific outcome, rather than a recurring per-seat fee that grows automatically as your team and usage grow.' },
+    ],
+    related: ['marketing-automation', 'customer-support-automation', 'hr-automation', 'operations-automation'],
+    sales: {
+      heroAccent: 'Growth-Stage Startups',
+      stats: [
+        { value: 65, suffix: '%', label: 'of routine work hours automatable with today\'s AI — McKinsey, 2023' },
+        { value: 25, suffix: ' hrs', label: 'saved weekly by marketers using automation — Zapier, State of Business Automation, 2021' },
+        { value: 16, suffix: ' hrs', label: 'saved weekly by support teams using automation — Zapier, State of Business Automation, 2021' },
+      ],
+      calculatorKey: 'startup',
+      stack: [
+        { file: 'hubspot.png', name: 'HubSpot' },
+        { file: 'notion.svg', name: 'Notion' },
+        { file: 'slack.png', name: 'Slack' },
+        { file: 'apollo.png', name: 'Apollo' },
+        { file: 'clay.png', name: 'Clay' },
+        { file: 'intercom.png', name: 'Intercom' },
+        { file: 'whatsapp.svg', name: 'WhatsApp' },
+        { file: 'zoominfo.png', name: 'ZoomInfo' },
+      ],
+      solutionLogos: {
+        'Content & acquisition engine': ['notion.svg', 'hubspot.png'],
+        'Lead research & personalization': ['apollo.png', 'clay.png'],
+        'Support triage & response': ['intercom.png', 'whatsapp.svg'],
+        'Reporting & decision support': ['hubspot.png', 'notion.svg'],
+      },
+      calculator: {
+        heading: 'What would this team cost you to hire?',
+        sub: 'Put in the roles you\'d hire to solve this bottleneck — see the fully-loaded cost, and how much of that work is repeatable enough for AI to take on. The full breakdown lands in your inbox.',
+      },
+      pricingLine:
+        'There\'s no single fixed price — it depends entirely on the bottleneck we\'re solving. Every engagement starts with a free discovery call, where we scope the specific workflow and you get a fixed price and clear success metrics agreed before any code is written.',
+      // No `scene` / `caseSpotlight` yet — the animated engine scene needs a design pass with
+      // Ankit (per the standing per-engine-discussion rule), and there's no real, live
+      // /case-studies/[slug] page for this vertical yet. Both sections are skipped until then.
+    },
+  },
 ];
 
 export function getService(slug: string): ServiceContent | undefined {
@@ -4168,6 +4283,12 @@ export function getService(slug: string): ServiceContent | undefined {
 export type SolutionCard = { title: string; body: string; roiImpact: string };
 
 export const SOLUTIONS: Record<string, SolutionCard[]> = {
+  'ai-growth-systems-for-startups': [
+    { title: 'Content & acquisition engine', body: 'AI drafts, optimizes and schedules content and outbound at the volume your funnel needs — a human reviews before anything ships.', roiImpact: 'Marketers reclaim ~25 hrs/week from repetitive production (Zapier, 2021)' },
+    { title: 'Lead research & personalization', body: 'Prospect and account research that used to take an SDR an hour happens automatically, with personalization pulled into outreach before it sends.', roiImpact: 'Hours back per rep, every week' },
+    { title: 'Support triage & response', body: 'Incoming tickets and WhatsApp messages get classified, drafted and routed — your team approves and sends, instead of typing from scratch.', roiImpact: 'Support teams reclaim ~16 hrs/week (Zapier, 2021)' },
+    { title: 'Reporting & decision support', body: 'Dashboards and weekly reporting assemble themselves from the systems you already run, so decisions wait on data, not on someone\'s free afternoon.', roiImpact: 'Same-day visibility instead of end-of-week' },
+  ],
   'legal-due-diligence-automation': [
     { title: 'Due diligence & contract review', body: 'AI reads contracts and filings, flags risk clauses, and writes structured findings back into iManage or NetDocuments.', roiImpact: '60–80% less manual review time per matter' },
     { title: 'Matter intake & classification', body: 'Incoming documents are auto-classified and routed to the right matter and team without paralegal triage.', roiImpact: 'Hours saved on every new matter' },

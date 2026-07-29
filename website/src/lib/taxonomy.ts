@@ -20,6 +20,7 @@ const CLASSIFY: Record<string, Meta> = {
   'system-data-integration': { kind: 'service', navLabel: 'System & Data Integration', order: 6 },
   'n8n-automation-services': { kind: 'service', navLabel: 'Workflow Automation (n8n)', order: 7 },
   'ai-readiness-assessment': { kind: 'service', navLabel: 'AI Readiness Assessment', order: 8 },
+  'ai-growth-systems-for-startups': { kind: 'service', navLabel: 'AI Growth Systems for Startups', order: 9 },
 
   // Use cases — by function (a department inside any company)
   'finance-automation': { kind: 'function', navLabel: 'Finance', order: 1 },

@@ -1,0 +1,68 @@
+/* Window chrome around an embedded engine scene — same grammar as the
+   homepage EngineShowcase frame, self-contained so service pages don't
+   couple to homepage styles. Scenes are built for a dark ground. */
+.frame {
+  border: 1px solid var(--border-dark-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--neutral-900);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6);
+}
+
+.frameBar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border-dark);
+  background: var(--neutral-850);
+}
+.frameBar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--neutral-700);
+  flex-shrink: 0;
+}
+.frameTitle {
+  margin-left: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted-dark);
+}
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+}
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-green);
+  animation: serviceScenePulse 2.2s infinite;
+}
+@keyframes serviceScenePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(103, 176, 53, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(103, 176, 53, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .liveDot { animation: none; }
+}
+
+.stage { min-height: clamp(560px, 72vh, 760px); }
+.placeholder {
+  height: clamp(560px, 72vh, 760px);
+  background: var(--neutral-900);
+}
+
+@media (max-width: 700px) {
+  .stage, .placeholder { min-height: 480px; height: auto; }
+}
