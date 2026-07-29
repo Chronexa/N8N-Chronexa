@@ -1,15 +1,19 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import ServiceSalesPage from '../../components/ServiceSalesPage';
-import { getService } from '../../lib/services-content';
-import { serviceMetadata } from '../../lib/seo';
+import StartupGrowthPage from './StartupGrowthPage';
 
-const SLUG = 'ai-growth-systems-for-startups';
-const data = getService(SLUG);
-
-export const metadata: Metadata = serviceMetadata(SLUG);
+export const metadata: Metadata = {
+  title: 'AI Growth Systems for Growth-Stage Startups | Chronexa',
+  description:
+    'Custom AI Growth Systems for growth-stage startups — scale acquisition, retention, and operational throughput without scaling headcount in lockstep.',
+  openGraph: {
+    title: 'AI Growth Systems for Growth-Stage Startups | Chronexa',
+    description:
+      'Custom AI Growth Systems for growth-stage startups — scale acquisition, retention, and operational throughput without scaling headcount in lockstep.',
+    url: 'https://chronexa.io/ai-growth-systems-for-startups',
+    type: 'website',
+  },
+};
 
 export default function Page() {
-  if (!data) notFound();
-  return <ServiceSalesPage data={data} />;
+  return <StartupGrowthPage />;
 }

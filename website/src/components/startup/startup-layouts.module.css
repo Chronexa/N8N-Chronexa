@@ -1,0 +1,38 @@
+/* Layout utilities for the Startup Growth Page responsive grids */
+
+/* 2-column split (e.g. Scaling Wall, Headcount Calculator) */
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .splitGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+  }
+}
+
+/* 2-column equal split (e.g. Bottleneck Selector) */
+.equalGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .equalGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Fade-in animation for tab switching */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeContent {
+  animation: fadeIn 0.3s ease-out forwards;
+}
