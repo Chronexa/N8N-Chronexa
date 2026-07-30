@@ -59,11 +59,12 @@ export default function StartupGrowthPage() {
 
         {/* 4 — The answer, at peak intent. The page's one dark band: their
                stack on both ends, a model doing the middle, a human gate, and
-               a readout denominated in headcount. */}
+               a readout denominated in headcount.
+               No .container wrapper here on purpose — GrowthEngine's pipeline
+               panel is full-bleed and manages its own gutters, while its
+               heading and tool strip wrap themselves in .container. */}
         <section className="section-dark section-major section-live">
-          <div className="container">
-            <GrowthEngine />
-          </div>
+          <GrowthEngine />
         </section>
 
         {/* 5 — Why it persisted. Placed after the fix, so the page never runs
