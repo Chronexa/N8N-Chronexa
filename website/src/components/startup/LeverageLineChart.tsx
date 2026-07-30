@@ -1,187 +1,138 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import styles from './LeverageLineChart.module.css';
 
 /**
- * LeverageLineChart — the recurring visual motif for the entire page.
+ * The diagnostic's chart — the page's ONE chart, and the only place a chart
+ * earns its place: it plots the visitor's own computed ratio.
  *
- * Renders in four states:
- *   "hero"      → two lines draw themselves on load, ending nearly overlapping (animated)
- *   "concept"   → annotated with 3 zones: Below / At / Above the line
- *   "diagnostic"→ accepts leverageRatio prop, renders a "YOU ARE HERE" marker
- *   "cta"       → open-ended upward green line, bookending the story
+ * It used to also render a "hero" variant (two abstract lines above the fold)
+ * and, before that, "concept" and "cta" variants — the same picture four times
+ * down one page, none of it responding to anything the visitor did. Those are
+ * gone. The hero now leads with real tool logos and attributed numbers, and
+ * the framework section explains itself in words plus its three ratio bands.
+ *
+ * The zone bands and the marker share ONE ratio→Y mapping (`ratioToY`) and one
+ * pair of thresholds (RATIO_BELOW_MAX / RATIO_AT_MAX) — these must match
+ * LeverageDiagnostic.tsx's own verdict thresholds exactly, or the marker can
+ * visually land in a zone that contradicts its own verdict.
  */
 
-type ChartVariant = 'hero' | 'concept' | 'diagnostic' | 'cta';
-
 interface Props {
-  variant: ChartVariant;
-  leverageRatio?: number; // only used in "diagnostic" variant
+  leverageRatio?: number;
   className?: string;
 }
 
-export default function LeverageLineChart({ variant, leverageRatio = 1.0, className }: Props) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [drawn, setDrawn] = useState(false);
+const W = 720;
+const H = 300;
+const PAD = { top: 36, right: 30, bottom: 44, left: 54 };
 
-  useEffect(() => {
-    if (variant !== 'hero') {
-      setDrawn(true);
-      return;
-    }
-    // Intersection observer — draw once when hero enters viewport
-    const svg = svgRef.current;
-    if (!svg) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setDrawn(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(svg);
-    return () => observer.disconnect();
-  }, [variant]);
+// Exported so LeverageDiagnostic.tsx's verdict logic reads from this ONE
+// definition instead of duplicating the same numbers in two files.
+export const RATIO_BELOW_MAX = 0.8;
+export const RATIO_AT_MAX = 1.2;
+const RATIO_MIN = 0;
+const RATIO_MAX = 3.0;
+const Y_TICKS = [0, 1, 2, 3];
 
-  const W = 720;
-  const H = 300;
-  const pad = { top: 36, right: 30, bottom: 44, left: 54 };
+const plotTop = PAD.top;
+const plotBottom = H - PAD.bottom;
+const plotWidth = W - PAD.left - PAD.right;
 
-  // Paths
-  // Headcount line — always rises roughly linearly
-  const headcountPath = `M ${pad.left} ${H - pad.bottom} C ${pad.left + 120} ${H - pad.bottom - 40}, ${pad.left + 300} ${H - pad.bottom - 100}, ${W - pad.right} ${pad.top + 60}`;
+/** One shared mapping from Leverage Ratio to a Y coordinate — used by both the
+ *  zone bands and the marker so they can never disagree. */
+function ratioToY(ratio: number): number {
+  const clamped = Math.min(Math.max(ratio, RATIO_MIN), RATIO_MAX);
+  const frac = (clamped - RATIO_MIN) / (RATIO_MAX - RATIO_MIN);
+  return plotBottom - frac * (plotBottom - plotTop);
+}
 
-  // Output line — rises then flattens (the 1:1 trap)
-  const outputTrapPath = `M ${pad.left} ${H - pad.bottom} C ${pad.left + 100} ${H - pad.bottom - 60}, ${pad.left + 220} ${H - pad.bottom - 110}, ${pad.left + 340} ${H - pad.bottom - 120} C ${pad.left + 420} ${H - pad.bottom - 125}, ${pad.left + 520} ${H - pad.bottom - 115}, ${W - pad.right} ${pad.top + 80}`;
+const yBelowAtBoundary = ratioToY(RATIO_BELOW_MAX);
+const yAtAboveBoundary = ratioToY(RATIO_AT_MAX);
 
-  // Output line — breakout trajectory (above the line)
-  const outputBreakoutPath = `M ${pad.left + 340} ${H - pad.bottom - 120} C ${pad.left + 420} ${H - pad.bottom - 160}, ${pad.left + 520} ${H - pad.bottom - 200}, ${W - pad.right} ${pad.top + 10}`;
+const headcountPath = `M ${PAD.left} ${plotBottom} C ${PAD.left + 120} ${plotBottom - 40}, ${PAD.left + 300} ${plotBottom - 100}, ${W - PAD.right} ${PAD.top + 60}`;
+const outputTrapPath = `M ${PAD.left} ${plotBottom} C ${PAD.left + 100} ${plotBottom - 60}, ${PAD.left + 220} ${plotBottom - 110}, ${PAD.left + 340} ${plotBottom - 120} C ${PAD.left + 420} ${plotBottom - 125}, ${PAD.left + 520} ${plotBottom - 115}, ${W - PAD.right} ${PAD.top + 80}`;
+const outputBreakoutPath = `M ${PAD.left + 340} ${plotBottom - 120} C ${PAD.left + 420} ${plotBottom - 160}, ${PAD.left + 520} ${plotBottom - 200}, ${W - PAD.right} ${PAD.top + 10}`;
 
-  const lineLen = 900; // approximate path length for dash animation
+const markerX = PAD.left + 340;
 
-  // Diagnostic: compute Y position for the marker
-  const clampedRatio = Math.min(Math.max(leverageRatio, 0.2), 3.0);
-  const markerX = pad.left + 340; // fixed at the "decision point"
-  // Map ratio: 0.2 → near bottom of output range, 3.0 → near top
-  const markerY = H - pad.bottom - 50 - ((clampedRatio - 0.2) / 2.8) * (H - pad.top - pad.bottom - 60);
+export default function LeverageLineChart({ leverageRatio = 1.0, className }: Props) {
+  const reduced = useReducedMotion();
+  const markerY = ratioToY(leverageRatio);
+  const spring = reduced
+    ? { duration: 0 }
+    : ({ type: 'spring', stiffness: 140, damping: 22 } as const);
 
   return (
     <svg
-      ref={svgRef}
       viewBox={`0 0 ${W} ${H}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      style={{ width: '100%', height: 'auto', display: 'block' }}
-      aria-label="The Leverage Line chart"
+      className={`${styles.svg} ${className || ''}`}
+      aria-label="Your position on the Leverage Line"
     >
-      {/* Grid lines */}
-      {[0.25, 0.5, 0.75].map((frac) => (
-        <line
-          key={frac}
-          x1={pad.left}
-          y1={pad.top + frac * (H - pad.top - pad.bottom)}
-          x2={W - pad.right}
-          y2={pad.top + frac * (H - pad.top - pad.bottom)}
-          stroke="var(--border-light)"
-          strokeDasharray="3 6"
-        />
+      {/* Gridlines + Y-axis ticks — real ratio values, the same scale the
+          marker and the zone bands are computed from. */}
+      {Y_TICKS.map((tick) => (
+        <g key={tick}>
+          <line x1={PAD.left} y1={ratioToY(tick)} x2={W - PAD.right} y2={ratioToY(tick)} className={styles.gridLine} />
+          <text x={PAD.left - 10} y={ratioToY(tick) + 4} className={styles.tickLabel} textAnchor="end">{tick}x</text>
+        </g>
       ))}
 
       {/* Axes */}
-      <line x1={pad.left} y1={pad.top - 10} x2={pad.left} y2={H - pad.bottom + 6} stroke="var(--border-light-strong)" strokeWidth="1.5" />
-      <line x1={pad.left - 6} y1={H - pad.bottom} x2={W - pad.right + 10} y2={H - pad.bottom} stroke="var(--border-light-strong)" strokeWidth="1.5" />
+      <line x1={PAD.left} y1={PAD.top - 10} x2={PAD.left} y2={plotBottom + 6} className={styles.axisLine} strokeWidth="1.5" />
+      <line x1={PAD.left - 6} y1={plotBottom} x2={W - PAD.right + 10} y2={plotBottom} className={styles.axisLine} strokeWidth="1.5" />
+      <text x={PAD.left - 8} y={PAD.top - 14} className={styles.axisLabel} textAnchor="start">Output</text>
+      <text x={W - PAD.right + 8} y={plotBottom + 16} className={styles.axisLabel} textAnchor="end">Headcount →</text>
 
-      {/* Axis labels */}
-      <text x={pad.left - 8} y={pad.top - 14} fill="var(--text-muted-light)" fontSize="10" fontWeight="600" textAnchor="start" fontFamily="var(--font-sans)">Output</text>
-      <text x={W - pad.right + 8} y={H - pad.bottom + 16} fill="var(--text-muted-light)" fontSize="10" fontWeight="600" textAnchor="end" fontFamily="var(--font-sans)">Headcount →</text>
+      {/* Zone bands, derived from the SAME ratioToY() as the marker */}
+      <rect x={PAD.left} y={yBelowAtBoundary} width={plotWidth} height={plotBottom - yBelowAtBoundary} className={styles.zoneBelow} rx="2" />
+      <text x={PAD.left + 10} y={yBelowAtBoundary + 18} className={styles.zoneLabelBelow}>BELOW THE LINE</text>
+      <text x={PAD.left + 10} y={yBelowAtBoundary + 32} className={styles.zoneSubLabelBelow}>The 1:1 Trap</text>
 
-      {/* --- CONCEPT & DIAGNOSTIC: Zone shading --- */}
-      {(variant === 'concept' || variant === 'diagnostic') && (
-        <>
-          {/* Below the line zone (amber tint) */}
-          <rect x={pad.left} y={H - pad.bottom - 60} width={W - pad.left - pad.right} height={60} fill="var(--accent-amber-soft)" rx="2" />
-          <text x={pad.left + 8} y={H - pad.bottom - 42} fill="var(--accent-amber)" fontSize="10" fontWeight="700" fontFamily="var(--font-sans)">BELOW THE LINE — The 1:1 Trap</text>
+      <rect x={PAD.left} y={yAtAboveBoundary} width={plotWidth} height={yBelowAtBoundary - yAtAboveBoundary} className={styles.zoneAt} rx="2" />
+      <text x={PAD.left + 10} y={yAtAboveBoundary + 18} className={styles.zoneLabelAt}>AT THE LINE</text>
+      <text x={PAD.left + 10} y={yAtAboveBoundary + 32} className={styles.zoneSubLabelAt}>Ratio = 1.0</text>
 
-          {/* At the line zone (neutral) */}
-          <rect x={pad.left} y={H - pad.bottom - 130} width={W - pad.left - pad.right} height={70} fill="var(--border-light)" opacity="0.3" rx="2" />
-          <text x={pad.left + 8} y={H - pad.bottom - 112} fill="var(--text-muted-light)" fontSize="10" fontWeight="600" fontFamily="var(--font-sans)">AT THE LINE — Ratio ≈ 1.0</text>
+      <rect x={PAD.left} y={PAD.top} width={plotWidth} height={yAtAboveBoundary - PAD.top} className={styles.zoneAbove} rx="2" />
+      <text x={PAD.left + 10} y={PAD.top + 16} className={styles.zoneLabelAbove}>ABOVE THE LINE</text>
+      <text x={PAD.left + 10} y={PAD.top + 30} className={styles.zoneSubLabelAbove}>Systems-Scaled</text>
 
-          {/* Above the line zone (green tint) */}
-          <rect x={pad.left} y={pad.top} width={W - pad.left - pad.right} height={H - pad.bottom - 130 - pad.top} fill="var(--brand-green-soft)" rx="2" />
-          <text x={pad.left + 8} y={pad.top + 16} fill="var(--brand-green-ink)" fontSize="10" fontWeight="700" fontFamily="var(--font-sans)">ABOVE THE LINE — Systems-Scaled</text>
-        </>
-      )}
+      {/* Illustrative trajectories: headcount, output-if-nothing-changes, and
+          output once a system absorbs the repeatable share. */}
+      <path d={headcountPath} className={styles.lineHeadcount} />
+      <path d={outputTrapPath} className={styles.lineOutputTrap} />
+      <path d={outputBreakoutPath} className={styles.lineOutputBreakout} />
 
-      {/* --- Headcount line (amber/red) --- */}
-      <path
-        d={headcountPath}
-        stroke="var(--accent-amber)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        style={variant === 'hero' ? {
-          strokeDasharray: lineLen,
-          strokeDashoffset: drawn ? 0 : lineLen,
-          transition: 'stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1)',
-        } : undefined}
-      />
-      {variant !== 'cta' && (
-        <text x={W - pad.right - 4} y={pad.top + 56} fill="var(--accent-amber)" fontSize="11" fontWeight="700" textAnchor="end" fontFamily="var(--font-sans)">Headcount</text>
-      )}
-
-      {/* --- Output line: trapped trajectory (flattening) --- */}
-      {variant !== 'cta' && (
-        <>
-          <path
-            d={outputTrapPath}
-            stroke="var(--brand-green-ink)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            style={variant === 'hero' ? {
-              strokeDasharray: lineLen,
-              strokeDashoffset: drawn ? 0 : lineLen,
-              transition: 'stroke-dashoffset 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
-            } : undefined}
-          />
-          <text x={W - pad.right - 4} y={pad.top + 78} fill="var(--text-muted-light)" fontSize="11" fontWeight="600" textAnchor="end" fontFamily="var(--font-sans)">Output (trapped)</text>
-        </>
-      )}
-
-      {/* --- Breakout trajectory (only concept, diagnostic, cta) --- */}
-      {variant !== 'hero' && (
-        <path
-          d={variant === 'cta'
-            ? `M ${pad.left} ${H - pad.bottom} C ${pad.left + 200} ${H - pad.bottom - 80}, ${pad.left + 400} ${H - pad.bottom - 180}, ${W - pad.right} ${pad.top + 10}`
-            : outputBreakoutPath}
-          stroke="var(--brand-green-ink)"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray={variant === 'cta' ? '8 6' : 'none'}
+      {/* The marker — the only element driven by the visitor's own numbers. */}
+      <g>
+        {/* Vertical guide ties the marker to the axis, so its movement reads
+            as "your position", not decoration. */}
+        <motion.line
+          x1={markerX}
+          x2={markerX}
+          y1={plotTop}
+          className={styles.guideLine}
+          animate={{ y2: markerY }}
+          transition={spring}
         />
-      )}
-      {(variant === 'concept' || variant === 'diagnostic') && (
-        <text x={W - pad.right - 4} y={pad.top + 8} fill="var(--brand-green-ink)" fontSize="11" fontWeight="800" textAnchor="end" fontFamily="var(--font-sans)">Output (systems-scaled)</text>
-      )}
-
-      {/* --- DIAGNOSTIC: "YOU ARE HERE" marker --- */}
-      {variant === 'diagnostic' && (
-        <g>
-          <circle cx={markerX} cy={markerY} r="8" fill="var(--brand-green-ink)" />
-          <circle cx={markerX} cy={markerY} r="14" fill="none" stroke="var(--brand-green-ink)" strokeWidth="2" opacity="0.4" />
-          <rect x={markerX + 18} y={markerY - 14} width="100" height="24" rx="4" fill="var(--brand-green-ink)" />
-          <text x={markerX + 28} y={markerY + 2} fill="white" fontSize="11" fontWeight="700" fontFamily="var(--font-sans)">YOU ARE HERE</text>
-        </g>
-      )}
-
-      {/* --- CTA: open arrow at end --- */}
-      {variant === 'cta' && (
-        <>
-          <polygon points={`${W - pad.right - 2},${pad.top + 10} ${W - pad.right - 14},${pad.top + 2} ${W - pad.right - 14},${pad.top + 18}`} fill="var(--brand-green-ink)" />
-          <text x={W / 2} y={H - 8} fill="var(--text-muted-light)" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="var(--font-sans)">Your trajectory starts here →</text>
-        </>
-      )}
+        <motion.circle cx={markerX} className={styles.marker} r="8" animate={{ cy: markerY }} transition={spring} />
+        <motion.circle cx={markerX} className={styles.markerRing} r="14" strokeWidth="2" animate={{ cy: markerY }} transition={spring} />
+        <motion.rect
+          x={markerX + 18}
+          width="100"
+          height="24"
+          rx="4"
+          className={styles.markerLabelBg}
+          animate={{ y: markerY - 14 }}
+          transition={spring}
+        />
+        <motion.text x={markerX + 28} className={styles.markerLabelText} animate={{ y: markerY + 2 }} transition={spring}>
+          YOU ARE HERE
+        </motion.text>
+      </g>
     </svg>
   );
 }

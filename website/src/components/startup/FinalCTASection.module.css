@@ -1,0 +1,4 @@
+.wrap { max-width: 720px; margin-inline: auto; text-align: center; }
+.heading { font-size: var(--step-4); margin-bottom: var(--spacing-sm); max-width: 20ch; margin-inline: auto; }
+.lede { font-size: var(--step-0); color: var(--text-muted-light); max-width: 48ch; margin-inline: auto; margin-bottom: var(--spacing-lg); }
+.fine { margin-top: var(--spacing-md); font-size: 0.75rem; font-weight: 600; color: var(--text-muted-light); letter-spacing: 0.05em; }

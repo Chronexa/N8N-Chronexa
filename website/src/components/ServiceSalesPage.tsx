@@ -11,7 +11,6 @@ import CountUp from './CountUp';
 import ServiceSceneFrame from './ServiceSceneFrame';
 import DocCostCalculator from '../app/document-processing-cost-calculator/DocCostCalculator';
 import LegalROICalculator from '../app/law-firm-billing-leakage-calculator/LegalROICalculator';
-import HiringCostCalculator from '../app/ai-growth-systems-for-startups/HiringCostCalculator';
 
 /**
  * Sales-first service page — the 2026-07 rebuild pattern from the services
@@ -29,7 +28,6 @@ import HiringCostCalculator from '../app/ai-growth-systems-for-startups/HiringCo
 const CALCULATORS = {
   docintel: DocCostCalculator,
   legal: LegalROICalculator,
-  startup: HiringCostCalculator,
 } as const;
 
 const Tick = () => (

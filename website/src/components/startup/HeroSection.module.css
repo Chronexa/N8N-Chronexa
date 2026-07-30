@@ -1,0 +1,83 @@
+.hero {
+  padding-top: calc(var(--nav-height) + var(--spacing-lg));
+  padding-bottom: var(--spacing-xl);
+}
+
+/* Two-column hero: content left, form right. Stacks on mobile — content
+   first, form directly after, same order as the DOM. */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.eyebrow { justify-content: flex-start; }
+
+.h1 {
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-sm);
+  max-width: 18ch;
+}
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--text-muted-light);
+  max-width: 46ch;
+  margin-bottom: var(--spacing-lg);
+  line-height: var(--leading-snug);
+}
+
+.scrollCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--brand-green-ink);
+}
+.scrollArrow { font-size: 1.2em; }
+
+.formCol { align-self: start; }
+
+/* The motif's frame. Capped narrower than the container — edge-to-edge left a
+   thin two-line chart stranded in a mostly-empty box. */
+.chartPanel {
+  margin-top: var(--spacing-2xl);
+  max-width: 680px;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+}
+
+.chartKicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin: 0 0 0.5rem;
+}
+
+/* Static, so the point lands for a visitor who scrolls past in two seconds —
+   the animation is reinforcement, never the only way to get the message. */
+.chartIntro {
+  font-size: var(--step-0);
+  color: var(--text-light);
+  font-weight: 500;
+  margin: 0 0 var(--spacing-md);
+  line-height: var(--leading-snug);
+}
+
+@media (max-width: 560px) {
+  .chartPanel { padding: var(--spacing-md); }
+}

@@ -1,0 +1,88 @@
+.form {
+  display: grid;
+  gap: 0.75rem;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  border-top: 3px solid var(--startup-accent);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-md);
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* This form now lives in a narrower sidebar column (not a wide centered
+   block), so fields stack one per row throughout — a 2-up row would get
+   cramped at typical sidebar widths. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+}
+
+.select { color: var(--text-muted-light); }
+.select:valid { color: var(--text-light); }
+
+.input::placeholder { color: var(--text-muted-light); }
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: 2px solid var(--startup-accent);
+  outline-offset: 1px;
+}
+
+.textarea {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+}
+
+.textarea::placeholder { color: var(--text-muted-light); }
+
+.submitBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+.errorText {
+  font-size: 0.85rem;
+  color: var(--color-alert);
+  margin: 0;
+}
+
+.successText {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.fallbackLink {
+  font-size: 0.85rem;
+  color: var(--startup-accent-ink);
+  font-weight: 600;
+}

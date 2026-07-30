@@ -1,0 +1,53 @@
+/* Three zone cards side by side — a different shape from the split-grid
+   pattern most other sections use, on purpose, so consecutive sections
+   don't all read as the same "text left, panel right" template. */
+.beats {
+  display: grid;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+@media (min-width: 900px) {
+  .beats { grid-template-columns: repeat(3, 1fr); }
+}
+
+.beat {
+  padding: var(--spacing-md);
+  border-top: 3px solid var(--border-light-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.beat[data-zone="below"] { border-top-color: var(--accent-amber-line); }
+.beat[data-zone="above"] { border-top-color: var(--startup-accent-line); }
+
+.ratio {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--step-3);
+  line-height: 1;
+}
+.ratio[data-zone="below"] { color: var(--accent-amber); }
+.ratio[data-zone="at"] { color: var(--text-muted-light); }
+.ratio[data-zone="above"] { color: var(--startup-accent-ink); }
+
+.zoneLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.zoneLabel[data-zone="below"] { color: var(--accent-amber); }
+.zoneLabel[data-zone="at"] { color: var(--text-muted-light); }
+.zoneLabel[data-zone="above"] { color: var(--startup-accent-ink); }
+
+.beatTitle { font-size: var(--step-0); color: var(--text-light); margin: 0; }
+.beatTitle[data-zone="above"] { color: var(--startup-accent-ink); }
+
+.beatBody { color: var(--text-muted-light); font-size: var(--step--1); margin: 0; }

@@ -1,123 +1,186 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import LeverageLineChart from './LeverageLineChart';
+import { useState, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import LeverageLineChart, { RATIO_BELOW_MAX, RATIO_AT_MAX } from './LeverageLineChart';
 import layouts from './startup-layouts.module.css';
+import styles from './LeverageDiagnostic.module.css';
+import { IconSliders, IconTeam, IconBulb } from './icons';
+
+type Zone = 'below' | 'at' | 'above';
+
+function SliderInput({
+  label, value, onChange, min, max, step = 1, suffix, hint, tone,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+  suffix?: string;
+  hint: string;
+  tone: 'output' | 'headcount';
+}) {
+  return (
+    <div className={styles.sliderRow}>
+      <span className={styles.sliderLabel}>{label}</span>
+      <div className={styles.sliderInputRow}>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className={styles.slider}
+          data-tone={tone}
+          aria-label={label}
+        />
+        <span className={styles.numberBox}>
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={(e) => onChange(Math.min(max, Math.max(min, Number(e.target.value) || 0)))}
+            aria-label={`${label} — exact value`}
+          />
+          {suffix && <span className={styles.numberSuffix}>{suffix}</span>}
+        </span>
+      </div>
+      <span className={styles.sliderHint}>{hint}</span>
+    </div>
+  );
+}
+
+function CellHead({ icon, tone, children }: { icon: ReactNode; tone: 'accent' | 'amber'; children: ReactNode }) {
+  return (
+    <div className={styles.cellHead}>
+      <span className={layouts.iconBadge} data-tone={tone} data-soft="true">{icon}</span>
+      <h3 className={styles.cellTitle}>{children}</h3>
+    </div>
+  );
+}
+
+function Legend() {
+  return (
+    <ul className={styles.legend}>
+      <li><span className={styles.swatch} data-tone="breakout" /> Output (systems-scaled)</li>
+      <li><span className={styles.swatch} data-tone="headcount" /> Headcount</li>
+      <li><span className={styles.swatch} data-tone="trap" /> Output (trapped)</li>
+    </ul>
+  );
+}
 
 export default function LeverageDiagnostic() {
   const [outputGrowth, setOutputGrowth] = useState(30); // % output growth over last 2 quarters
   const [headcountGrowth, setHeadcountGrowth] = useState(25); // % headcount growth over same period
+  const [teamSize, setTeamSize] = useState(20); // current headcount — feeds only the ₹ Headcount Tax below
 
   const result = useMemo(() => {
     // Cap ratio to avoid infinity when headcount growth is 0
     if (headcountGrowth <= 0) {
-      return { ratio: 5.0, zone: 'above' as const, label: 'Systems-Scaled' };
+      return { ratio: 5.0, zone: 'above' as Zone, label: 'Systems-Scaled' };
     }
     const ratio = Math.round((outputGrowth / headcountGrowth) * 100) / 100;
-    if (ratio < 0.8) return { ratio, zone: 'below' as const, label: 'Deep in the 1:1 Trap' };
-    if (ratio <= 1.2) return { ratio, zone: 'at' as const, label: 'At the 1:1 Trap boundary' };
-    return { ratio, zone: 'above' as const, label: 'Above the Line' };
+    if (ratio < RATIO_BELOW_MAX) return { ratio, zone: 'below' as Zone, label: 'Deep in the 1:1 Trap' };
+    if (ratio <= RATIO_AT_MAX) return { ratio, zone: 'at' as Zone, label: 'At the 1:1 Trap boundary' };
+    return { ratio, zone: 'above' as Zone, label: 'Above the Line' };
   }, [outputGrowth, headcountGrowth]);
 
-  // Headcount Tax calculation — reusing the V0 salary data
-  // Average blended CTC per head: ~₹6L (mix of SDR, marketer, support, analyst)
-  const avgCTCPerHead = 6.0; // lakhs
-  const teamSize = 20; // assume a 20-person growth-stage startup
+  // Headcount Tax — now computed from the team size the visitor actually
+  // enters, not a hardcoded assumption. avgCTCPerHead stays a stated estimate
+  // (surfaced honestly below), since a per-role breakdown is out of scope here.
+  const avgCTCPerHead = 6.0; // lakhs, blended estimate
   const headcountGrowthAbsolute = Math.round(teamSize * (headcountGrowth / 100));
   const annualHeadcountBurn = headcountGrowthAbsolute * avgCTCPerHead * 1.18; // +18% statutory
   const automatableShare = annualHeadcountBurn * 0.65; // McKinsey 60-70% midpoint
+
+  const goalNote = result.zone === 'above'
+    ? 'You’re compounding output faster than cost — keep the next hire reserved for judgment work, not backlog.'
+    : 'Stay above the line. Let systems multiply output while headcount grows on purpose, not by default.';
 
   return (
     <section id="diagnostic" className="section-light reveal-ready">
       <div className="container" data-reveal>
         <p className="eyebrow">The Diagnostic</p>
-        <h2 className="sectionHead" style={{ maxWidth: '24ch' }}>Where do you actually stand?</h2>
-        <p style={{ fontSize: 'var(--step-1)', color: 'var(--text-muted-light)', maxWidth: '56ch', marginBottom: 'var(--spacing-xl)', lineHeight: 'var(--leading-snug)' }}>
-          Two numbers you already know. Ten seconds of math. A verdict about your company you can't unsee.
+        <h2 className={layouts.sectionHead} style={{ maxWidth: '24ch' }}>Where do you actually stand?</h2>
+        <p className={layouts.sectionLede}>
+          Two numbers you already know. Ten seconds of math. A verdict about your company you can&apos;t unsee.
         </p>
 
-        <div className={`glass-panel ${layouts.splitGrid}`} style={{ padding: 0, overflow: 'hidden' }}>
-          {/* Left: Inputs */}
-          <div style={{ padding: 'var(--spacing-lg)', background: 'var(--bg-light)' }}>
-            <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-light)' }}>
-                <span>Output growth (last 2 quarters)</span>
-                <span style={{ color: 'var(--brand-green-ink)', fontFamily: 'var(--font-display)', fontVariationSettings: '"WONK" 1, "SOFT" 4' }}>{outputGrowth}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
+        {/* One card, internal dividers only — no gaps, no separate boxes. */}
+        <div className={styles.card}>
+          <div className={styles.topRow}>
+            <div className={styles.growthCol}>
+              <CellHead icon={<IconSliders />} tone="accent">Your Growth</CellHead>
+              <p className={styles.colSubtitle}>AI systems compound your output. Headcount just adds to your cost.</p>
+              <SliderInput
+                label="Output growth (last 2 quarters)"
+                hint="Revenue, customers served, or your north-star metric"
                 value={outputGrowth}
-                onChange={(e) => setOutputGrowth(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--brand-green-ink)' }}
-                aria-label="Output growth percentage"
+                onChange={setOutputGrowth}
+                min={0}
+                max={100}
+                suffix="%"
+                tone="output"
               />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted-light)' }}>Revenue, customers served, or your north-star metric</span>
-            </div>
-
-            <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-light)' }}>
-                <span>Headcount growth (same period)</span>
-                <span style={{ color: 'var(--accent-amber)', fontFamily: 'var(--font-display)', fontVariationSettings: '"WONK" 1, "SOFT" 4' }}>{headcountGrowth}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
+              <SliderInput
+                label="Headcount growth (same period)"
+                hint="Full-time team size increase, including contractors"
                 value={headcountGrowth}
-                onChange={(e) => setHeadcountGrowth(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--accent-amber)' }}
-                aria-label="Headcount growth percentage"
+                onChange={setHeadcountGrowth}
+                min={0}
+                max={100}
+                suffix="%"
+                tone="headcount"
               />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted-light)' }}>Full-time team size increase, including contractors</span>
             </div>
 
-            {/* Headcount Tax */}
-            <div style={{ padding: 'var(--spacing-md)', background: 'var(--bg-sunken)', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--accent-amber)' }}>
-              <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-amber)', marginBottom: '0.4rem' }}>Headcount Tax</span>
-              <span className="display-num" style={{ fontSize: 'var(--step-2)', color: 'var(--text-light)', display: 'block' }}>₹{automatableShare.toFixed(1)}L</span>
-              <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted-light)', marginTop: '0.3rem' }}>
+            <div className={styles.taxCol}>
+              <CellHead icon={<IconTeam />} tone="amber">Headcount Tax</CellHead>
+              <span className={`display-num ${styles.taxValue}`}>₹{automatableShare.toFixed(1)}L</span>
+              <p className={styles.taxCaption}>
                 Estimated annual cost of work that could be absorbed by a system instead of a hire (McKinsey: 60–70% of routine hours).
-              </span>
+              </p>
+              <SliderInput
+                label="Given a team of"
+                hint="Assumes ~₹6L average blended CTC per new hire, +18% statutory costs — adjust for your own numbers."
+                value={teamSize}
+                onChange={setTeamSize}
+                min={5}
+                max={150}
+                step={5}
+                suffix="people"
+                tone="headcount"
+              />
             </div>
           </div>
 
-          {/* Right: Verdict + Chart */}
-          <div style={{ padding: 'var(--spacing-lg)', background: 'var(--bg-sunken)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'var(--spacing-md)' }}>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: result.zone === 'above' ? 'var(--brand-green-ink)' : 'var(--accent-amber)', marginBottom: '0.5rem' }}>
-                Your Leverage Ratio
-              </span>
-              <span className="display-num" style={{
-                fontSize: 'var(--step-4)',
-                color: result.zone === 'above' ? 'var(--brand-green-ink)' : result.zone === 'at' ? 'var(--text-light)' : 'var(--accent-amber)',
-                display: 'block',
-              }}>
-                {result.ratio.toFixed(1)}x
-              </span>
-              <span style={{
-                display: 'inline-block',
-                marginTop: '0.5rem',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                padding: '0.35rem 0.8rem',
-                borderRadius: '999px',
-                background: result.zone === 'above' ? 'var(--brand-green-soft)' : result.zone === 'at' ? 'var(--bg-card)' : 'var(--accent-amber-soft)',
-                color: result.zone === 'above' ? 'var(--brand-green-ink)' : result.zone === 'at' ? 'var(--text-light)' : 'var(--accent-amber)',
-                border: '1px solid',
-                borderColor: result.zone === 'above' ? 'var(--brand-green-line)' : result.zone === 'at' ? 'var(--border-light)' : 'var(--accent-amber-line)',
-              }}>
-                {result.label}
-              </span>
-            </div>
-
-            <div className="panel" style={{ padding: 'var(--spacing-sm)', position: 'relative' }}>
-              <div className="grid-texture" style={{ position: 'absolute', inset: 0, opacity: 0.4 }}></div>
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <LeverageLineChart variant="diagnostic" leverageRatio={result.ratio} />
+          <div className={styles.chartSection}>
+            <div className={styles.chartHead}>
+              <div>
+                <span className={styles.verdictLabel}>Your Leverage Ratio</span>
+                <div className={styles.ratioRow}>
+                  <span className={`display-num ${styles.ratioValue}`} data-zone={result.zone}>{result.ratio.toFixed(1)}x</span>
+                  <span className={styles.verdictBadge} data-zone={result.zone}>{result.label}</span>
+                </div>
               </div>
+              <Legend />
             </div>
+            <LeverageLineChart leverageRatio={result.ratio} />
+          </div>
+
+          <div className={styles.footerRow}>
+            <p className={styles.goalNote}>
+              <span className={layouts.iconBadge} data-tone="accent" data-soft="true"><IconBulb /></span>
+              <span><strong>The goal:</strong> {goalNote}</span>
+            </p>
+            <a href="#method" className="btn-outline">
+              See how we&apos;d fix this <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </div>

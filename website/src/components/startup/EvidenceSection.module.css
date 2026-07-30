@@ -1,0 +1,93 @@
+.wrap { max-width: 860px; margin-inline: auto; }
+
+/* Company-level delivery figures, hairline-divided — same construction as the
+   homepage hero's stat strip. */
+.delivery {
+  display: flex;
+  gap: clamp(1.1rem, 2.5vw, 2rem);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+}
+.deliveryStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+.deliveryStat + .deliveryStat {
+  border-left: 1px solid var(--border-light);
+  padding-left: clamp(1.1rem, 2.5vw, 2rem);
+}
+.deliveryNum { font-size: var(--step-3); }
+.deliveryLabel {
+  font-size: 0.78rem;
+  color: var(--text-muted-light);
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+@media (max-width: 560px) {
+  .delivery { flex-direction: column; gap: var(--spacing-sm); }
+  .deliveryStat + .deliveryStat {
+    border-left: none;
+    padding-left: 0;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-light);
+  }
+}
+
+/* Mobile: horizontal scroll-snap strip, same pattern as the Roadmap steps —
+   less vertical scrolling, and it visually separates "sourced research" from
+   "our own honesty statement" below instead of reading as one long column. */
+.benchmarks {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) calc(var(--container-pad) * -1) var(--spacing-xl);
+  padding: 0 var(--container-pad) var(--spacing-sm);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.benchmarkCard {
+  padding: var(--spacing-md);
+  border-left: 3px solid var(--border-light-strong);
+  flex: 0 0 85%;
+  max-width: 420px;
+  scroll-snap-align: start;
+}
+.benchmarkTop { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; gap: 0.5rem; flex-wrap: wrap; }
+.benchmarkSource { font-size: var(--step--1); font-weight: 700; color: var(--text-light); }
+.benchmarkTag { font-size: 0.7rem; color: var(--text-muted-light); font-style: italic; }
+.benchmarkBody { color: var(--text-muted-light); font-size: var(--step--1); margin: 0; }
+
+@media (min-width: 900px) {
+  .benchmarks {
+    margin: var(--spacing-md) 0 var(--spacing-xl);
+    padding: 0;
+    overflow-x: visible;
+  }
+  .benchmarkCard { flex: 1 1 0; max-width: none; scroll-snap-align: none; }
+}
+
+.honestyPanel { padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-lg) calc(var(--spacing-lg) + 3px); border-left: 3px solid var(--startup-accent); background: var(--startup-accent-soft); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.honestyTitle { font-size: var(--step-1); color: var(--text-light); margin-bottom: var(--spacing-sm); }
+.honestyClaim { font-size: var(--step-0); color: var(--text-light); font-weight: 600; margin: 0 0 var(--spacing-sm); line-height: var(--leading-normal); }
+
+.honestyList { display: flex; flex-direction: column; gap: 0.6rem; margin: 0 0 var(--spacing-md); padding-left: 1.1rem; }
+.honestyList li { color: var(--text-muted-light); font-size: var(--step--1); line-height: 1.5; }
+.honestyList strong { color: var(--text-light); }
+
+.honestyQuote {
+  color: var(--text-light);
+  font-size: var(--step-0);
+  font-weight: 500;
+  font-style: italic;
+  font-family: var(--font-display);
+  font-variation-settings: "WONK" 1, "SOFT" 8;
+  margin: 0;
+  line-height: var(--leading-normal);
+}

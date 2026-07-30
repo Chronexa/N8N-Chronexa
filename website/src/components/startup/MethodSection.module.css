@@ -1,0 +1,54 @@
+.wrap { max-width: 860px; margin-inline: auto; }
+
+/* Connected vertical timeline — replaces the plain big-number-plus-paragraph
+   layout every numbered-step section on the site uses. The line running
+   through the nodes is a literal callback to the Leverage Line concept
+   itself, not a generic timeline widget. */
+.steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+  padding-left: 2.5rem;
+}
+.steps::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 9px;
+  width: 2px;
+  background: var(--startup-accent-line);
+}
+
+.step { position: relative; }
+
+.stepNode {
+  position: absolute;
+  left: -2.5rem;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  border: 2px solid var(--startup-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--startup-accent-ink);
+  font-family: var(--font-display);
+}
+.stepNode[data-final="true"] {
+  background: var(--startup-accent);
+  color: #ffffff;
+}
+
+.stepHead { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.stepTitle { font-size: var(--step-1); color: var(--text-light); margin: 0; }
+.stepTitle[data-final="true"] { color: var(--startup-accent-ink); }
+.stepBody { color: var(--text-muted-light); font-size: var(--step-0); line-height: var(--leading-normal); margin: 0; }
+.stepBody strong { color: var(--text-light); }
+.ctaWrap { text-align: center; margin-top: var(--spacing-xl); }

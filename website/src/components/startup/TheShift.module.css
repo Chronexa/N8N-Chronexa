@@ -1,0 +1,45 @@
+/* Desktop: a real 3-column table. Each cell holds full sentences (~15-20
+   words), so this needs the full 1200px container, not just tablet width —
+   unwinds at 900px, same as the shared splitGrid breakpoint. */
+.compareTable { display: none; overflow: hidden; }
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-sunken);
+}
+.tableHeadCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+}
+.tableHeadCell[data-tone="headcount"] { color: var(--accent-amber); }
+.tableHeadCell[data-tone="systems"] { color: var(--startup-accent-ink); }
+
+.tableRow { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.tableRow:not(:last-child) { border-bottom: 1px solid var(--border-light); }
+.outcomeCell { padding: var(--spacing-sm) var(--spacing-md); font-weight: 600; font-size: var(--step--1); color: var(--text-light); background: var(--bg-sunken); }
+.cellTraditional { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--step--1); color: var(--text-muted-light); }
+.cellSystems { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--step--1); color: var(--text-muted-light); background: var(--startup-accent-soft); }
+.cellTraditional strong, .cellSystems strong { color: var(--text-light); }
+
+/* Mobile/tablet: stacked cards, each outcome as its own block. */
+.compareCards { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.compareCard { border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
+.cardOutcome { padding: var(--spacing-sm) var(--spacing-md); font-weight: 700; font-size: var(--step--1); color: var(--text-light); background: var(--bg-sunken); }
+.cardCell { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--step--1); color: var(--text-muted-light); border-left: 3px solid; }
+.cardCell strong { color: var(--text-light); }
+.cardKicker { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.cardCell[data-tone="headcount"] { border-left-color: var(--accent-amber-line); }
+.cardCell[data-tone="headcount"] .cardKicker { color: var(--accent-amber); }
+.cardCell[data-tone="systems"] { border-left-color: var(--startup-accent-line); background: var(--startup-accent-soft); }
+.cardCell[data-tone="systems"] .cardKicker { color: var(--startup-accent-ink); }
+
+@media (min-width: 900px) {
+  .compareTable { display: block; }
+  .compareCards { display: none; }
+}

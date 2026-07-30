@@ -1,46 +1,70 @@
 'use client';
 
-import React from 'react';
-import LeverageLineChart from './LeverageLineChart';
+import HeroLeadForm from './HeroLeadForm';
+import LeverageLineHeroChart from './LeverageLineHeroChart';
+import styles from './HeroSection.module.css';
 
+/**
+ * Hero — realigned to the redesign spec
+ * (src/specs/ai-growth-systems-for-startups-redesign.md, §7 Section 1).
+ *
+ * The spec is explicit about what must NOT appear here: no tool logos, no
+ * stats, no service list, no "we build AI automation for startups." A previous
+ * pass put a ten-logo strip and three counting stats in this section — the
+ * exact two things the spec bans, and the tool strip is separately listed under
+ * §15 "What to Remove" as something to demote to a minor supporting element at
+ * most. Both have moved: logos to the growth-engine section (where "your tools,
+ * kept" is the actual argument being made), stats to the evidence section.
+ *
+ * What the spec DOES prescribe here is the mirror headline plus the animated
+ * two-line chart as the first appearance of the page's recurring motif, shown
+ * before the framework names it, so the next section pays it off.
+ *
+ * One deliberate deviation from the spec, on Ankit's explicit instruction: the
+ * spec calls for "almost no chrome" and a soft CTA only, but the hero carries a
+ * lead-capture form. That instruction supersedes the spec.
+ */
 export default function HeroSection() {
   return (
-    <section className="section-light section-major" data-reveal>
-      <div className="container" style={{ paddingTop: 'calc(var(--nav-height) + var(--spacing-xl))' }}>
+    <section className={`section-light ${styles.hero}`} data-reveal>
+      <div className="container">
+        <div className={styles.grid}>
+          <div className={styles.content}>
+            {/* Carries the target keyword so the emotional headline doesn't
+                have to — spec §7 Section 1, point 10. */}
+            <p className={`eyebrow ${styles.eyebrow}`}>AI Growth Systems for Startups</p>
 
-        <div style={{ maxWidth: '820px', marginInline: 'auto', textAlign: 'center' }}>
-          {/* SEO eyebrow — carries the keyword so the emotional headline doesn't have to */}
-          <p className="eyebrow" style={{ justifyContent: 'center' }}>AI Growth Systems for Startups</p>
+            {/* The mirror line. Self-recognition, not a value proposition. */}
+            <h1 className={styles.h1}>
+              Your revenue is growing. So is your headcount.{' '}
+              <span className="accent-phrase">At the same rate.</span>
+            </h1>
 
-          {/* Mirror headline — self-recognition, not value prop */}
-          <h1 style={{ fontSize: 'var(--step-5)', marginBottom: 'var(--spacing-sm)', lineHeight: 1.06, maxWidth: '22ch', marginInline: 'auto' }}>
-            Your revenue is growing. So is your headcount.{' '}
-            <span className="accent-phrase">At the same rate.</span>
-          </h1>
+            <p className={styles.lede}>
+              There is a name for this pattern, a number you can compute in ten seconds, and a
+              structural reason it keeps happening. Keep reading.
+            </p>
 
-          <p style={{ fontSize: 'var(--step-1)', color: 'var(--text-muted-light)', maxWidth: '48ch', marginInline: 'auto', marginBottom: 'var(--spacing-lg)', lineHeight: 'var(--leading-snug)' }}>
-            There is a name for this pattern, a number you can compute in ten seconds, and a structural reason it keeps happening. Keep reading.
-          </p>
+            <a href="#leverage-line" className={styles.scrollCta}>
+              See where you stand <span aria-hidden="true" className={styles.scrollArrow}>↓</span>
+            </a>
+          </div>
 
-          {/* Soft scroll CTA — not "book a call", too early */}
-          <a
-            href="#leverage-line"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: 'var(--step--1)', fontWeight: 600, color: 'var(--brand-green-ink)' }}
-          >
-            See where you stand <span aria-hidden="true" style={{ fontSize: '1.2em' }}>↓</span>
-          </a>
-        </div>
-
-        {/* The chart — two lines drawing themselves, ending nearly overlapping */}
-        <div style={{ maxWidth: '640px', marginInline: 'auto', marginTop: 'var(--spacing-xl)' }}>
-          <div className="panel" style={{ padding: 'var(--spacing-md)', position: 'relative' }}>
-            <div className="grid-texture" style={{ position: 'absolute', inset: 0, opacity: 0.5 }}></div>
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <LeverageLineChart variant="hero" />
-            </div>
+          <div className={styles.formCol}>
+            <HeroLeadForm />
           </div>
         </div>
 
+        {/* The motif, shown before it's named. Draws itself once on scroll-in,
+            then idles; hovering a line explains it. */}
+        <div className={styles.chartPanel}>
+          <p className={styles.chartKicker}>What this chart shows</p>
+          <p className={styles.chartIntro}>
+            Here&apos;s a pattern we see constantly: revenue up 30% last quarter. Headcount up 30%
+            too. That&apos;s not leverage — that&apos;s paying for growth with people.
+          </p>
+          <LeverageLineHeroChart />
+        </div>
       </div>
     </section>
   );

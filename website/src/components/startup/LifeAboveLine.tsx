@@ -1,6 +1,9 @@
 'use client';
 
-import React from 'react';
+import Image from 'next/image';
+import BookButton from '../BookButton';
+import layouts from './startup-layouts.module.css';
+import styles from './LifeAboveLine.module.css';
 
 const outcomes = [
   {
@@ -34,35 +37,39 @@ export default function LifeAboveLine() {
   return (
     <section className="section-light reveal-ready">
       <div className="container" data-reveal>
-        <p className="eyebrow">Future Vision</p>
-        <h2 className="sectionHead" style={{ maxWidth: '24ch' }}>Life above the Leverage Line</h2>
-        <p style={{ fontSize: 'var(--step-1)', color: 'var(--text-muted-light)', maxWidth: '56ch', marginBottom: 'var(--spacing-xl)', lineHeight: 'var(--leading-snug)' }}>
-          What your company looks like when output compounds faster than headcount — in the language you actually think in, not in the language of an AI vendor.
-        </p>
+        <div className={styles.intro}>
+          <div>
+            <p className="eyebrow">Future Vision</p>
+            <h2 className={layouts.sectionHead} style={{ maxWidth: '24ch' }}>Life above the Leverage Line</h2>
+            <p className={layouts.sectionLede} style={{ marginBottom: 0 }}>
+              What your company looks like when output compounds faster than headcount — in the language you actually think in, not in the language of an AI vendor.
+            </p>
+          </div>
+          <div className={styles.imageFrame}>
+            <Image
+              src="/images/startup/hero.png"
+              alt="An interconnected network of nodes, representing systems that compound and connect rather than a headcount that just adds up"
+              width={1024}
+              height={1024}
+              className={styles.image}
+            />
+          </div>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--spacing-md)' }}>
-          {outcomes.map((item, idx) => (
-            <div key={idx} style={{ padding: 'var(--spacing-md)', background: 'var(--bg-card)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-              <h3 style={{ fontSize: 'var(--step-0)', color: 'var(--text-light)', fontFamily: 'var(--font-sans)', fontWeight: 600, margin: 0 }}>{item.title}</h3>
-              <p style={{ fontSize: 'var(--step--1)', color: 'var(--text-light)', margin: 0, fontWeight: 500, lineHeight: 1.4 }}>
-                {item.felt}
-              </p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted-light)', margin: 0, lineHeight: 1.4, paddingTop: '0.4rem', borderTop: '1px solid var(--border-light)' }}>
-                {item.mechanism}
-              </p>
+        <div className={styles.grid}>
+          {outcomes.map((item) => (
+            <div className={layouts.card} key={item.title}>
+              <h3 className={styles.cardTitle}>{item.title}</h3>
+              <p className={styles.cardFelt}>{item.felt}</p>
+              <p className={styles.cardMechanism}>{item.mechanism}</p>
             </div>
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: 'var(--spacing-xl)' }}>
-          <a
-            href="https://calendly.com/ankit-chronexa/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline"
-          >
+        <div className={styles.ctaWrap}>
+          <BookButton className="btn-outline" location="startup-life-above-line">
             See what this looks like at your stage <span aria-hidden="true">→</span>
-          </a>
+          </BookButton>
         </div>
       </div>
     </section>

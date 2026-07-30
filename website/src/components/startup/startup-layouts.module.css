@@ -1,30 +1,109 @@
-/* Layout utilities for the Startup Growth Page responsive grids */
+/* Shared layout + typography utilities for the Startup Growth Page sections. */
 
-/* 2-column split (e.g. Scaling Wall, Headcount Calculator) */
+/* Real, working heading pair — mirrors ServiceSalesPage.module.css's pattern.
+   ("sectionHead"/"sectionLede" as bare global class strings matched nothing;
+   every section now imports these instead.) */
+.sectionHead { font-size: var(--step-3); margin: 0 0 var(--spacing-sm); }
+.sectionLede {
+  font-size: var(--step-1);
+  color: var(--text-muted-light);
+  max-width: 56ch;
+  margin-bottom: var(--spacing-xl);
+  line-height: var(--leading-snug);
+}
+
+/* Site-standard tablet breakpoint (900px, not the 768px this page used to use). */
+
+/* 2-column split (e.g. Leverage Line concept, Diagnostic) */
 .splitGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-lg);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .splitGrid {
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
   }
 }
 
-/* 2-column equal split (e.g. Bottleneck Selector) */
+/* 2-column equal split */
 .equalGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .equalGrid {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* Shared "spine card" — this page's own container language, replacing the
+   sitewide bordered-white-box .panel/.glass-panel look used everywhere else.
+   No border, no box-shadow, no separate white surface — just a colored rule
+   on the left edge, sitting directly on the section's own background. Used
+   for outcome cards, benchmark cards, FAQ items. */
+.card {
+  padding: var(--spacing-md);
+  border-left: 3px solid var(--startup-accent-line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Claim + support-line row (WhyThisHappens, Evidence). */
+.reasoningChain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+.reasoningRow { font-size: var(--step-0); color: var(--text-muted-light); line-height: var(--leading-normal); margin: 0; }
+.reasoningRow strong { color: var(--text-light); }
+
+/* Icon + text row — used by WhyThisHappens and MethodSection so long runs
+   of plain paragraphs get a visual anchor instead of reading as one grey
+   wall of text. */
+.iconRow { display: flex; gap: var(--spacing-md); align-items: flex-start; }
+.iconBadge {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  color: var(--text-muted-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iconBadge svg { width: 20px; height: 20px; }
+.iconBadge[data-tone="accent"] { color: var(--startup-accent-ink); }
+.iconBadge[data-tone="amber"] { color: var(--accent-amber); }
+
+/* Soft tinted circle variant — used on the diagnostic, where each panel's
+   icon carries its own color at a glance, not just a neutral grey dot. */
+.iconBadge[data-soft="true"][data-tone="accent"] { background: var(--startup-accent-soft); }
+.iconBadge[data-soft="true"][data-tone="amber"] { background: var(--accent-amber-soft); }
+
+/* Full-bleed pull-quote — breaks out of the standard container width as its
+   own visual beat, instead of sitting inline at body-copy width like every
+   other blockquote-ish line on the site. */
+.pullQuote {
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+  max-width: 44ch;
+  margin-inline: auto;
+  text-align: center;
+  font-size: var(--step-2);
+  color: var(--text-light);
+  font-style: italic;
+  font-family: var(--font-display);
+  font-variation-settings: "WONK" 1, "SOFT" 8;
+  line-height: 1.35;
 }
 
 /* Fade-in animation for tab switching */

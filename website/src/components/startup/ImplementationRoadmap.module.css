@@ -1,0 +1,88 @@
+/* Mobile/tablet (<900px): horizontal scroll-snap strip — breaks up the long
+   vertical scroll and matches how a 4-step process is naturally "flipped
+   through" rather than read top-to-bottom. Desktop (>=900px): the existing
+   horizontal connected timeline, all 4 steps visible at once, line-through-
+   nodes matching MethodSection's vertical version. */
+.steps {
+  list-style: none;
+  margin: 0 calc(var(--container-pad) * -1) 0;
+  padding: 0 var(--container-pad) var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.step {
+  position: relative;
+  padding-top: 2.5rem;
+  flex: 0 0 78%;
+  max-width: 320px;
+  scroll-snap-align: start;
+}
+
+.stepNode {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  border: 2px solid var(--startup-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--startup-accent-ink);
+  font-family: var(--font-display);
+}
+
+.stepTitle { display: block; margin-bottom: 0.5rem; color: var(--text-light); font-size: var(--step-0); }
+.stepBody { color: var(--text-muted-light); font-size: var(--step--1); margin: 0; line-height: 1.5; }
+.stepBody strong { color: var(--text-light); }
+
+.swipeHint {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted-light);
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--spacing-sm);
+}
+
+.pricingNote { margin-top: var(--spacing-xl); padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + 3px); border-left: 3px solid var(--border-light-strong); max-width: 640px; }
+.pricingTitle { font-size: var(--step-0); color: var(--text-light); margin-bottom: 0.5rem; }
+.pricingBody { color: var(--text-muted-light); font-size: var(--step--1); margin: 0; line-height: 1.5; }
+
+.ctaWrap { text-align: center; margin-top: var(--spacing-lg); }
+
+@media (min-width: 900px) {
+  .swipeHint { display: none; }
+
+  .steps {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    overflow-x: visible;
+  }
+
+  .step {
+    flex: initial;
+    max-width: none;
+    scroll-snap-align: none;
+  }
+  .step::before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: -0.75rem;
+    right: 0.75rem;
+    height: 2px;
+    background: var(--startup-accent-line);
+  }
+  .step:first-child::before { left: 10px; }
+}
