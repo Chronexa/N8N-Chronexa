@@ -1,0 +1,134 @@
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: var(--leading-tight);
+  margin: 0.5rem 0 1rem;
+}
+
+.lede {
+  max-width: 62ch;
+  color: var(--neutral-700);
+  line-height: var(--leading-normal);
+  margin: 0 0 3rem;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.4em;
+}
+
+.group {
+  margin-bottom: 3.5rem;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: var(--leading-snug);
+  margin: 0 0 0.5rem;
+}
+
+.groupBlurb {
+  max-width: 62ch;
+  color: var(--neutral-700);
+  line-height: var(--leading-normal);
+  margin: 0 0 1.5rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.row {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--brand-green);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+}
+
+.rowHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.rowName {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--color-black);
+  text-decoration: none;
+}
+
+.rowName:hover {
+  color: var(--brand-green-ink);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tagOn,
+.tagOff {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.tagOn {
+  background: var(--brand-green-soft);
+  color: var(--brand-green-ink);
+  border: 1px solid var(--brand-green-line);
+}
+
+.tagOff {
+  background: var(--bg-sunken);
+  color: var(--neutral-500);
+  border: 1px solid var(--border-light);
+}
+
+.url {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--neutral-500);
+  word-break: break-all;
+  margin: 0 0 0.75rem;
+}
+
+.purpose {
+  max-width: 70ch;
+  line-height: var(--leading-normal);
+  margin: 0 0 0.5rem;
+}
+
+.notes {
+  max-width: 70ch;
+  font-size: 0.9rem;
+  color: var(--neutral-700);
+  line-height: var(--leading-normal);
+  margin: 0 0 0.5rem;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neutral-400);
+  margin: 0;
+}

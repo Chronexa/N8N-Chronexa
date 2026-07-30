@@ -1043,7 +1043,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How long does an n8n build take?', a: 'Most go live in 4–6 weeks: week 1 discovery and scoping, weeks 2–3 build and integration, week 4 testing — then deploy.' },
       { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
     ],
-    related: ['us-ai-automation-agency', 'vc-pe-crm-automation', 'legal-due-diligence-automation'],
+    related: ['ai-growth-systems-for-startups', 'us-ai-automation-agency', 'vc-pe-crm-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'us-ai-automation-agency',
@@ -4183,7 +4183,7 @@ export const SERVICES: ServiceContent[] = [
     whyCustom: [],
     included: [],
     faqs: [],
-    related: [],
+    related: ['n8n-automation-services', 'sales-revenue-automation', 'operations-automation'],
   },
 ];
 

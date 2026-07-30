@@ -20,11 +20,12 @@ const CLASSIFY: Record<string, Meta> = {
   'system-data-integration': { kind: 'service', navLabel: 'System & Data Integration', order: 6 },
   'n8n-automation-services': { kind: 'service', navLabel: 'Workflow Automation (n8n)', order: 7 },
   'ai-readiness-assessment': { kind: 'service', navLabel: 'AI Readiness Assessment', order: 8 },
-  // 'ai-growth-systems-for-startups' intentionally omitted — its own dedicated landing
-  // page for a distinct new vertical/ICP (growth-stage Indian startups), not folded into
-  // the enterprise-AI service grid. Still fully live + sitemapped (sitemap.ts reads
-  // SERVICES directly); reached via direct links, SEO and paid traffic instead. Same
-  // "demoted but still live" pattern as property-management-automation/d2c-ecommerce-automation.
+  // Promoted into the Services menu (2026-07-30). Previously omitted as a standalone
+  // landing page for a distinct ICP (growth-stage startups); it is now the single page
+  // that owns startup organic search, so it needs menu + hub discoverability. The paid
+  // Meta-ads sibling '/n8n-ai-automation-startups' stays out of nav AND out of the index
+  // (noindex on its page.tsx) so the two never compete for the same queries.
+  'ai-growth-systems-for-startups': { kind: 'service', navLabel: 'AI Growth Systems for Startups', order: 9 },
 
   // Use cases — by function (a department inside any company)
   'finance-automation': { kind: 'function', navLabel: 'Finance', order: 1 },
