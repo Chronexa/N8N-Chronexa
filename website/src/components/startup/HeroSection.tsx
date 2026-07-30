@@ -48,22 +48,25 @@ export default function HeroSection() {
             <a href="#leverage-line" className={styles.scrollCta}>
               See where you stand <span aria-hidden="true" className={styles.scrollArrow}>↓</span>
             </a>
+
+            {/* The motif, shown before it's named. It lives INSIDE the left
+                column rather than in a full-width band below the grid: the
+                form column is much taller than this copy, so a band below
+                left a large dead void under the headline. Now the chart fills
+                that space and the two columns balance. */}
+            <div className={styles.chartPanel}>
+              <p className={styles.chartKicker}>What this chart shows</p>
+              <p className={styles.chartIntro}>
+                Revenue up 30% last quarter. Headcount up 30% too. That&apos;s not leverage —
+                that&apos;s paying for growth with people.
+              </p>
+              <LeverageLineHeroChart />
+            </div>
           </div>
 
           <div className={styles.formCol}>
             <HeroLeadForm />
           </div>
-        </div>
-
-        {/* The motif, shown before it's named. Draws itself once on scroll-in,
-            then idles; hovering a line explains it. */}
-        <div className={styles.chartPanel}>
-          <p className={styles.chartKicker}>What this chart shows</p>
-          <p className={styles.chartIntro}>
-            Here&apos;s a pattern we see constantly: revenue up 30% last quarter. Headcount up 30%
-            too. That&apos;s not leverage — that&apos;s paying for growth with people.
-          </p>
-          <LeverageLineHeroChart />
         </div>
       </div>
     </section>

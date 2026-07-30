@@ -21,27 +21,14 @@
 
 /* Headcount — always amber, the site-wide "cost / human" signal. */
 .lineHeadcount { stroke: var(--accent-amber); stroke-width: 2.5; stroke-linecap: round; }
-.lineLabelHeadcount { fill: var(--accent-amber); font-size: 11px; font-weight: 700; font-family: var(--font-sans); }
 
 /* Output, trapped trajectory — neutral gray, dashed: the "do nothing" path.
    Deliberately NOT green (it was once identical to the breakout line,
    distinguished only by curve shape — a real legibility bug). */
 .lineOutputTrap { stroke: var(--text-muted-light); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 6; }
-.lineLabelTrap { fill: var(--text-muted-light); font-size: 11px; font-weight: 600; font-family: var(--font-sans); }
 
 /* Output once a system absorbs the repeatable share. */
 .lineOutputBreakout { stroke: var(--startup-accent-ink); stroke-width: 3; stroke-linecap: round; }
-.lineLabelBreakout { fill: var(--startup-accent-ink); font-size: 11px; font-weight: 700; font-family: var(--font-sans); }
-
-/* Hover-to-explain strip under the hero chart. */
-.caption {
-  margin: var(--spacing-sm) 0 0;
-  min-height: 1.4em;
-  font-size: var(--step--1);
-  color: var(--text-muted-light);
-  border-top: 1px solid var(--border-light);
-  padding-top: var(--spacing-sm);
-}
 
 .marker { fill: var(--startup-accent-ink); }
 .markerRing { fill: none; stroke: var(--startup-accent-ink); stroke-width: 2; opacity: 0.4; }

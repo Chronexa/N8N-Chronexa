@@ -48,36 +48,33 @@
 
 .formCol { align-self: start; }
 
-/* The motif's frame. Capped narrower than the container — edge-to-edge left a
-   thin two-line chart stranded in a mostly-empty box. */
+/* The motif's frame, sitting in the left column under the scroll cue.
+   Padding is deliberately modest so the chart is the dominant object in the
+   card rather than a small drawing floating in a large empty box. */
 .chartPanel {
-  margin-top: var(--spacing-2xl);
-  max-width: 680px;
-  padding: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .chartKicker {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted-light);
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
 }
 
 /* Static, so the point lands for a visitor who scrolls past in two seconds —
    the animation is reinforcement, never the only way to get the message. */
 .chartIntro {
-  font-size: var(--step-0);
+  font-size: var(--step--1);
   color: var(--text-light);
   font-weight: 500;
   margin: 0 0 var(--spacing-md);
-  line-height: var(--leading-snug);
-}
-
-@media (max-width: 560px) {
-  .chartPanel { padding: var(--spacing-md); }
+  line-height: 1.5;
 }
