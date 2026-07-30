@@ -11,6 +11,13 @@ import { track, identifyByEmail } from '../../lib/analytics';
 import { site } from '../../lib/site';
 import styles from './N8nStartupPage.module.css';
 
+/* ─── Global types ─────────────────────────────────────────────────────── */
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
 /* ─── Inline SVG icons (enterprise feel, no emojis) ──────────────────── */
 const IconBolt = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg>
@@ -264,6 +271,14 @@ function LeadForm() {
         if (r.ok) {
           setStatus('success');
           track('n8n_startup_lead_success', { source: FORM_SOURCE });
+          
+          if (typeof window !== 'undefined' && window.fbq) {
+            window.fbq('track', 'Lead', {
+              content_name: 'N8n Startup Landing Form',
+              currency: 'USD',
+            });
+          }
+
           trackBookCta(FORM_SOURCE);
           setTimeout(() => openBooking({ name, email, notes: comments }), 600);
         } else {
