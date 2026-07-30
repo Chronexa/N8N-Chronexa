@@ -49,9 +49,13 @@ const LINE_CAPTIONS: Record<LineKey, string> = {
   breakout: 'The same team, with one system absorbing the repeatable work — output keeps compounding, payroll doesn’t.',
 };
 
-const W = 700;
-const H = 400;
-const PAD = { top: 38, right: 30, bottom: 44, left: 52 };
+/* Sized so the SVG renders at ~1:1 inside its column (~624px on the site's
+   standard 1200px container), which keeps 13px labels at ~13px on screen.
+   Recompute fontSize × (renderedPx / W) before changing W or any font-size —
+   that ratio, not taste, is what once rendered these labels at 8.6px. */
+const W = 620;
+const H = 370;
+const PAD = { top: 36, right: 28, bottom: 42, left: 50 };
 const plotTop = PAD.top;
 const plotBottom = H - PAD.bottom;
 const plotWidth = W - PAD.left - PAD.right;

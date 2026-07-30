@@ -1,7 +1,9 @@
-/* Full-bleed band. The BACKGROUND runs edge to edge; the content sits in a
-   wider-than-usual measure (1440 vs the site's 1200 container) so the band
-   feels expansive without the chart itself being scaled to absurdity — an
-   SVG stretched to 1920px would render its 13px labels at 48px. */
+/* Full-bleed band: the BACKGROUND runs edge to edge, but the CONTENT sits on
+   the site's standard measure. An earlier version used a wider 1440px inner
+   width to feel expansive, which pushed this section's left and right edges
+   outside the container every other section on the page aligns to — the band
+   read as broken rather than expansive. These four declarations are exactly
+   the global `.container` rule; don't diverge from it again. */
 
 .band {
   padding-block: var(--spacing-xl);
@@ -9,7 +11,7 @@
 
 .inner {
   width: 100%;
-  max-width: 1440px;
+  max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--container-pad);
 }
