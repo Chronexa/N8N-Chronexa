@@ -103,7 +103,7 @@ export default function LeverageDiagnostic() {
     : 'Stay above the line. Let systems multiply output while headcount grows on purpose, not by default.';
 
   return (
-    <section id="diagnostic" className="section-light reveal-ready">
+    <section id="diagnostic" className="section-muted reveal-ready">
       <div className="container" data-reveal>
         <p className="eyebrow">The Diagnostic</p>
         <h2 className={layouts.sectionHead} style={{ maxWidth: '24ch' }}>Where do you actually stand?</h2>

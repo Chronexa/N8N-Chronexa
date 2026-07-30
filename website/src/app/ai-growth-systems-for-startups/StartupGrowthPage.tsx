@@ -4,6 +4,7 @@ import Nav from '../../components/Nav';
 import Footer from '../../components/Footer';
 import ScrollDepth from '../../components/ScrollDepth';
 import HeroSection from '../../components/startup/HeroSection';
+import LeverageLineScene from '../../components/startup/LeverageLineScene';
 import LeverageLineConcept from '../../components/startup/LeverageLineConcept';
 import LeverageDiagnostic from '../../components/startup/LeverageDiagnostic';
 import GrowthEngine from '../../components/startup/GrowthEngine';
@@ -48,8 +49,14 @@ export default function StartupGrowthPage() {
       <ScrollDepth pageType="startup-landing" />
       <Nav />
       <main id="main">
-        {/* 1 — Recognition, credential, the real stack, and the form. */}
+        {/* 1 — Recognition, and the form. */}
         <HeroSection />
+
+        {/* 1.5 — The motif, in its own full-bleed band directly under the
+               hero: a narrated 4-beat run that ends by showing the ratio
+               being computed. Shown before the framework names it, so the
+               next section pays it off. */}
+        <LeverageLineScene />
 
         {/* 2 — Name the pattern. */}
         <LeverageLineConcept />

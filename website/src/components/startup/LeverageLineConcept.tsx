@@ -6,7 +6,7 @@ import styles from './LeverageLineConcept.module.css';
 
 export default function LeverageLineConcept() {
   return (
-    <section id="leverage-line" className="section-muted reveal-ready">
+    <section id="leverage-line" className="section-light reveal-ready">
       <div className="container" data-reveal>
         <p className="eyebrow">The Framework</p>
         <h2 className={layouts.sectionHead} style={{ maxWidth: '26ch' }}>The Leverage Line</h2>

@@ -1,0 +1,169 @@
+/* Full-bleed band. The BACKGROUND runs edge to edge; the content sits in a
+   wider-than-usual measure (1440 vs the site's 1200 container) so the band
+   feels expansive without the chart itself being scaled to absurdity — an
+   SVG stretched to 1920px would render its 13px labels at 48px. */
+
+.band {
+  padding-block: var(--spacing-xl);
+}
+
+.inner {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+/* ── Left column ─────────────────────────────────────────────────────────── */
+.explain { display: flex; flex-direction: column; }
+
+.kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.intro {
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+  color: var(--text-light);
+  font-weight: 500;
+  margin: 0 0 var(--spacing-md);
+  max-width: 34ch;
+}
+
+/* The arithmetic, revealed on beat 3. Space is reserved (visibility, not
+   display) so the column never jumps when it appears. */
+.mathCard {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light-strong);
+  border-left: 3px solid var(--brand-green-ink);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+}
+.mathCard[data-on='true'] { opacity: 1; transform: none; }
+
+.mathEq {
+  font-family: var(--font-display);
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-size: var(--step-2);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-light);
+  line-height: 1;
+}
+.mathNote {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+}
+
+/* ── Narration ───────────────────────────────────────────────────────────── */
+.narration {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-light);
+  min-height: 5.4em;
+}
+.beatDots { display: flex; gap: 4px; margin-bottom: 0.6rem; }
+.beatDot {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-light-strong);
+  transition: background-color 0.4s var(--ease-out);
+}
+.beatDot[data-on='true'] { background: var(--brand-green-ink); }
+.narrationText {
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-light);
+  max-width: 40ch;
+}
+
+/* ── Right column: the chart ─────────────────────────────────────────────── */
+.chartCol { min-width: 0; }
+
+/* Font sizes below are viewBox units against W=700, which renders at roughly
+   640-790px in this column — i.e. near 1:1. Recompute
+   fontSize × (renderedPx / 700) before changing either. */
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.gridLine { stroke: var(--border-light); stroke-dasharray: 2 5; stroke-width: 1; }
+.axisLine { stroke: var(--border-light-strong); stroke-width: 1.25; }
+
+.tickLabel {
+  fill: var(--text-muted-light);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.axisLabel {
+  fill: var(--text-muted-light);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The locked pair share one path: amber solid underneath, grey dashed over the
+   top, so the dashes reveal amber through the gaps. Reading as one braided
+   line is the point — two things on a single trajectory. */
+.lineHeadcount { stroke: var(--accent-amber); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+.lineRevenue {
+  stroke: var(--text-muted-light);
+  stroke-width: 3.5;
+  stroke-linecap: butt;
+  stroke-dasharray: 9 9;
+  fill: none;
+}
+/* The breakout — the only optimistic line on the chart. */
+.lineBreakout { stroke: var(--brand-green-ink); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+
+.branchDot { fill: var(--bg-sunken); stroke: var(--text-muted-light); stroke-width: 2; }
+
+.labelHeadcount { fill: var(--accent-amber); font-size: 13px; font-weight: 700; font-family: var(--font-sans); }
+.labelRevenue { fill: var(--text-muted-light); font-size: 13px; font-weight: 700; font-family: var(--font-sans); }
+.labelBreakout { fill: var(--brand-green-ink); font-size: 13px; font-weight: 700; font-family: var(--font-sans); }
+
+.hit { stroke: transparent; stroke-width: 26; fill: none; cursor: pointer; }
+
+@media (max-width: 899px) {
+  .intro { max-width: none; }
+  .narrationText { max-width: none; }
+}

@@ -1,7 +1,6 @@
 'use client';
 
 import HeroLeadForm from './HeroLeadForm';
-import LeverageLineHeroChart from './LeverageLineHeroChart';
 import styles from './HeroSection.module.css';
 
 /**
@@ -16,9 +15,10 @@ import styles from './HeroSection.module.css';
  * most. Both have moved: logos to the growth-engine section (where "your tools,
  * kept" is the actual argument being made), stats to the evidence section.
  *
- * What the spec DOES prescribe here is the mirror headline plus the animated
- * two-line chart as the first appearance of the page's recurring motif, shown
- * before the framework names it, so the next section pays it off.
+ * The motif chart that briefly sat inside this section now has its own
+ * full-bleed band immediately below (LeverageLineScene) — it needed the width,
+ * and the form column is much taller than this copy, so keeping it here left
+ * either a dead void or a cramped chart.
  *
  * One deliberate deviation from the spec, on Ankit's explicit instruction: the
  * spec calls for "almost no chrome" and a soft CTA only, but the hero carries a
@@ -48,20 +48,6 @@ export default function HeroSection() {
             <a href="#leverage-line" className={styles.scrollCta}>
               See where you stand <span aria-hidden="true" className={styles.scrollArrow}>↓</span>
             </a>
-
-            {/* The motif, shown before it's named. It lives INSIDE the left
-                column rather than in a full-width band below the grid: the
-                form column is much taller than this copy, so a band below
-                left a large dead void under the headline. Now the chart fills
-                that space and the two columns balance. */}
-            <div className={styles.chartPanel}>
-              <p className={styles.chartKicker}>What this chart shows</p>
-              <p className={styles.chartIntro}>
-                Revenue up 30% last quarter. Headcount up 30% too. That&apos;s not leverage —
-                that&apos;s paying for growth with people.
-              </p>
-              <LeverageLineHeroChart />
-            </div>
           </div>
 
           <div className={styles.formCol}>
