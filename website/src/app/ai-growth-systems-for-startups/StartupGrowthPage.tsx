@@ -1,7 +1,7 @@
 'use client';
 
-import Nav from '../../components/Nav';
-import Footer from '../../components/Footer';
+// No Nav/Footer/<main> here — layout.tsx renders the site chrome around every route
+// via ChromeGate. Rendering them again duplicated the header and footer on this page.
 import ScrollDepth from '../../components/ScrollDepth';
 import HeroSection from '../../components/startup/HeroSection';
 import LeverageLineScene from '../../components/startup/LeverageLineScene';
@@ -47,8 +47,6 @@ export default function StartupGrowthPage() {
   return (
     <div className="reveal-ready">
       <ScrollDepth pageType="startup-landing" />
-      <Nav />
-      <main id="main">
         {/* 1 — Recognition, and the form. */}
         <HeroSection />
 
@@ -92,8 +90,6 @@ export default function StartupGrowthPage() {
 
         {/* 10 — One clear ask. */}
         <FinalCTASection />
-      </main>
-      <Footer />
     </div>
   );
 }

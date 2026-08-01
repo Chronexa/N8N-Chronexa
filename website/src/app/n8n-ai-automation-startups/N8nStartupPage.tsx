@@ -2,8 +2,8 @@
 
 import { useState, type FormEvent } from 'react';
 import Image from 'next/image';
-import Nav from '../../components/Nav';
-import Footer from '../../components/Footer';
+// No Nav/Footer/<main> here — layout.tsx renders the site chrome around every route
+// via ChromeGate. Rendering them again duplicated the header and footer on this page.
 import ScrollDepth from '../../components/ScrollDepth';
 import LogoChip from '../../components/LogoChip';
 import { openBooking, trackBookCta } from '../../lib/cal';
@@ -340,8 +340,6 @@ export default function N8nStartupPage() {
   return (
     <div className="reveal-ready">
       <ScrollDepth pageType="n8n-startup-landing" />
-      <Nav />
-      <main id="main">
 
         {/* ═══ 1. HERO + LEAD FORM ═══════════════════════════════════════ */}
         <section className={`section-light ${styles.hero}`}>
@@ -363,11 +361,11 @@ export default function N8nStartupPage() {
                   ))}
                 </div>
                 <div className={styles.heroActions}>
-                  <a href={`tel:${site.phone || '+919876543210'}`} className="btn-outline">
+                  <a href={`tel:${'+919876543210'}`} className="btn-outline">
                     <IconPhone /> Call Us
                   </a>
                   <a
-                    href={`https://wa.me/${(site.phone || '+919876543210').replace(/[^0-9]/g, '')}`}
+                    href={`https://wa.me/${('+919876543210').replace(/[^0-9]/g, '')}`}
                     className="btn-outline"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -650,7 +648,7 @@ export default function N8nStartupPage() {
                 Book Your Automation Audit
               </a>
               <a
-                href={`https://wa.me/${(site.phone || '+919876543210').replace(/[^0-9]/g, '')}`}
+                href={`https://wa.me/${('+919876543210').replace(/[^0-9]/g, '')}`}
                 className="btn-outline"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -661,8 +659,6 @@ export default function N8nStartupPage() {
           </div>
         </section>
 
-      </main>
-      <Footer />
     </div>
   );
 }
