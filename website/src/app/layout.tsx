@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import ChromeGate from "../components/ChromeGate";
 import ScrollReveal from "../components/ScrollReveal";
 import Analytics from "../components/Analytics";
+import MetaPixel from "../components/MetaPixel";
 import VisitorIdentify from "../components/VisitorIdentify";
 import ChatWidget from "../components/ChatWidget";
 import ExitIntent from "../components/ExitIntent";
@@ -206,6 +207,7 @@ export default function RootLayout({
         </ChromeGate>
         <ScrollReveal />
         <Analytics />
+        <MetaPixel />
         <VisitorIdentify />
         <ChatWidget />
         <ExitIntent />

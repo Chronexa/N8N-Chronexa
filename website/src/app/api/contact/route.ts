@@ -75,10 +75,15 @@ export async function POST(req: Request) {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   const startupSheetId = process.env.STARTUP_LEAD_SHEET_ID;
   const startupSheetTab = process.env.STARTUP_LEAD_SHEET_TAB || 'Leads';
+  // Dedicated sheet for the /n8n-ai-automation-startups Meta-ads form. Its form posts
+  // source 'n8n-startup-landing' (NOT 'startup-hero-form'), so it needs its own routing
+  // rule — the two startup pages feed two different sheets on purpose.
+  const n8nSheetId = process.env.N8N_LEAD_SHEET_ID;
+  const n8nSheetTab = process.env.N8N_LEAD_SHEET_TAB || 'Sheet1';
   const gClientId = process.env.GSC_CLIENT_ID;
   const gSecret = process.env.GSC_CLIENT_SECRET;
   const gRefresh = process.env.GOOGLE_OAUTH_REFRESH_TOKEN;
-  if ((sheetId || startupSheetId) && gClientId && gSecret && gRefresh) {
+  if ((sheetId || startupSheetId || n8nSheetId) && gClientId && gSecret && gRefresh) {
     try {
       const tokRes = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
@@ -114,6 +119,20 @@ export async function POST(req: Request) {
             if (!res.ok) console.error('[contact] Startup-lead sheet append failed:', res.status, (await res.text()).slice(0, 200));
           } catch (e) {
             console.error('[contact] Startup-lead sheet write error:', e);
+          }
+        }
+        // Dedicated sheet for the n8n Meta-ads landing page only.
+        if (n8nSheetId && source === 'n8n-startup-landing') {
+          try {
+            const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${n8nSheetId}/values/${encodeURIComponent(n8nSheetTab)}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
+            const res = await fetch(appendUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok.access_token}` },
+              body: JSON.stringify({ values: [[submittedAt, name, email, company, companySize, comments, source]] }),
+            });
+            if (!res.ok) console.error('[contact] n8n-lead sheet append failed:', res.status, (await res.text()).slice(0, 200));
+          } catch (e) {
+            console.error('[contact] n8n-lead sheet write error:', e);
           }
         }
       } else {
