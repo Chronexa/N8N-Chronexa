@@ -1,23 +1,25 @@
 /**
  * The five situations — the heart of the page.
  *
- * Chosen because a founder in almost any industry recognises them straight away,
- * and because these are patterns we genuinely build. Written as a plain
- * before-and-after: no diagram, no animation, no toggle. Reading the comparison
- * is the whole experience.
+ * WRITING RULE: keep it short. Two lines a side, fragments rather than full
+ * sentences, no line longer than about fifteen words. The first draft of this
+ * page read as a document instead of a landing page; the fix was cutting words,
+ * not adding decoration. If a line can lose half its words, cut it.
  *
- * Every `human` line is deliberate. It says what a person still decides, which is
- * both true and the thing that stops a careful buyer from walking away.
+ * Every `human` line stays. It says what a person still decides, which is both
+ * true and the thing that stops a careful buyer from walking away.
  *
- * Logos are claims: only list tools we actually build with, and only files that
- * exist in /public/logos.
+ * Logos are claims: only tools we actually build with, and only files that exist
+ * in /public/logos.
  */
 
 export type Tool = { file: string; name: string };
 
 export type Situation = {
   id: string;
-  /** The situation in a founder's own words. Must be scannable on its own. */
+  /** Two-digit marker. Typographic rhythm, not decoration. */
+  num: string;
+  /** The situation in a founder's own words. Must work read on its own. */
   title: string;
   today: string[];
   after: string[];
@@ -29,16 +31,15 @@ export type Situation = {
 export const SITUATIONS: Situation[] = [
   {
     id: 'enquiries',
+    num: '01',
     title: 'An enquiry comes in and nobody answers for six hours',
     today: [
-      'A form fill at 9:40pm. A WhatsApp message on Sunday. An IndiaMART lead nobody opened.',
-      'Whoever is free replies, eventually.',
-      'By then the customer has already bought somewhere else.',
+      'A form fill at 9:40pm. A WhatsApp message on Sunday.',
+      'By the time someone replies, they have bought elsewhere.',
     ],
     after: [
-      'Every enquiry is picked up within minutes, whichever channel it arrived on.',
-      'The system works out who they are, writes a reply in your words, and sends it.',
-      'The lead reaches the right person with the background already attached.',
+      'Picked up within minutes, on any channel.',
+      'Researched, answered, and handed to the right person with the background attached.',
     ],
     tools: [
       { file: 'whatsapp.svg', name: 'WhatsApp' },
@@ -51,14 +52,15 @@ export const SITUATIONS: Situation[] = [
   },
   {
     id: 'support',
-    title: 'The same fifty questions, all day, every day',
+    num: '02',
+    title: 'The same fifty questions, all day',
     today: [
-      'Where is my order. Is this in stock. When does it ship. Can I change the address.',
-      'Someone senior is answering these at ten at night, because nobody else can.',
+      'Where is my order. Is it in stock. When does it ship.',
+      'Someone senior is answering these at ten at night.',
     ],
     after: [
-      'The routine ones are answered straight away, in your words, on whatever channel the customer used.',
-      'Anything unusual or expensive goes to a person, with the history already summarised.',
+      'Routine questions answered straight away, in your words.',
+      'Anything unusual goes to a person, with the history already summarised.',
     ],
     tools: [
       { file: 'whatsapp.svg', name: 'WhatsApp' },
@@ -70,15 +72,15 @@ export const SITUATIONS: Situation[] = [
   },
   {
     id: 'visibility',
-    title: 'Nobody actually knows what is going on',
+    num: '03',
+    title: 'Nobody knows what is actually going on',
     today: [
-      'Status sits in four places. A WhatsApp group, someone’s inbox, an Excel file, and a project tool three weeks out of date.',
+      'Status sits in a WhatsApp group, an inbox, an Excel file and a stale project tool.',
       'You find out something slipped when the customer tells you.',
     ],
     after: [
-      'One summary every morning, in Slack or on WhatsApp.',
-      'What moved, what is stuck and for how long, who is waiting on whom, and the few numbers you watch.',
-      'Pulled from the tools your team already uses, so nobody has to update anything extra.',
+      'One summary every morning: what moved, what is stuck, who is waiting.',
+      'Pulled from the tools your team already uses.',
     ],
     tools: [
       { file: 'slack.svg', name: 'Slack' },
@@ -86,18 +88,18 @@ export const SITUATIONS: Situation[] = [
       { file: 'excel.svg', name: 'Excel' },
       { file: 'gmail.svg', name: 'Gmail' },
     ],
-    human: 'what to do about it. The summary only tells you where to look.',
+    human: 'what to do about it.',
   },
   {
     id: 'marketing',
+    num: '04',
     title: 'Marketing stops the week your marketing person is busy',
     today: [
       'Three posts in a good week, then nothing for a month.',
-      'The blog has not moved since the person who owned it left.',
-      'Everyone agrees it matters. Nobody has the hours.',
+      'The blog has not moved since its owner left.',
     ],
     after: [
-      'Research, writing, images and scheduling run to a calendar, whether or not anyone is free that week.',
+      'Research, writing, images and scheduling run to a calendar.',
       'You approve. You do not produce.',
     ],
     tools: [
@@ -106,18 +108,19 @@ export const SITUATIONS: Situation[] = [
       { file: 'instagram.svg', name: 'Instagram' },
       { file: 'perplexity.svg', name: 'Perplexity' },
     ],
-    human: 'the positioning, the offer, and what actually goes out.',
+    human: 'the positioning, the offer, and what goes out.',
   },
   {
     id: 'documents',
+    num: '05',
     title: 'Paperwork that needs a person to read it',
     today: [
-      'Invoices, purchase orders, KYC files, GST paperwork, vendor documents.',
-      'Read by a person, typed in by the same person, and typed in wrong often enough to matter.',
+      'Invoices, purchase orders, KYC files, GST paperwork.',
+      'Read by a person, typed in by the same person, and typed in wrong.',
     ],
     after: [
-      'Documents are read, the numbers pulled out and checked against what they should be, then filed where they belong.',
-      'Anything that does not add up gets flagged. The rest goes through without anyone touching it.',
+      'Read, checked against what they should be, and filed.',
+      'Anything that does not add up is flagged. The rest goes through.',
     ],
     tools: [
       { file: 'gdrive.svg', name: 'Google Drive' },
@@ -130,67 +133,64 @@ export const SITUATIONS: Situation[] = [
 ];
 
 /* ─── The three researched numbers ───────────────────────────────────────
-   Every figure here is published research, and the source prints on the page
-   underneath it. That is the point: it is what separates this page from an
-   agency that made its numbers up. Never add a figure without a source, and
-   never present any of these as a Chronexa client result. */
+   Every figure is published research and the source prints underneath it on the
+   page. That is the point: it is what separates this page from an agency that
+   made its numbers up. Never add a figure without a source, and never present
+   any of these as a Chronexa client result. */
 
 export type ImpactFigure = {
-  value: number;
-  prefix?: string;
-  suffix?: string;
+  value: string;
   line: string;
   source: string;
 };
 
 export const IMPACT: ImpactFigure[] = [
   {
-    value: 42,
-    suffix: ' hrs',
-    line: 'The average company takes 42 hours to reply to a new enquiry. Almost a quarter never reply at all.',
-    source: 'Harvard Business Review, study of 2,241 companies',
+    value: '42 hrs',
+    line: 'The average company takes 42 hours to answer a new enquiry. A quarter never answer.',
+    source: 'Harvard Business Review, 2,241 companies',
   },
   {
-    value: 7,
-    suffix: '×',
-    line: 'Reply within the hour instead and you are seven times more likely to qualify that lead.',
-    source: 'Same study, and the MIT Lead Response Management research',
+    value: '7×',
+    line: 'Answer within the hour and you are seven times more likely to qualify that lead.',
+    source: 'Same study, and the MIT lead response research',
   },
   {
-    value: 60,
-    suffix: '%',
-    line: 'Six of every ten hours your team works go to status updates, chasing information and retyping things that already exist.',
-    source: 'Asana Anatomy of Work Index, 13,000 knowledge workers',
+    value: '60%',
+    line: 'Six of every ten hours your team works go to chasing information and retyping it.',
+    source: 'Asana, 13,000 knowledge workers',
   },
 ];
 
 /* ─── FAQ ──────────────────────────────────────────────────────────────
-   House rule: every answer is at least one full paragraph, written both for a
-   founder skimming and for an AI answer engine quoting it. */
+   Full-paragraph answers are the house standard for indexed pages, where they
+   earn SEO and AI-citation value. This page is noindex and paid-traffic only, so
+   the answers are trimmed to what a founder will actually read on a phone —
+   still complete, roughly half the length. */
 
 export const FAQS: { q: string; a: string }[] = [
   {
     q: 'How long does it take?',
-    a: 'Most first builds go live in two to three weeks. Week one is spent sitting with whoever does the work by hand today and mapping what actually happens, which is usually different from what the process document says happens. Week two is building it and connecting it to the tools you already run. Week three is testing against your real data, fixing what breaks, and handing it over. Larger builds take longer, and we will tell you that before you commit rather than halfway through.',
+    a: 'Two to three weeks for a first build. Week one we sit with whoever does the work by hand and map what actually happens, which is usually not what the process document says. Week two we build it and connect it to your tools. Week three we test it on your real data and hand it over. Bigger builds take longer, and we say so before you commit.',
   },
   {
     q: 'We already use Zapier or Make. Why change?',
-    a: 'You may not need to. If the bill is small and nothing important breaks, leave it alone. It stops working for you when you are paying per task at volume, when the logic gets complex enough that Zapier cannot express it, or when customer data needs to stay inside your own systems. We build on n8n, which is open source and can run on your own servers, so your cost stops scaling with usage and your data never leaves your infrastructure. Moving existing Zaps across is one of the more common things we are asked to do.',
+    a: 'You may not need to. If the bill is small and nothing important breaks, leave it. It stops working when you pay per task at volume, when the logic gets too complex for Zapier to express, or when your data needs to stay on your own systems. We build on n8n, which is open source and self-hostable, so cost stops scaling with usage. Moving existing Zaps across is routine for us.',
   },
   {
     q: 'Is our data safe?',
-    a: 'Yes, and the reason is how it is built rather than a promise on a website. We can deploy the whole system inside your own cloud account, so customer records, documents and messages never sit on our servers at all. Where an AI model is involved we use providers that do not train on your data, or run models inside your own environment for anything sensitive. If you are in a regulated sector such as fintech or healthcare, tell us on the first call and we will design for that from the start instead of retrofitting it later.',
+    a: 'Yes, and because of how it is built rather than a promise. We can deploy the whole system inside your own cloud account, so customer records and documents never touch our servers. Where an AI model is involved we use providers that do not train on your data, or run models in your environment. If you are in fintech, healthcare or anything audited, say so on the first call and we design for it from the start.',
   },
   {
     q: 'What happens when it breaks?',
-    a: 'Eventually something will break. An API changes, a vendor has an outage, someone renames a column. What matters is whether it fails loudly or silently. Everything we build is monitored, retries automatically on temporary failures, and alerts a real person when something needs attention, so you hear about it from us and not from a customer. Thirty days of support comes with every build, and most clients keep a small monthly arrangement after that for monitoring and changes. You are never locked in, because you own the files.',
+    a: 'Something will break eventually. An API changes, a vendor goes down, someone renames a column. What matters is that it fails loudly. Everything is monitored, retries on temporary failures, and alerts a person when it genuinely needs attention, so you hear it from us and not from a customer. Thirty days of support is included, and you own the files either way.',
   },
   {
     q: 'Can we start with just one thing?',
-    a: 'Yes, and we would rather you did. Pick the one process that hurts most. We build that, and you judge us on it before committing to anything else. It is a better test than any case study we could show you, and it is how most of our longer engagements actually started.',
+    a: 'Yes, and we would prefer it. Pick the process that hurts most, we build that, and you judge us on it before committing to anything else. It is a better test than any case study, and it is how most of our longer engagements began.',
   },
   {
     q: 'Does this work for a company like ours?',
-    a: 'The five situations on this page turn up in software companies, D2C brands, manufacturers, logistics businesses and professional services firms alike, because they are about how work is organised rather than what you sell. What changes is which tools we connect to: ERP and dispatch systems for a manufacturer, orders and returns for a D2C brand, a CRM and ticketing stack for a software company. If we do not think we can help you, we will say so on the first call rather than sell you a project.',
+    a: 'These five situations turn up in software companies, D2C brands, manufacturers and services firms alike, because they are about how work is organised rather than what you sell. What changes is which tools we connect to: ERP and dispatch for a manufacturer, orders and returns for a D2C brand, CRM and ticketing for software. If we cannot help, we will say so on the call.',
   },
 ];

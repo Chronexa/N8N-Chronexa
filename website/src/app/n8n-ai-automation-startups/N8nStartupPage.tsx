@@ -196,8 +196,8 @@ function LeadForm({ id, onFocusChange }: { id: string; onFocusChange?: (focused:
       {status === 'error' && <p className={styles.errorText}>{error}</p>}
 
       <p className={styles.formNote}>
-        30 minutes, no slide deck. You get a written plan of what is worth automating and
-        what it costs, as a document you can forward to your co-founder. Yours either way.
+        30 minutes, no slide deck. You get a written plan of what is worth automating and what
+        it costs — a document you can forward. Yours either way.
       </p>
     </form>
   );
@@ -223,14 +223,9 @@ export default function N8nStartupPage() {
                 <span className="accent-phrase">With the team you already have.</span>
               </h1>
               <p className={styles.lede}>
-                Every day your people spend hours doing work a machine could do. Replying to
-                enquiries. Chasing follow-ups. Answering the same customer question for the
-                fortieth time. Copying numbers between WhatsApp, email and Excel. Building the
-                same report every Monday.
-              </p>
-              <p className={styles.lede}>
-                We build systems that do that work instead, connected to the tools you already
-                use, running on your own infrastructure, owned by you.
+                Replying to enquiries. Chasing follow-ups. Answering the same question for the
+                fortieth time. Copying numbers between WhatsApp, email and Excel. We build systems
+                that do that work instead, using the tools you already have.
               </p>
               <p className={styles.ledeStrong}>
                 Your team keeps the thinking. The machine does the typing.
@@ -285,9 +280,7 @@ export default function N8nStartupPage() {
             {IMPACT.map((f) => (
               <div key={f.line} className={styles.figure}>
                 {/* Static, not counted up — the brief was no animation. */}
-                <p className={`display-num ${styles.figureNum}`}>
-                  {f.prefix}{f.value}{f.suffix}
-                </p>
+                <p className={`display-num ${styles.figureNum}`}>{f.value}</p>
                 <p className={styles.figureLine}>{f.line}</p>
                 <p className={styles.figureSource}>{f.source}</p>
               </div>
@@ -311,14 +304,17 @@ export default function N8nStartupPage() {
         <div className="container">
           <h2 className={styles.h2}>You will recognise at least three of these</h2>
           <p className={styles.sectionLede}>
-            These are not features. They are the five things that break in almost every company
-            between 20 and 100 people, whatever it sells.
+            The five things that break in almost every company between 20 and 100 people,
+            whatever it sells.
           </p>
 
           <div className={styles.situations}>
             {SITUATIONS.map((s) => (
               <article key={s.id} className={styles.situation}>
-                <h3 className={styles.situationTitle}>{s.title}</h3>
+                <div className={styles.situationHead}>
+                  <span className={styles.situationNum} aria-hidden="true">{s.num}</span>
+                  <h3 className={styles.situationTitle}>{s.title}</h3>
+                </div>
 
                 <div className={styles.compare}>
                   <div className={styles.compareCol}>
@@ -327,7 +323,7 @@ export default function N8nStartupPage() {
                       <p key={line} className={styles.compareLine}>{line}</p>
                     ))}
                   </div>
-                  <div className={styles.compareCol}>
+                  <div className={`${styles.compareCol} ${styles.compareColAfter}`}>
                     <p className={`${styles.compareLabel} ${styles.compareLabelAfter}`}>With Chronexa</p>
                     {s.after.map((line) => (
                       <p key={line} className={styles.compareLine}>{line}</p>
@@ -361,25 +357,22 @@ export default function N8nStartupPage() {
             <div className={styles.own}>
               <h3 className={styles.ownTitle}>Our outbound engine</h3>
               <p className={styles.ownBody}>
-                Every prospect is researched automatically, including what the company does and
-                what has happened there recently. A short, specific email is written for that one
-                company, sent, and followed up. Leads move through their stages on their own.
-                Nobody here copies anything between tools.
+                Each prospect is researched, a short email written for that one company, sent and
+                followed up. Leads move through their stages on their own. Nobody here copies
+                anything between tools.
               </p>
             </div>
             <div className={styles.own}>
               <h3 className={styles.ownTitle}>Our content pipeline</h3>
               <p className={styles.ownBody}>
-                Five steps, chained together. One reads Google Search Console and decides what is
-                worth writing about. One researches it. One writes it. One makes the cover image.
-                One publishes it to this website. It runs every week.
+                Five steps, chained. One picks the topic from Search Console, one researches, one
+                writes, one makes the cover image, one publishes it here. Every week.
               </p>
             </div>
           </div>
 
           <p className={styles.ownFoot}>
-            On the call we will open both and show you the workflows actually running, rather than
-            slides of them.
+            On the call we will open both and show you them running, not slides of them.
           </p>
         </div>
       </section>
@@ -396,11 +389,11 @@ export default function N8nStartupPage() {
             )}
             <p className={styles.costBody}>
               Fixed price, agreed in writing before we start. One payment for the build, not a
-              monthly licence. Two to three weeks. Thirty days of support included.
+              monthly licence. Two to three weeks, with thirty days of support after.
             </p>
             <p className={styles.costBody}>
-              You own the files, so if you walk away it keeps working and any competent developer
-              can pick it up. No per-task fees, and nothing switches off when you stop paying us.
+              You own the files. If you walk away it keeps working, and nothing switches off when
+              you stop paying us.
             </p>
             <p className={styles.costMetaHead}>What changes the price</p>
             <p className={styles.costMeta}>How many processes you want built.</p>
@@ -416,26 +409,19 @@ export default function N8nStartupPage() {
           <div className={styles.prose}>
             <h2 className={styles.h2}>You could probably build version one yourself</h2>
             <p>
-              Honestly, you could. n8n is open source, the templates are free, and if you or
-              someone on your team is technical you will have something working in a weekend. We
-              are not going to pretend otherwise.
+              Honestly, you could. n8n is open source and the templates are free. If someone on
+              your team is technical, you will have something working in a weekend.
             </p>
             <p>
-              Here is what usually happens next. Version one works. Then an API changes and it
-              stops, quietly, and nobody notices for four days. Then the person who built it gets
-              pulled onto the product. Then a customer gets the wrong reply and nobody can explain
-              why, because there are no logs. Then it sits broken for a month and everyone goes
-              back to doing the work by hand.
+              Then an API changes and it stops, quietly, and nobody notices for four days. The
+              person who built it gets pulled onto the product. A customer gets the wrong reply
+              and nobody can explain why, because there are no logs. It sits broken for a month
+              and everyone goes back to doing the work by hand.
             </p>
             <p>
-              The build is the easy part. What you are paying us for is that it still works in
-              month eight: logging, alerts when something fails, retries, someone accountable when
-              an API changes at 2am, and documentation so it is not trapped in one person&rsquo;s
-              head. Which, if you think about it, is the problem you came here to solve.
-            </p>
-            <p>
-              If you would rather build it yourself, do. Call us when it breaks and we will fix it
-              and hand it back to you working.
+              The build is the easy part. You are paying us for month eight: logging, alerts,
+              retries, someone accountable when an API changes at 2am, and documentation so it is
+              not stuck in one person&rsquo;s head. Which is the problem you came here to solve.
             </p>
           </div>
         </div>
@@ -447,15 +433,13 @@ export default function N8nStartupPage() {
           <div className={styles.prose}>
             <h2 className={styles.h2}>What we do not automate</h2>
             <p>
-              We do not automate decisions with money or a customer relationship on the other end.
-              Refunds, pricing, anything a customer is angry about, anything legal or regulated. A
-              person decides those, every time. What the system does is put the full picture in
-              front of that person the moment they need it, instead of making them scroll a
-              WhatsApp thread to work out what happened.
+              Nothing with money or a customer relationship on the other end. Refunds, pricing,
+              an angry customer, anything regulated — a person decides those, every time. The
+              system just puts the full picture in front of them the moment they need it.
             </p>
             <p>
-              Everything we build keeps a log, so you can see what it did, when and why. If
-              something breaks at 2am it tells a person. It does not fail quietly.
+              Everything keeps a log, so you can see what it did and why. If it breaks at 2am it
+              tells a person. It does not fail quietly.
             </p>
           </div>
         </div>
@@ -491,8 +475,8 @@ export default function N8nStartupPage() {
             <div className={styles.closingText}>
               <h2 className={styles.h2}>Tell us what is eating the most time</h2>
               <p className={styles.lede}>
-                Thirty minutes. You describe the work your team does by hand every day. We tell you
-                what is worth automating, what it takes and roughly what it costs, in writing.
+                Thirty minutes. You describe the work your team does by hand. We tell you what is
+                worth automating and roughly what it costs, in writing.
               </p>
               <ContactButtons where="closing" />
             </div>
