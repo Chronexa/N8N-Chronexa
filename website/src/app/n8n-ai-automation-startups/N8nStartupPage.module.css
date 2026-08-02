@@ -1,507 +1,530 @@
 /* ============================================================================
-   N8n AI Automation for Startups — Page Styles
-   Follows the Chronexa Design System (globals.css tokens).
+   /n8n-ai-automation-startups — Meta-ads landing page
+
+   Written mobile-first: every rule below is the phone layout, and the two media
+   queries at the bottom widen it. Most of this traffic arrives on a phone.
+
+   Deliberate constraints (see docs/n8n-startup-landing-visual-design.md):
+     • No dark backgrounds. Bands alternate .section-light / .section-muted.
+     • Green appears twice on the whole page: one phrase in the h1 (via the
+       global .accent-phrase) and the buttons. Nowhere else.
+     • No gradients, textures, shadows (bar one on the form), or animation.
+     • One hairline border weight. One radius. Two greys.
    ============================================================================ */
 
-/* ─── 1. HERO ─────────────────────────────────────────────────────────── */
-.hero {
-  padding-top: calc(var(--nav-height) + var(--spacing-xl));
-  padding-bottom: var(--spacing-xl);
+.page {
+  /* Room for the sticky phone contact bar so it never covers the last section. */
+  padding-bottom: 72px;
 }
 
-.heroGrid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: var(--spacing-lg);
-  align-items: start;
+/* ---- Shared typography ---------------------------------------------------- */
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-light);
+  margin: 0.5rem 0 1.25rem;
+  max-width: 18ch;
 }
 
-.heroContent h1 {
-  margin-bottom: var(--spacing-sm);
+.h2 {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-light);
+  margin: 0 0 1rem;
+  max-width: 24ch;
 }
 
-.heroLede {
+.lede,
+.sectionLede {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  max-width: 62ch;
+  margin: 0 0 1rem;
+}
+
+.sectionLede { margin-bottom: 2rem; }
+
+.ledeStrong {
   font-size: var(--step-1);
   line-height: var(--leading-snug);
-  color: var(--text-muted-light);
-  max-width: 52ch;
-  margin-bottom: var(--spacing-md);
+  color: var(--text-light);
+  max-width: 40ch;
+  margin: 0 0 1.75rem;
 }
 
-.heroLogos {
+/* Long-form text blocks (build-it-yourself, what stays human). */
+.prose { max-width: 65ch; }
+.prose p {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  margin: 0 0 1.1rem;
+}
+.prose p:last-child { margin-bottom: 0; }
+
+/* ---- Section rhythm ------------------------------------------------------- */
+
+.band { padding-block: 3.5rem; }
+.bandTight { padding-block: 0 3.5rem; }
+.hero { padding-block: 2.5rem 3.5rem; }
+.stripBand { padding-block: 1.5rem; }
+
+/* ---- Hero ----------------------------------------------------------------- */
+
+.heroGrid { display: grid; gap: 2.5rem; }
+.heroText { min-width: 0; }
+
+/* ---- Contact buttons ------------------------------------------------------ */
+
+.contactRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: var(--spacing-md);
-}
-
-.heroActions {
-  display: flex;
-  gap: var(--spacing-sm);
-}
-
-.heroFormCol {
-  position: sticky;
-  top: calc(var(--nav-height) + 1rem);
-}
-
-/* ─── Lead Form ──────────────────────────────────────────────────────── */
-.leadForm {
-  display: grid;
   gap: 0.75rem;
-  padding: var(--spacing-md);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
-  border-top: 3px solid var(--brand-green);
+}
+
+.contactBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;              /* touch target */
+  padding: 0.7rem 1.15rem;
+  border: 1px solid var(--border-light-strong);
+  border-radius: var(--radius-md);
   background: var(--bg-card);
-  box-shadow: var(--shadow-lg);
+  color: var(--text-light);
+  font-size: var(--step-0);
+  text-decoration: none;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+.contactBtn:hover {
+  border-color: var(--brand-green-ink);
+  color: var(--brand-green-ink);
+}
+
+/* ---- Form ----------------------------------------------------------------- */
+
+.form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
 }
 
 .formLabel {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-light);
-  margin: 0;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-}
-
-.formInput,
-.formSelect {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
-  background: #ffffff;
-  color: var(--text-light);
-  font-size: 0.95rem;
-  font-family: inherit;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
-}
-.formSelect { color: var(--text-muted-light); }
-.formSelect:valid { color: var(--text-light); }
-.formInput::placeholder { color: var(--text-muted-light); }
-
-.formInput:focus,
-.formSelect:focus,
-.formTextarea:focus {
-  outline: 2px solid var(--brand-green);
-  outline-offset: 1px;
-}
-
-.formTextarea {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
-  background: #ffffff;
-  color: var(--text-light);
-  font-size: 0.95rem;
-  font-family: inherit;
-  resize: vertical;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
-}
-.formTextarea::placeholder { color: var(--text-muted-light); }
-
-.formSubmit {
-  width: 100%;
-  justify-content: center;
-}
-
-.errorText {
-  font-size: 0.85rem;
-  color: var(--color-alert);
-  margin: 0;
-}
-.successText {
-  font-size: 1rem;
-  color: var(--text-light);
-  margin: 0;
-}
-.fallbackLink {
-  font-size: 0.85rem;
-  color: var(--brand-green-ink);
-  font-weight: 600;
-}
-
-/* ─── 2. WHY AI AUTOMATION ───────────────────────────────────────────── */
-.whyGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.whyCard {
-  padding: var(--spacing-md);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.whyCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.whyIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  background: var(--brand-green-soft);
-  color: var(--brand-green-ink);
-  margin-bottom: var(--spacing-sm);
-}
-
-.whyCard h4 {
-  margin-bottom: 0.5rem;
-  color: var(--text-light);
-}
-.whyCard p {
-  color: var(--text-muted-light);
-  font-size: var(--step--1);
-  line-height: var(--leading-normal);
-}
-
-/* ─── 3. WORKFLOW TEMPLATES ──────────────────────────────────────────── */
-.templatesSection h2 {
-  margin-bottom: 0.75rem;
-}
-
-.templatesSub {
-  color: var(--text-muted-dark);
-  max-width: 64ch;
-  margin-bottom: var(--spacing-md);
-}
-
-.templateGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.templateCard {
-  background: var(--surface-glass);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  transition: transform var(--transition), background-color var(--transition),
-    border-color var(--transition);
-  cursor: pointer;
-}
-.templateCard:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--brand-green-line);
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cardLogos {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.cardBadge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-pill);
-  background: var(--brand-green-soft);
-  color: var(--brand-green);
-}
-
-.cardTitle {
-  font-size: var(--step-0);
-  font-weight: 600;
-  color: var(--text-dark);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
   line-height: var(--leading-snug);
+  color: var(--text-light);
+  margin: 0 0 1.25rem;
 }
 
-.cardDesc {
+.field { display: block; margin-bottom: 1rem; }
+
+.fieldLabel {
+  display: block;
   font-size: var(--step--1);
-  color: var(--text-muted-dark);
-  line-height: var(--leading-normal);
-  flex: 1;
-}
-
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border-dark);
-}
-
-.nodeCount {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  color: var(--text-muted-dark);
-  font-weight: 500;
-}
-
-.cardCta {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--brand-green);
-  transition: color var(--transition-fast);
-}
-.templateCard:hover .cardCta {
-  color: var(--text-dark);
-}
-
-/* ─── 4. TOOL CLOUD ──────────────────────────────────────────────────── */
-.toolCloudSub {
   color: var(--text-muted-light);
-  max-width: 56ch;
-  margin: 0 auto var(--spacing-md);
+  margin-bottom: 0.35rem;
 }
 
-.toolCloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  justify-content: center;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* ─── 5. ROI ─────────────────────────────────────────────────────────── */
-.roiGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-lg);
-}
-
-.roiCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.roiBig {
-  font-size: var(--step-5);
-}
-
-.roiLabel {
-  font-weight: 600;
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-light-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-light);
+  color: var(--text-light);
+  font-family: var(--font-sans);
   font-size: var(--step-0);
-  color: var(--text-dark);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
 }
-
-.roiDetail {
-  font-size: var(--step--1);
-  color: var(--text-muted-dark);
-  max-width: 28ch;
-  text-align: center;
-  line-height: var(--leading-normal);
-}
-
-/* ─── 6. AI FIRST ────────────────────────────────────────────────────── */
-.aiFirstGrid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: var(--spacing-lg);
-  align-items: start;
-}
-
-.aiFirstLede {
-  font-size: var(--step-0);
-  color: var(--text-muted-light);
-  line-height: var(--leading-normal);
-  margin-top: var(--spacing-sm);
-}
-
-.shiftTable {
+.input:focus {
+  outline: 2px solid var(--brand-green-ink);
+  outline-offset: 1px;
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
 }
+textarea.input { resize: vertical; line-height: var(--leading-normal); }
 
-.shiftRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
+.submit {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.5rem;
+  padding: 0.8rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--brand-green-ink);
+  color: var(--text-on-fill);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  cursor: pointer;
+  transition: background var(--transition-fast);
 }
+.submit:hover:not(:disabled) { background: #275A30; }
+.submit:disabled { opacity: 0.6; cursor: default; }
 
-.shiftRow span {
-  padding: 0.85rem 1rem;
+.formNote {
   font-size: var(--step--1);
+  line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  margin: 1rem 0 0;
+}
+
+.errorText { color: var(--color-error); font-size: var(--step--1); margin: 0.75rem 0 0; }
+.successText { font-size: var(--step-1); color: var(--text-light); margin: 0 0 0.75rem; }
+.fallbackLink { color: var(--brand-green-ink); font-size: var(--step-0); }
+
+/* ---- Credibility strip ---------------------------------------------------- */
+
+.strip { display: grid; gap: 0.85rem; }
+
+.stripLead {
+  font-size: var(--step-0);
+  line-height: var(--leading-snug);
+  color: var(--text-light);
+  max-width: 60ch;
+  margin: 0;
+}
+
+.stripLogos { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.stripMeta {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  margin: 0;
+}
+.stripLink { color: var(--brand-green-ink); text-decoration: none; white-space: nowrap; }
+.stripLink:hover { text-decoration: underline; }
+
+/* ---- The three figures ---------------------------------------------------- */
+
+.figures {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.figure { padding: 1.5rem; border-bottom: 1px solid var(--border-light); }
+.figure:last-child { border-bottom: none; }
+
+.figureNum {
+  font-size: var(--step-4);
+  margin: 0 0 0.6rem;
+}
+
+.figureLine {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  margin: 0 0 0.6rem;
+}
+
+/* The source is a design element, not fine print — it is what separates this
+   page from an agency that invented its numbers. Muted, but legible. */
+.figureSource {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  margin: 0;
+}
+
+.afterFigures {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  max-width: 60ch;
+  margin: 1.5rem 0 0;
+}
+
+.softCta {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border-light);
+}
+.softCta p {
+  font-size: var(--step-1);
+  font-family: var(--font-display);
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* ---- The five situations -------------------------------------------------- */
+
+.situations {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.situation { padding: 1.75rem 1.25rem; border-bottom: 1px solid var(--border-light); }
+.situation:last-child { border-bottom: none; }
+
+.situationTitle {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-snug);
+  color: var(--text-light);
+  margin: 0 0 1.25rem;
+  max-width: 30ch;
+}
+
+.compare { display: grid; gap: 1.25rem; }
+
+.compareCol { min-width: 0; }
+
+.compareLabel {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-light);
 }
+.compareLabelAfter { color: var(--brand-green-ink); }
 
-.shiftRow span:not(:last-child) {
-  border-right: 1px solid var(--border-light);
-}
-
-.shiftHeader {
-  background: var(--bg-sunken);
-}
-
-.shiftHeader span {
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--text-muted-light);
-}
-
-.shiftGreen {
-  color: var(--brand-green-ink);
-  font-weight: 600;
-}
-
-/* ─── 7. WHY US ──────────────────────────────────────────────────────── */
-.whyUsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.whyUsCard {
-  padding: var(--spacing-md);
-  border-left: 3px solid var(--brand-green);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.whyUsCard:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-.whyUsCard h4 {
-  margin-bottom: 0.5rem;
+.compareLine {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
   color: var(--text-light);
+  margin: 0 0 0.5rem;
 }
-.whyUsCard p {
-  color: var(--text-muted-light);
+.compareLine:last-child { margin-bottom: 0; }
+
+.situationFoot {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.situationLogos { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* Says what a person still decides. Text, not a colour — it has to read for
+   colour-blind users and in greyscale. */
+.humanLine {
   font-size: var(--step--1);
   line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  margin: 0;
 }
 
-/* ─── 8. FAQ ─────────────────────────────────────────────────────────── */
-.faqList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
-  max-width: 800px;
+/* ---- Our own systems ------------------------------------------------------ */
+
+.ownGrid { display: grid; gap: 1.25rem; }
+
+.own {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
 }
 
-.faqItem {
-  padding: 0;
+.ownTitle {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--text-light);
+  margin: 0 0 0.75rem;
+}
+
+.ownBody {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  margin: 0;
+}
+
+.ownFoot {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  max-width: 60ch;
+  margin: 1.5rem 0 0;
+}
+
+/* ---- Cost ----------------------------------------------------------------- */
+
+.costPanel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  max-width: 60ch;
+}
+
+.costNum { font-size: var(--step-3); margin: 0 0 1rem; }
+
+.costBody {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  margin: 0 0 1rem;
+}
+
+.costMetaHead {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin: 1.5rem 0 0.6rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.costMeta {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  margin: 0 0 0.35rem;
+}
+
+/* ---- FAQ ------------------------------------------------------------------ */
+
+.faq {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
   overflow: hidden;
-  transition: box-shadow var(--transition);
+  max-width: 75ch;
 }
-.faqOpen {
-  box-shadow: var(--shadow-glow);
-}
+
+.faqItem { border-bottom: 1px solid var(--border-light); }
+.faqItem:last-child { border-bottom: none; }
 
 .faqQ {
   width: 100%;
+  min-height: 56px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1.1rem var(--spacing-md);
-  font-size: var(--step-0);
-  font-weight: 600;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: none;
+  background: none;
   text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
   color: var(--text-light);
-  font-family: inherit;
   cursor: pointer;
 }
+.faqQ:hover { color: var(--brand-green-ink); }
 
-.faqIcon {
-  font-size: 1.4rem;
+.faqSign {
+  font-size: var(--step-2);
   line-height: 1;
-  color: var(--brand-green-ink);
+  color: var(--text-muted-light);
   flex-shrink: 0;
-  margin-left: 1rem;
 }
 
 .faqA {
-  padding: 0 var(--spacing-md) 1.1rem;
-  font-size: var(--step--1);
-  color: var(--text-muted-light);
+  font-size: var(--step-0);
   line-height: var(--leading-normal);
-  border-top: 1px solid var(--border-light);
-  margin-top: 0;
+  color: var(--text-muted-light);
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  max-width: 70ch;
 }
 
-/* ─── 9. FINAL CTA ───────────────────────────────────────────────────── */
-.finalCta h2 {
-  margin-bottom: var(--spacing-sm);
-}
+/* ---- Closing -------------------------------------------------------------- */
 
-.ctaLede {
-  font-size: var(--step-1);
-  color: var(--text-muted-dark);
-  max-width: 52ch;
-  margin: 0 auto var(--spacing-md);
-  line-height: var(--leading-snug);
-}
+.closing { display: grid; gap: 2.5rem; }
+.closingText { min-width: 0; }
 
-.ctaButtons {
+/* ---- Sticky contact bar (phones only) ------------------------------------- */
+
+.stickyBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
+  padding: 0.5rem calc(env(safe-area-inset-left) + 0.75rem)
+           calc(env(safe-area-inset-bottom) + 0.5rem)
+           calc(env(safe-area-inset-right) + 0.75rem);
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-light);
+}
+.stickyBar[data-hidden] { display: none; }
+
+.stickyBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light-strong);
+  background: var(--bg-card);
+  color: var(--text-light);
+  font-size: var(--step-0);
+  text-decoration: none;
+}
+.stickyBtnPrimary {
+  background: var(--brand-green-ink);
+  border-color: var(--brand-green-ink);
+  color: var(--text-on-fill);
 }
 
-/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .heroGrid {
-    grid-template-columns: 1fr;
-  }
-  .heroFormCol {
-    position: static;
-  }
-  .aiFirstGrid {
-    grid-template-columns: 1fr;
-  }
+/* ============================================================================
+   Wider screens. Everything above is the phone layout.
+   ============================================================================ */
+
+@media (min-width: 700px) {
+  .figures { grid-template-columns: repeat(3, 1fr); }
+  .figure { border-bottom: none; border-right: 1px solid var(--border-light); }
+  .figure:last-child { border-right: none; }
+
+  .compare { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .situation { padding: 2rem 1.75rem; }
+
+  .ownGrid { grid-template-columns: 1fr 1fr; }
+
+  .softCta { grid-template-columns: auto auto; align-items: center; justify-content: start; gap: 1.5rem; }
+  .situationFoot { grid-template-columns: auto 1fr; align-items: center; gap: 1.5rem; }
 }
 
-@media (max-width: 768px) {
-  .whyGrid,
-  .roiGrid {
-    grid-template-columns: 1fr;
+@media (min-width: 960px) {
+  .band { padding-block: 5rem; }
+  .bandTight { padding-block: 0 5rem; }
+  .hero { padding-block: 3.5rem 5rem; }
+
+  .heroGrid,
+  .closing {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 4rem;
+    align-items: start;
   }
-  .whyUsGrid {
-    grid-template-columns: 1fr;
+
+  .strip {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
   }
-  .templateGrid {
-    grid-template-columns: 1fr;
-  }
-  .formRow {
-    grid-template-columns: 1fr;
-  }
-  .heroActions,
-  .ctaButtons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .shiftRow {
-    font-size: 0.8rem;
-  }
+  .stripMeta { grid-column: 1 / -1; }
+
+  .form { padding: 2rem; }
+
+  /* The sticky bar is a phone affordance — the desktop page has the buttons
+     inline in three places already. */
+  .stickyBar { display: none; }
+  .page { padding-bottom: 0; }
 }
