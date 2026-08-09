@@ -1,74 +1,512 @@
-.article { padding-top: calc(var(--nav-height) + var(--spacing-lg)); padding-bottom: var(--spacing-2xl); }
+/* ============================================================================
+   Blog article page
 
-.head { max-width: 760px; }
-.crumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: var(--step--1); color: var(--text-muted-light); margin-bottom: var(--spacing-md); }
-.crumbs a:hover { color: var(--brand-green-ink); }
-.crumbs [aria-current] { color: var(--text-light); }
+   Reading is the priority, in this order: readability → clarity → credibility
+   → trust → conversion. Every number below was measured on the live page in
+   headless Chrome rather than eyeballed.
 
-.title { font-size: var(--step-4); margin-bottom: var(--spacing-md); }
-.meta { display: flex; flex-wrap: wrap; gap: 1.2rem; color: var(--text-muted-light); font-size: var(--step--1); }
-.meta span { position: relative; }
-.meta span + span::before { content: '•'; position: absolute; left: -0.75rem; color: var(--neutral-400); }
+   Measure: the previous 760px column at 16.8px Host Grotesk rendered 88
+   characters per line. Comfortable sustained reading is 66-75. Raising the type
+   AND narrowing the column both move toward that: 19px in a 660px column
+   renders 68. On a 390px phone the same 19px gives ~35, so mobile steps down to
+   17.5px (~38).
 
-.heroWrap { max-width: 900px; margin-block: var(--spacing-lg); }
-.hero { width: 100%; height: auto; border-radius: var(--radius-lg); border: 1px solid var(--border-light); }
+   Colour: body copy is now --text-light (16.7:1), not --text-muted-light
+   (5.32:1). Grey body text is a UI convention that does not survive 2,000 words
+   — hierarchy comes from size, weight and space instead.
+   ============================================================================ */
+
+.article {
+  padding-top: calc(var(--nav-height) + var(--spacing-md));
+  padding-bottom: var(--spacing-2xl);
+
+  /* One shared geometry for every band of the page, so the left edge never
+     shifts between the masthead, the article and the footer sections. */
+  --measure: 660px;      /* the reading column */
+  --rail: 260px;         /* the outline gutter */
+  --gutter: var(--spacing-lg);
+  --full: calc(var(--measure) + var(--gutter) + var(--rail));  /* 984px */
+}
+
+.takeaways,
+.body,
+.pillarLink { max-width: var(--measure); }
+
+.footWrap { max-width: var(--full); }
+
+/* ---- masthead + cover ------------------------------------------------
+   The cover used to be a 518px-tall block sitting between the byline and the
+   article — over half a desktop screen of decoration, with the first sentence
+   two full screens down. It now shares the masthead's vertical space instead of
+   adding to it: absolutely positioned, bleeding off the right edge of the
+   viewport, and masked so its left edge dissolves into the paper rather than
+   ending on a hard seam.
+
+   The headline never sits ON the image. Covers range from dark abstracts to
+   bright photographs, so text over them would be a contrast lottery across 128
+   posts; the mask is fully transparent everywhere the text lives, which gives
+   the blended look with none of the risk. */
+
+.head { position: relative; }
+.headText { position: relative; z-index: 1; max-width: var(--measure); }
+
+/* ------------------------------------------------------------- masthead -- */
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  margin-bottom: var(--spacing-md);
+}
+.crumbs a { color: var(--text-muted-light); text-decoration: none; }
+.crumbs a:hover { color: var(--brand-green-ink); text-decoration: underline; }
+/* The current crumb is the full post title (titles run to ~80 chars), so cap it —
+   otherwise it wraps and visually outweighs the trail above the <h1>. */
+.crumbs [aria-current] {
+  color: var(--text-light);
+  max-width: 42ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eyebrow {
+  /* inline-flex + min-height keeps this standalone link at the 24px WCAG 2.5.8
+     target size without changing how the label reads */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  /* falls back to brand ink; the per-industry accent is set inline from the
+     taxonomy bucket so an article matches its hub page */
+  color: var(--brand-green-ink);
+  text-decoration: none;
+  margin-bottom: var(--spacing-xs);
+}
+.eyebrow:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.title {
+  font-size: var(--step-4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-light);
+  text-wrap: balance;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Standfirst — the deck under the headline. Larger and lighter than body copy,
+   so it reads as a summary rather than the first paragraph. */
+.standfirst {
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--text-muted-light);
+  max-width: 46ch;
+  text-wrap: pretty;
+  margin-bottom: var(--spacing-md);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  color: var(--text-muted-light);
+  font-size: var(--step--1);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-light);
+}
+.byline { color: var(--text-light); font-weight: 600; }
+.bylineRole { color: var(--text-muted-light); font-weight: 400; }
+/* Separator dots between the metadata items, but never before the byline. */
+.meta span + span { position: relative; }
+.meta span + span::before {
+  content: '·';
+  position: absolute;
+  left: -0.85rem;
+  color: var(--neutral-400);
+}
+
+/* ---------------------------------------------------------------- cover -- */
+
+/* Mobile default: a slim full-bleed band under the byline, fading out at the
+   bottom so it hands over to the text rather than stopping on an edge. */
+.cover {
+  position: relative;
+  margin: var(--spacing-md) calc(-1 * var(--container-pad)) 0;
+  height: 150px;
+  overflow: hidden;
+  background: var(--neutral-50); /* placeholder tone: no white flash before paint */
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+.cover :global(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (min-width: 1000px) {
+  /* Lets the cover run a little past the byline before it fades, so it ends on
+     a dissolve rather than flush against the takeaways band below. */
+  .head { padding-bottom: var(--spacing-md); }
+
+  .cover {
+    position: absolute;
+    inset-block: 0;
+    /* Starts left of where the text ends, but the mask is still fully
+       transparent there — the image reads as emerging from behind the headline
+       instead of butting up against it. */
+    left: 44%;
+    /* Bleeds to the viewport edge: undo the container's centring margin and its
+       side padding. */
+    right: calc(-1 * (max(0px, (100vw - var(--container-max)) / 2) + var(--container-pad)));
+    margin: 0;
+    height: auto;
+    background: none;
+    /* Two masks intersected: dissolve into the paper on the left, and again at
+       the bottom so the image never ends on a hard horizontal cut. */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.28) 26%, #000 62%),
+      linear-gradient(to bottom, #000 62%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.28) 26%, #000 62%),
+      linear-gradient(to bottom, #000 62%, transparent 100%);
+    mask-composite: intersect;
+  }
+}
+
+/* ------------------------------------------------------- what matters -- */
+/* The takeaways are the article's answer, so they get a tinted band and a real
+   heading rather than a bordered card competing with the table of contents. */
+
+.takeaways {
+  background: var(--bg-sunken);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+.takeawaysLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-green-ink);
+  margin-bottom: var(--spacing-sm);
+}
+.takeaways ul { margin: 0; padding: 0; list-style: none; }
+.takeaways li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: 0.65rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+.takeaways li:last-child { margin-bottom: 0; }
+.takeaways li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--brand-green);
+}
+
+/* ------------------------------------------------- outline + article -- */
+
+.shell { display: block; }
+.rail { display: contents; } /* single column until the gutter opens */
 
 /* Article body (PortableText) */
-.body { max-width: 760px; }
-.body :global(h2) { font-size: var(--step-2); margin: var(--spacing-lg) 0 var(--spacing-sm); }
-.body :global(h3) { font-size: var(--step-1); margin: var(--spacing-md) 0 var(--spacing-xs); color: var(--brand-green-ink); }
-.body :global(h4) { font-size: var(--step-0); font-weight: 700; margin: var(--spacing-md) 0 var(--spacing-xs); color: var(--text-light); }
-.body :global(p) { color: var(--text-muted-light); margin-bottom: var(--spacing-sm); font-size: 1.05rem; line-height: 1.75; }
-.body :global(ul), .body :global(ol) { color: var(--text-muted-light); margin: 0 0 var(--spacing-sm) 1.25rem; line-height: 1.75; }
-.body :global(li) { margin-bottom: 0.4rem; }
-/* :not() guards keep this prose-link styling off CTA buttons (BlogInlineCta,
-   NewsletterCallout) that render inside .body — otherwise this descendant
-   selector (higher specificity than a single .btn-primary class) repaints
-   button text the same dark green as the button's own background. */
-.body :global(a:not(.btn-primary):not(.btn-outline)) { color: var(--brand-green-ink); text-decoration: underline; text-underline-offset: 2px; }
-.body :global(blockquote) { border-left: 3px solid var(--brand-green); padding-left: var(--spacing-sm); margin: var(--spacing-md) 0; color: var(--text-light); font-style: italic; }
-.body :global(strong) { color: var(--text-light); }
+.body {
+  font-size: 1.1875rem;   /* 19px */
+  line-height: 1.7;
+  color: var(--text-light);
+}
 
-.bodyImg { width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-block: var(--spacing-md); }
+.body :global(p) {
+  margin-bottom: var(--spacing-sm);
+  text-wrap: pretty;
+}
 
-/* Data tables injected via dangerouslySetInnerHTML — scrollable on mobile */
-.tableWrap { max-width: 760px; overflow-x: auto; margin-block: var(--spacing-md); }
-.tableWrap :global(table) { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
-.tableWrap :global(th), .tableWrap :global(td) { border: 1px solid var(--border-light); padding: 0.6rem 0.8rem; text-align: left; }
-.tableWrap :global(th) { background: var(--neutral-50); font-weight: 700; color: var(--text-light); }
+/* Headings bind to the section BELOW them: much more space above than below,
+   so a heading never floats midway between two sections. */
+.body :global(h2) {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-light);
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
+  text-wrap: balance;
+  /* the anchor target must clear the fixed nav when jumped to from the TOC */
+  scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+}
+.body :global(h3) {
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+  font-weight: 600;
+  color: var(--text-light);   /* was green — 5 per post read as decoration */
+  margin: var(--spacing-md) 0 var(--spacing-xs);
+  scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+}
+.body :global(h4) {
+  font-size: var(--step-0);
+  font-weight: 700;
+  color: var(--text-light);
+  margin: var(--spacing-md) 0 var(--spacing-xs);
+}
 
-/* Shared eyebrow label for boxed sections (takeaways, TOC, related) */
-.boxEyebrow { font-size: var(--step--1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-green-ink); margin-bottom: var(--spacing-sm); }
+.body :global(ul), .body :global(ol) {
+  margin: 0 0 var(--spacing-sm) 1.35rem;
+  line-height: 1.7;
+}
+.body :global(li) { margin-bottom: 0.5rem; padding-left: 0.25rem; }
+.body :global(li::marker) { color: var(--neutral-400); }
 
-.takeaways { max-width: 760px; background: var(--neutral-50); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
-.takeaways ul { margin: 0; padding-left: 1.1rem; color: var(--text-light); line-height: 1.7; }
-.takeaways li { margin-bottom: 0.4rem; }
-.takeaways li:last-child { margin-bottom: 0; }
+/* :not() guards keep this prose-link styling off CTA buttons that render inside
+   .body — otherwise this descendant selector (higher specificity than a single
+   .btn-primary class) repaints button text the same dark green as the button's
+   own background. */
+.body :global(a:not(.btn-primary):not(.btn-outline)) {
+  color: var(--brand-green-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.body :global(a:not(.btn-primary):not(.btn-outline):hover) { text-decoration-thickness: 2px; }
 
-.toc { max-width: 760px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
-.toc ol { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.toc a { color: var(--text-light); text-decoration: none; }
-.toc a:hover { color: var(--brand-green-ink); text-decoration: underline; }
+.body :global(blockquote) {
+  border-left: 3px solid var(--brand-green);
+  padding-left: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+  color: var(--text-light);
+  font-style: italic;
+}
+.body :global(strong) { color: var(--text-light); font-weight: 600; }
 
-.authorBox { display: flex; gap: var(--spacing-md); align-items: flex-start; max-width: 760px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-top: var(--spacing-xl); }
+.body :global(code) {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--neutral-50);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+  /* long identifiers must break rather than widen the column on a phone */
+  overflow-wrap: break-word;
+}
+.body :global(pre) {
+  background: var(--neutral-950);
+  color: var(--text-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  margin-block: var(--spacing-md);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.body :global(pre code) {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* In-body figures. No post uses one yet — this exists so that when the writing
+   warrants an image it lands correctly, not so images get manufactured. */
+.figure { margin-block: var(--spacing-md); }
+.figure :global(img) {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  display: block;
+}
+.figure figcaption {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  line-height: 1.5;
+}
+
+/* Data tables injected via dangerouslySetInnerHTML.
+   The scroll container carries a right-edge fade so the reader can see there is
+   more table off-screen; it detaches once scrolling reaches the end. */
+.tableScroll {
+  overflow-x: auto;
+  margin-block: var(--spacing-md);
+  background:
+    linear-gradient(to right, var(--bg-light) 30%, rgba(251, 250, 247, 0)) left center / 2.5rem 100% no-repeat,
+    linear-gradient(to left, var(--bg-light) 30%, rgba(251, 250, 247, 0)) right center / 2.5rem 100% no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(26, 24, 20, 0.14), transparent) left center / 1rem 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(26, 24, 20, 0.14), transparent) right center / 1rem 100% no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+.tableWrap :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+.tableWrap :global(th), .tableWrap :global(td) {
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+}
+.tableWrap :global(th) {
+  background: var(--bg-sunken);
+  font-weight: 700;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+.tableWrap :global(tbody tr:last-child td) { border-bottom: none; }
+
+/* "Read next" pillar link — the guaranteed hub-and-spoke link up. */
+.pillarLink {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-light);
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+}
+.pillarLink a {
+  color: var(--brand-green-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* -------------------------------------------------------- foot sections -- */
+
+.footWrap { margin-top: var(--spacing-lg); }
+
+.sectionLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted-light);
+  margin-bottom: var(--spacing-sm);
+}
+
+.authorBox {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  max-width: var(--measure);
+  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-light);
+}
 .authorAvatar { border-radius: 50%; flex-shrink: 0; }
 .authorName { font-weight: 700; color: var(--text-light); margin-bottom: 0.3rem; }
 .authorRole { font-weight: 400; color: var(--text-muted-light); }
 .authorAbout { color: var(--text-muted-light); font-size: var(--step--1); line-height: 1.6; margin-bottom: 0.5rem; }
-.authorLink { color: var(--brand-green-ink); font-size: var(--step--1); font-weight: 600; text-decoration: none; }
-.authorLink:hover { text-decoration: underline; }
+/* Standalone link, so it carries a real target size (WCAG 2.5.8) rather than
+   just the height of its text. */
+.authorLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem; /* inline-flex collapses the whitespace before the arrow */
+  min-height: 24px;
+  color: var(--brand-green-ink);
+  font-size: var(--step--1);
+  font-weight: 600;
+  text-decoration: none;
+}
+.authorLink:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-.related { max-width: 900px; margin-top: var(--spacing-xl); }
-.relatedGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-top: var(--spacing-sm); }
-.relatedCard { display: flex; flex-direction: column; border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden; transition: border-color var(--transition), box-shadow var(--transition); }
-.relatedCard:hover { border-color: var(--brand-green); box-shadow: var(--shadow-sm); }
+.related { margin-top: var(--spacing-xl); }
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+.relatedCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-card);
+  text-decoration: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.relatedCard:hover { border-color: var(--brand-green-line); box-shadow: var(--shadow-md); }
 .relatedCard :global(img) { width: 100%; height: auto; display: block; }
-.relatedCat { font-size: var(--step--1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand-green-ink); padding: var(--spacing-sm) var(--spacing-sm) 0; }
-.relatedTitle { font-weight: 600; color: var(--text-light); line-height: 1.4; padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-sm); }
+.relatedCat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand-green-ink);
+  padding: var(--spacing-sm) var(--spacing-sm) 0;
+}
+.relatedTitle {
+  font-weight: 600;
+  color: var(--text-light);
+  line-height: 1.4;
+  padding: 0.35rem var(--spacing-sm) var(--spacing-sm);
+  text-wrap: pretty;
+}
+
+/* ============================ desktop: open the outline gutter ============ */
+
+@media (min-width: 1120px) {
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(0, var(--rail));
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+  /* Outline sits in column 2, the prose in column 1, both starting on row 1 so
+     the rail can stick for the full height of the article. */
+  .rail { display: block; grid-column: 2; grid-row: 1; align-self: stretch; }
+  .body { grid-column: 1; grid-row: 1; }
+}
+
+/* ================================== mobile =============================== */
 
 @media (max-width: 720px) {
   .relatedGrid { grid-template-columns: 1fr; }
-  .authorBox { flex-direction: column; }
+  .authorBox { flex-direction: column; gap: var(--spacing-sm); }
 }
 
-.cta { max-width: 760px; display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-light); }
+@media (max-width: 600px) {
+  .article {
+    padding-top: calc(var(--nav-height) + var(--spacing-sm));
+    /* room for the one-line sticky bar so it never covers the final content */
+    padding-bottom: calc(var(--spacing-xl) + 3.5rem);
+  }
+  .crumbs { margin-bottom: var(--spacing-sm); }
+  .crumbs [aria-current] { max-width: 18ch; }
+
+  /* 17.5px on a ~350px column renders ~38 characters per line (measured) */
+  .body { font-size: 1.09375rem; line-height: 1.68; }
+  .standfirst { font-size: var(--step-0); }
+
+  /* Full-bleed tinted bands: side borders inside a 350px column spend
+     horizontal space on decoration the reader does not need. */
+  .takeaways {
+    border-radius: 0;
+    margin-inline: calc(-1 * var(--container-pad));
+    padding: var(--spacing-md) var(--container-pad);
+  }
+
+  .body :global(h2) { margin-top: var(--spacing-md); }
+  .body :global(pre) {
+    margin-inline: calc(-1 * var(--container-pad));
+    border-radius: 0;
+    padding: var(--spacing-sm) var(--container-pad);
+  }
+}

@@ -1,0 +1,110 @@
+/* Article outline — sticky rail on desktop, native <details> on mobile.
+   The two variants swap at the same breakpoint the article grid opens its
+   gutter (1120px), so exactly one is ever rendered. */
+
+.rail { display: none; }
+.mobile { display: block; }
+
+/* ---------------------------------------------------------------- mobile -- */
+.details {
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  /* 48px effective touch target */
+  padding: 0.9rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.summary::-webkit-details-marker { display: none; }
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-muted-light);
+}
+/* Disclosure chevron, drawn in CSS so it needs no icon font or SVG payload */
+.count::after {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1.5px solid var(--text-muted-light);
+  border-bottom: 1.5px solid var(--text-muted-light);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform var(--transition-fast);
+}
+.details[open] .count::after { transform: rotate(-135deg) translate(-1px, -1px); }
+
+.mobile .list { padding-bottom: var(--spacing-sm); }
+
+/* --------------------------------------------------------------- shared -- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  counter-reset: toc;
+}
+.list li { counter-increment: toc; }
+.list a {
+  display: block;
+  position: relative;
+  padding: 0.45rem 0 0.45rem 1.75rem;
+  color: var(--text-muted-light);
+  text-decoration: none;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  transition: color var(--transition-fast);
+}
+.list a::before {
+  content: counter(toc);
+  position: absolute;
+  left: 0;
+  color: var(--neutral-400);
+  font-variant-numeric: tabular-nums;
+}
+.list a:hover { color: var(--brand-green-ink); }
+.list a:hover::before { color: var(--brand-green-ink); }
+
+/* --------------------------------------------------------------- desktop -- */
+@media (min-width: 1120px) {
+  .mobile { display: none; }
+  .rail {
+    display: block;
+    position: sticky;
+    /* clears the fixed nav, then breathes */
+    top: calc(var(--nav-height) + var(--spacing-md));
+    /* never taller than the viewport: long outlines scroll inside the rail
+       instead of pushing their tail permanently out of reach */
+    max-height: calc(100vh - var(--nav-height) - var(--spacing-lg));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-left: var(--spacing-md);
+    border-left: 1px solid var(--border-light);
+  }
+  .railLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted-light);
+    margin-bottom: var(--spacing-sm);
+  }
+}

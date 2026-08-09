@@ -7,8 +7,19 @@ import styles from './RelatedServices.module.css';
  * service / use-case pages, with keyword-rich anchor text. Drives link equity
  * to commercial pages and gives readers a path toward booking.
  */
-export default function RelatedServices({ title, category, slug }: { title?: string; category?: string; slug?: string }) {
-  const items = relatedServices({ title, category, slug });
+export default function RelatedServices({
+  title,
+  category,
+  slug,
+  industry,
+}: {
+  title?: string;
+  category?: string;
+  slug?: string;
+  /** Sanity `industry` value — guarantees the cluster's pillar page is linked. */
+  industry?: string;
+}) {
+  const items = relatedServices({ title, category, slug, industry });
   if (!items.length) return null;
   return (
     <aside className={styles.wrap} aria-label="Related services">

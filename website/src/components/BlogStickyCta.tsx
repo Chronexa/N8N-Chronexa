@@ -4,78 +4,108 @@ import { useEffect, useRef, useState } from 'react';
 import BookButton from './BookButton';
 import CalcCtaButton from './CalcCtaButton';
 import { track } from '../lib/analytics';
-import { relatedCalculator } from '../lib/blog-links';
+import type { ArticleCtaPlan } from '../lib/blog-links';
 import styles from './BlogStickyCta.module.css';
 
 const DISMISSED_KEY = 'cx_blog_sticky_dismissed';
 
 /**
- * Always-available conversion CTA for blog posts — the passive counterpart to
- * the exit-intent popup. It never interrupts reading: on wide screens it floats
- * in the empty right-hand gutter beside the 760px reading column; on narrow
- * screens it collapses to a slim bar pinned to the bottom of the viewport.
- *
- * Behaviour:
- *   - Appears only AFTER the reader has scrolled past the intro (~600px) so it
- *     feels earned, not thrown in their face on arrival.
- *   - Hides again near the very bottom, where the article's own footer CTA lives,
- *     so the same ask never stacks on itself.
- *   - Dismissible; once closed it stays gone for the rest of the browser session.
- *
- * When the post topically matches a calculator (legal/CPA-tax/document — see
- * `relatedCalculator`), that becomes the primary ask with a lighter "or book a
- * call" fallback — a cold organic reader is far more likely to spend 2 minutes
- * on a calculator than book a 15-minute call on their first visit. Posts with no
- * calculator fit (most n8n/dev tutorials) keep the original single book-a-call ask.
- *
- * Fires `blog_sticky_cta_shown` once per render; the buttons fire `book_cta_click`
- * / `calculator_cta_click` with location `blog-sticky`.
+ * Read the session dismissal during render rather than in an effect. Safe for
+ * SSR (returns false on the server) and safe for hydration: the bar is hidden
+ * on the server and on the first client render either way, because `past` only
+ * becomes true once the reader has actually scrolled past the article opening.
  */
-export default function BlogStickyCta({ slug, title, category }: { slug: string; title?: string; category?: string }) {
-  const calc = relatedCalculator({ title, category, slug });
-  const [visible, setVisible] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+function readDismissed(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(DISMISSED_KEY) !== null;
+  } catch {
+    return false; // storage blocked — proceed without the session guard
+  }
+}
+
+/**
+ * The passive, always-available ask — one line, one action.
+ *
+ * Two things changed here and both matter:
+ *
+ * 1. It is now a single line. The previous version stacked an eyebrow, a
+ *    headline, a sub-line, a button and a secondary link into a floating card
+ *    that ate a large share of a phone viewport while the reader was trying to
+ *    read.
+ *
+ * 2. It observes instead of polling. The old implementation ran a scroll +
+ *    resize listener that read `document.documentElement.scrollHeight` inside
+ *    every rAF frame, which forces layout on every frame of every scroll. Two
+ *    IntersectionObservers do the same job with no main-thread work between
+ *    intersections — a straight INP win.
+ *
+ * It stands down whenever an in-page ask (`[data-cta-block]`) is on screen, and
+ * stays down for good once the end-of-article block has been reached, so the
+ * reader never faces two asks at once or the same ask twice.
+ */
+export default function BlogStickyCta({ slug, plan }: { slug: string; plan: ArticleCtaPlan }) {
+  // Both signals start "suppressed" and are only ever relaxed from an observer
+  // callback. The article page always renders the sentinel and the end-of-post
+  // block, so the observers always fire; if either ever went missing the bar
+  // simply stays hidden, which is the safe failure.
+  const [past, setPast] = useState(false);
+  const [blocked, setBlocked] = useState(true);
+  const [done, setDone] = useState(false);
+  const [dismissed, setDismissed] = useState(readDismissed);
   const shownRef = useRef(false);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(DISMISSED_KEY)) {
-        setDismissed(true);
-        return;
-      }
-    } catch {
-      // storage blocked — proceed without the session guard
-    }
+    const sentinel = document.querySelector('[data-cta-sentinel]');
+    const blocks = Array.from(document.querySelectorAll('[data-cta-block]'));
 
-    let ticking = false;
-    const evaluate = () => {
-      ticking = false;
-      const scrolled = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight;
-      const nearBottom = scrolled + window.innerHeight > docHeight - 900;
-      const past = scrolled > 600;
-      const show = past && !nearBottom;
-      setVisible(show);
-      if (show && !shownRef.current) {
-        shownRef.current = true;
-        track('blog_sticky_cta_shown', { slug });
-      }
-    };
+    // "Past the intro": the whole opening region has scrolled above the fold.
+    // Testing `bottom <= 0` (not `top`) is what makes a tall sentinel work — the
+    // reader is past it only once its last pixel is behind them.
+    const startIo = new IntersectionObserver(
+      ([e]) => setPast(!e.isIntersecting && e.boundingClientRect.bottom <= 0),
+      { threshold: 0 },
+    );
+    if (sentinel) startIo.observe(sentinel);
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(evaluate);
-    };
+    // Any in-page ask on screen suppresses the bar; reaching the end retires it.
+    const live = new Set<Element>();
+    const blockIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            live.add(e.target);
+            if (e.target.hasAttribute('data-cta-end')) setDone(true);
+          } else {
+            live.delete(e.target);
+          }
+        }
+        setBlocked(live.size > 0);
+      },
+      // No negative bottom margin: shrinking the detection box let the
+      // end-of-article block sit in the last 10% of the viewport without
+      // registering, so the floating bar and the end block were briefly on
+      // screen together. Any ask in view now suppresses the bar.
+      { rootMargin: '0px' },
+    );
+    blocks.forEach((b) => blockIo.observe(b));
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    evaluate();
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      startIo.disconnect();
+      blockIo.disconnect();
     };
-  }, [slug]);
+  }, []);
+
+  const visible = past && !blocked && !done && !dismissed;
+
+  useEffect(() => {
+    if (visible && !shownRef.current) {
+      shownRef.current = true;
+      track('blog_sticky_cta_shown', { slug, tier: plan.tier });
+    }
+  }, [visible, slug, plan.tier]);
+
+  if (!visible) return null;
 
   function dismiss() {
     setDismissed(true);
@@ -84,35 +114,32 @@ export default function BlogStickyCta({ slug, title, category }: { slug: string;
     } catch {}
   }
 
-  if (dismissed || !visible) return null;
+  // `action` has to stand on its own: a 390px phone reserves a right-hand corner
+  // for the chat FAB, which leaves no usable room for a separate label, so the
+  // label is hidden there and the button alone carries the message. On desktop
+  // the label returns as a lead-in.
+  const copy =
+    plan.tier === 'calculator'
+      ? { label: 'Two minutes, no email', action: "Get your firm's number" }
+      : plan.tier === 'scope'
+        ? { label: 'Still comparing?', action: 'See how we would scope it' }
+        : { label: 'No sales rep', action: 'Book a 15-min call' };
 
   return (
-    <aside className={styles.wrap} aria-label={calc ? 'Free calculator' : 'Book a strategy call'}>
-      <button className={styles.close} onClick={dismiss} aria-label="Dismiss" type="button">
-        ✕
-      </button>
-      {calc ? (
-        <>
-          <p className={styles.eyebrow}>Free 2-minute calculator</p>
-          <p className={styles.headline}>{calc.benchmarkHook}</p>
-          <p className={styles.sub}>See your firm&apos;s number — no email required.</p>
-          <CalcCtaButton slug={calc.slug} className={`btn-primary ${styles.btn}`} location="blog-sticky">
-            {calc.navLabel}
-          </CalcCtaButton>
-          <BookButton className={styles.altLink} location="blog-sticky-secondary">
-            Prefer to talk? Book a free call →
-          </BookButton>
-        </>
+    <aside className={styles.wrap} aria-label="Next step">
+      <p className={styles.label}>{copy.label}</p>
+      {plan.tier === 'calculator' ? (
+        <CalcCtaButton slug={plan.calc.slug} className={styles.action} location="blog-sticky">
+          {copy.action} <span aria-hidden="true">→</span>
+        </CalcCtaButton>
       ) : (
-        <>
-          <p className={styles.eyebrow}>See it for your firm</p>
-          <p className={styles.headline}>Curious what this would look like in your operation?</p>
-          <p className={styles.sub}>15 minutes with the engineer who&apos;d build it — not a sales rep.</p>
-          <BookButton className={`btn-primary ${styles.btn}`} location="blog-sticky">
-            Book a Free Strategy Call
-          </BookButton>
-        </>
+        <BookButton className={styles.action} location="blog-sticky">
+          {copy.action} <span aria-hidden="true">→</span>
+        </BookButton>
       )}
+      <button className={styles.close} onClick={dismiss} aria-label="Dismiss" type="button">
+        <span aria-hidden="true">✕</span>
+      </button>
     </aside>
   );
 }

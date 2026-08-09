@@ -72,6 +72,22 @@ export function midpointBlockIndex(blocks: unknown): number {
   return h2Indexes[Math.ceil(h2Indexes.length / 2)];
 }
 
+/**
+ * Words in the rendered article body — feeds schema.org `wordCount`. Counts the
+ * same blocks the reader sees (headings and list items included, image and
+ * table blocks skipped since they carry no prose).
+ */
+export function wordCount(blocks: unknown): number {
+  if (!Array.isArray(blocks)) return 0;
+  let n = 0;
+  for (const b of blocks as PTBlockLike[]) {
+    if (b?._type !== 'block') continue;
+    const t = blockText(b);
+    if (t) n += t.split(/\s+/).length;
+  }
+  return n;
+}
+
 export interface FaqItem {
   question: string;
   answer: string;

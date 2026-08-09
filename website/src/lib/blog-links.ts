@@ -36,9 +36,36 @@ const RULES: [RegExp, string[]][] = [
 
 const FALLBACK = ['n8n-automation-services', 'document-processing-automation', 'sales-revenue-automation'];
 
-export function relatedServices(opts: { title?: string; category?: string; slug?: string }) {
+/**
+ * The pillar page each audience cluster links UP to (hub-and-spoke). The blog
+ * strategy requires every post in a cluster to link its pillar — keyword rules
+ * alone missed it whenever a post's title/slug didn't happen to contain the
+ * vertical keyword (a CPA post titled "Cross-Document Data Mismatches" matched
+ * only the generic document rule and never reached /cpa-tax-document-automation).
+ * Keyed by the Sanity `industry` value; `cross-industry` has no single pillar,
+ * so those posts fall through to the keyword rules as before.
+ */
+const PILLAR_BY_INDUSTRY: Record<string, string> = {
+  'cpa-firms': 'cpa-tax-document-automation',
+  'law-firms': 'legal-due-diligence-automation',
+  'rias-wealth-management': 'financial-services-automation',
+  'private-equity-vc': 'vc-pe-crm-automation',
+  'insurance-healthcare': 'insurance-claims-triage-automation',
+  'sales-revenue': 'sales-revenue-automation',
+};
+
+/** The pillar page for a post's industry, if it has one. */
+export function pillarFor(industry?: string): { slug: string; label: string } | undefined {
+  const slug = industry ? PILLAR_BY_INDUSTRY[industry] : undefined;
+  return slug ? { slug, label: LABEL.get(slug) || slug } : undefined;
+}
+
+export function relatedServices(opts: { title?: string; category?: string; slug?: string; industry?: string }) {
   const hay = `${opts.title || ''} ${opts.category || ''} ${opts.slug || ''}`.toLowerCase();
   const picked: string[] = [];
+  // Pillar first — it is the guaranteed link, not a keyword coincidence.
+  const pillar = PILLAR_BY_INDUSTRY[opts.industry || ''];
+  if (pillar) picked.push(pillar);
   for (const [re, slugs] of RULES) {
     if (re.test(hay)) for (const s of slugs) if (!picked.includes(s)) picked.push(s);
   }
@@ -65,4 +92,60 @@ export function relatedCalculator(opts: { title?: string; category?: string; slu
     if (re.test(hay)) return CALCULATORS.find((c) => c.slug === slug);
   }
   return undefined;
+}
+
+/* ---------------------------------------------------------------------------
+   Article CTA intent tiers
+   ---------------------------------------------------------------------------
+   Search Console (May-Aug 2026) showed the blog's highest-earning posts are all
+   vendor-comparison pieces ("top AI automation agencies …"), and every one of
+   them fell through to a generic "Book a Free Strategy Call" because no
+   calculator rule matched. That reader is mid-shortlist asking "who do I hire";
+   a calendar link answers a question they have not reached yet.
+
+   So the ask is chosen by READER INTENT, not by keyword coincidence:
+     scope      — comparison / vendor-selection posts. Answer the shortlisting
+                  question: how we scope, price and build. Calculator, when one
+                  fits, rides along as the lighter secondary ask.
+     calculator — cost/problem posts matching CALC_RULES. Two minutes, no email:
+                  the correctly-sized first ask for a cold organic reader.
+     call       — everything else. One quiet, non-aggressive ask.
+   --------------------------------------------------------------------------- */
+
+export type ArticleCtaPlan =
+  | { tier: 'scope'; calc?: CalculatorDef }
+  | { tier: 'calculator'; calc: CalculatorDef }
+  | { tier: 'call' };
+
+/**
+ * Comparison / vendor-selection signals. `format: 'comparison'` and
+ * `topic: 'build-vs-buy'` are set in Sanity and authoritative; the regex is the
+ * fallback for the older imported corpus, which predates the taxonomy fields.
+ */
+const COMPARISON_RE =
+  /\bvs\.?\b|\bversus\b|\balternatives?\b|\btop \d+\b|\btop (?:ai|n8n|automation|software|tools?|agenc|companies|platforms?|vendors?)|\brankings?\b|\bshortlist\b|\bbuild[ -]vs[ -]buy\b|\bhow to (?:choose|pick|select|evaluate)\b|\bchoosing\b|\bwhich .{0,40}\b(?:should|is best|to choose)\b|\bbest .{0,40}\b(?:agenc|vendor|platform|tool|software|compan|provider|partner)/i;
+
+export function isComparisonPost(opts: { title?: string; slug?: string; format?: string; topic?: string }): boolean {
+  if (opts.format === 'comparison') return true;
+  if (opts.topic === 'build-vs-buy') return true;
+  return COMPARISON_RE.test(`${opts.title || ''} ${opts.slug || ''}`);
+}
+
+/**
+ * The single primary ask for a post. Comparison intent is checked BEFORE the
+ * calculator: on a "best legal AI vendors" post the reader is comparing
+ * suppliers, so the scope answer leads and the billing-leakage calculator
+ * becomes the secondary, no-email option rather than a detour.
+ */
+export function articleCta(opts: {
+  title?: string;
+  category?: string;
+  slug?: string;
+  format?: string;
+  topic?: string;
+}): ArticleCtaPlan {
+  const calc = relatedCalculator(opts);
+  if (isComparisonPost(opts)) return { tier: 'scope', calc };
+  if (calc) return { tier: 'calculator', calc };
+  return { tier: 'call' };
 }
