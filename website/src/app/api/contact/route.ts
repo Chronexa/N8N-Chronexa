@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { sendLeadEvent } from '../../../lib/meta-capi';
 
 /**
  * Lead capture endpoint. Every form submit is written to Baserow's "Website
@@ -141,6 +142,34 @@ export async function POST(req: Request) {
     } catch (e) {
       console.error('[contact] Sheets token exchange error:', e);
     }
+  }
+
+  // --- Meta Conversions API ------------------------------------------------
+  // Reports the lead to Meta server-side. The browser pixel misses most of these
+  // (only one page fires an fbq Lead event, and iOS blocks a large share of what
+  // does fire), which leaves Meta optimising on a fraction of real enquiries.
+  // Best-effort: never allowed to fail the submission.
+  try {
+    const hdrs = req.headers;
+    const cookieHeader = hdrs.get('cookie') || '';
+    const cookieValue = (key: string) => {
+      const m = cookieHeader.match(new RegExp('(?:^|;\\s*)' + key + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : undefined;
+    };
+    await sendLeadEvent({
+      email,
+      name,
+      phone: String(data.phone || '').trim() || undefined,
+      sourceUrl: hdrs.get('referer') || undefined,
+      fbp: cookieValue('_fbp'),
+      fbc: cookieValue('_fbc'),
+      // The first entry of x-forwarded-for is the real client on Vercel.
+      clientIp: (hdrs.get('x-forwarded-for') || '').split(',')[0].trim() || undefined,
+      userAgent: hdrs.get('user-agent') || undefined,
+      eventId: `lead-${source}-${submittedAt}`,
+    });
+  } catch (e) {
+    console.error('[contact] Meta CAPI error:', e);
   }
 
   // --- Optional mirror to an n8n / external webhook ------------------------
