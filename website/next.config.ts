@@ -30,6 +30,28 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      /* ── SERVICE REBUILD 2026-08 ──────────────────────────────────────
+         The nine nav services became twelve. These folds keep one live URL per
+         service; all nine originals had zero clicks in the 90 days before the
+         change, so there is no ranking equity at risk here. */
+      { source: '/us-ai-automation-agency', destination: '/ai-automation', permanent: true },
+      { source: '/ai-automation-agency-dubai', destination: '/ai-automation', permanent: true },
+      { source: '/n8n-automation-services', destination: '/ai-automation', permanent: true },
+      { source: '/agentic-ai-systems', destination: '/ai-agent-development', permanent: true },
+      { source: '/rag-knowledge-engines', destination: '/private-rag-knowledge-systems', permanent: true },
+      { source: '/sales-revenue-automation', destination: '/ai-sales-outreach-engine', permanent: true },
+      { source: '/finance-automation', destination: '/accounts-payable-automation', permanent: true },
+      { source: '/ai-readiness-assessment', destination: '/business-process-automation-consulting', permanent: true },
+      { source: '/operations-automation', destination: '/business-process-automation-consulting', permanent: true },
+      { source: '/applied-ml-data-science', destination: '/solutions', permanent: true },
+      { source: '/ai-growth-systems-for-startups', destination: '/solutions', permanent: true },
+      { source: '/marketing-automation', destination: '/ai-sales-outreach-engine', permanent: true },
+
+      // The blog archive lost a page when the lead story and the collection rails
+      // moved onto every page (those ~25 posts left the paginated pool). /blog/page/6
+      // was briefly live and is in the sitemap, so send it somewhere real.
+      { source: "/blog/page/6", destination: "/blog/page/5", permanent: false },
+
       // --- Old 3-level /services/* slugs → new flat keyword-first slugs (301) ---
       { source: "/services/legal-due-diligence", destination: "/legal-due-diligence-automation", permanent: true },
       { source: "/services/insurance-claims-triage", destination: "/insurance-claims-triage-automation", permanent: true },
@@ -173,6 +195,17 @@ const nextConfig: NextConfig = {
       { source: "/blog/custom-ai-agents-vs-off-the-shelf-professional-services", destination: "/blog/off-the-shelf-ai-vs-custom-workflows-ria-build-vs-buy-guide", permanent: true },
       { source: "/blog/ria-client-onboarding-automation-compliance", destination: "/blog/client-onboarding-automation-ria-custom-workflows", permanent: true },
       { source: "/blog/n8n-workflows-cpa-firms-document-collection-deadline", destination: "/blog/tax-document-collection-automation-cpa-firms", permanent: true },
+
+      // --- 2026-08-06 cull: pulled the generic AI-ROI post (its whole device was a
+      // textbook ROI formula, no CPA-specific substance) and consolidated the two
+      // engagement-letter posts onto the keyword-forward slug. ---
+      { source: "/blog/ai-roi-for-cpa-firms", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
+      { source: "/blog/cpa-engagement-letter-automation", destination: "/blog/engagement-letter-automation-cpa-firms", permanent: true },
+
+      // --- 2026-08-26 duplicate consolidation (Regulated Industries) ---
+      { source: "/blog/document-automation-tools-regulated-industries-guide", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
+      { source: "/blog/document-automation-tools-regulated-industries-cpa-firms", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
+      { source: "/blog/legal-document-automation-for-regulated-industries", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
     ];
   },
 };
