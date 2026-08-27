@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 import { site } from '../lib/site';
 import { services, useCasesByIndustry } from '../lib/taxonomy';
+import { indexableBuckets, hubPath } from '../lib/blog-taxonomy';
 import { CALCULATORS } from './calculators/registry';
 
 export default function Footer() {
@@ -36,6 +37,18 @@ export default function Footer() {
           <Link href="/use-cases" className={styles.link}>All use cases</Link>
         </div>
 
+        {/* Site-wide internal links into the blog industry hubs — without these the
+            hubs would only be reachable from /blog itself. */}
+        <div className={styles.col}>
+          <h2>Articles</h2>
+          {indexableBuckets('industry').map((b) => (
+            <Link key={b.value} href={hubPath('industry', b.value)} className={styles.link}>
+              {b.label}
+            </Link>
+          ))}
+          <Link href="/blog" className={styles.link}>All articles</Link>
+        </div>
+
         <div className={styles.col}>
           <h2>Company</h2>
           <Link href="/ai-engines" className={styles.link}>AI Engines</Link>
@@ -65,6 +78,9 @@ export default function Footer() {
 
       <div className={`container ${styles.bottom}`}>
         <span>&copy; {year} {site.name}. All rights reserved.</span>
+        <span>
+          <Link href="/privacy">Privacy Policy</Link>
+        </span>
         <span>Engineered for B2B enterprises. Delivering globally.</span>
       </div>
     </footer>

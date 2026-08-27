@@ -1,0 +1,79 @@
+/* Long-form legal page: optimised for reading, not for selling.
+   Same 660px measure and 19px body the blog article page settled on. */
+.page {
+  padding: clamp(80px, 12vw, 140px) 0 clamp(64px, 10vw, 120px);
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted, #6b7280);
+  margin: 0 0 12px;
+}
+
+.title {
+  font-size: clamp(32px, 5vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+
+.updated {
+  font-size: 15px;
+  color: var(--muted, #6b7280);
+  margin: 0 0 44px;
+}
+
+.body h2 {
+  font-size: clamp(20px, 2.6vw, 25px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 44px 0 14px;
+}
+
+.body h3 {
+  font-size: 18px;
+  margin: 28px 0 10px;
+}
+
+.body p,
+.body li {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-body, #374151);
+}
+
+.body p { margin: 0 0 18px; }
+
+.body ul {
+  margin: 0 0 18px;
+  padding-left: 22px;
+}
+
+.body li { margin-bottom: 9px; }
+
+.body a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.body strong { font-weight: 600; }
+
+/* Contact block at the foot — the address a data request actually goes to. */
+.contact {
+  margin-top: 48px;
+  padding: 24px 26px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+}
+
+.contact p { margin: 0 0 8px; font-size: 16px; }
+.contact p:last-child { margin-bottom: 0; }
