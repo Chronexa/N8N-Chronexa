@@ -51,7 +51,8 @@ export default function PrivacyPage() {
 
           <h2>1. Who we are and how to reach us</h2>
           <p>
-            {site.legalName} operates from {site.locality} and serves clients internationally. For the
+            {site.legalName} (trading as {site.name}) operates from {site.locality} and serves clients
+            internationally. For the
             personal information described in Section 3 we act as the <strong>controller</strong> — we
             decide why and how it is used. For personal information inside systems we build or run on
             a client&apos;s behalf we act as a <strong>processor</strong>, handling it only on that

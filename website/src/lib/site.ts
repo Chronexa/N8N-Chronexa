@@ -5,7 +5,9 @@
  */
 export const site = {
   name: "Chronexa",
-  legalName: "Chronexa",
+  // Registered company name. Used in the privacy policy and anywhere the legal
+  // entity must be named rather than the brand.
+  legalName: "Chronexa Intelligence Private Limited",
   // Production origin. Override via NEXT_PUBLIC_SITE_URL in Vercel if needed.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://chronexa.io",
   title: "Custom Enterprise AI for Law Firms, CPA Practices & Finance Teams | Chronexa",

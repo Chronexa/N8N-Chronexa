@@ -26,6 +26,8 @@ const VERIFY_TOKEN = env.META_WEBHOOK_VERIFY_TOKEN || require('crypto').randomBy
 if (!env.META_WEBHOOK_VERIFY_TOKEN) setEnv('META_WEBHOOK_VERIFY_TOKEN', VERIFY_TOKEN);
 
 const CONSENT_KEY = env.META_CONSENT_FIELD_KEY || 'whatsapp_consent';
+// gid of the 'All Leads' tab — stable for the life of the workbook.
+const MASTER_GID = 417864124;
 const RECIPIENTS = (env.WA_ALERT_RECIPIENTS || '918580875285,917486900000,917973109226').split(',');
 const WA_PHONE_ID = env.WA_PHONE_NUMBER_ID || '1261828987009541'; // sandbox until the real number registers
 const API = env.META_API_VERSION || 'v23.0';
@@ -106,13 +108,16 @@ for (const item of $input.all()) {
   // field_data, so check both. Absent means NO — never assume consent.
   const CONSENT_KEY = '${CONSENT_KEY}';
   let consented = false;
+  // Meta reports a ticked box as is_checked: "1" — NOT "true". Testing for 'true'
+  // silently read every consenting lead as non-consenting and suppressed the nudge.
+  const isTicked = (v) => v === true || /^(1|true|yes|on|checked)$/i.test(String(v ?? ''));
   for (const d of lead.custom_disclaimer_responses || []) {
     for (const c of d.checkbox_key ? [d] : (d.responses || [])) {
-      if (c.checkbox_key === CONSENT_KEY && String(c.is_checked) === 'true') consented = true;
+      if (c.checkbox_key === CONSENT_KEY && isTicked(c.is_checked)) consented = true;
     }
   }
   for (const f of lead.field_data || []) {
-    if (f.name === CONSENT_KEY && /true|yes|checked/i.test((f.values || []).join(''))) consented = true;
+    if (f.name === CONSENT_KEY && isTicked((f.values || []).join(''))) consented = true;
   }
   rec._consent = consented;
   rec._first_name = String(rec.name || '').trim().split(/\\s+/)[0] || 'there';
@@ -202,12 +207,25 @@ const nodes = [
     options: {},
   }, { retryOnFail: true, maxTries: 3, waitBetweenTries: 2000 }),
 
-  node('Append All Leads', 'n8n-nodes-base.httpRequest', 4.2, [880, 400], {
+  // The master tab is sorted newest-first and used as the call queue, so a new lead
+  // must go to the TOP. Appending put it at row 170 of 170 — precisely where nobody
+  // looks. Insert a blank row 2 first, then write into it.
+  node('Insert Row At Top', 'n8n-nodes-base.httpRequest', 4.2, [880, 400], {
     method: 'POST',
-    url: 'https://sheets.googleapis.com/v4/spreadsheets/' + env.META_LEADS_SHEET_ID
-      + "/values/'All Leads'!A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS",
+    url: 'https://sheets.googleapis.com/v4/spreadsheets/' + env.META_LEADS_SHEET_ID + ':batchUpdate',
     sendHeaders: true,
     headerParameters: { parameters: [{ name: 'Authorization', value: '=Bearer {{ $json.access_token }}' }] },
+    sendBody: true, specifyBody: 'json',
+    jsonBody: `={{ ({ requests: [ { insertDimension: { range: { sheetId: ${MASTER_GID}, dimension: "ROWS", startIndex: 1, endIndex: 2 }, inheritFromBefore: false } } ] }) }}`,
+    options: {},
+  }, { retryOnFail: true, maxTries: 3, waitBetweenTries: 2000 }),
+
+  node('Write Newest Lead', 'n8n-nodes-base.httpRequest', 4.2, [1000, 400], {
+    method: 'PUT',
+    url: 'https://sheets.googleapis.com/v4/spreadsheets/' + env.META_LEADS_SHEET_ID
+      + "/values/'All Leads'!A2?valueInputOption=RAW",
+    sendHeaders: true,
+    headerParameters: { parameters: [{ name: 'Authorization', value: "=Bearer {{ $('Google Token').item.json.access_token }}" }] },
     sendBody: true, specifyBody: 'json',
     jsonBody: "={{ ({ values: [ $('Normalise').item.json._row ] }) }}",
     options: {},
@@ -241,9 +259,9 @@ const nodes = [
     options: {},
   }, { onError: 'continueRegularOutput', retryOnFail: true, maxTries: 2, waitBetweenTries: 3000 }),
 
-  // Messages the LEAD, not us. DISABLED until the consent-carrying form
-  // (META_LEAD_FORM_ID_V2) is swapped into the live ad — sending without a ticked
-  // consent box risks the WhatsApp number being restricted.
+  // Messages the LEAD, not us. Live since the consent-carrying form
+  // (META_LEAD_FORM_ID_V2) went into the ad. The 'Consented?' gate in front of it is
+  // what keeps this safe — sending without a ticked box risks the number being banned.
   node('Nudge Lead', 'n8n-nodes-base.httpRequest', 4.2, [1760, 560], {
     method: 'POST',
     url: 'https://graph.facebook.com/' + API + '/' + WA_PHONE_ID + '/messages',
@@ -263,7 +281,7 @@ const nodes = [
       ]}]}
     }) }}`,
     options: {},
-  }, { disabled: true, onError: 'continueRegularOutput', retryOnFail: true, maxTries: 2, waitBetweenTries: 3000 }),
+  }, { onError: 'continueRegularOutput', retryOnFail: true, maxTries: 2, waitBetweenTries: 3000 }),
 
   // Only people who ticked the WhatsApp consent box and gave a number get nudged.
   node('Consented?', 'n8n-nodes-base.if', 2.2, [1540, 560], {
@@ -303,8 +321,9 @@ const connections = {
     { node: 'Consented?', type: 'main', index: 0 },
   ]] },
   'Consented?': { main: [[{ node: 'Nudge Lead', type: 'main', index: 0 }], []] },
-  'Google Token': { main: [[{ node: 'Append All Leads', type: 'main', index: 0 }]] },
-  'Append All Leads': { main: [[{ node: 'Append Campaign Tab', type: 'main', index: 0 }]] },
+  'Google Token': { main: [[{ node: 'Insert Row At Top', type: 'main', index: 0 }]] },
+  'Insert Row At Top': { main: [[{ node: 'Write Newest Lead', type: 'main', index: 0 }]] },
+  'Write Newest Lead': { main: [[{ node: 'Append Campaign Tab', type: 'main', index: 0 }]] },
   'Append Campaign Tab': { main: [[{ node: 'Fan Out Recipients', type: 'main', index: 0 }]] },
   'Fan Out Recipients': { main: [[{ node: 'Send WhatsApp', type: 'main', index: 0 }]] },
 };
