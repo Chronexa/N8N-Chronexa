@@ -100,7 +100,9 @@ for (const item of $input.all()) {
   rec._tab = rec.campaign.replace(/[:\\\\/?*\\[\\]]/g, '-').slice(0, 90).trim() || 'Unknown';
   rec._row = COLUMNS.map(c => rec[c] ?? '');
   // Short, readable summary for the WhatsApp alert body.
-  rec._business = [rec.business_type, rec.team_size].filter(Boolean).join(', ') || 'Not stated';
+  rec._business = [rec.business_type, rec.team_size].filter(Boolean).join(', ')
+    || [rec.company, rec.website].filter(Boolean).join(' — ')
+    || 'Not stated';
   rec._wants = rec.automate_area || rec.looking_for || rec.biggest_challenge || 'Not stated';
 
   // Consent to be messaged on WhatsApp. Meta returns disclaimer answers in
@@ -141,8 +143,11 @@ function clean(v, max = 240) {
   return (s.length > max ? s.slice(0, max - 1) + '…' : s) || 'Not given';
 }
 
+// Read the lead from Normalise BY NAME, not from $input. This node sits at the end
+// of the sheet-writing chain, so $input holds the Google Sheets API response — every
+// lead field would be undefined and every alert would read "Not given".
 const out = [];
-for (const item of $input.all()) {
+for (const item of $('Normalise').all()) {
   const r = item.json;
   const parameters = [r.campaign, r.name, r.phone, r._business, r._wants]
     .map(v => ({ type: 'text', text: clean(v) }));

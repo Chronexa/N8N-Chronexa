@@ -27,9 +27,14 @@ function leadsOf(row) {
   for (const a of row.actions || []) if (a.action_type === 'lead') return Number(a.value) || 0;
   return 0;
 }
-// alwaysOutputData means an account with no delivery still yields one empty item,
-// so rows without a date must be dropped or the report renders "Invalid Date".
-const rows = $input.all().map(i => i.json).filter(r => r && r.date_start);
+// The HTTP node hands back the whole Graph response as ONE item ({ data: [...] }),
+// it does not split the array into items. Reading i.json directly found no
+// date_start on anything and silently reported zeros on a day that spent Rs445.
+const rows = [];
+for (const i of $input.all()) {
+  const j = i.json || {};
+  for (const r of (Array.isArray(j.data) ? j.data : [j])) if (r && r.date_start) rows.push(r);
+}
 const byDate = {};
 for (const r of rows) byDate[r.date_start] = r;
 const dates = Object.keys(byDate).sort();
@@ -76,7 +81,12 @@ function leadsOf(row) {
   for (const a of row.actions || []) if (a.action_type === 'lead') return Number(a.value) || 0;
   return 0;
 }
-const rows = $input.all().map(i => i.json);
+// Same unwrapping as above — one item containing the array, not one item per row.
+const rows = [];
+for (const i of $input.all()) {
+  const j = i.json || {};
+  for (const r of (Array.isArray(j.data) ? j.data : [j])) if (r && r.campaign_name) rows.push(r);
+}
 // Best = most leads; spend breaks a tie the cheap way round.
 let best = null;
 for (const r of rows) {
@@ -112,8 +122,10 @@ const insightsNode = (name, pos, level, extraFields) => node(name, 'n8n-nodes-ba
   sendQuery: true,
   queryParameters: { parameters: [
     { name: 'level', value: level },
-    // Two days so the report can say whether yesterday was better or worse.
-    { name: 'date_preset', value: 'last_2d' },
+    // Account level pulls two days so the report can say better or worse than the
+    // day before. Campaign level pulls yesterday ONLY — spanning two days there made
+    // the "best campaign" cost per lead disagree with the headline cost per lead.
+    { name: 'date_preset', value: level === 'account' ? 'last_2d' : 'yesterday' },
     { name: 'time_increment', value: level === 'account' ? '1' : 'all_days' },
     { name: 'fields', value: extraFields },
     { name: 'limit', value: '200' },

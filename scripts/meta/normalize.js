@@ -36,6 +36,12 @@ const FIELD_MAP = {
   'what_are_you_looking_for?': 'looking_for',
   'do_you_already_sell_products?': 'sells_online',
   'do_you_already_sell_products_online?': 'sells_online',
+  'do_you_have_an_existing_e-commerce_store?': 'sells_online',
+
+  // The Shopify forms ask about products rather than "what do you want to automate",
+  // so without this every Shopify lead's alert read "Wants help with: Not stated".
+  'what_products_are_you_looking_to_sell_on_shopify': 'looking_for',
+  'what_products_are_you_looking_to_sell_on_shopify?': 'looking_for',
 };
 
 /** Column order for every tab in the workbook. Keep in sync with rowFor(). */
