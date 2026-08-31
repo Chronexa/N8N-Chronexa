@@ -123,6 +123,14 @@ for (const item of $input.all()) {
   }
   rec._consent = consented;
   rec.consent = consented ? 'yes' : 'no';
+
+  // Defence in depth. Nothing upstream should ever hand us a months-old lead, but on
+  // 2026-08-31 a broken reconciler did exactly that and 258 alerts went out about
+  // leads from June. The sheet still records anything it is given; only the MESSAGING
+  // is gated on the lead being genuinely new.
+  const ageMs = lead.created_time ? (Date.now() - new Date(lead.created_time).getTime()) : 0;
+  rec._age_days = Math.floor(ageMs / 864e5);
+  rec._is_recent = rec._age_days <= 7;
   rec._first_name = String(rec.name || '').trim().split(/\\s+/)[0] || 'there';
   rec._enquiry = rec.looking_for || rec.automate_area || 'your enquiry';
   out.push({ json: rec });
@@ -150,6 +158,12 @@ function clean(v, max = 240) {
 const out = [];
 for (const item of $('Normalise').all()) {
   const r = item.json;
+  // A stale lead is still written to the sheet upstream — it just never triggers an
+  // alert. This is the last line of defence against a replay storm.
+  if (!r._is_recent) {
+    console.log('skipping alert: lead ' + r.lead_id + ' is ' + r._age_days + ' days old');
+    continue;
+  }
   const parameters = [r.campaign, r.name, r.phone, r._business, r._wants]
     .map(v => ({ type: 'text', text: clean(v) }));
   for (const to of recipients) {
@@ -296,6 +310,9 @@ const nodes = [
         leftValue: '={{ $json._consent }}', rightValue: '' },
       { id: 'c2', operator: { type: 'string', operation: 'notEmpty', singleValue: true },
         leftValue: '={{ $json.phone }}', rightValue: '' },
+      // Never nudge someone about an enquiry they made weeks ago.
+      { id: 'c3', operator: { type: 'boolean', operation: 'true', singleValue: true },
+        leftValue: '={{ $json._is_recent }}', rightValue: '' },
     ] },
     options: {},
   }),
