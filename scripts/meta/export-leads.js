@@ -22,7 +22,7 @@ async function fetchAllLeads(env) {
   for (const form of forms) {
     if (!form.leads_count) continue;
     const raw = await graphAll(`${form.id}/leads`, {
-      fields: 'created_time,field_data,campaign_name,adset_name,ad_name,platform', limit: 100,
+      fields: 'created_time,field_data,custom_disclaimer_responses,campaign_name,adset_name,ad_name,platform', limit: 100,
     }, authPage(env, auth));
     for (const l of raw) leads.push(normaliseLead(l, form.name));
     console.log(`  form ${form.id} "${form.name}" -> ${raw.length} leads`);

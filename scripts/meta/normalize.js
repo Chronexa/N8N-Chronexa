@@ -49,8 +49,30 @@ const COLUMNS = [
   'received_ist', 'name', 'phone', 'email', 'company', 'website',
   'business_type', 'team_size', 'automate_area', 'biggest_challenge',
   'budget', 'timeline', 'looking_for', 'sells_online',
+  // Whether this person ticked the WhatsApp opt-in. Only 'yes' rows are ever
+  // messaged, so this column is the at-a-glance answer to "did we follow up?".
+  'consent',
   'campaign', 'adset', 'ad', 'platform', 'form_name', 'lead_id', 'extra',
 ];
+
+const CONSENT_KEY = 'whatsapp_consent';
+
+/**
+ * Meta reports a ticked disclaimer box as is_checked: "1" — not "true".
+ * Shared by the export and the live workflow so they can never disagree.
+ */
+function hasWhatsAppConsent(lead) {
+  const ticked = (v) => v === true || /^(1|true|yes|on|checked)$/i.test(String(v ?? ''));
+  for (const d of lead.custom_disclaimer_responses || []) {
+    for (const c of d.checkbox_key ? [d] : (d.responses || [])) {
+      if (c.checkbox_key === CONSENT_KEY && ticked(c.is_checked)) return true;
+    }
+  }
+  for (const f of lead.field_data || []) {
+    if (f.name === CONSENT_KEY && ticked((f.values || []).join(''))) return true;
+  }
+  return false;
+}
 
 /** Meta returns Indian mobiles variously as "+919876543210", "p:+91...", "9876543210". */
 function normalisePhone(raw) {
@@ -91,6 +113,7 @@ function normaliseLead(lead, formName = '') {
   rec.adset = lead.adset_name || '';
   rec.ad = lead.ad_name || '';
   rec.platform = lead.platform === 'ig' ? 'Instagram' : lead.platform === 'fb' ? 'Facebook' : (lead.platform || '');
+  rec.consent = hasWhatsAppConsent(lead) ? 'yes' : 'no';
   return rec;
 }
 
@@ -99,4 +122,4 @@ const rowFor = (rec) => COLUMNS.map((c) => rec[c] ?? '');
 /** Google Sheets tab titles cannot contain : \ / ? * [ ] and cap at 100 chars. */
 const safeTabName = (name) => (name || 'Unknown').replace(/[:\\/?*[\]]/g, '-').slice(0, 90).trim() || 'Unknown';
 
-module.exports = { FIELD_MAP, COLUMNS, normaliseLead, normalisePhone, toIst, rowFor, safeTabName };
+module.exports = { FIELD_MAP, COLUMNS, CONSENT_KEY, hasWhatsAppConsent, normaliseLead, normalisePhone, toIst, rowFor, safeTabName };

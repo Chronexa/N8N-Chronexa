@@ -122,6 +122,7 @@ for (const item of $input.all()) {
     if (f.name === CONSENT_KEY && isTicked((f.values || []).join(''))) consented = true;
   }
   rec._consent = consented;
+  rec.consent = consented ? 'yes' : 'no';
   rec._first_name = String(rec.name || '').trim().split(/\\s+/)[0] || 'there';
   rec._enquiry = rec.looking_for || rec.automate_area || 'your enquiry';
   out.push({ json: rec });
