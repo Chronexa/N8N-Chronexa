@@ -23,8 +23,11 @@ const { loadEnv, setEnv } = require('./lib');
 const env = loadEnv();
 const WF_NAME = 'Meta Leads — Reconcile';
 const API = env.META_API_VERSION || 'v23.0';
-// lead_id is the 20th column in the sheet layout (see normalize.js COLUMNS) => column T.
-const LEAD_ID_RANGE = "'All Leads'!T:T";
+// Read the header + every column and locate lead_id BY NAME. Hardcoding a column
+// letter caused a real incident on 2026-08-31: adding a 'consent' column shifted
+// lead_id from T to U, the reconciler matched nothing, concluded all 174 leads were
+// missing, and replayed the lot — hundreds of WhatsApp messages about months-old leads.
+const LEAD_ID_RANGE = "'All Leads'!A:Z";
 
 const node = (name, type, typeVersion, position, parameters, extra = {}) =>
   ({ id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 36), name, type, typeVersion, position, parameters, ...extra });
@@ -39,20 +42,49 @@ return out;
 `.trim();
 
 const DIFF = `
-// Every lead ID Meta currently holds, across all forms.
-const metaIds = [];
+// --- Safeguard 1: only ever consider genuinely recent leads -------------------
+// The webhook handles live leads; this net exists for the ones it drops. A lead
+// older than a week is not a delivery failure, it is history — replaying it means
+// WhatsApping someone about an enquiry they made months ago.
+const MAX_AGE_DAYS = 7;
+// --- Safeguard 2: never replay more than a handful in one run ----------------
+// If this cap is ever hit something is wrong with the comparison, not with Meta.
+// Better to under-deliver and log loudly than to spam the team and the leads.
+const MAX_REPLAYS = 5;
+
+const cutoff = Date.now() - MAX_AGE_DAYS * 864e5;
+const recent = [];
 for (const item of $input.all()) {
-  for (const l of item.json.data || []) if (l.id) metaIds.push(String(l.id));
+  for (const l of item.json.data || []) {
+    if (!l.id) continue;
+    const t = l.created_time ? new Date(l.created_time).getTime() : 0;
+    if (t && t >= cutoff) recent.push(String(l.id));
+  }
 }
 
-// Everything already captured. The sheet column includes its header, which is
-// harmless here because "lead_id" will never match a numeric Meta ID.
+// --- Safeguard 3: find lead_id by header name, never by column position ------
 const sheet = $('Read Sheet IDs').first().json;
-const known = new Set((sheet.values || []).map(r => String((r && r[0]) || '')));
+const values = sheet.values || [];
+const header = values[0] || [];
+const col = header.indexOf('lead_id');
+if (col === -1) {
+  // Refuse to guess. Emitting nothing is safe; guessing replays everything.
+  console.log('RECONCILE ABORTED: no lead_id column found in the sheet header');
+  return [];
+}
+const known = new Set(values.slice(1).map(r => String((r && r[col]) || '')).filter(Boolean));
+if (known.size === 0) {
+  console.log('RECONCILE ABORTED: sheet returned zero known lead ids — refusing to replay');
+  return [];
+}
 
-const missing = [...new Set(metaIds)].filter(id => !known.has(id));
+let missing = [...new Set(recent)].filter(id => !known.has(id));
+if (missing.length > MAX_REPLAYS) {
+  console.log('RECONCILE ABORTED: ' + missing.length + ' leads looked missing, over the cap of '
+    + MAX_REPLAYS + '. This means the comparison is broken, not that Meta dropped that many.');
+  return [];
+}
 
-// Nothing to do is the normal case — emit no items so the replay node stays idle.
 return missing.map(id => ({ json: {
   leadgen_id: id,
   replay_payload: {
@@ -117,7 +149,7 @@ const nodes = [
     url: '=https://graph.facebook.com/' + API + '/{{ $json.form_id }}/leads',
     sendQuery: true,
     queryParameters: { parameters: [
-      { name: 'fields', value: 'id' },
+      { name: 'fields', value: 'id,created_time' },
       { name: 'limit', value: '50' },
       { name: 'access_token', value: env.META_PAGE_TOKEN },
       { name: 'appsecret_proof', value: env.META_PAGE_TOKEN_PROOF },
