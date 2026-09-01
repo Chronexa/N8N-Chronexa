@@ -77,6 +77,55 @@ async function ensureWorkbook(env, at) {
   return created.spreadsheetId;
 }
 
+/**
+ * Snapshot any column a human added that this script does not own, keyed by lead_id.
+ *
+ * This script clears and rewrites whole tabs, which on 2026-08-31 silently destroyed
+ * six columns Tushar had been filling in by hand — Call Status, remarks, follow-up
+ * dates and more — along with every note in them. The sheet is a shared working
+ * document, not a private output, so anything we did not write must survive a rebuild.
+ */
+async function snapshotManualColumns(sheetId, at, tab) {
+  let existing;
+  try {
+    existing = await sheets('GET', `/${sheetId}/values/${encodeURIComponent(`'${tab}'!A:ZZ`)}`, at);
+  } catch {
+    return null; // Tab does not exist yet — nothing to preserve.
+  }
+  const values = existing.values || [];
+  const header = values[0] || [];
+  if (!header.length) return null;
+
+  const owned = new Set(COLUMNS);
+  const manual = header.map((name, i) => ({ name, i })).filter((c) => c.name && !owned.has(c.name));
+  if (!manual.length) return null;
+
+  const leadCol = header.indexOf('lead_id');
+  if (leadCol === -1) return null;
+
+  const byLead = {};
+  for (const row of values.slice(1)) {
+    const id = row[leadCol];
+    if (!id) continue;
+    const vals = manual.map((c) => row[c.i] ?? '');
+    if (vals.some((v) => String(v).trim())) byLead[id] = vals;
+  }
+  return { names: manual.map((c) => c.name), byLead };
+}
+
+/** Re-attach preserved columns to the right of the columns this script owns. */
+async function restoreManualColumns(sheetId, at, tab, snap, orderedLeadIds) {
+  if (!snap) return 0;
+  const blank = snap.names.map(() => '');
+  const rows = orderedLeadIds.map((id) => snap.byLead[id] || blank);
+  const startCol = COLUMNS.length; // 0-indexed, so this is the first free column
+  const a1 = (n) => (n < 26 ? String.fromCharCode(65 + n) : String.fromCharCode(64 + Math.floor(n / 26)) + String.fromCharCode(65 + (n % 26)));
+  const range = `'${tab}'!${a1(startCol)}1`;
+  await sheets('PUT', `/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`, at,
+    { values: [snap.names, ...rows] });
+  return Object.keys(snap.byLead).length;
+}
+
 /** Create any missing tabs, then clear the ones we are about to rewrite. */
 async function syncTabs(sheetId, at, wanted) {
   const meta = await sheets('GET', `/${sheetId}?fields=sheets.properties`, at);
@@ -139,11 +188,25 @@ async function formatTabs(sheetId, at, titles) {
   }
 
   const tabs = [MASTER, ...byCampaign.keys()];
+
+  // Capture anything a human added BEFORE the clear, so it can be put back after.
+  const snapshots = {};
+  for (const tab of tabs) snapshots[tab] = await snapshotManualColumns(sheetId, at, tab);
+
   await syncTabs(sheetId, at, tabs);
 
   const data = [{ range: `'${MASTER}'!A1`, values: [COLUMNS, ...leads.map(rowFor)] }];
   for (const [tab, rows] of byCampaign) data.push({ range: `'${tab}'!A1`, values: [COLUMNS, ...rows.map(rowFor)] });
   await sheets('POST', `/${sheetId}/values:batchUpdate`, at, { valueInputOption: 'RAW', data });
+
+  // Put the human columns back, realigned to the new row order.
+  let restored = 0;
+  restored += await restoreManualColumns(sheetId, at, MASTER, snapshots[MASTER], leads.map((l) => l.lead_id));
+  for (const [tab, rows] of byCampaign) {
+    restored += await restoreManualColumns(sheetId, at, tab, snapshots[tab], rows.map((l) => l.lead_id));
+  }
+  if (restored) console.log(`preserved manual columns on ${restored} row(s)`);
+
   await formatTabs(sheetId, at, tabs);
 
   console.log(`wrote ${MASTER}: ${leads.length} rows`);
