@@ -206,9 +206,9 @@ function readAngle(): AngleId {
 }
 
 /** Shared by /shopify-store-build (global) and /shopify-store-build-india — only `market` differs.
- * Section order (2026-09-29): hero → store names → CONTACT FORM → live stores →
- * what we do → brand & video → client notes → how it works → LUMIQ tour → FAQ → closing Contact Us band.
- * Nothing was removed; the form moved up from 8th place (it sat ~85% down the page). */
+ * Section order (2026-09-29, rev 2): hero → store names → live stores → what we do →
+ * CONTACT FORM → client notes → how it works → LUMIQ tour → FAQ → brand & video → closing Contact Us band.
+ * Nothing was removed; Ankit moved the form after the scope and the films to the end. */
 export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market }) {
   // Server renders 'outgrown'; the client swaps to the ad's angle on hydration (same 3-line height, no shift).
   const angle = useSyncExternalStore(noSubscribe, readAngle, () => 'outgrown' as AngleId);
@@ -291,21 +291,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
         <a className={fs.proofLink} href="#live-stores" onClick={() => track('shopify_landing_proof_jump')}>Shop them below <span aria-hidden="true">↓</span></a>
       </section>
 
-      {/* 3 — The form, straight after the proof strip. On phones the form comes before the supporting copy. */}
-      <section ref={enquiryRef} className={`${styles.enquiry} ${fs.enquiry}`} aria-labelledby="enquiry-heading">
-        <div className={fs.enquiryHead}>
-          <p className={styles.eyebrow}>CONTACT US</p>
-          <h2 id="enquiry-heading">Tell us about your store.<br /><em>We&rsquo;ll call you back.</em></h2>
-          <p>Leave your number. We talk through your store and goals, then send a written plan and a fixed price.</p>
-        </div>
-        <LeadForm market={market} angle={angle} />
-        <div className={fs.enquiryMore}>
-          <ol className={styles.roadmapList}><li>What your redesign should cover</li><li>How the new store will look and work</li><li>A written plan and fixed price</li></ol>
-          <blockquote>&ldquo;{QUOTE.text}&rdquo;<footer><span className={styles.founderInitial} aria-hidden="true">T</span><span><strong>Tushar</strong><br />Co-founder, Chronexa</span></footer></blockquote>
-        </div>
-      </section>
-
-      {/* 4 — The stores themselves, live on this page (no Shopify password). */}
+      {/* 3 — The stores themselves, live on this page (no Shopify password). */}
       <section id="live-stores" className={fs.tryIt} aria-labelledby="live-heading">
         <div className={fs.sectionHead}>
           <div><p className={styles.eyebrow}>01 / THREE STORES WE BUILT</p><h2 id="live-heading">Don&rsquo;t take our word for it.<br /><em>Shop them.</em></h2></div>
@@ -314,7 +300,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
         <LiveStores onCta={() => contactUs('live_store')} />
       </section>
 
-      {/* 5 — What we do: the scope, unmistakable. */}
+      {/* 4 — What we do: the scope, unmistakable. */}
       <section id="services" className={fs.services} aria-labelledby="services-heading">
         <div className={fs.sectionHead}>
           <div><p className={styles.eyebrow}>02 / WHAT WE DO</p><h2 id="services-heading">Everything your store needs.<br /><em>One team.</em></h2></div>
@@ -336,29 +322,24 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
         </div>
       </section>
 
-      {/* 6 — Brand & video: every brand gets its own identity and films. */}
-      <section className={fs.films} aria-labelledby="films-heading">
-        <div className={fs.sectionHead}>
-          <div><p className={styles.eyebrow}>03 / BRAND &amp; VIDEO</p><h2 id="films-heading">Three brands.<br /><em>Three identities.</em></h2></div>
-          <p>Each store gets its own look, photos and videos, made for that brand and used across the store, social media and ads.</p>
+      {/* 5 — The form, after the stores and the scope. On phones the form comes before the supporting copy. */}
+      <section ref={enquiryRef} className={`${styles.enquiry} ${fs.enquiry}`} aria-labelledby="enquiry-heading">
+        <div className={fs.enquiryHead}>
+          <p className={styles.eyebrow}>CONTACT US</p>
+          <h2 id="enquiry-heading">Tell us about your store.<br /><em>We&rsquo;ll call you back.</em></h2>
+          <p>Leave your number. We talk through your store and goals, then send a written plan and a fixed price.</p>
         </div>
-        <div className={fs.filmGrid}>
-          {FILMS.map((b) => (
-            <article key={b.brand} className={fs.filmBrand}>
-              <header><h3>{b.brand}</h3><p>{b.category} · {b.tone}</p></header>
-              <VideoFrame id={`film-${b.brand}`} src={b.main.src} poster={b.main.poster} label={b.main.label} className={fs.filmMain} />
-              <div className={fs.filmSide}>
-                {b.side.map((c) => <VideoFrame key={c.src} id={`film-${b.brand}-side`} src={c.src} poster={c.poster} label={c.label} className={fs.filmSmall} />)}
-              </div>
-            </article>
-          ))}
+        <LeadForm market={market} angle={angle} />
+        <div className={fs.enquiryMore}>
+          <ol className={styles.roadmapList}><li>What your redesign should cover</li><li>How the new store will look and work</li><li>A written plan and fixed price</li></ol>
+          <blockquote>&ldquo;{QUOTE.text}&rdquo;<footer><span className={styles.founderInitial} aria-hidden="true">T</span><span><strong>Tushar</strong><br />Co-founder, Chronexa</span></footer></blockquote>
         </div>
       </section>
 
-      {/* 7 — Client voices: an editorial wall, not a generic review grid. */}
+      {/* 6 — Client voices: an editorial wall, not a generic review grid. */}
       <section className={fs.testimonials} aria-labelledby="testimonials-heading">
         <div className={fs.sectionHead}>
-          <div><p className={styles.eyebrow}>04 / CLIENT NOTES</p><h2 id="testimonials-heading">Built with the people<br /><em>behind the brands.</em></h2></div>
+          <div><p className={styles.eyebrow}>03 / CLIENT NOTES</p><h2 id="testimonials-heading">Built with the people<br /><em>behind the brands.</em></h2></div>
           <p>Notes from six clients after working with us on their stores — from careful rebuilds to full brand and Shopify systems.</p>
         </div>
         <div className={fs.testimonialGrid}>
@@ -385,10 +366,10 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
         <p className={fs.swipeNote}>Swipe to read all six <span aria-hidden="true">→</span></p>
       </section>
 
-      {/* 8 — How it works. */}
+      {/* 7 — How it works. */}
       <section id="process" className={fs.process} aria-labelledby="process-heading">
         <div className={fs.sectionHead}>
-          <div><p className={styles.eyebrow}>05 / HOW IT WORKS</p><h2 id="process-heading">From first call<br /><em>to launch.</em></h2></div>
+          <div><p className={styles.eyebrow}>04 / HOW IT WORKS</p><h2 id="process-heading">From first call<br /><em>to launch.</em></h2></div>
           <p>You sign off at every stage. The plan, timeline and price are agreed in writing before work starts.</p>
         </div>
         <ol className={fs.steps}>
@@ -405,10 +386,10 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
         </div>
       </section>
 
-      {/* 9 — Proof in depth: real sessions on LUMIQ. */}
+      {/* 8 — Proof in depth: real sessions on LUMIQ. */}
       <section id="inside-lumiq" className={fs.tour} aria-labelledby="tour-heading">
         <div className={fs.sectionHead}>
-          <div><p className={styles.eyebrow}>06 / INSIDE LUMIQ</p><h2 id="tour-heading">Watch a real shopper<br /><em>go from tap to checkout.</em></h2></div>
+          <div><p className={styles.eyebrow}>05 / INSIDE LUMIQ</p><h2 id="tour-heading">Watch a real shopper<br /><em>go from tap to checkout.</em></h2></div>
           <p>Real sessions on LUMIQ, recorded on a phone and a laptop: browsing, the menu, the product page, the cart and checkout.</p>
         </div>
         <div className={fs.tourTabs} role="group" aria-label="Choose part of the store">
@@ -446,6 +427,25 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
       </section>
 
       <section id="faq" className={`${styles.faqSection} ${fs.faq}`} aria-labelledby="faq-heading"><div><p className={styles.eyebrow}>COMMON QUESTIONS</p><h2 id="faq-heading">Before we begin.</h2><ContactButtons where="faq" /></div><div>{FAQS.map((f, i) => <div key={f.q} className={styles.faqItem}><button type="button" className={styles.faqQ} aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => { setOpenFaq(openFaq === i ? null : i); if (openFaq !== i) track('shopify_landing_faq_open', { q: i }); }}>{f.q}<span aria-hidden="true">{openFaq === i ? '−' : '+'}</span></button><p id={`faq-answer-${i}`} hidden={openFaq !== i} className={styles.faqA}>{f.a}</p></div>)}</div></section>
+
+      {/* 9 — Brand & video (last content section, after the FAQ): every brand gets its own identity and films. */}
+      <section className={fs.films} aria-labelledby="films-heading">
+        <div className={fs.sectionHead}>
+          <div><p className={styles.eyebrow}>06 / BRAND &amp; VIDEO</p><h2 id="films-heading">Three brands.<br /><em>Three identities.</em></h2></div>
+          <p>Each store gets its own look, photos and videos, made for that brand and used across the store, social media and ads.</p>
+        </div>
+        <div className={fs.filmGrid}>
+          {FILMS.map((b) => (
+            <article key={b.brand} className={fs.filmBrand}>
+              <header><h3>{b.brand}</h3><p>{b.category} · {b.tone}</p></header>
+              <VideoFrame id={`film-${b.brand}`} src={b.main.src} poster={b.main.poster} label={b.main.label} className={fs.filmMain} />
+              <div className={fs.filmSide}>
+                {b.side.map((c) => <VideoFrame key={c.src} id={`film-${b.brand}-side`} src={c.src} poster={c.poster} label={c.label} className={fs.filmSmall} />)}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* 10 — Closing ask for people who read to the end. */}
       <section ref={finalRef} className={fs.finalCta} aria-labelledby="final-heading">
