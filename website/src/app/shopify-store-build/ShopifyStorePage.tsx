@@ -119,6 +119,8 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      // Never leave the button on "Sending…": give up and show the call fallback.
+      signal: AbortSignal.timeout(12000),
     })
       .then((r) => r.json().catch(() => ({ ok: r.ok })))
       .then((res: { ok?: boolean; qualified?: boolean }) => {

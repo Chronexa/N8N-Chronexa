@@ -1,5 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { sendLeadEvent } from '../../../lib/meta-capi';
+
+// Lead saves run in after() once the visitor already has their answer; give
+// them room to finish (each outbound call is also capped by FETCH_TIMEOUT_MS).
+export const maxDuration = 60;
+const FETCH_TIMEOUT_MS = 15000;
 
 /**
  * Lead capture endpoint. Every form submit is written to Baserow's "Website
@@ -119,6 +124,10 @@ export async function POST(req: Request) {
   };
   const fbp = cookieValue('_fbp');
   const fbc = cookieValue('_fbc');
+  // Captured now: the destinations below run after the response is sent.
+  const referer = req.headers.get('referer') || undefined;
+  const clientIp = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined;
+  const userAgent = req.headers.get('user-agent') || undefined;
 
   // Every destination below is independent of the others (none reads another's
   // result), so they run concurrently via Promise.all instead of one after
@@ -139,6 +148,7 @@ export async function POST(req: Request) {
     try {
       const res = await fetch(`${baseHost}/api/database/rows/table/${tableId}/?user_field_names=true`, {
         method: 'POST',
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
         headers: { 'Content-Type': 'application/json', Authorization: `Token ${baserowToken}` },
         body: JSON.stringify({
           Name: name,
@@ -174,6 +184,7 @@ export async function POST(req: Request) {
     try {
       const tokRes = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ client_id: gClientId, client_secret: gSecret, refresh_token: gRefresh, grant_type: 'refresh_token' }),
       });
@@ -189,6 +200,7 @@ export async function POST(req: Request) {
             const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Leads!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
             const res = await fetch(appendUrl, {
               method: 'POST',
+              signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
               headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok.access_token}` },
               body: JSON.stringify({ values: [[submittedAt, name, email, company, usecase, source]] }),
             });
@@ -207,6 +219,7 @@ export async function POST(req: Request) {
             const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${startupSheetId}/values/${encodeURIComponent(startupSheetTab)}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
             const res = await fetch(appendUrl, {
               method: 'POST',
+              signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
               headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok.access_token}` },
               body: JSON.stringify({ values: [[submittedAt, name, email, company, companySize, comments, source]] }),
             });
@@ -223,6 +236,7 @@ export async function POST(req: Request) {
             const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${n8nSheetId}/values/${encodeURIComponent(n8nSheetTab)}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
             const res = await fetch(appendUrl, {
               method: 'POST',
+              signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
               headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok.access_token}` },
               body: JSON.stringify({ values: [[submittedAt, name, email, company, companySize, comments, source]] }),
             });
@@ -245,17 +259,16 @@ export async function POST(req: Request) {
   // Best-effort: never allowed to fail the submission.
   async function sendCapi() {
     try {
-      const hdrs = req.headers;
       await sendLeadEvent({
         email,
         name,
         phone: phone || undefined,
-        sourceUrl: hdrs.get('referer') || undefined,
+        sourceUrl: referer,
         fbp: fbp || undefined,
         fbc: fbc || undefined,
         // The first entry of x-forwarded-for is the real client on Vercel.
-        clientIp: (hdrs.get('x-forwarded-for') || '').split(',')[0].trim() || undefined,
-        userAgent: hdrs.get('user-agent') || undefined,
+        clientIp,
+        userAgent,
         eventId,
         // Source-aware: both Shopify landing forms (UK and India) already send
         // a fully-coded international number (see ShopifyStorePage.tsx's
@@ -282,6 +295,7 @@ export async function POST(req: Request) {
     try {
       await fetch(shopHook, {
         method: 'POST',
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name, phone, email,
@@ -312,6 +326,7 @@ export async function POST(req: Request) {
     try {
       await fetch(webhook, {
         method: 'POST',
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name, email, phone, company, usecase, source, submittedAt,
@@ -326,7 +341,11 @@ export async function POST(req: Request) {
     }
   }
 
-  await Promise.all([writeBaserow(), writeSheets(), sendCapi(), sendShopifyWebhook(), sendWebhookMirror()]);
+  // 2026-09-29: the visitor used to wait for every destination here, so one
+  // slow service (n8n, Google, Meta) left the button on "Sending…" for 30s+.
+  // Nothing in the response depends on these writes, so answer first and
+  // finish them in after(). Failures are still logged per destination.
+  after(() => Promise.all([writeBaserow(), writeSheets(), sendCapi(), sendShopifyWebhook(), sendWebhookMirror()]));
 
   // The Shopify landing page needs the verdict back so it can show the calendar
   // to a qualified lead or a "we'll be in touch" message to everyone else.

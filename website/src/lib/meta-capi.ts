@@ -112,7 +112,7 @@ export async function sendLeadEvent(input: LeadEventInput): Promise<void> {
   try {
     const res = await fetch(
       `https://graph.facebook.com/${GRAPH_VERSION}/${pixelId}/events?access_token=${encodeURIComponent(token)}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) },
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(15000) },
     );
     if (!res.ok) {
       console.error('[capi] Lead event rejected:', res.status, (await res.text()).slice(0, 300));
