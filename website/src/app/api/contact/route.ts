@@ -1,7 +1,7 @@
 import { NextResponse, after } from 'next/server';
 import { sendLeadEvent } from '../../../lib/meta-capi';
 
-// Lead saves run in after() once the visitor already has their answer; give
+// Slow follow-ups run in after() once Baserow has saved the lead; give
 // them room to finish (each outbound call is also capped by FETCH_TIMEOUT_MS).
 export const maxDuration = 60;
 const FETCH_TIMEOUT_MS = 15000;
@@ -101,7 +101,7 @@ export async function POST(req: Request) {
   // keeps working unchanged.
   const usecase = usecaseRaw
     || (shop
-      ? `Shopify lead — ${shopQualified ? 'QUALIFIED' : 'unqualified'} | Store: ${shop.storeUrl || 'none'} `
+      ? `Phone: ${phone0} | Shopify lead — ${shopQualified ? 'QUALIFIED' : 'unqualified'} | Store: ${shop.storeUrl || 'none'} `
         + `| Sells: ${shop.sells || 'n/a'} (${shop.sellsOnline || 'n/a'}) | Orders/mo: ${shop.monthlyOrders || 'n/a'} `
         + `| Budget: ${shop.budget || 'n/a'} | Photos: ${shop.photosReady || 'n/a'} | WA consent: ${shop.waConsent ? 'yes' : 'no'}`
       : (companySize || comments
@@ -137,13 +137,14 @@ export async function POST(req: Request) {
   // delays the response beyond the slowest single call.
 
   // --- Baserow (Website Leads table) — best-effort -------------------------
-  async function writeBaserow() {
+  // Returns true only when Baserow confirmed the row — the caller waits on this one.
+  async function writeBaserow(): Promise<boolean> {
     const baseHost = process.env.BASEROW_HOST || 'https://api.baserow.io';
     const tableId = process.env.BASEROW_LEADS_TABLE_ID;
     const baserowToken = process.env.BASEROW_LEADS_TOKEN || process.env.BASEROW_API_KEY;
     if (!tableId || !baserowToken) {
       console.warn('[contact] Baserow not configured — lead not stored:', email);
-      return;
+      return false;
     }
     try {
       const res = await fetch(`${baseHost}/api/database/rows/table/${tableId}/?user_field_names=true`, {
@@ -159,9 +160,11 @@ export async function POST(req: Request) {
           'Submitted At': submittedAt,
         }),
       });
-      if (!res.ok) console.error('[contact] Baserow write failed:', res.status, (await res.text()).slice(0, 200));
+      if (!res.ok) { console.error('[contact] Baserow write failed:', res.status, (await res.text()).slice(0, 200)); return false; }
+      return true;
     } catch (e) {
       console.error('[contact] Baserow write error:', e);
+      return false;
     }
   }
 
@@ -341,11 +344,16 @@ export async function POST(req: Request) {
     }
   }
 
-  // 2026-09-29: the visitor used to wait for every destination here, so one
-  // slow service (n8n, Google, Meta) left the button on "Sending…" for 30s+.
-  // Nothing in the response depends on these writes, so answer first and
-  // finish them in after(). Failures are still logged per destination.
-  after(() => Promise.all([writeBaserow(), writeSheets(), sendCapi(), sendShopifyWebhook(), sendWebhookMirror()]));
+  // 2026-09-29: the visitor used to wait for every destination, so one slow
+  // service (n8n, Google, Meta) left the button on "Sending…" for 30s+. Now the
+  // lead is registered in Baserow first (well under a second) and only then
+  // confirmed; the slow follow-ups (Sheets, Meta CAPI, n8n WhatsApp alert)
+  // run in after(). If Baserow fails we still start the other destinations
+  // (the lead may land in Sheets/n8n) but tell the visitor to call instead of
+  // showing a false "done".
+  const saved = await writeBaserow();
+  after(() => Promise.all([writeSheets(), sendCapi(), sendShopifyWebhook(), sendWebhookMirror()]));
+  if (!saved) return NextResponse.json({ ok: false, error: 'We could not save your details. Please call us instead.' }, { status: 503 });
 
   // The Shopify landing page needs the verdict back so it can show the calendar
   // to a qualified lead or a "we'll be in touch" message to everyone else.
