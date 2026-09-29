@@ -1,0 +1,143 @@
+{
+  "name": "Blog Agent 5: Publisher",
+  "nodes": [
+    {
+      "id": "a5-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-get-ready",
+      "name": "Get Ready to Publish",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-map-fields",
+      "name": "Map to Framer Schema",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-publish-bridge",
+      "name": "Publish to Framer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-mark-published",
+      "name": "Mark Published",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a5-sticky-1",
+      "name": "⚙️ Agent 5: Publisher",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        160
+      ],
+      "parameters": {
+        "content": "## Blog Agent 5: Publisher\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 380,
+        "height": 160
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Ready to Publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ready to Publish": {
+      "main": [
+        [
+          {
+            "node": "Lock Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [
+          {
+            "node": "Map to Framer Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map to Framer Schema": {
+      "main": [
+        [
+          {
+            "node": "Publish to Framer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to Framer": {
+      "main": [
+        [
+          {
+            "node": "Mark Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

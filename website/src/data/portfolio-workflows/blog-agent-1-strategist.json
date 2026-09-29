@@ -1,0 +1,99 @@
+{
+  "name": "[DRAFT] Blog Agent 1: SEO Strategist",
+  "nodes": [
+    {
+      "id": "a1-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1-perplexity",
+      "name": "Claude Brief Generation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1-parse-brief",
+      "name": "Parse Brief Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1-create-record",
+      "name": "Create Pipeline Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1-sticky",
+      "name": "⚙️ Agent 1: SEO Strategist",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        160
+      ],
+      "parameters": {
+        "content": "## Blog Agent 1: SEO Strategist v4\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 420,
+        "height": 180
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Claude Brief Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Brief Generation": {
+      "main": [
+        [
+          {
+            "node": "Parse Brief Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Brief Fields": {
+      "main": [
+        [
+          {
+            "node": "Create Pipeline Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

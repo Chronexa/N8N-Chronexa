@@ -199,6 +199,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["blog", "seo", "ai-agent", "autonomous"],
     previewImage: "/images/portfolio/workflow-blog-pipeline.png",
     featured: false,
+    jsonFile: "blog-agent-1-strategist.json",
   },
 
   /* ─── 6. Blog Agent 2: Deep Researcher ───────────────────────────────── */
@@ -221,6 +222,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["blog", "research", "ai-agent", "autonomous"],
     previewImage: "/images/portfolio/workflow-ai-agent.png",
     featured: false,
+    jsonFile: "blog-agent-2-researcher.json",
   },
 
   /* ─── 7. Blog Agent 3: Copywriter ────────────────────────────────────── */
@@ -243,6 +245,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["blog", "copywriting", "ai-agent", "autonomous"],
     previewImage: "/images/portfolio/workflow-ai-agent.png",
     featured: false,
+    jsonFile: "blog-agent-3-copywriter.json",
   },
 
   /* ─── 8. Blog Agent 4: Image Designer ────────────────────────────────── */
@@ -265,6 +268,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["blog", "design", "ai-agent", "image-generation"],
     previewImage: "/images/portfolio/workflow-ai-agent.png",
     featured: false,
+    jsonFile: "blog-agent-4-designer.json",
   },
 
   /* ─── 9. Blog Agent 5: Publisher ─────────────────────────────────────── */
@@ -292,6 +296,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["blog", "publishing", "cms", "ai-agent"],
     previewImage: "/images/portfolio/workflow-blog-pipeline.png",
     featured: false,
+    jsonFile: "blog-agent-5-publisher.json",
   },
 
   /* ─── 10. Shopify → Meta CAPI Feedback ───────────────────────────────── */
@@ -318,6 +323,7 @@ export const workflows: PortfolioWorkflow[] = [
     tags: ["shopify", "meta", "capi", "attribution", "ecommerce"],
     previewImage: "/images/portfolio/workflow-crm-sync.png",
     featured: false,
+    jsonFile: "shopify-leads-meta-feedback.json",
   },
 
   /* ─── 11. Universal Unsubscribe Handler ──────────────────────────────── */

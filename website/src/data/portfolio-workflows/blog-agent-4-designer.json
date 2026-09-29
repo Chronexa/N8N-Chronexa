@@ -1,0 +1,212 @@
+{
+  "name": "[DRAFT] Blog Agent 4: Image Designer",
+  "nodes": [
+    {
+      "id": "a4-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-get-pending",
+      "name": "Get Pending Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-gen-prompt",
+      "name": "Generate Image Prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-extract-prompt",
+      "name": "Extract Image Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-gen-image",
+      "name": "Generate Image with Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-upload-imgbb",
+      "name": "Upload Image to Imgbb",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        220
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-save-image-success",
+      "name": "Save Image URL (With Image)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1780,
+        220
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-save-image",
+      "name": "Save Image URL (No Image)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1560,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4-sticky",
+      "name": "⚙️ Agent 4: Image Designer",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        160
+      ],
+      "parameters": {
+        "content": "## Blog Agent 4: Image Designer v2\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 380,
+        "height": 180
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Pending Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Lock Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [
+          {
+            "node": "Generate Image Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image Prompt": {
+      "main": [
+        [
+          {
+            "node": "Extract Image Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Image Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate Image with Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image with Gemini": {
+      "main": [
+        [
+          {
+            "node": "Upload Image to Imgbb",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Image URL (No Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image to Imgbb": {
+      "main": [
+        [
+          {
+            "node": "Save Image URL (With Image)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Image URL (No Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

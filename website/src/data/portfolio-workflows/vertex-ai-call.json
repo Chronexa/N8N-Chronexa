@@ -1,0 +1,55 @@
+{
+  "name": "Chronexa: Vertex AI Call (Gemini) — keyless",
+  "nodes": [
+    {
+      "id": "bbbbbbbb-0000-4000-8000-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "bbbbbbbb-0000-4000-8000-000000000002",
+      "name": "Vertex AI (Gemini)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "bbbbbbbb-0000-4000-8000-000000000003",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -320
+      ],
+      "parameters": {
+        "content": "## Vertex AI — keyless\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 420,
+        "height": 260
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Vertex AI (Gemini)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

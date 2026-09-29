@@ -1,0 +1,114 @@
+/* ─── ROI Calculator ─────────────────────────────────────────────────── */
+
+.calculator {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  overflow: hidden;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  background: var(--bg-dark);
+}
+
+/* ─── Inputs ─────────────────────────────────────────────────────────── */
+.inputs {
+  padding: var(--spacing-md);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: var(--text-muted-dark);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.inputs input {
+  width: 100%;
+  height: 48px;
+  padding: 0 0.8rem;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  outline: 0;
+  background: var(--surface-glass);
+  color: var(--text-dark);
+  font-size: var(--step-0);
+  font-family: var(--font-sans);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.inputs input:focus {
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 3px var(--brand-green-soft);
+}
+
+/* ─── Result panel ───────────────────────────────────────────────────── */
+.result {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 90% 10%, var(--brand-green-glow), transparent 50%),
+    var(--surface-glass);
+  border-left: 1px solid var(--border-dark);
+}
+
+.result span {
+  color: var(--brand-green);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.result strong {
+  margin-top: 0.75rem;
+  color: var(--text-dark);
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  line-height: 1;
+  letter-spacing: -0.012em;
+}
+
+.result b {
+  margin-top: 0.5rem;
+  color: var(--text-dark);
+  font-size: var(--step-0);
+  font-weight: 550;
+}
+
+.result p {
+  margin-top: var(--spacing-sm);
+  color: var(--text-muted-dark);
+  font-size: var(--step--1);
+  line-height: var(--leading-normal);
+}
+
+/* ─── Responsive: Mobile ─────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .calculator {
+    grid-template-columns: 1fr;
+  }
+
+  .inputs {
+    grid-template-columns: 1fr 1fr;
+    padding: var(--spacing-sm);
+  }
+
+  .result {
+    padding: var(--spacing-sm);
+    border-left: none;
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .result strong {
+    font-size: var(--step-3);
+  }
+}

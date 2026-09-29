@@ -20,6 +20,7 @@ export default function ChromeGate({
 }) {
   const pathname = usePathname();
   if (pathname?.startsWith('/studio')) return <>{children}</>;
+  if (pathname === '/portfolio' || pathname?.startsWith('/portfolio/')) return <main id="main">{children}</main>;
 
   return (
     <>

@@ -1,0 +1,196 @@
+/* ─── Portfolio Index ────────────────────────────────────────────────── */
+/* Enterprise Chronexa design system dark layout                        */
+
+.page {
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text-dark);
+  background:
+    radial-gradient(650px 360px at 50% 2%, var(--brand-green-glow), transparent 70%),
+    var(--bg-dark);
+}
+
+.gridSection {
+  width: min(calc(100% - 48px), var(--container-max));
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionHeading p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--brand-green);
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sectionHeading p::before {
+  content: "";
+  width: 1.6rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.sectionHeading h2 {
+  margin-top: 0.25rem;
+  color: var(--text-dark);
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+
+.sectionHeading > span {
+  flex: none;
+  padding-bottom: 0.4rem;
+  color: var(--text-muted-dark);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.empty {
+  padding: var(--spacing-xl) var(--spacing-sm);
+  text-align: center;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted-dark);
+  background: var(--surface-glass);
+}
+
+.cta {
+  position: relative;
+  min-height: 470px;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-top: 1px solid var(--border-dark);
+  background:
+    linear-gradient(to bottom, var(--bg-dark) 0%, transparent 28%),
+    radial-gradient(circle at 50% 110%, rgba(103, 176, 53, 0.4), transparent 55%),
+    var(--panel-grad-c);
+}
+
+.ctaStars {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  background-image: radial-gradient(var(--border-dark) 0.7px, transparent 0.7px);
+  background-size: 53px 53px;
+  mask-image: linear-gradient(transparent, #000 45%, #000);
+  -webkit-mask-image: linear-gradient(transparent, #000 45%, #000);
+}
+
+.cta > *:not(.ctaStars) {
+  position: relative;
+  z-index: 1;
+}
+
+.cta p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--brand-green);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cta p::before,
+.cta p::after {
+  content: "";
+  width: 1.6rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.cta h2 {
+  margin: var(--spacing-sm) 0 var(--spacing-md);
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-optical-sizing: auto;
+  font-variation-settings: "WONK" 1, "SOFT" 4;
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  letter-spacing: -0.012em;
+}
+
+.cta > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.85rem;
+  font-weight: 600;
+  font-size: var(--step-0);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  background-color: var(--brand-green-ink);
+  color: var(--text-on-fill);
+  border: 1px solid var(--brand-green-ink);
+  box-shadow: var(--shadow-sm), 0 8px 20px -6px rgba(103, 176, 53, 0.4);
+  transition: background-color var(--transition-fast), color var(--transition-fast),
+    border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cta > a:hover {
+  background-color: var(--brand-green-hover);
+  border-color: var(--brand-green-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md), 0 12px 26px -6px rgba(103, 176, 53, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .gridSection {
+    width: calc(100% - 28px);
+    padding: var(--spacing-lg) 0 var(--spacing-xl);
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta h2 br {
+    display: none;
+  }
+}

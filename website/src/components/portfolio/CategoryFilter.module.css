@@ -1,0 +1,49 @@
+/* ─── Category Filter Bar ────────────────────────────────────────────── */
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  max-width: 100%;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filterBar::-webkit-scrollbar {
+  display: none;
+}
+
+.pill {
+  flex: 0 0 auto;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass);
+  color: var(--text-muted-dark);
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.pill:hover {
+  color: var(--text-dark);
+  border-color: var(--brand-green-line);
+  background: var(--bg-dark);
+}
+
+.pillActive {
+  color: var(--text-dark) !important;
+  border-color: var(--brand-green) !important;
+  background: var(--brand-green-ink) !important;
+  box-shadow: var(--shadow-sm), 0 0 16px var(--brand-green-soft);
+}
+
+.count {
+  margin-left: 0.5rem;
+  opacity: 0.6;
+  font-size: 0.75rem;
+}

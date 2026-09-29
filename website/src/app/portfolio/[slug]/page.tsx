@@ -36,8 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import type { PublicWorkflow } from "../../../components/portfolio/WorkflowCanvas";
 
 export default async function WorkflowPage({ params }: Props) {
   const { slug } = await params;
@@ -45,12 +46,12 @@ export default async function WorkflowPage({ params }: Props) {
   if (!workflow) notFound();
   
   // Attempt to load the real n8n workflow JSON if it exists
-  let workflowJson = null;
+  let workflowJson: PublicWorkflow | null = null;
   try {
     const fileName = workflow.jsonFile || `${slug}.json`;
-    const jsonPath = path.join(process.cwd(), "..", "src", "workflows", fileName);
+    const jsonPath = path.join(process.cwd(), "src", "data", "portfolio-workflows", fileName);
     if (fs.existsSync(jsonPath)) {
-      workflowJson = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+      workflowJson = JSON.parse(fs.readFileSync(jsonPath, "utf-8")) as PublicWorkflow;
     }
   } catch (e) {
     console.error("Failed to load workflow JSON:", e);

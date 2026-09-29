@@ -1,0 +1,183 @@
+{
+  "name": "[DRAFT] Blog Agent 3: Copywriter",
+  "nodes": [
+    {
+      "id": "a3-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-get-pending",
+      "name": "Get Pending Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-call-claude",
+      "name": "Call Claude - Write Blog Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-parse-fields",
+      "name": "Parse Blog Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-quality-gate",
+      "name": "Quality Gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-save-content",
+      "name": "Save Content",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1560,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-fail",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1560,
+        420
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3-sticky",
+      "name": "⚙️ Agent 3: Copywriter",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        160
+      ],
+      "parameters": {
+        "content": "## Blog Agent 3: Copywriter v6 — Delimiter Parsing\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 400,
+        "height": 160
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Pending Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Lock Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lock Record": {
+      "main": [
+        [
+          {
+            "node": "Call Claude - Write Blog Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Claude - Write Blog Post": {
+      "main": [
+        [
+          {
+            "node": "Parse Blog Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Blog Fields": {
+      "main": [
+        [
+          {
+            "node": "Quality Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Gate": {
+      "main": [
+        [
+          {
+            "node": "Save Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "name": "Shopify Landing — Lead Capture",
+  "nodes": [
+    {
+      "id": "webhook-lead-0001",
+      "name": "Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "code-validate-0001",
+      "name": "Validate & Normalize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "if-invalid-0001",
+      "name": "Missing required fields?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "respond-400-0001",
+      "name": "Respond 400 — Missing Fields",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        -180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "if-bot-0001",
+      "name": "Honeypot filled (bot)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        780,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "respond-fake-0001",
+      "name": "Respond 200 — Fake Success (bot)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        20
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "http-sheets-append-0001",
+      "name": "Append Lead to Google Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "respond-ok-0001",
+      "name": "Respond 200 — Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1300,
+        180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "respond-500-0001",
+      "name": "Respond 500 — Save Failed",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1300,
+        320
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "gmail-alert-0001",
+      "name": "Alert — Lead Save Failed",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1300,
+        440
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "if-wa-consent-0001",
+      "name": "Consented for WhatsApp?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1040,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "http-wa-nudge-0001",
+      "name": "Nudge Lead (WhatsApp)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "code-team-alert-0001",
+      "name": "Build Team Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        620
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "http-team-alert-0001",
+      "name": "Alert Team (WhatsApp)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        620
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Lead Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate & Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Normalize": {
+      "main": [
+        [
+          {
+            "node": "Missing required fields?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Missing required fields?": {
+      "main": [
+        [
+          {
+            "node": "Respond 400 — Missing Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Honeypot filled (bot)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Honeypot filled (bot)?": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 — Fake Success (bot)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append Lead to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Lead to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 — Success",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Consented for WhatsApp?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Team Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 500 — Save Failed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alert — Lead Save Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consented for WhatsApp?": {
+      "main": [
+        [
+          {
+            "node": "Nudge Lead (WhatsApp)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Team Alert": {
+      "main": [
+        [
+          {
+            "node": "Alert Team (WhatsApp)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,716 @@
+{
+  "name": "Chronexa Autonomous Outbound Engine v2.0",
+  "nodes": [
+    {
+      "id": "c08b3e28-ddab-4d9b-b8d3-5bc705888eb9",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        672
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e04f095b-3170-4f26-8114-6dd7ab1b6cb1",
+      "name": "Normalize Lead Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        672
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a48e088c-ada1-425c-9d1f-3415fbcecdbd",
+      "name": "Exa News Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        688,
+        672
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "538a5139-d8ec-49b3-9655-70217b3e68ad",
+      "name": "Parse Exa Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        552
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f791c66e-0559-4dcf-9cae-3565bf6df087",
+      "name": "Gate Error Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1360,
+        552
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c95afa2c-823f-4627-a61b-4eaadb519575",
+      "name": "Anthropic Match Routing Bucket",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        480
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "cc49379c-e546-42fe-9506-9b3bd856d6be",
+      "name": "Parse Anthropic Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1808,
+        480
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "466c2a1b-bdd0-4ac7-8f5f-0f0a6c12a111",
+      "name": "Switch Bucket Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2032,
+        416
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "76d924d9-aa8f-4952-8576-d450f799024f",
+      "name": "Anthropic Generate Cold Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "89945788-561b-45dd-b62d-64b6e17acb25",
+      "name": "Parse Email Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0b93bc8d-d589-4e65-bb3b-6bbf54b80f9b",
+      "name": "Append to HITL Queue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3152,
+        144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b21ed06c-3085-4df9-bf2e-2ad0bd7ef4fe",
+      "name": "Tag Exa API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        1632
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "70e19c8a-ca3a-4ac7-b070-046a780f196d",
+      "name": "Tag Exa Data Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3600,
+        1488
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "87b17fc2-964d-4630-83c2-6a6cf30aada5",
+      "name": "Tag Routing API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3376,
+        1320
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "420bb469-b494-47e1-928f-e6174e80b9dd",
+      "name": "Tag Anthropic Parse JS Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3600,
+        1248
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "03a06b09-2439-4f3e-a34a-eb6610631df6",
+      "name": "Tag Legitimate Skip",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3600,
+        864
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "41b2c967-e160-4364-a949-51c1c826c1cb",
+      "name": "Tag Classification Drift",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3600,
+        1056
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "43be6b97-c3ac-441a-850b-8367525fe7a6",
+      "name": "Tag Email API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3376,
+        640
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e3dee03d-b14d-408b-8d5e-3a44dfe46af1",
+      "name": "Tag Email Parse JS Error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3600,
+        624
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "4c0453b0-f1f9-4667-86fe-15c5a6bbc785",
+      "name": "Tag Sheets API Failure",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3376,
+        112
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "1b752a25-eb18-461e-ad8e-f0d781e04519",
+      "name": "Append to DLQ Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4048,
+        600
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "exa-crawl-0001-0000-0000-000000000001",
+      "name": "Exa Company Crawl",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        912,
+        600
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "master-db-done-001",
+      "name": "Update Master DB — Engine Done",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3376,
+        328
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "master-db-dlq-001",
+      "name": "Update Master DB — DLQ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3824,
+        600
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "hitl-idem-check",
+      "name": "Check HITL Duplicate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2704,
+        144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "hitl-idem-if",
+      "name": "Already in HITL?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2928,
+        144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "retry-or-dlq",
+      "name": "Retry or DLQ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "reset-retry",
+      "name": "Reset Stage — Retry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3824,
+        840
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "engine-sticky-001",
+      "name": "⚙️ HOW THIS WORKFLOW WORKS",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -384
+      ],
+      "parameters": {
+        "content": "## Chronexa Outbound Engine v2.0\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
+        "width": 1000,
+        "height": 700,
+        "color": 5
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Lead Input": {
+      "main": [
+        [
+          {
+            "node": "Exa News Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gate Error Check": {
+      "main": [
+        [
+          {
+            "node": "Anthropic Match Routing Bucket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Exa Data Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Match Routing Bucket": {
+      "main": [
+        [
+          {
+            "node": "Parse Anthropic Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Routing API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Anthropic Response": {
+      "main": [
+        [
+          {
+            "node": "Switch Bucket Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Anthropic Parse JS Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Bucket Router": {
+      "main": [
+        [
+          {
+            "node": "Tag Legitimate Skip",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anthropic Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Classification Drift",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Generate Cold Email": {
+      "main": [
+        [
+          {
+            "node": "Parse Email Output",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Email API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Email Output": {
+      "main": [
+        [
+          {
+            "node": "Check HITL Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Email Parse JS Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to HITL Queue": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — Engine Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Sheets API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Routing API Failure": {
+      "main": [
+        [
+          {
+            "node": "Retry or DLQ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Anthropic Parse JS Error": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Legitimate Skip": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Classification Drift": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Email API Failure": {
+      "main": [
+        [
+          {
+            "node": "Retry or DLQ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Email Parse JS Error": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Sheets API Failure": {
+      "main": [
+        [
+          {
+            "node": "Retry or DLQ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa News Search": {
+      "main": [
+        [
+          {
+            "node": "Exa Company Crawl",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Exa API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa Company Crawl": {
+      "main": [
+        [
+          {
+            "node": "Parse Exa Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Exa API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Exa Response": {
+      "main": [
+        [
+          {
+            "node": "Gate Error Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Exa API Failure": {
+      "main": [
+        [
+          {
+            "node": "Retry or DLQ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Exa Data Error": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Master DB — Engine Done": {
+      "main": [
+        []
+      ]
+    },
+    "Update Master DB — DLQ": {
+      "main": [
+        [
+          {
+            "node": "Append to DLQ Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check HITL Duplicate": {
+      "main": [
+        [
+          {
+            "node": "Already in HITL?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Already in HITL?": {
+      "main": [
+        [
+          {
+            "node": "Update Master DB — Engine Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append to HITL Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry or DLQ?": {
+      "main": [
+        [
+          {
+            "node": "Reset Stage — Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Master DB — DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
