@@ -1,0 +1,251 @@
+/* Shopify landing page (global + India) — redesign-first layout (2026-09-25).
+   Reuses tokens (--ink, --paper, --lime) from ShopifyStorePage.module.css, which still styles the form, FAQ and footer. */
+.flagship { --night:#0c1a13; --line:#173a2d1f; --soft:#5a6b61; }
+.flagship h2 em, .flagship h1 em { font-family:var(--font-display); font-weight:450; }
+.topbar { background:var(--paper); }
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+.hero { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:4%; align-items:center; padding:72px 5% 84px; background:radial-gradient(120% 90% at 85% 10%, #1f4a38 0%, var(--night) 62%); color:var(--paper); }
+.heroCopy h1 { font-size:clamp(46px,5.3vw,84px); font-weight:500; line-height:1.02; letter-spacing:-.06em; margin:0 0 26px; }
+.heroCopy h1 em { color:var(--lime); letter-spacing:-.05em; }
+/* Fixed 3 lines: a web-font swap can't re-wrap the headline and push the recording below it (CLS). */
+.heroCopy h1 > span, .heroCopy h1 > em { display:block; white-space:nowrap; }
+.heroLead { max-width:490px; font-size:18px; line-height:1.65; color:#dfe7df; }
+.heroNote { margin:14px 0 0; font-size:13px; color:#b6c6b8; }
+.scopeChips { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px; padding:0; list-style:none; }
+.scopeChips li { padding:6px 12px; border:1px solid #dbfa8055; border-radius:999px; color:var(--paper); font-size:13px; }
+.srOnly { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.heroStage { position:relative; padding:0 0 8% 0; }
+.heroLaptop { width:92%; margin-left:auto; }
+.heroPhone { position:absolute; left:0; bottom:0; width:27%; min-width:120px; }
+.recordingTag { position:absolute; right:0; bottom:-6px; display:flex; align-items:center; gap:8px; margin:0; font-size:12px; letter-spacing:.4px; color:#c9d6ca; }
+.recWho { font-style:normal; }
+.recordingTag span { width:8px; height:8px; border-radius:50%; background:#ff5a4f; box-shadow:0 0 0 4px #ff5a4f30; animation:rec 1.6s ease-in-out infinite; }
+@keyframes rec { 50% { opacity:.35; } }
+
+/* ── Brands strip ─────────────────────────────────────────────────────── */
+.proof { display:flex; align-items:center; gap:32px; padding:26px 5%; border-bottom:1px solid var(--line); }
+.proofIntro { margin:0; font-size:12px; letter-spacing:1.4px; text-transform:uppercase; white-space:nowrap; }
+.proof ul { flex:1; display:flex; flex-wrap:wrap; gap:14px 44px; margin:0; padding:0; list-style:none; }
+.proof li { display:flex; align-items:baseline; gap:10px; }
+.proof strong { font-family:var(--font-display); font-size:30px; font-weight:450; line-height:1; letter-spacing:-.03em; }
+.proof li span { font-size:13px; color:var(--soft); }
+.proofLink { display:inline-flex; align-items:center; gap:10px; min-height:44px; color:var(--ink); font-size:15px; font-weight:600; white-space:nowrap; text-decoration:none; border-bottom:1px solid var(--ink); }
+
+/* ── Shared section rhythm ────────────────────────────────────────────── */
+.services, .tryIt, .films, .testimonials, .process, .tour { padding:88px 5%; scroll-margin-top:16px; }
+.sectionHead { display:flex; align-items:end; justify-content:space-between; gap:40px; margin-bottom:34px; }
+.sectionHead > p { max-width:360px; margin-bottom:22px; font-size:16px; line-height:1.7; color:var(--soft); }
+.sectionCta { display:flex; flex-wrap:wrap; align-items:center; gap:18px 28px; margin-top:30px; }
+.sectionCta p { max-width:420px; margin:0; font-size:14px; line-height:1.6; color:var(--soft); }
+
+/* ── What we do ───────────────────────────────────────────────────────── */
+.services { background:var(--paper); }
+.serviceGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin:0; padding:0; list-style:none; }
+.serviceCard { display:flex; flex-direction:column; padding:28px; border-radius:10px; background:#fff; border:1px solid #173a2d14; }
+.serviceN { margin:0 0 26px; font-size:12px; letter-spacing:1.3px; color:#4a5f54; }
+.serviceCard h3 { margin:0 0 8px; font-size:clamp(23px,2vw,28px); font-weight:500; letter-spacing:-.04em; }
+.flagship .serviceOutcome { margin:0 0 18px; font-size:15px; font-weight:600; color:#1f5a3f; }
+.serviceCard ul { display:flex; flex-direction:column; gap:10px; margin:0; padding:0; list-style:none; }
+.serviceCard ul li { position:relative; padding-left:22px; font-size:14.5px; line-height:1.5; color:#2e4439; }
+.serviceCard ul li::before { content:'✓'; position:absolute; left:0; color:#2f7d5b; font-weight:700; }
+
+/* ── Live stores ──────────────────────────────────────────────────────── */
+.tryIt { background:#eef0e6; }
+
+/* ── Brand & video ────────────────────────────────────────────────────── */
+.films { background:var(--night); color:var(--paper); }
+.films .sectionHead > p { color:#b9c8bb; }
+.filmGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+.filmBrand { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.filmBrand header { display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
+.filmBrand h3 { margin:0; font-size:24px; font-weight:500; letter-spacing:-.03em; }
+.filmBrand header p { margin:0; font-size:13px; color:#9fb2a3; }
+.filmMain { aspect-ratio:1; min-width:0; overflow:hidden; border-radius:10px; }
+.filmSide { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.filmSmall { aspect-ratio:4 / 5; min-width:0; overflow:hidden; border-radius:10px; }
+
+/* ── Client notes ─────────────────────────────────────────────────────── */
+.testimonials { overflow:hidden; background:#e8eadf; }
+.testimonialGrid { display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-flow:dense; gap:16px; }
+.testimonialCard { position:relative; display:flex; min-width:0; min-height:260px; overflow:hidden; border:1px solid #173a2d18; border-radius:10px; background:#fff; box-shadow:0 16px 44px -34px #173a2d88; }
+.testimonialCard:nth-child(1) { grid-column:span 7; grid-row:span 2; min-height:536px; background:#10271d; color:var(--paper); }
+.testimonialCard:nth-child(2), .testimonialCard:nth-child(3) { grid-column:span 5; }
+.testimonialCard:nth-child(4), .testimonialCard:nth-child(5), .testimonialCard:nth-child(6) { grid-column:span 4; min-height:590px; }
+.testimonialCard:nth-child(2) { background:#fff2c8; }
+.testimonialCard:nth-child(3) { background:#e8eee7; }
+.testimonialCard:nth-child(6) { background:#c88e62; color:#21160f; }
+.testimonialCard:nth-child(1), .testimonialCard:nth-child(4), .testimonialCard:nth-child(5) { flex-direction:column; }
+.testimonialVisual { position:relative; flex:0 0 42%; min-height:180px; overflow:hidden; background:#1a2b22; }
+.testimonialVisual::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 55%,#0c1a13aa); }
+.testimonialVisual img { object-fit:cover; object-position:top center; transition:transform .7s var(--ease-out); }
+.testimonialCard:hover .testimonialVisual img { transform:scale(1.025); }
+.testimonialVisual span { position:absolute; left:22px; bottom:17px; z-index:1; font-family:var(--font-display); font-size:24px; font-weight:500; letter-spacing:-.03em; color:#fff; }
+.testimonialBody { display:flex; flex:1; flex-direction:column; padding:26px; }
+.testimonialCard:nth-child(1) .testimonialBody { padding:34px; }
+.quoteMark { height:24px; margin:0 0 10px; font-family:var(--font-display); font-size:58px; line-height:.75; color:#2f6b3a; }
+.testimonialCard:nth-child(1) .quoteMark { color:var(--lime); }
+.testimonialCard blockquote { margin:0 0 28px; font-family:var(--font-display); font-size:clamp(20px,1.7vw,27px); font-weight:450; line-height:1.34; letter-spacing:-.02em; }
+.testimonialCard:nth-child(1) blockquote { font-size:clamp(25px,2.15vw,34px); }
+.testimonialCard footer { display:flex; align-items:center; gap:12px; margin-top:auto; }
+.clientInitial { display:grid; flex:0 0 40px; width:40px; height:40px; place-items:center; border:1px solid currentColor; border-radius:50%; font-family:var(--font-display); font-size:20px; opacity:.75; }
+.testimonialCard footer strong, .testimonialCard footer small { display:block; }
+.testimonialCard footer strong { font-size:14px; font-weight:700; }
+.testimonialCard footer small { margin-top:2px; font-size:12px; line-height:1.35; opacity:.68; }
+.noteNumber { position:absolute; top:18px; right:20px; z-index:2; font-size:11px; letter-spacing:1.3px; opacity:.55; }
+.testimonialVisual + .testimonialBody + .noteNumber { color:#fff; }
+.swipeNote { display:none; }
+
+/* ── How it works ─────────────────────────────────────────────────────── */
+.process { background:var(--paper); }
+.steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; margin:0; padding:0; list-style:none; }
+.steps li { display:flex; flex-direction:column; padding:28px; border-radius:10px; background:#fff; border:1px solid #173a2d14; }
+.stepTop { display:flex; margin:0 0 26px; }
+.stepTop span { display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:var(--lime); font-size:13px; font-weight:700; }
+.steps h3 { margin:0 0 10px; font-size:clamp(22px,1.9vw,26px); font-weight:500; letter-spacing:-.04em; }
+.steps li > p:not(.stepTop) { font-size:15px; line-height:1.65; color:#2e4439; }
+
+/* ── LUMIQ tour ───────────────────────────────────────────────────────── */
+.tour { background:#eef0e6; }
+.tourTabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
+.tourTabs button { display:inline-flex; align-items:center; gap:10px; min-height:44px; padding:10px 16px; border:1px solid #173a2d33; border-radius:999px; background:transparent; color:var(--ink); font-size:15px; cursor:pointer; transition:background .2s, color .2s, border-color .2s; }
+.tourTabs button span { font-size:11px; opacity:.85; }
+.tourTabs button:hover { border-color:var(--ink); }
+.tourTabs button.tabOn { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+.tourStage { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(0,1fr); gap:48px; align-items:center; }
+.tourScreen { min-width:0; }
+.tourScreenPhone { display:flex; justify-content:center; }
+.tourScreenPhone > div { width:min(300px,62%); }
+.tourCount { font-size:12px; letter-spacing:1.4px; color:var(--soft); margin-bottom:14px; }
+.tourInfo h3 { font-size:clamp(26px,2.4vw,36px); font-weight:500; line-height:1.12; letter-spacing:-.04em; margin-bottom:16px; }
+.tourInfo > p { font-size:16px; line-height:1.7; color:#3b5146; }
+.tags { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 28px; padding:0; list-style:none; }
+.tags li { padding:6px 12px; border-radius:999px; background:#173a2d10; font-size:13px; }
+.nextBtn { display:inline-flex; align-items:center; gap:12px; min-height:44px; padding:0; border:0; border-bottom:1px solid var(--ink); background:none; color:var(--ink); font-size:15px; font-weight:600; cursor:pointer; }
+.nextBtn span { transition:transform .2s; }
+.nextBtn:hover span { transform:translateX(4px); }
+
+/* ── Header nav + CTAs (2026-09-28) ───────────────────────────────────── */
+.navLinks { display:flex; gap:30px; margin-left:auto; margin-right:12px; }
+.navLinks a { color:var(--ink); font-size:15px; text-decoration:none; padding:10px 0; border-bottom:2px solid transparent; }
+.navLinks a:hover { border-bottom-color:var(--ink); }
+.headerCta { min-height:46px; padding:0 24px; border:0; border-radius:6px; background:var(--ink); color:var(--paper); font-size:15px; font-weight:700; cursor:pointer; transition:background .2s; }
+.headerCta:hover { background:#28523e; }
+/* The one big button. Dark green on light sections; lime on the dark hero and closing band. */
+.ctaBig { display:inline-flex; align-items:center; justify-content:center; gap:14px; min-height:62px; padding:0 36px; border:0; border-radius:8px; background:var(--ink); color:var(--paper); font-size:18px; font-weight:700; letter-spacing:-.01em; cursor:pointer; box-shadow:0 10px 24px #173a2d33; transition:transform .2s, background .2s; }
+.ctaBig:hover { transform:translateY(-2px); background:#28523e; }
+.ctaBig span { font-size:22px; }
+.hero .ctaBig, .finalCta .ctaBig { background:var(--lime); color:var(--ink); box-shadow:0 12px 30px #04110b55; }
+.hero .ctaBig:hover, .finalCta .ctaBig:hover { background:#e8ffa9; }
+.ctaGhostDark { display:inline-flex; align-items:center; min-height:44px; color:var(--paper); font-size:16px; text-decoration:underline; text-underline-offset:5px; }
+.heroActions { display:flex; flex-wrap:wrap; align-items:center; gap:14px 26px; }
+
+/* ── Contact section: heading, form, then supporting copy ─────────────── */
+.enquiry { grid-template-areas:"head form" "more form"; row-gap:0; align-items:start; padding-block:80px; scroll-margin-top:80px; }
+.enquiryHead { grid-area:head; }
+.enquiryHead > p:first-child { color:var(--lime); }
+.enquiryHead > p:not(:first-child) { max-width:420px; font-size:17px; line-height:1.7; color:#cfd9cd; }
+.enquiryMore { grid-area:more; }
+.formCard { grid-area:form; box-shadow:0 24px 60px #04110b55; }
+.flagship .formIntro { margin:-8px 0 20px; font-size:14px; color:var(--soft); }
+.phoneRow { display:flex; gap:8px; }
+.flagship .codeSelect { flex:0 0 150px; width:150px; font-size:16px; padding-inline:8px; }
+.submitBig { min-height:62px; font-size:18px; font-weight:700; border-radius:8px; }
+.submitBig span { margin-left:8px; }
+
+/* ── Closing band ─────────────────────────────────────────────────────── */
+.finalCta { display:flex; flex-direction:column; align-items:center; text-align:center; padding:88px 5%; background:var(--night); color:var(--paper); }
+.finalCta h2 { margin-bottom:10px; }
+.finalCta h2 em { color:var(--lime); }
+.finalCta > p { margin-bottom:28px; font-size:17px; color:#b9c8bb; }
+.finalCta .heroActions { justify-content:center; }
+
+.stickyMain { font-size:16px; font-weight:700; min-height:50px; }
+.stickyHidden { transform:translateY(110%); }
+
+/* `.page p { margin-top:0 }` in the shared module outranks single-class rules, so top margins here need the extra class. */
+.flagship .heroNote { margin-top:14px; }
+.flagship .scopeChips { margin-top:22px; }
+
+/* WCAG AA contrast for small labels styled in ShopifyStorePage.module.css. */
+.flagship .tagText { color:#4f6358; opacity:1; }
+
+/* Desktop: the header (section links + Contact Us) stays on screen while scrolling. */
+@media (min-width:701px) {
+  .topbar { position:sticky; top:0; z-index:50; padding-block:16px; box-shadow:0 1px 0 #173a2d1f; }
+  .services, .tryIt, .films, .testimonials, .process, .tour, .faq { scroll-margin-top:84px; }
+  .formCard { scroll-margin-top:96px; }
+}
+@media (max-width:900px) { .navLinks { display:none; } }
+
+@media (min-width:1600px) {
+  .hero, .proof, .services, .tryIt, .films, .testimonials, .process, .tour { padding-inline:max(5%,calc((100vw - 1400px)/2)); }
+}
+@media (max-width:1100px) {
+  .serviceGrid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .steps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .testimonialCard:nth-child(1) { grid-column:span 7; }
+  .testimonialCard:nth-child(2), .testimonialCard:nth-child(3) { grid-column:span 5; }
+  .testimonialCard:nth-child(4), .testimonialCard:nth-child(5), .testimonialCard:nth-child(6) { grid-column:span 6; }
+}
+@media (max-width:1000px) {
+  .hero { grid-template-columns:1fr; gap:48px; padding-block:56px 64px; }
+  .heroStage { max-width:720px; }
+  .proof { flex-direction:column; align-items:flex-start; gap:14px; }
+  .tourStage { grid-template-columns:1fr; gap:28px; }
+  .filmGrid { grid-template-columns:1fr; gap:34px; max-width:560px; }
+}
+@media (max-width:700px) {
+  /* Mobile: the recording must land in the first screen of an ad click, so it moves up under the headline. */
+  .hero { display:flex; flex-direction:column; align-items:stretch; padding:32px 16px 44px; gap:0; }
+  .heroCopy { display:contents; }
+  .heroCopy > * { order:4; }
+  .heroCopy > p:first-child { order:1; margin-bottom:16px; }
+  .heroCopy h1 { order:2; margin-bottom:22px; }
+  .heroStage { order:3; margin-bottom:26px; }
+  /* Scope + URL field straight under the recording; the explanatory paragraph follows. */
+  .heroCopy .heroLead { order:5; margin:22px 0 0; }
+  .heroCopy h1 { font-size:clamp(35px,9.6vw,58px); }
+  .scopeChips { margin-bottom:18px; }
+  .scopeChips li { font-size:12px; padding:5px 10px; }
+  .heroLead { font-size:16px; }
+  .heroPhone { width:30%; }
+  .recWho { display:none; }
+  .recordingTag { position:static; margin-top:14px; padding-left:32%; justify-content:flex-end; font-size:11px; white-space:nowrap; }
+  .heroStage { padding-bottom:12%; }
+  .proof { padding:22px 16px; }
+  .proof ul { gap:10px 24px; }
+  .proof strong { font-size:24px; }
+  .services, .tryIt, .films, .testimonials, .process, .tour { padding:56px 16px; }
+  .sectionHead { flex-direction:column; align-items:flex-start; gap:4px; margin-bottom:24px; }
+  .sectionHead > p { margin-bottom:0; font-size:15px; }
+  .serviceGrid, .steps { grid-template-columns:1fr; }
+  .serviceCard, .steps li { padding:22px; }
+  .serviceN, .stepTop { margin-bottom:16px; }
+  .testimonialGrid { display:flex; gap:12px; overflow-x:auto; margin-inline:-16px; padding:0 16px 12px; scroll-snap-type:x mandatory; scrollbar-width:none; }
+  .testimonialGrid::-webkit-scrollbar { display:none; }
+  .testimonialCard, .testimonialCard:nth-child(n) { flex:0 0 min(84vw,360px); width:min(84vw,360px); min-height:620px; grid-column:auto; grid-row:auto; scroll-snap-align:center; }
+  .testimonialCard:nth-child(1), .testimonialCard:nth-child(4), .testimonialCard:nth-child(5) { flex-direction:column; }
+  .testimonialVisual { flex:0 0 180px; min-height:0; }
+  .testimonialBody, .testimonialCard:nth-child(1) .testimonialBody { padding:24px; }
+  .testimonialCard blockquote, .testimonialCard:nth-child(1) blockquote { font-size:23px; }
+  .swipeNote { display:flex; align-items:center; justify-content:flex-end; gap:10px; margin:10px 0 0; font-size:12px; letter-spacing:.05em; text-transform:uppercase; color:var(--soft); }
+  .tourTabs { flex-wrap:nowrap; overflow-x:auto; margin:0 -16px 20px; padding:0 16px 4px; scrollbar-width:none; }
+  .tourTabs::-webkit-scrollbar { display:none; }
+  .tourTabs button { flex:0 0 auto; font-size:14px; }
+  .headerCta { min-height:42px; padding:0 16px; font-size:14px; }
+  .heroActions { flex-direction:column; align-items:stretch; gap:6px; }
+  .ctaBig { width:100%; min-height:58px; }
+  .ctaGhostDark { justify-content:center; }
+  .sectionCta { flex-direction:column; align-items:stretch; }
+  .enquiry { grid-template-columns:1fr; grid-template-areas:"head" "form" "more"; padding:44px 16px; gap:22px; }
+  .flagship .enquiry h2 { font-size:34px; }
+  .enquiryHead > p:not(:first-child) { font-size:15px; margin-bottom:0; }
+  .flagship .codeSelect { flex-basis:124px; width:124px; }
+  .finalCta { padding:56px 16px; }
+  .finalCta .heroActions { width:100%; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .recordingTag span { animation:none; }
+  .nextBtn span, .tourTabs button, .ctaBig, .headerCta, .stickyHidden { transition:none; }
+}

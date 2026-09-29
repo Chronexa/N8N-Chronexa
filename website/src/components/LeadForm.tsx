@@ -4,10 +4,11 @@ import { useRef, useState, type FormEvent } from 'react';
 import styles from './LeadForm.module.css';
 import { openBooking, trackBookCta } from '../lib/cal';
 import { track, identifyByEmail } from '../lib/analytics';
+import { site } from '../lib/site';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-export default function LeadForm({ source = 'website', compact = false }: { source?: string; compact?: boolean }) {
+export default function LeadForm({ source = 'website', compact = false, submitLabel = 'Book my free audit', note = 'Free 30-min call. No spam, no sales pitch — just actionable insights.' }: { source?: string; compact?: boolean; submitLabel?: string; note?: string }) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
   const startedRef = useRef(false);
@@ -62,7 +63,7 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
         <strong>Opening your booking…</strong>
         <p>
           Pick a time and we&apos;ll come prepped on your workflows. Didn&apos;t see it?{' '}
-          <a href="https://cal.com/chronexa/30min" target="_blank" rel="noopener noreferrer" className={styles.successLink}>
+          <a href={site.booking} target="_blank" rel="noopener noreferrer" className={styles.successLink}>
             Open the calendar
           </a>.
         </p>
@@ -95,10 +96,18 @@ export default function LeadForm({ source = 'website', compact = false }: { sour
         )}
       </div>
       <button type="submit" className={`btn-primary ${styles.btn}`} disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Opening booking…' : <>Book my free audit <span aria-hidden="true">→</span></>}
+        {status === 'submitting' ? 'Opening booking…' : (
+          <>
+            {submitLabel}{' '}
+            <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor"
+              strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 10h11M11 6l4 4-4 4" />
+            </svg>
+          </>
+        )}
       </button>
       {status === 'error' && <p className={styles.error} role="alert">{error}</p>}
-      <p className={styles.note}>Free 30-min call. No spam, no sales pitch — just actionable insights.</p>
+      <p className={styles.note}>{note}</p>
     </form>
   );
 }

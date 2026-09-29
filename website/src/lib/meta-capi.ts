@@ -26,13 +26,22 @@ const hashEmail = (email: string) => {
   return v ? sha256(v) : undefined;
 };
 
-/** Phone numbers: digits only, country code included, no leading +. */
-const hashPhone = (phone: string) => {
+/**
+ * Phone numbers: digits only, country code included, no leading +.
+ *
+ * 2026-09-22, revised: source-aware rather than a blind global guess or no
+ * guess at all. The Shopify landing form now prepends an explicit country
+ * code client-side before this is ever called, so it never needs — and never
+ * passes — a default. Other/older forms on the site still send a bare local
+ * number and relied on the old "assume India" behaviour to match correctly
+ * in Meta; `defaultCountryCode` restores that, but only for callers that
+ * explicitly opt in (see route.ts), so a UK lead can never be silently
+ * miscoded as Indian again.
+ */
+const hashPhone = (phone: string, defaultCountryCode?: string) => {
   let v = String(phone).replace(/[^\d]/g, '');
   if (!v) return undefined;
-  // A bare 10-digit Indian mobile needs its country code before hashing, or it
-  // will never match the same person as recorded elsewhere.
-  if (v.length === 10) v = `91${v}`;
+  if (defaultCountryCode && v.length === 10) v = `${defaultCountryCode}${v}`;
   return sha256(v);
 };
 
@@ -54,6 +63,14 @@ export type LeadEventInput = {
   userAgent?: string;
   /** Distinguishes one form from another in Meta's reporting. */
   eventId?: string;
+  /**
+   * Only set this for a form/source that still sends bare local numbers with
+   * no country code, to restore the old assume-this-country behaviour for it
+   * specifically. Leave unset for any form that already sends a fully-coded
+   * number (e.g. the Shopify landing page) — passing it there risks re-coding
+   * an already-correct non-Indian number.
+   */
+  defaultCountryCode?: string;
 };
 
 /**
@@ -70,7 +87,7 @@ export async function sendLeadEvent(input: LeadEventInput): Promise<void> {
 
   const userData: Record<string, unknown> = {
     em: hashEmail(input.email),
-    ph: input.phone ? hashPhone(input.phone) : undefined,
+    ph: input.phone ? hashPhone(input.phone, input.defaultCountryCode) : undefined,
     fn: firstName ? hashName(firstName) : undefined,
     client_ip_address: input.clientIp,
     client_user_agent: input.userAgent,

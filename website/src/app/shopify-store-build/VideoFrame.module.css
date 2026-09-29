@@ -1,0 +1,33 @@
+/* Device frames for the silent store recordings. Aspect ratios are fixed so nothing shifts while video loads (CLS). */
+.media { position:relative; overflow:hidden; background:#101a14; }
+.video { display:block; width:100%; height:100%; object-fit:cover; object-position:top center; }
+.posterImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; }
+.overPoster { position:relative; z-index:1; }
+.toggle { position:absolute; right:12px; bottom:12px; z-index:2; display:grid; place-items:center; width:44px; height:44px; padding:0; border:0; border-radius:50%; background:#0d1f17b3; color:#f7f7ee; cursor:pointer; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); opacity:.72; transition:opacity .2s, transform .2s; }
+.toggle:hover, .toggle:focus-visible { opacity:1; transform:scale(1.06); }
+.toggle:focus-visible { outline:3px solid #dbfa80; outline-offset:3px; }
+.toggle svg { width:16px; height:16px; fill:currentColor; }
+
+.laptop { border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 1px 0 #ffffff30 inset, 0 30px 80px #04110b55, 0 8px 22px #04110b30; border:1px solid #ffffff20; }
+.laptop .media { aspect-ratio:16 / 10; }
+.browserBar { display:flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:#eceee6; border-bottom:1px solid #d8dbd0; }
+.browserBar i { width:9px; height:9px; border-radius:50%; background:#c9ccc0; }
+.browserBar i:first-child { background:#e9806b; }.browserBar i:nth-child(2) { background:#e8c060; }.browserBar i:nth-child(3) { background:#8cc27a; }
+.browserBar span { flex:1; max-width:60%; margin:0 auto; padding:3px 10px; border-radius:5px; background:#fff; color:#56605a; font-size:11px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.phone { padding:9px; border-radius:38px; background:#0d130f; box-shadow:0 0 0 1.5px #3a443d inset, 0 30px 70px #04110b60, 0 8px 20px #04110b35; }
+.phone .media { aspect-ratio:390 / 844; border-radius:30px; }
+.phone .toggle { right:10px; bottom:14px; width:44px; height:44px; }
+
+/* 'bare' takes its shape from the parent (aspect-ratio set there): width drives height, never the reverse. */
+.bare { display:flex; width:100%; }
+.bare .media { flex:1; width:100%; border-radius:10px; }
+
+@media (max-width:700px) {
+  .browserBar { height:24px; padding:0 9px; }
+  .browserBar i { width:7px; height:7px; }
+  .browserBar span { font-size:10px; }
+  .phone { padding:6px; border-radius:28px; }
+  .phone .media { border-radius:23px; }
+}
+@media (prefers-reduced-motion:reduce) { .toggle { transition:none; } }

@@ -77,16 +77,42 @@ export const CAMPAIGN_PAGES: CampaignPage[] = [
   },
   {
     path: 'https://chronexa-portfolio.vercel.app/',
-    name: 'Shopify Store Portfolio (Meta ads)',
+    name: 'Shopify Store Portfolio (Meta ads) — SUPERSEDED',
     purpose:
-      'Paid landing page for the D2C Shopify studio offer — "Complete Shopify Store for ₹25,000". Links into the live demo stores, ends on a Calendly CTA.',
+      'Old paid landing page for the D2C Shopify offer — "Complete Shopify Store for ₹25,000". A generic feature page with no lead form, no pixel, no qualifier. Replaced 2026-09-10 by /shopify-store-build.',
     traffic: 'external',
     indexed: false,
     inNav: false,
     host: 'chronexa-portfolio.vercel.app',
     launched: '2026-06-22',
     notes:
-      'Separate Vercel project (chronexa-portfolio) built from the Ecommerce/Portfolio repo — a hand-written static page, not part of this Next.js site.',
+      'DO NOT send ad traffic here any more. Separate static Vercel project (chronexa-portfolio), no instrumentation. Kept only as a link to the demo stores.',
+  },
+  {
+    path: 'shopify-store-build',
+    name: 'Shopify Redesign & Conversion for Established Brands (Meta ads — UK)',
+    purpose:
+      'Paid landing page for established Shopify stores — redesign + conversion-focused rebuild, not a new-store build. Repositioned 2026-09-21 from the earlier India / ₹25,000 / Instagram-first offer on this same URL. Qualifier form (Shopify store URL required, GBP budget gate) posts to /api/contact as source "shopify-store-landing"; qualified leads get the Calendly booking, everyone else a nurture reply. Fires a Meta Pixel + CAPI Lead event.',
+    traffic: 'paid',
+    indexed: false,
+    inNav: false,
+    host: 'chronexa.io',
+    launched: '2026-09-10',
+    notes:
+      'The only e-commerce ad destination. UK test decided 2026-09-21 — quote-based, no stated price, targets stores that already exist. Strategy: docs/strategy/meta-ecommerce-ads-playbook.md (pre-repositioning, kept for the lead-quality evidence, not the current offer). noindex so it cannot compete with the organic /d2c-ecommerce-automation page. Feeds the n8n → Meta QualifiedLead/BookedCall/Purchase feedback loop.',
+  },
+  {
+    path: 'shopify-store-build-india',
+    name: 'Shopify Redesign & Conversion for Established Brands (Meta ads — India metro)',
+    purpose:
+      'Duplicate of /shopify-store-build created 2026-09-24 to repurpose the same UK campaign narrative and creatives for affluent Indian metros (Mumbai, Delhi NCR, Bengaluru, Pune, Hyderabad, Chennai) at ₹1,500/day. Same content, same three ad-concept narrative, same Calendly. Only difference: INR budget bands (under-20k-inr / 20-50k-inr / 50k-1lakh-inr / 1lakh+-inr since 2026-09-25; lakh bands before) instead of GBP, India-first country-code default, and a distinct form source ("shopify-store-landing-india") so leads stay separately labelled from the UK page in Baserow/Sheets/CAPI. Since the 2026-09-24 flagship overhaul it renders the same ShopifyStorePage component with the INDIA settings from shopify-store-build/markets.ts — one page, two markets, no fork.',
+    traffic: 'paid',
+    indexed: false,
+    inNav: false,
+    host: 'chronexa.io',
+    launched: '2026-09-24',
+    notes:
+      'Meta campaign "Shopify Redesign — India Metro (Sep 2026)" (120248274304840534) — campaign, ad set and all 3 ads kept PAUSED, not launched. /api/contact treats this source identically to shopify-store-landing via the isShopifyLanding() gate (qualifier fields, phone requirement, source-aware CAPI phone hashing) — only the budget-band values and the Source label differ.',
   },
 ];
 
