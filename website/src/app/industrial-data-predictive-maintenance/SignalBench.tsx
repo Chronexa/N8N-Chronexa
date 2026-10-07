@@ -1,0 +1,13 @@
+'use client';
+
+import { useState } from 'react';
+import s from './SignalBench.module.css';
+
+const ASSETS = [
+  {tab:'Pump 04',tag:'P04.VIB.RMS',reading:'7.2 mm/s',transport:'MQTT message arrived',context:['Asset: cooling-water pump 04','State: running at 92% load','Baseline: 3.1–4.0 mm/s at this load','Maintenance: bearing replaced 14 months ago'],decision:'Inspect within the next planned maintenance window',reason:'Vibration is outside this asset’s load-adjusted baseline, but temperature and flow remain stable.'},
+  {tab:'Line 2 motor',tag:'M2.TEMP.DE',reading:'81.4 °C',transport:'OPC UA value changed',context:['Asset: conveyor drive motor, line 2','State: idle after washdown','Baseline: temperature should be falling','Neighbour signal: current draw is zero','Work order: electrical inspection still open'],decision:'Route to the open electrical work order',reason:'The number is meaningful because the operating state and unresolved maintenance record travelled with it.'},
+  {tab:'Compressor',tag:'C7.PRESS.OUT',reading:'6.8 bar',transport:'Historian sample stored',context:['Asset: compressor 07','Recipe target: 7.0 bar ±0.4','State: loaded','Quality state: sensor calibration current','Trend: stable across the last 40 minutes'],decision:'No maintenance action',reason:'A threshold-only alert would create noise. In operating context, this is a healthy observation.'},
+  {tab:'Unknown tag',tag:'AI_4307',reading:'43.7',transport:'Broker is receiving data',context:['Asset: not mapped','Unit: not supplied','Operating state: unavailable','Quality flag: unavailable','Maintenance history: no asset key'],decision:'Do not model or alert yet',reason:'Connectivity succeeded. The signal still has no usable meaning, owner or relationship to an asset.'},
+] as const;
+
+export default function SignalBench(){const [active,setActive]=useState(0);const a=ASSETS[active];return <div className={s.bench}><div className={s.bar}><span>SIGNAL BENCH</span><span>ILLUSTRATIVE · PICK AN ASSET</span></div><div className={s.tabs} role="tablist" aria-label="Industrial signal examples">{ASSETS.map((x,i)=><button type="button" role="tab" id={`signal-tab-${i}`} aria-controls="signal-panel" aria-selected={active===i} key={x.tab} onClick={()=>setActive(i)}>{x.tab}</button>)}</div><div className={s.panel} id="signal-panel" role="tabpanel" aria-labelledby={`signal-tab-${active}`}><div className={s.reading}><span>{a.tag}</span><b>{a.reading}</b><small>✓ {a.transport}</small></div><div className={s.arrow} aria-hidden="true">↓ <span>ADD MEANING</span></div><ul>{a.context.map(x=><li key={x}>{x}</li>)}</ul><div className={s.decision}><span>OPERATIONAL DECISION</span><b>{a.decision}</b><p>{a.reason}</p></div></div></div>}

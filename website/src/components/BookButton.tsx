@@ -1,7 +1,7 @@
 'use client';
 
 import { site } from '../lib/site';
-import { trackBookCta } from '../lib/cal';
+import { attributedBookingUrl, trackBookCta } from '../lib/cal';
 
 /**
  * Primary conversion CTA → opens the Cal.com booking in a new tab (keeps the
@@ -25,8 +25,12 @@ export default function BookButton({
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => {
-        trackBookCta(location);
+      onClick={(event) => {
+        const pathname = window.location.pathname;
+        // Update synchronously before the browser follows the anchor. The plain
+        // untagged href remains a no-JS fallback.
+        event.currentTarget.href = attributedBookingUrl(site.booking, { location, pathname });
+        trackBookCta(location, pathname);
         onClick?.();
       }}
     >

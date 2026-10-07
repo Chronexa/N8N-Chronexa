@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { preconnect } from 'react-dom';
 import ShopifyStorePage from './ShopifyStorePage';
 import { site } from '../../lib/site';
 import { FAQS } from './content';
@@ -20,13 +21,13 @@ const SLUG = 'shopify-store-build';
 export const metadata: Metadata = {
   title: 'Shopify Store Redesign for D2C Brands',
   description:
-    'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Contact us for your redesign.',
+    'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Get a free store audit.',
   robots: { index: false, follow: true },
   alternates: { canonical: `${site.url}/${SLUG}` },
   openGraph: {
     title: 'Shopify Store Redesign for D2C Brands | Chronexa',
     description:
-      'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Contact us for your redesign.',
+      'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Get a free store audit.',
     url: `${site.url}/${SLUG}`,
     type: 'website',
   },
@@ -38,11 +39,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Shopify Store Redesign for D2C Brands | Chronexa',
     description:
-      'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Contact us for your redesign.',
+      'We redesign Shopify stores for growing D2C brands: custom design, SEO, brand creative and video, payments, shipping and automation. Get a free store audit.',
   },
 };
 
 export default function Page() {
+  // Open the Meta Pixel's connection early: its load is what counts the ad click as a "landing page view".
+  preconnect('https://connect.facebook.net');
   const url = `${site.url}/${SLUG}`;
 
   const serviceSchema = {

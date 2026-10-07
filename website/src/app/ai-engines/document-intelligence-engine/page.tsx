@@ -14,9 +14,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/document-intelligence-engine`;
-const TITLE = 'AI Document Intelligence — Ask Your Documents, Get Cited Answers | Chronexa';
-const DESCRIPTION =
-  'Chronexa\'s Document Intelligence Engine reads every document your business runs on — leases, loan files, tax returns, audit and compliance files — across legal, finance, compliance and tax, and turns them into a private knowledge base you can simply ask. Plain-language questions return answers in seconds, each cited to the exact source page, grounded only in your own documents with nothing sent to public AI.';
+const TITLE = 'AI Document Intelligence: Cited Answers From Your Files';
+const DESCRIPTION = 'Ask plain-language questions of every document your business runs on and get answers cited to the exact page. Built inside your environment.';
 
 export const metadata: Metadata = {
   title: TITLE,

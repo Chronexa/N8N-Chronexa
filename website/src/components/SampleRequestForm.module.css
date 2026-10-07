@@ -1,0 +1,49 @@
+/* Mirrors LeadForm.module.css conventions so the two forms feel like one system.
+
+   The palette is host-overridable through the --srf-* custom properties. Every
+   fallback below is the original dark-surface value, so /document-pipeline (a
+   dark hero) renders exactly as before; ServiceOffer sets the light set because
+   its band sits on pale green, where black input fields read as a bug and break
+   the "no dark modes" rule for these pages. */
+
+.form { display: flex; flex-direction: column; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+@media (max-width: 640px) { .row { grid-template-columns: 1fr; gap: 0; } }
+
+.group { margin-bottom: 0.9rem; display: flex; flex-direction: column; }
+.group label { font-size: var(--step--1); margin-bottom: 0.35rem; color: var(--srf-label, var(--neutral-400)); }
+.group input {
+  width: 100%;
+  background: var(--srf-field-bg, var(--color-black));
+  border: 1px solid var(--srf-field-border, var(--neutral-700));
+  padding: 0.75rem 0.85rem;
+  color: var(--srf-field-ink, var(--text-dark));
+  border-radius: var(--radius-sm);
+}
+.group input::placeholder { color: var(--srf-placeholder, var(--neutral-500)); }
+.group input:focus-visible { outline: none; border-color: var(--brand-green); }
+
+.form button { width: 100%; margin-top: 0.25rem; }
+.form button:disabled { opacity: 0.7; cursor: progress; }
+
+.fine {
+  font-size: var(--step--1);
+  color: var(--srf-fine, var(--text-muted-dark));
+  text-align: center;
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+.error { font-size: var(--step--1); color: var(--color-error); margin-top: 0.6rem; text-align: center; }
+
+.success {
+  text-align: center;
+  padding: var(--spacing-md);
+  border: 1px solid var(--brand-green);
+  border-radius: var(--radius-md);
+  background: var(--brand-green-soft);
+}
+.success strong { display: block; font-size: var(--step-1); margin-bottom: 0.5rem; }
+.success p { color: var(--srf-fine, var(--text-muted-dark)); font-size: var(--step--1); }
+.success .fine { margin-top: 0.75rem; text-align: left; }
+.mail { color: var(--brand-green); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }

@@ -25,15 +25,22 @@ const contactSchema = {
 };
 
 export const metadata: Metadata = {
-  title: 'Book a Free Automation Audit',
+  title: { absolute: 'Discuss Your Technology Project | Chronexa' },
   description:
-    "Tell us about your workflows and we'll show you where AI can save time and cost. No spam, no sales pitch — just actionable insights.",
+    "Talk to Chronexa about software development, AI automation, voice agents, Shopify, UX design or dedicated engineering support.",
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'Book a Free Automation Audit | Chronexa',
-    description: "Tell us about your workflows and we'll show you where AI can save time and cost.",
+    title: 'Discuss Your Technology Project | Chronexa',
+    description: "Talk to Chronexa about software development, AI automation, voice agents, Shopify, UX design or dedicated engineering support.",
     url: '/contact',
     type: 'website',
+    images: [site.ogImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Discuss Your Technology Project | Chronexa',
+    description: "Talk to Chronexa about software development, AI automation, voice agents, Shopify, UX design or dedicated engineering support.",
+    images: [site.ogImage],
   },
 };
 
@@ -43,11 +50,10 @@ export default function ContactPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }} />
       <div className={`container ${styles.grid}`}>
         <div className={styles.intro}>
-          <p className="eyebrow">Automation Audit</p>
+          <p className="eyebrow">Talk to our team</p>
           <h1 className={styles.h1}>Let&apos;s talk today</h1>
           <p className="heroDescription">
-            Sometimes the hardest part is reaching out — but once you do, we&apos;ll make the
-            rest easy. We&apos;ll review your workflows and suggest where AI can save time &amp; cost.
+            Tell us about your product, technology challenge or engineering roadmap. We’ll discuss your priorities and help define a practical next step.
           </p>
           <div className={styles.bookRow}>
             <BookButton location="contact-intro">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
@@ -56,7 +62,6 @@ export default function ContactPage() {
           <ul className={styles.meta}>
             <li><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
             <li><span>Location</span>{site.locality}</li>
-            <li><span>Hours</span>{site.hours}</li>
           </ul>
         </div>
 

@@ -1,0 +1,522 @@
+{
+  "name": "AI Error Triage & Auto-Retry",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## AI error triage and auto-retry\n\n**Reference architecture.**\n\nEvery other workflow points here when it fails. The failure is checked against known incidents so one outage doesn't become fifty alerts.\n\nA new failure gets its execution data pulled and an AI classifies it: transient, data problem or real bug. Transient failures are retried automatically after a pause. Everything else gets an enriched alert with the cause.\n\nRepeats bump a counter, and anything that keeps failing escalates to the owner.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "any-workflow-fails",
+      "name": "Any Workflow Fails",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "prepare-context",
+      "name": "Prepare Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "failing-itself-",
+      "name": "Failing Itself?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "bare-slack-alert",
+      "name": "Bare Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        480
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "find-existing-incident",
+      "name": "Find Existing Incident",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "decide-path",
+      "name": "Decide Path",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "route-path",
+      "name": "Route Path",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1200,
+        80
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.path }}",
+                    "rightValue": "new",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.path }}",
+                    "rightValue": "duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.path }}",
+                    "rightValue": "escalate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Escalate"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "fetch-execution-data",
+      "name": "Fetch Execution Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        -140
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://n8n.example.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "classify-error",
+      "name": "Classify Error",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1680,
+        -140
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-haiku",
+      "name": "Claude Haiku",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        -400
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "error-schema",
+      "name": "Error Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1872,
+        -400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "log-incident",
+      "name": "Log Incident",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        -140
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "safe-to-retry-",
+      "name": "Safe to Retry?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        -140
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "wait-60-seconds",
+      "name": "Wait 60 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2400,
+        -260
+      ],
+      "parameters": {
+        "resume": "timeInterval"
+      }
+    },
+    {
+      "id": "retry-execution",
+      "name": "Retry Execution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        -260
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.example.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "alert-with-cause",
+      "name": "Alert with Cause",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2400,
+        -20
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "bump-incident-counter",
+      "name": "Bump Incident Counter",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        180
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "escalate-to-owner",
+      "name": "Escalate to Owner",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        380
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Any Workflow Fails": {
+      "main": [
+        [
+          {
+            "node": "Prepare Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Context": {
+      "main": [
+        [
+          {
+            "node": "Failing Itself?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failing Itself?": {
+      "main": [
+        [
+          {
+            "node": "Bare Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Find Existing Incident",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Existing Incident": {
+      "main": [
+        [
+          {
+            "node": "Decide Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide Path": {
+      "main": [
+        [
+          {
+            "node": "Route Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Path": {
+      "main": [
+        [
+          {
+            "node": "Fetch Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bump Incident Counter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate to Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Classify Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classify Error",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Classify Error",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Error": {
+      "main": [
+        [
+          {
+            "node": "Log Incident",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Incident": {
+      "main": [
+        [
+          {
+            "node": "Safe to Retry?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safe to Retry?": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alert with Cause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Retry Execution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Execution": {
+      "main": [
+        [
+          {
+            "node": "Alert with Cause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

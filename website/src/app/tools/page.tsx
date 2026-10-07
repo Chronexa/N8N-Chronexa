@@ -6,18 +6,13 @@ import { CALCULATORS } from '../../components/calculators/registry';
 import styles from '../../components/calculators/calculators.module.css';
 
 const URL = `${site.url}/tools`;
-const TITLE = 'Free AI Automation ROI Calculators for Law Firms, CPA Firms & Finance Teams | Chronexa';
+const TITLE = 'Free AI Automation ROI Calculators | Chronexa';
 const DESCRIPTION =
-  'Free, ungated calculators built for professional services firms: law-firm billing leakage, CPA tax-season capacity, document processing cost. See what manual work costs you — and what automation recovers — in your own numbers.';
+  'Estimate the cost of manual document work, billing leakage and tax-season workload with our free calculators. No signup required.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  keywords: [
-    'automation ROI calculator', 'AI ROI calculator', 'billing leakage calculator',
-    'tax season capacity calculator', 'document processing cost calculator', 'free business calculators',
-    'law firm automation calculator', 'CPA firm automation calculator', 'professional services AI tools',
-  ],
   alternates: { canonical: URL },
   openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: 'website', images: [site.ogImage] },
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [site.ogImage] },
@@ -35,7 +30,7 @@ const jsonLd = {
     },
     {
       '@type': 'CollectionPage',
-      name: 'Free AI Automation Calculators for Professional Services Firms',
+      name: 'Free AI Automation ROI Calculators',
       description: DESCRIPTION,
       url: URL,
       publisher: { '@type': 'Organization', name: site.name, url: site.url },

@@ -1,5 +1,6 @@
 import { createClient } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import { MERGED_POSTS } from "../lib/blog-seo";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your-project-id";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -26,7 +27,7 @@ export function urlFor(source: SanityImage) {
 }
 
 export interface SanityImage {
-  asset?: { _ref?: string };
+  asset?: { _ref?: string; _id?: string; url?: string; metadata?: { lqip?: string; dimensions?: { width?: number; height?: number } } };
   alt?: string;
 }
 
@@ -37,12 +38,31 @@ export interface Post {
   title: string;
   slug: { current: string };
   excerpt?: string;
+  /** @deprecated legacy Blog/Resources split — superseded by industry/topic/format. */
   category?: string;
+  /** Blog taxonomy — see src/lib/blog-taxonomy.ts for labels and hub rules. */
+  industry?: string;
+  topic?: string;
+  format?: string;
+  region?: string;
+  featured?: boolean;
   readingTime?: number;
   publishedAt?: string;
   updatedAt?: string;
   keyTakeaways?: string[];
   hero?: SanityImage;
+  /** width/height of the hero asset. Cards are 16:9 (1.78); anything much squarer
+   *  must be fitted rather than cropped or it loses ~43% of the illustration. */
+  heroRatio?: number;
+  /** Dominant swatch colour + how much of the image it covers, from Sanity's own
+   *  palette metadata. Together these identify current house-style covers versus
+   *  the older glowing-AI art. See isHouseStyleCover in BlogIndex.tsx. */
+  heroBg?: string;
+  heroPop?: number;
+  /** Asset filename. Covers commissioned in the 2026-08 art direction are uploaded
+   *  as `cover-<slug>.png`; that prefix is how the card knows to show the image
+   *  rather than fall back to a colour tile. See isCommissionedCover in BlogIndex. */
+  heroFile?: string;
   // PortableText blocks — typed loosely to avoid a hard @portabletext dependency here.
   body?: unknown[];
   metaTitle?: string;
@@ -51,13 +71,19 @@ export interface Post {
 }
 
 const POST_FIELDS = `
-  _id, _createdAt, title, slug, excerpt, category, readingTime, publishedAt, updatedAt,
+  _id, _createdAt, title, slug, excerpt, category, industry, topic, format, region,
+  readingTime, publishedAt, updatedAt,
   keyTakeaways, hero, body, metaTitle, metaDescription,
   author->{ name, role, about, linkedin, avatar }
 `;
 
 const CARD_FIELDS = `
-  _id, _createdAt, title, slug, excerpt, category, readingTime, publishedAt, hero,
+  _id, _createdAt, title, slug, excerpt, category, industry, topic, format, region,
+  featured, readingTime, publishedAt, hero,
+  "heroRatio": hero.asset->metadata.dimensions.aspectRatio,
+  "heroBg": hero.asset->metadata.palette.dominant.background,
+  "heroPop": hero.asset->metadata.palette.dominant.population,
+  "heroFile": hero.asset->originalFilename,
   author->{ name, role }
 `;
 
@@ -77,34 +103,93 @@ async function safeFetch<T>(query: string, params: Record<string, unknown> | und
 
 /** All slugs — used by generateStaticParams for the blog. */
 export async function getBlogSlugs(): Promise<{ slug: string }[]> {
-  return safeFetch(`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`, undefined, []);
-}
-
-/** Single post by slug. */
-export async function getBlogPostBySlug(slug: string): Promise<Post | null> {
-  return safeFetch(`*[_type == "post" && slug.current == $slug][0]{ ${POST_FIELDS} }`, { slug }, null);
-}
-
-/** Published posts, newest first — used by the blog index (no heavy body field). */
-export async function getAllPosts(): Promise<Post[]> {
-  return safeFetch(`*[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc){ ${CARD_FIELDS} }`, undefined, []);
+  return safeFetch(
+    `*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]{ "slug": slug.current }`,
+    undefined,
+    [],
+  );
 }
 
 /**
- * Up to 3 related posts for the "Keep reading" row: same category first,
- * newest first, padded with the latest posts if the category is thin.
+ * Single post by slug.
+ *
+ * Deliberately NOT wrapped in safeFetch. A swallowed network error returns null,
+ * the page calls notFound(), and Next bakes a permanent 404 for a live article —
+ * which is exactly what happened when one query timed out mid-build. A missing
+ * post and an unreachable CMS are different things: only the first is a 404, and
+ * the second must fail the build loudly so it gets retried.
  */
-export async function getRelatedPosts(slug: string, category?: string): Promise<Post[]> {
+export async function getBlogPostBySlug(slug: string): Promise<Post | null> {
+  return client.fetch<Post | null>(
+    `*[_type == "post" && slug.current == $slug && !(_id in path("drafts.**"))][0]{ ${POST_FIELDS} }`,
+    { slug },
+  );
+}
+
+/** Published posts, newest first — used by the blog index (no heavy body field). */
+// Posts folded into another page (lib/blog-seo.ts) now 301; never list or link them.
+const notMerged = (p: Post) => !(p.slug.current in MERGED_POSTS);
+
+export async function getAllPosts(): Promise<Post[]> {
   const posts = await safeFetch<Post[]>(
-    `*[_type == "post" && defined(slug.current) && slug.current != $slug]
+    `*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
+      | order(coalesce(publishedAt, _createdAt) desc){ ${CARD_FIELDS} }`,
+    undefined,
+    [],
+  );
+  return posts.filter(notMerged);
+}
+
+/**
+ * Up to 3 related posts for the "Keep reading" row.
+ *
+ * Ranked by taxonomy overlap rather than the old Blog/Resources `category`, which
+ * matched ~85% of the corpus and so ranked almost nothing. Same industry AND topic
+ * is the strongest signal, then same industry, then same topic, padded with the
+ * newest posts so the row is never short.
+ */
+export async function getRelatedPosts(slug: string, opts?: { industry?: string; topic?: string }): Promise<Post[]> {
+  const posts = (await safeFetch<Post[]>(
+    `*[_type == "post" && defined(slug.current) && slug.current != $slug && !(_id in path("drafts.**"))]
       | order(coalesce(publishedAt, _createdAt) desc)
-      { ${CARD_FIELDS} }[0...24]`,
+      { ${CARD_FIELDS} }[0...70]`,
     { slug },
     []
+  )).filter(notMerged);
+  const score = (p: Post) =>
+    (opts?.industry && p.industry === opts.industry ? 2 : 0) + (opts?.topic && p.topic === opts.topic ? 1 : 0);
+  // Stable sort: equal scores keep the newest-first order from the query.
+  return posts
+    .map((p, i) => ({ p, i, s: score(p) }))
+    .sort((a, b) => b.s - a.s || a.i - b.i)
+    .slice(0, 3)
+    .map((x) => x.p);
+}
+
+/** Every post in one hub, newest first. Powers /blog/industries/* and /blog/topics/*. */
+export async function getPostsForHub(axis: 'industry' | 'topic', value: string): Promise<Post[]> {
+  // Field name is interpolated, not parameterised — GROQ cannot parameterise an
+  // attribute path. Safe because `axis` is a union of two literals, never user input.
+  const posts = await safeFetch<Post[]>(
+    `*[_type == "post" && defined(slug.current) && ${axis} == $value && !(_id in path("drafts.**"))]
+      | order(coalesce(publishedAt, _createdAt) desc){ ${CARD_FIELDS} }`,
+    { value },
+    []
   );
-  const same = category ? posts.filter((p) => p.category === category) : [];
-  const rest = posts.filter((p) => !same.includes(p));
-  return [...same, ...rest].slice(0, 3);
+  return posts.filter(notMerged);
+}
+
+/** Per-hub post counts, so the index can show depth without fetching every post. */
+export async function getHubCounts(axis: 'industry' | 'topic'): Promise<Record<string, number>> {
+  const rows = await safeFetch<{ value: string | null }[]>(
+    `*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]{ "value": ${axis} }`,
+    undefined,
+    []
+  );
+  return rows.reduce<Record<string, number>>((acc, r) => {
+    if (r.value) acc[r.value] = (acc[r.value] || 0) + 1;
+    return acc;
+  }, {});
 }
 
 /* ----------------------------- Case studies ----------------------------- */
@@ -112,11 +197,22 @@ export interface CaseStudy {
   _id: string;
   _updatedAt?: string;
   title: string;
+  metaTitle?: string;
+  metaDescription?: string;
   slug: { current: string };
   thumb?: SanityImage;
   logo?: SanityImage;
   overview?: string;
+  quickAnswer?: string;
+  targetKeyword?: string;
+  secondaryKeywords?: string[];
+  toolsUsed?: string[];
+  workflowSteps?: { _key: string; name: string; description: string }[];
+  safeguards?: string[];
+  publishedAt?: string;
   projectType?: string;
+  evidenceType?: 'client' | 'internal' | 'reference' | 'market';
+  evidenceNote?: string;
   serviceIncluded?: string[];
   companyName?: string;
   year?: string;
@@ -125,6 +221,7 @@ export interface CaseStudy {
   websiteLink?: string;
   content1?: unknown[];
   content2?: unknown[];
+  technicalContent?: unknown[];
   testimonial?: string;
   client?: string;
   clientDetails?: string;
@@ -137,9 +234,13 @@ export interface CaseStudy {
 }
 
 const CASE_FIELDS = `
-  _id, _updatedAt, title, slug, thumb, logo, overview, projectType, serviceIncluded,
+  _id, _createdAt, _updatedAt, title, metaTitle, metaDescription, slug,
+  thumb{alt, hotspot, crop, asset->{_id, url, metadata{lqip, dimensions}}}, logo,
+  overview, quickAnswer, targetKeyword, secondaryKeywords, toolsUsed,
+  workflowSteps[]{_key, name, description}, safeguards, publishedAt,
+  projectType, evidenceType, evidenceNote, serviceIncluded,
   companyName, year, industry, websiteName, websiteLink,
-  content1, content2, testimonial, client, clientDetails, clientImage, youtubeLink,
+  content1, content2, technicalContent, testimonial, client, clientDetails, clientImage, youtubeLink,
   stat1, stat1Text, stat2, stat2Text
 `;
 

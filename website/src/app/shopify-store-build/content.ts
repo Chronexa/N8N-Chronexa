@@ -1,7 +1,7 @@
 /**
  * Copy for the Shopify landing pages (/shopify-store-build = US/EU, /shopify-store-build-india).
- * Positioning (decided 2026-09-25): a Shopify store REDESIGN offer. CTA is "Contact Us" everywhere (2026-09-28, plain words only) —
- * not an audit. Plain, standard agency language; scope in clearly labelled services; no prices and
+ * Positioning (decided 2026-09-25): a Shopify store REDESIGN offer. CTA was "Contact Us" (2026-09-28); on 2026-10-01 Ankit
+ * moved it to a FREE STORE AUDIT (phone follow-up, no Calendly) to lift form fills. Plain, standard agency language; scope in clearly labelled services; no prices and
  * no invented results (proof = three stores we built, live on the page). Market-specific payment
  * and shipping names live in markets.ts. No "world's leading"-style superlatives (ASA/CAP).
  */
@@ -16,11 +16,17 @@ export const QUOTE = {
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 
-export type AngleId = 'outgrown' | 'traffic' | 'grew';
+export type AngleId = 'outgrown' | 'traffic' | 'grew' | 'leak' | 'proof' | 'd2c';
 
-/** One hero per Meta ad concept, chosen by ?angle= on the ad link (default 'outgrown').
+/** One hero per Meta ad concept, chosen by ?angle= on the ad link (default 'outgrown'; the India page defaults to 'd2c',
+ * which matches its only live ad, C1 "Shopify Stores for D2C Brands").
  * Each headline is exactly 3 lines (Flagship.module.css) so swapping it can't shift the layout. */
 export const ANGLES: Record<AngleId, { lines: [string, string]; em: string; lead: string }> = {
+  d2c: {
+    lines: ['Shopify stores', 'built for'],
+    em: 'D2C brands.',
+    lead: 'Send us your store link. We review it and call you with a free audit: what to fix, and a fixed price to fix it. Designed and built by the team behind LUMIQ, VITALEDGE and Loom & Little.',
+  },
   outgrown: {
     lines: ['Your Shopify store', 'has outgrown'],
     em: 'its design.',
@@ -35,6 +41,17 @@ export const ANGLES: Record<AngleId, { lines: [string, string]; em: string; lead
     lines: ['Your brand grew.', 'Did your'],
     em: 'store?',
     lead: 'We redesign Shopify stores so they match the brand you are now: custom design, photos and videos, Google search and automation, all by one team.',
+  },
+  // Meta test batch 2 (2026-09-30): B1 commercial leakage, B4 proof / real work.
+  leak: {
+    lines: ['Ads got the click.', 'Did your store'],
+    em: 'earn the order?',
+    lead: 'We find where your Shopify store loses buyers after the click, on the product page, in the cart or at checkout, and fix it.',
+  },
+  proof: {
+    lines: ['Three brands.', 'Three stores.'],
+    em: 'None look alike.',
+    lead: 'LUMIQ, VITALEDGE and Loom & Little: stores we designed and built, each around its brand and how its customers shop. See them live below.',
   },
 };
 

@@ -1,0 +1,154 @@
+{
+  "name": "Voice Agent Appointment Booking",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "9d135a18-a22f-4819-bbe9-db2e790da40a",
+      "name": "Check Availability (from voice agent)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -144
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "ffc91b4f-b590-445d-b70c-8fbe9d628b00",
+      "name": "Read Booked Slots",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        -144
+      ],
+      "parameters": {
+        "operation": "getAll"
+      }
+    },
+    {
+      "id": "48490a93-e99b-40d2-8992-2698c562c509",
+      "name": "Return Free Slots",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        464,
+        -144
+      ],
+      "parameters": {
+        "respondWith": "json"
+      }
+    },
+    {
+      "id": "77e8bb12-5554-4fb6-b840-7ca402592364",
+      "name": "Work Out Free Slots",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -144
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4eab4d3-501f-4be9-afae-bf2c579f366a",
+      "name": "Book Appointment (from voice agent)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        320
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "6b688e35-40f3-4a91-a07b-dbda90cc5f62",
+      "name": "Create Calendar Booking",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        320
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "d6c32dc5-fb24-45ca-8e5d-81e17c0bcbf1",
+      "name": "Confirm Booking",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        320
+      ],
+      "parameters": {
+        "respondWith": "json"
+      }
+    }
+  ],
+  "connections": {
+    "Check Availability (from voice agent)": {
+      "main": [
+        [
+          {
+            "node": "Read Booked Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Booked Slots": {
+      "main": [
+        [
+          {
+            "node": "Work Out Free Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Work Out Free Slots": {
+      "main": [
+        [
+          {
+            "node": "Return Free Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Book Appointment (from voice agent)": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Booking": {
+      "main": [
+        [
+          {
+            "node": "Confirm Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

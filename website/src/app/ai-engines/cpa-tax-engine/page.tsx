@@ -14,9 +14,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/cpa-tax-engine`;
-const TITLE = 'AI CPA & Tax Engine — Automated Tax Return Preparation | Chronexa';
-const DESCRIPTION =
-  'Chronexa\'s AI CPA & Tax Engine ingests every client document, extracts all fields including K-1s and brokerage composites, pre-fills the return in your tax software, and routes a reviewer-ready file to your CPA. Live in 3–5 weeks.';
+const TITLE = 'AI CPA & Tax Engine for Tax Return Preparation';
+const DESCRIPTION = 'An AI tax engine for CPA firms: client documents collected, classified and extracted, with reviewer-ready returns and uncertain items flagged.';
 
 export const metadata: Metadata = {
   title: TITLE,

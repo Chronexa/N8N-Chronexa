@@ -1,0 +1,632 @@
+{
+  "name": "Insurance Claims Triage & Routing",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Insurance claims triage\n\n**Reference architecture.**\n\nClaims arrive by email or API and are normalised into one shape. Claude extracts the claim details, the policy is checked in the CRM, and lapsed policies get a reply instead of a queue slot.\n\nSeverity is assessed against a fixed schema, a rules step checks fraud indicators, and the claim is routed to the right adjuster team. Suspected fraud alerts the investigations team.\n\n**Every decision is written to an audit log** for regulatory review.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "claims-inbox",
+      "name": "Claims Inbox",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "claims-api",
+      "name": "Claims API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "normalise-email-claim",
+      "name": "Normalise Email Claim",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "normalise-api-claim",
+      "name": "Normalise API Claim",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "merge-intake",
+      "name": "Merge Intake",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        480,
+        120
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "extract-claim-details",
+      "name": "Extract Claim Details",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        360
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "look-up-policy",
+      "name": "Look Up Policy",
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        960,
+        120
+      ],
+      "parameters": {
+        "resource": "account",
+        "operation": "get"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "policy-active-",
+      "name": "Policy Active?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "reply-policy-lapsed",
+      "name": "Reply: Policy Lapsed",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        380
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "assess-severity",
+      "name": "Assess Severity",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1440,
+        60
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet-severity-",
+      "name": "Claude Sonnet (Severity)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1368,
+        -180
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "severity-schema",
+      "name": "Severity Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1536,
+        -180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "check-fraud-indicators",
+      "name": "Check Fraud Indicators",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        60
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fraud-flag-",
+      "name": "Fraud Flag?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        60
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "alert-investigations-team",
+      "name": "Alert Investigations Team",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        -180
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "route-by-severity",
+      "name": "Route by Severity",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2160,
+        120
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "critical",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Critical"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "standard",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Standard"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "fast-track",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Fast-track"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "assign-senior-adjuster",
+      "name": "Assign Senior Adjuster",
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        -40
+      ],
+      "parameters": {
+        "resource": "case",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "assign-adjuster-pool",
+      "name": "Assign Adjuster Pool",
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        120
+      ],
+      "parameters": {
+        "resource": "case",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "fast-track-approval",
+      "name": "Fast-track Approval",
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        280
+      ],
+      "parameters": {
+        "resource": "case",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "write-audit-log",
+      "name": "Write Audit Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2640,
+        120
+      ],
+      "parameters": {
+        "operation": "append"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "acknowledge-claimant",
+      "name": "Acknowledge Claimant",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2880,
+        120
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Claims Inbox": {
+      "main": [
+        [
+          {
+            "node": "Normalise Email Claim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claims API": {
+      "main": [
+        [
+          {
+            "node": "Normalise API Claim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Email Claim": {
+      "main": [
+        [
+          {
+            "node": "Merge Intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise API Claim": {
+      "main": [
+        [
+          {
+            "node": "Merge Intake",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Intake": {
+      "main": [
+        [
+          {
+            "node": "Extract Claim Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Claim Details",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Claim Details": {
+      "main": [
+        [
+          {
+            "node": "Look Up Policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Look Up Policy": {
+      "main": [
+        [
+          {
+            "node": "Policy Active?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Policy Active?": {
+      "main": [
+        [
+          {
+            "node": "Assess Severity",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply: Policy Lapsed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet (Severity)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Assess Severity",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Severity Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Assess Severity",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess Severity": {
+      "main": [
+        [
+          {
+            "node": "Check Fraud Indicators",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Fraud Indicators": {
+      "main": [
+        [
+          {
+            "node": "Fraud Flag?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fraud Flag?": {
+      "main": [
+        [
+          {
+            "node": "Alert Investigations Team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route by Severity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Investigations Team": {
+      "main": [
+        [
+          {
+            "node": "Write Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Severity": {
+      "main": [
+        [
+          {
+            "node": "Assign Senior Adjuster",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign Adjuster Pool",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fast-track Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Senior Adjuster": {
+      "main": [
+        [
+          {
+            "node": "Write Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Adjuster Pool": {
+      "main": [
+        [
+          {
+            "node": "Write Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fast-track Approval": {
+      "main": [
+        [
+          {
+            "node": "Write Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Audit Log": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge Claimant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

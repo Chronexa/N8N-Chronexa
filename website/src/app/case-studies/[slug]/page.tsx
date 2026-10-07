@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
@@ -20,14 +19,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cs = await getCaseStudyBySlug(slug);
   if (!cs) return { title: 'Not Found' };
-  const description = cs.overview || `How Chronexa helped ${cs.companyName || 'a client'} with AI automation.`;
+  const title = cs.metaTitle || `${cs.title} | ${site.name}`;
+  const full = (cs.metaDescription || cs.overview || `How Chronexa helped ${cs.companyName || 'a client'} with AI automation.`).replace(/\s+/g, ' ').trim();
+  // Google shows ~155 characters; long Sanity overviews were being cut mid-sentence.
+  const description = full.length <= 158 ? full : full.slice(0, 155).replace(/\s+\S*$/, '') + '…';
   const og = cs.thumb?.asset ? urlFor(cs.thumb).width(1200).height(630).url() : site.ogImage;
   return {
-    title: { absolute: `${cs.title} | ${site.name}` },
+    title: { absolute: title },
     description,
     alternates: { canonical: `/case-studies/${slug}` },
-    openGraph: { title: cs.title, description, url: `/case-studies/${slug}`, type: 'article', images: [og] },
-    twitter: { card: 'summary_large_image', title: cs.title, description, images: [og] },
+    openGraph: { title, description, url: `/case-studies/${slug}`, type: 'article', images: [og] },
+    twitter: { card: 'summary_large_image', title, description, images: [og] },
   };
 }
 
@@ -63,6 +65,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   const logo = cs.logo?.asset ? urlFor(cs.logo).width(240).auto('format').url() : null;
   const clientImg = cs.clientImage?.asset ? urlFor(cs.clientImage).width(96).height(96).fit('crop').url() : null;
+  const cover = cs.thumb?.asset ? urlFor(cs.thumb).width(1440).height(810).fit('crop').auto('format').url() : null;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -71,7 +74,11 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         '@type': 'Article',
         headline: cs.title,
         description: cs.overview,
-        about: cs.industry,
+        about: [cs.industry, cs.targetKeyword].filter(Boolean),
+        keywords: [cs.targetKeyword, ...(cs.secondaryKeywords || []), ...(cs.toolsUsed || [])].filter(Boolean).join(', '),
+        image: cover || undefined,
+        datePublished: cs.publishedAt,
+        dateModified: cs._updatedAt,
         author: { '@type': 'Organization', name: site.name, url: site.url },
         publisher: { '@type': 'Organization', name: site.name },
         mainEntityOfPage: `${site.url}/case-studies/${slug}`,
@@ -103,12 +110,20 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <h1 className={styles.title}>{cs.title}</h1>
           {cs.overview && <p className="heroDescription">{cs.overview}</p>}
           <ul className={styles.facts}>
+            {cs.evidenceType && <li><span>Proof basis</span>{evidenceLabel(cs.evidenceType)}</li>}
             {cs.industry && <li><span>Industry</span>{cs.industry}</li>}
             {cs.year && <li><span>Year</span>{cs.year}</li>}
             {cs.serviceIncluded?.length ? <li><span>Services</span>{cs.serviceIncluded.join(', ')}</li> : null}
             {cs.websiteLink && <li><span>Website</span><a href={cs.websiteLink} target="_blank" rel="noopener noreferrer">{cs.websiteName || cs.websiteLink}</a></li>}
           </ul>
+          {cs.evidenceNote && <p className={styles.evidenceNote}>{cs.evidenceNote}</p>}
         </div>
+
+        {cover && (
+          <div className={`container ${styles.coverWrap}`}>
+            <img className={styles.cover} src={cover} alt={cs.thumb?.alt || `Workflow architecture for ${cs.title}`} width="1440" height="810" />
+          </div>
+        )}
 
         {(cs.stat1 || cs.stat2) && (
           <div className={`container ${styles.statsRow}`}>
@@ -118,8 +133,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         )}
 
         <div className={`container ${styles.body}`}>
+          {cs.quickAnswer && <section className={styles.answerBox} aria-labelledby="quick-answer"><h2 id="quick-answer">The short answer</h2><p>{cs.quickAnswer}</p></section>}
+          {cs.toolsUsed?.length ? <section><h2>Tools and systems used</h2><ul className={styles.toolList}>{cs.toolsUsed.map((tool) => <li key={tool}>{tool}</li>)}</ul></section> : null}
           {cs.content1 ? <PortableText value={normalizeHeadings(cs.content1) as never} components={components} /> : null}
+          {cs.workflowSteps?.length ? <section><h2>How the workflow runs</h2><ol className={styles.steps}>{cs.workflowSteps.map((step) => <li key={step._key}><strong>{step.name}</strong><p>{step.description}</p></li>)}</ol></section> : null}
           {cs.content2 ? <PortableText value={normalizeHeadings(cs.content2) as never} components={components} /> : null}
+          {cs.technicalContent ? <PortableText value={normalizeHeadings(cs.technicalContent) as never} components={components} /> : null}
+          {cs.safeguards?.length ? <section><h2>Safeguards and failure handling</h2><ul>{cs.safeguards.map((item) => <li key={item}>{item}</li>)}</ul></section> : null}
         </div>
 
         {cs.testimonial && (
@@ -142,4 +162,11 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </article>
     </>
   );
+}
+
+function evidenceLabel(type: 'client' | 'internal' | 'reference' | 'market') {
+  if (type === 'client') return 'Deployed for a client';
+  if (type === 'internal') return 'Running inside Chronexa';
+  if (type === 'market') return 'Market solution story';
+  return 'Working reference build';
 }

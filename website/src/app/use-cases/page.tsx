@@ -5,15 +5,22 @@ import { site } from '../../lib/site';
 import styles from './use-cases.module.css';
 
 export const metadata: Metadata = {
-  title: 'AI Automation Use Cases — by Function & Industry',
+  title: { absolute: 'AI Automation Use Cases for Business Teams | Chronexa' },
   description:
-    'AI and n8n automation use cases by business function (finance, operations, customer support, HR) and by industry (legal, accounting, insurance, financial services, VC/PE, property, pharma, e-commerce).',
+    'See how AI can automate work across sales, support, finance, operations, legal and more. Find ideas you can apply to your business.',
   alternates: { canonical: '/use-cases' },
   openGraph: {
-    title: 'AI Automation Use Cases — by Function & Industry | Chronexa',
-    description: 'AI and n8n automation use cases by business function and by industry.',
+    title: 'AI Automation Use Cases for Business Teams | Chronexa',
+    description: 'See how AI can automate work across sales, support, finance, operations, legal and more. Find ideas you can apply to your business.',
     url: '/use-cases',
     type: 'website',
+    images: [site.ogImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AI Automation Use Cases for Business Teams | Chronexa',
+    description: 'See how AI can automate work across sales, support, finance, operations, legal and more. Find ideas you can apply to your business.',
+    images: [site.ogImage],
   },
 };
 
@@ -79,7 +86,7 @@ export default function UseCasesPage() {
           </div>
           <p style={{ marginTop: 'var(--spacing-xl)', color: 'var(--color-muted)' }}>
             Not sure where to start?{' '}
-            <Link href="/ai-readiness-assessment" className={styles.inlineLink}>
+            <Link href="/business-process-automation-consulting" className={styles.inlineLink}>
               Take the AI Readiness Assessment →
             </Link>
           </p>

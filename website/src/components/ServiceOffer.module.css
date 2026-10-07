@@ -1,0 +1,88 @@
+/**
+ * ServiceOffer — the mid-page offer band.
+ *
+ * This is the one place on a service page that is allowed to raise its voice.
+ * The pages read flat because nine sections shared one rhythm; a band with a
+ * different ground colour and a heavier heading is what breaks the scroll and
+ * gives the eye somewhere to stop.
+ */
+
+.band {
+  border: 1px solid var(--brand-green-line);
+  border-radius: var(--radius-md);
+  background-color: var(--brand-green-soft);
+  padding: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
+}
+
+/* Two columns only when a form is present. */
+.bandForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
+  align-items: start;
+}
+
+.copy { display: grid; gap: 0.7rem; align-content: start; }
+
+.eyebrow {
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--brand-green-ink);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-light);
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.body {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  max-width: 56ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: 0.6rem;
+}
+
+.reassure {
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+}
+
+/* The light palette for SampleRequestForm — see the --srf-* note in
+   SampleRequestForm.module.css. Without these the form renders its dark-surface
+   defaults: black input fields on a pale green band. */
+.formCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+
+  --srf-field-bg: var(--bg-light);
+  --srf-field-border: var(--border-light-strong);
+  --srf-field-ink: var(--text-light);
+  --srf-placeholder: var(--text-muted-light);
+  --srf-label: var(--text-light);
+  --srf-fine: var(--text-muted-light);
+}
+
+@media (max-width: 860px) {
+  .bandForm { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .heading { max-width: none; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .reassure { text-align: center; }
+}

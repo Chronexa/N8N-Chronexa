@@ -1,0 +1,126 @@
+{
+  "name": "Reddit Keyword Alerts",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "c8a5a643-7a9d-4c29-90c2-c1dcaaca6bf1",
+      "name": "Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "becfedef-c82c-46f7-b8bb-210c15773db2",
+      "name": "Build Keyword Queries",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "d26a6730-81d7-4e95-bb5c-88ff7fec2d77",
+      "name": "Search Reddit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.reddit.com",
+        "options": {}
+      }
+    },
+    {
+      "id": "f0cbb68c-8417-46cf-b754-8c10079d7d01",
+      "name": "Filter and Format Alerts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f3012bb8-38eb-423e-8ba6-8e66e8985201",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "Build Keyword Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Keyword Queries": {
+      "main": [
+        [
+          {
+            "node": "Search Reddit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Reddit": {
+      "main": [
+        [
+          {
+            "node": "Filter and Format Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter and Format Alerts": {
+      "main": [
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

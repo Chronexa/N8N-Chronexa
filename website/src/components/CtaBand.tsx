@@ -42,8 +42,12 @@ export default function CtaBand() {
             Let&apos;s find <span className="accent-phrase">the first one</span> to fix.
           </h2>
           <p className={styles.guarantee}>
-            <span aria-hidden="true">✓</span> The audit is free. If we can&apos;t find automation
-            worth more than it costs to build, you owe us nothing — and you keep the roadmap.
+            <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor"
+              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m4 10.5 4 4 8-9" />
+            </svg>{' '}
+            The audit is free. If we can&apos;t find automation
+            worth more than it costs to build, you owe us nothing, and you keep the roadmap.
           </p>
           <div className={styles.actions}>
             <BookButton location="cta-band" className="btn-primary">Book a discovery call</BookButton>

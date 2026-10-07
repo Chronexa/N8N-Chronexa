@@ -1,6 +1,6 @@
 // Generate soft-clay 3D cover images for the two 2026-07 case studies
 // (scrum-master sprint ops, multi-asset quant research) and attach them as
-// `thumb` in Sanity. OpenAI gpt-image-1 first; BFL FLUX fallback if OpenAI
+// `thumb` in Sanity. OpenAI gpt-image-1-mini first; BFL FLUX fallback if OpenAI
 // fails (billing limits have hit before). Keys from .env files, never hardcoded.
 //   node scripts/gen-case-covers.mjs
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -60,7 +60,7 @@ async function genOpenAI(prompt) {
   const res = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_KEY}` },
-    body: JSON.stringify({ model: 'gpt-image-1', prompt, size: '1536x1024', n: 1, quality: 'high' }),
+    body: JSON.stringify({ model: 'gpt-image-1-mini', prompt, size: '1536x1024', n: 1, quality: 'medium' }),
   });
   if (!res.ok) throw new Error(`OpenAI ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const b64 = (await res.json())?.data?.[0]?.b64_json;

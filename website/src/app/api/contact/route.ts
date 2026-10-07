@@ -48,6 +48,15 @@ export async function POST(req: Request) {
   const phone = String(data.phone || '').trim();
   const source = String(data.source || 'website');
   const submittedAt = new Date().toISOString();
+  // Which page the visitor was on when they submitted (path only, no query). Generic
+  // sources like `cta-band` or `chatbot:*` are shared by many pages, so Source alone
+  // cannot say which page produced the enquiry. Prefers the page the form reports,
+  // falls back to the Referer header so older callers are covered too.
+  const landingPage = (() => {
+    const raw = String(data.page || req.headers.get('referer') || '').trim();
+    if (!raw) return '';
+    try { return new URL(raw, 'https://chronexa.io').pathname.slice(0, 200); } catch { return ''; }
+  })();
   // Dedup key shared with the browser pixel's fbq eventID (when the caller sends
   // one) so Meta merges the two into one Lead instead of counting it twice. Falls
   // back to a server-generated id for sources that don't send their own yet.
@@ -157,6 +166,7 @@ export async function POST(req: Request) {
           Company: company,
           'What to automate': usecase,
           Source: source,
+          'Landing Page': landingPage,
           'Submitted At': submittedAt,
         }),
       });

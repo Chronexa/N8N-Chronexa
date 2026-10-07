@@ -50,28 +50,6 @@ type CaseDef = {
 
 const CASES: CaseDef[] = [
   {
-    slug: 'ai-automation-tax-workflow-cpa-case-study',
-    label: 'Tax workflow · CPA firm',
-    client: 'CPA firm',
-    title: 'Tax-season capacity, tripled. Headcount, flat.',
-    body: 'Client documents chased, classified and extracted automatically through the busiest weeks of the year — with uncertain items flagged for the CPA rather than guessed.',
-    stats: [
-      { value: 3, suffix: '×', label: 'documents per staff member' },
-      { value: 84, suffix: '%', label: 'less client follow-up' },
-    ],
-    window: {
-      title: 'Client intake — busy season',
-      rows: [
-        { file: 'gmail.svg', name: 'Gmail', text: 'K-1s and 1099s collected' },
-        { file: 'gdrive.svg', name: 'Google Drive', text: 'Classified into client files' },
-        { file: 'excel.svg', name: 'Excel', text: 'Fields extracted for review' },
-      ],
-      gate: 'CPA review queue → filed',
-    },
-    overlay: { big: '3×', small: 'season capacity' },
-    grad: 'a',
-  },
-  {
     slug: 'how-reservestudy-automated-report-production-with-ai',
     label: 'Intelligent document processing · Property services',
     client: 'US property-services firm',

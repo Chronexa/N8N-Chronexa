@@ -1,0 +1,882 @@
+{
+  "name": "Reserve Study Site-Visit Report",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "3a08a268-4575-40dc-a406-ff988c23dff9",
+      "name": "Site Visit Upload",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        1536,
+        528
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8e88f0b8-5e43-4b5e-b7ba-8b279bf47ab5",
+      "name": "Create Property Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1744,
+        528
+      ],
+      "parameters": {
+        "operation": "create"
+      }
+    },
+    {
+      "id": "8bb595a7-14f6-4ef2-ad54-a9e3c5058535",
+      "name": "Split Photos with Property Link",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        272
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "13cf1480-a143-4f05-8079-536ffd45b2b5",
+      "name": "Upload Photos to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2816,
+        272
+      ],
+      "parameters": {
+        "operation": "create"
+      }
+    },
+    {
+      "id": "b36e8390-62e6-48c5-a501-da8fae8936fd",
+      "name": "Download Photo from Airtable URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3040,
+        272
+      ],
+      "parameters": {
+        "method": "GET",
+        "options": {}
+      }
+    },
+    {
+      "id": "9091da33-1b1f-428b-93a1-16dd9b4740f8",
+      "name": "Analyze Photo AI",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3216,
+        272
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "aee9ca7d-40c1-4fa5-a26a-af072f17f35e",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3280,
+        432
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2f8d9f2d-2c22-4d3b-89e5-235451fdfdb0",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        592
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9ac72101-91ac-400f-9ce1-48ebe3ea4475",
+      "name": "Update Photo Analysis",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        3552,
+        272
+      ],
+      "parameters": {
+        "operation": "update"
+      }
+    },
+    {
+      "id": "14385a0e-3b07-4c36-a0ca-79c5b0f07c11",
+      "name": "Merge All Photo Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        272
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f6458586-d3cb-4f69-a20a-276e20657044",
+      "name": "Split Notes with Property Link",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        736
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "43b811be-cd18-401d-91d6-6949ef9848c8",
+      "name": "Upload Notes to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2768,
+        736
+      ],
+      "parameters": {
+        "operation": "create"
+      }
+    },
+    {
+      "id": "9874e4fa-6060-4f11-9c1f-eb4925b02158",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        1088
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e536d7ca-c86c-48a5-92f8-9ce74445a1dd",
+      "name": "Structured Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3264,
+        912
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f593ceb8-8ec6-4f98-b8f1-1fc8c2507c18",
+      "name": "Merge All Note Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        736
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0a052f53-b6a5-4330-8043-06195e606c6f",
+      "name": "Generate Report Narratives",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        4912,
+        496
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "2301e6a4-483c-423d-8666-2401edc7c224",
+      "name": "Structured Output Parser2",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4976,
+        688
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f01b8963-3f22-4b59-96a5-159bf142f09a",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4912,
+        864
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "76dbb02d-dc85-48d9-92c8-8b907242c374",
+      "name": "Upload Photo to ImgBB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2368,
+        272
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com",
+        "options": {}
+      }
+    },
+    {
+      "id": "5dc3ae8d-1c2e-4249-8edf-234e1af302ec",
+      "name": "Prepare Photo Data for Airtable",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2592,
+        272
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "6760c99c-7130-43d9-812c-24b65ddc107c",
+      "name": "Upload Note to ImgBB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2352,
+        736
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com",
+        "options": {}
+      }
+    },
+    {
+      "id": "17d19d56-face-4323-ab0b-99f3a2943ee5",
+      "name": "Prepare Note Data for Airtable",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2560,
+        736
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2003ffe4-26b9-4b2c-8366-da3bbab91819",
+      "name": "Download Note from Airtable",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2976,
+        736
+      ],
+      "parameters": {
+        "method": "GET",
+        "options": {}
+      }
+    },
+    {
+      "id": "71c27d76-562f-46db-9869-e37fb04a14aa",
+      "name": "Extract Measurements with OCR",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3200,
+        736
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "589c35ea-707c-4dab-97f4-cc6a708a4735",
+      "name": "Update Note Record with OCR",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        3552,
+        736
+      ],
+      "parameters": {
+        "operation": "update"
+      }
+    },
+    {
+      "id": "38defb4e-83dd-4f74-a0fb-594bdf746089",
+      "name": "Combine Photo and Note Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4272,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e97af4f9-24c0-48a6-979f-175419c1f5e6",
+      "name": "Create Component Records",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        4672,
+        496
+      ],
+      "parameters": {
+        "operation": "create"
+      }
+    },
+    {
+      "id": "3580c1db-855d-4855-bf68-7de4c70b8e41",
+      "name": "Update Components with Narratives",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5232,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e4191b9e-e953-4c09-a346-d7f09bf634fc",
+      "name": "Save Narratives to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        5456,
+        496
+      ],
+      "parameters": {
+        "operation": "update"
+      }
+    },
+    {
+      "id": "edcef9f5-68d9-4d02-9fe6-21e7e49197b4",
+      "name": "Get Photos for Report",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        5680,
+        496
+      ],
+      "parameters": {
+        "operation": "search"
+      }
+    },
+    {
+      "id": "801e4164-1759-4c20-a5d9-afdcd2124d17",
+      "name": "Build HTML Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6720,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "aafece26-03f8-490f-b8eb-3fc9f0f854ed",
+      "name": "Merge Report Parts",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4064,
+        480
+      ],
+      "parameters": {
+        "numberInputs": 3
+      }
+    },
+    {
+      "id": "4c8bb711-448a-4b2f-9718-e1b098c40802",
+      "name": "Split Out Photos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5888,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "48f8bb81-f8a0-47cd-b9fa-a8f3bf2a9f6d",
+      "name": "Fetch Report Photo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        6096,
+        496
+      ],
+      "parameters": {
+        "method": "GET",
+        "options": {}
+      }
+    },
+    {
+      "id": "0a97f20b-97c7-4e3c-b067-9e16c3f94f96",
+      "name": "Encode to Base64",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6304,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2f548c21-cb6e-4fb9-bc45-363c86831d84",
+      "name": "Aggregate",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6512,
+        496
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "36ddfb50-a3d0-4ccc-8416-5773c862ecb2",
+      "name": "Clean Data for Airtable",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4480,
+        496
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Site Visit Upload": {
+      "main": [
+        [
+          {
+            "node": "Create Property Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Property Record": {
+      "main": [
+        [
+          {
+            "node": "Split Photos with Property Link",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Notes with Property Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Photos with Property Link": {
+      "main": [
+        [
+          {
+            "node": "Upload Photo to ImgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photos to Airtable": {
+      "main": [
+        [
+          {
+            "node": "Download Photo from Airtable URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Photo from Airtable URL": {
+      "main": [
+        [
+          {
+            "node": "Analyze Photo AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Analyze Photo AI",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyze Photo AI",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Photo AI": {
+      "main": [
+        [
+          {
+            "node": "Update Photo Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Photo Analysis": {
+      "main": [
+        [
+          {
+            "node": "Merge All Photo Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All Photo Results": {
+      "main": [
+        [
+          {
+            "node": "Merge Report Parts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Notes with Property Link": {
+      "main": [
+        [
+          {
+            "node": "Upload Note to ImgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Notes to Airtable": {
+      "main": [
+        [
+          {
+            "node": "Download Note from Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Measurements with OCR",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Extract Measurements with OCR",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All Note Results": {
+      "main": [
+        [
+          {
+            "node": "Merge Report Parts",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Report Narratives",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Report Narratives",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Report Narratives": {
+      "main": [
+        [
+          {
+            "node": "Update Components with Narratives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photo to ImgBB": {
+      "main": [
+        [
+          {
+            "node": "Prepare Photo Data for Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Photo Data for Airtable": {
+      "main": [
+        [
+          {
+            "node": "Upload Photos to Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Note to ImgBB": {
+      "main": [
+        [
+          {
+            "node": "Prepare Note Data for Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Note Data for Airtable": {
+      "main": [
+        [
+          {
+            "node": "Upload Notes to Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Note from Airtable": {
+      "main": [
+        [
+          {
+            "node": "Extract Measurements with OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Measurements with OCR": {
+      "main": [
+        [
+          {
+            "node": "Update Note Record with OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Note Record with OCR": {
+      "main": [
+        [
+          {
+            "node": "Merge All Note Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Photo and Note Data": {
+      "main": [
+        [
+          {
+            "node": "Clean Data for Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Component Records": {
+      "main": [
+        [
+          {
+            "node": "Generate Report Narratives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Components with Narratives": {
+      "main": [
+        [
+          {
+            "node": "Save Narratives to Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Narratives to Airtable": {
+      "main": [
+        [
+          {
+            "node": "Get Photos for Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Photos for Report": {
+      "main": [
+        [
+          {
+            "node": "Split Out Photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build HTML Report": {
+      "main": [
+        []
+      ]
+    },
+    "Merge Report Parts": {
+      "main": [
+        [
+          {
+            "node": "Combine Photo and Note Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Photos": {
+      "main": [
+        [
+          {
+            "node": "Fetch Report Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Report Photo": {
+      "main": [
+        [
+          {
+            "node": "Encode to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode to Base64": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Build HTML Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Data for Airtable": {
+      "main": [
+        [
+          {
+            "node": "Create Component Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

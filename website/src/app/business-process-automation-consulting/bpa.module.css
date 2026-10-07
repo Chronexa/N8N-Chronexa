@@ -1,0 +1,27 @@
+.patterns { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.pattern { padding:24px; border-radius:8px; background:#e9ece0; }
+.pattern:nth-child(2),.pattern:nth-child(6) { background:#e7ded4; }
+.pattern:nth-child(3),.pattern:nth-child(4) { background:#dfe3be; }
+.pattern > span { display:block; margin-bottom:18px; font-size:11px; font-weight:700; letter-spacing:.09em; opacity:.6; }
+.pattern h3 { margin-bottom:9px; font-size:19px; font-weight:600; letter-spacing:-.35px; }
+.pattern p { margin:0; font-size:14px; line-height:1.65; }
+.map { display:grid; grid-template-columns:repeat(6,1fr); border:1px solid #173a2d25; }
+.map li { position:relative; min-height:170px; padding:20px 17px; list-style:none; border-left:1px solid #173a2d25; }
+.map li:first-child { border-left:0; }
+.map span { font-size:11px; opacity:.55; }
+.map h3 { margin:24px 0 9px; font-size:16px; font-weight:600; }
+.map p { font-size:12.5px; line-height:1.55; }
+.map i { position:absolute; right:-7px; top:25px; z-index:1; width:13px; height:13px; border-radius:50%; background:#dbfa80; border:2px solid #173a2d; }
+.layers { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.layer { display:grid; grid-template-columns:50px 1fr; gap:15px; padding:22px; border:1px solid #173a2d25; border-radius:8px; background:#f7f7ee; }
+.layer > span { font-family:var(--font-display); font-size:28px; font-style:italic; }
+.layer h3 { margin-bottom:7px; font-size:18px; font-weight:600; }
+.layer p { margin:0; font-size:14px; line-height:1.65; }
+.decision { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+.decision article { padding:24px; border-top:4px solid #173a2d; background:#f7f7ee; }
+.decision article:nth-child(2) { border-color:#cb8b3f; }
+.decision article:nth-child(3) { border-color:#78679b; }
+.decision h3 { margin-bottom:9px; font-size:19px; font-weight:600; }
+.decision p { margin:0; font-size:14px; line-height:1.65; }
+@media(max-width:1040px) { .patterns { grid-template-columns:1fr 1fr; } .map { grid-template-columns:repeat(3,1fr); } .map li:nth-child(4) { border-left:0; } .map li:nth-child(n+4) { border-top:1px solid #173a2d25; } }
+@media(max-width:700px) { .patterns,.layers,.decision { grid-template-columns:1fr; } .map { grid-template-columns:1fr; } .map li { min-height:0; border-left:0; border-top:1px solid #173a2d25; } .map li:first-child { border-top:0; } .map i { right:auto; left:21px; top:auto; bottom:-7px; } }

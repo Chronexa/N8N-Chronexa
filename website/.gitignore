@@ -46,3 +46,7 @@ Client Proposals/
 # Raw generated images (optimised webp are committed to public/images/)
 public/images/gen/
 public/images/gen3d/
+
+# Isolated local homepage review build
+/.next-home-review/
+/.next-services-review/

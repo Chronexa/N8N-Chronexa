@@ -139,7 +139,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Do we need technical people on our side?", a: "You need someone who knows how the process currently works and can answer questions about the edge cases. You do not need anyone technical. We handle the building and hand it over documented." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['business-process-automation-consulting', 'document-processing-automation', 'system-data-integration'],
+    related: ['business-process-automation-consulting', 'document-processing-automation', 'ai-automation'],
     stack: [
       { file: 'n8n.svg', name: 'n8n' },
       { file: 'claude.svg', name: 'Claude' },
@@ -295,7 +295,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "What if we already know what we want automated?", a: "Then we will say so quickly and get on with it. But it is worth an hour to check, because the step that annoys people most and the step that costs most are often different steps." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the work covers and what it costs, before it starts." },
     ],
-    related: ['ai-automation', 'system-data-integration', 'document-processing-automation'],
+    related: ['ai-automation', 'document-processing-automation'],
     stack: [
       { file: 'n8n.svg', name: 'n8n' },
       { file: 'airtable.svg', name: 'Airtable' },
@@ -445,7 +445,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Can this work for a long, relationship-led sale?", a: "The research, routing and follow-up parts, yes. The conversation itself should stay human in that kind of sale, and we would push back on anyone trying to automate it." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['crm-automation-services', 'ai-automation', 'ai-agent-development'],
+    related: ['crm-automation-services', 'ai-automation', 'ai-workspace-setup'],
     stack: [
       { file: 'hubspot.png', name: 'HubSpot' },
       { file: 'apollo.png', name: 'Apollo' },
@@ -594,7 +594,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Can it connect to our accounting system?", a: "Usually yes, and it is often the highest-value part of the job. Knowing that an account is overdue before you call them changes the conversation, and that information already exists in the business." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['ai-sales-outreach-engine', 'system-data-integration', 'ai-automation'],
+    related: ['ai-sales-outreach-engine', 'ai-automation'],
     /* Actual CRMs first. This strip used to run HubSpot, Airtable, Notion,
        Slack, Gmail, Stripe — four of which are not CRMs and none of which are
        the two a mid-market buyer is most likely to be running. To a CRM buyer
@@ -749,7 +749,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Does this work with our accounting software?", a: "In most cases. We would confirm on the call before quoting rather than after. The system posts into what you already run, so nothing about your close process needs to change." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['document-processing-automation', 'business-process-automation-consulting', 'system-data-integration'],
+    related: ['document-processing-automation', 'business-process-automation-consulting', 'ai-automation'],
     stack: [
       { file: 'excel.svg', name: 'Excel' },
       { file: 'outlook.png', name: 'Outlook' },
@@ -801,7 +801,7 @@ export const SERVICES_V2: ServiceContent[] = [
   {
     slug: 'customer-support-automation',
     heroBg: '/images/hero/customer-support-automation.webp',
-    metaTitle: 'Customer Support Automation That Resolves, Not Deflects | Chronexa',
+    metaTitle: 'Customer Support Automation That Resolves | Chronexa',
     metaDescription:
       "Most support bots deflect and annoy. See how we build agents that read the account, do the task, and hand to a person the moment it stops being routine.",
     h1: "Customer support automation that resolves the ticket instead of deflecting it",
@@ -886,7 +886,7 @@ export const SERVICES_V2: ServiceContent[] = [
     confidence: [
       { title: "It says what it is", body: "No pretending to be a person. Customers work it out anyway and resent it when they do, and the moment they ask for a human they get one." },
       { title: "You draw the line, in writing", body: "Which actions it may take, up to what value, and what it must never touch. Refunds above a threshold, account closures and anything contractual stay with your team unless you decide otherwise." },
-      { title: "Every action is logged and reversible", body: "You can see what it did, to which account and when. If something goes wrong you can find it and undo it, which is what makes it safe to widen the scope over time." },
+      { title: "Actions are logged, with recovery planned", body: "The log records the action, account and time. We agree how to recover from failures before launch. Actions that cannot be safely undone require approval or stay outside the automated scope." },
       OWNERSHIP,
     ],
     notIncluded: [
@@ -898,13 +898,13 @@ export const SERVICES_V2: ServiceContent[] = [
     engagementNote: ENGAGEMENT,
     faqs: [
       { q: "How is this different from the chatbot we already tried?", a: "Most chatbots can only search a help centre and paste back text. The difference is access: if the system can read this customer's account and change the thing they asked about, it resolves the request. If it cannot, it is a search box with a personality." },
-      { q: "What stops it doing something expensive by mistake?", a: "A written line, agreed with you, about what it may do and up to what value. Refunds above a threshold, cancellations and anything contractual stop for a person. Everything it does is logged and reversible." },
+      { q: "What stops it doing something expensive by mistake?", a: "We agree which actions are allowed and any value limits. Refunds above the limit, cancellations and contractual changes require approval. Actions are logged. Recovery depends on the connected system; irreversible actions need additional checks or remain manual." },
       { q: "Will customers know they are talking to a system?", a: "Yes, because it says so. Pretending otherwise damages trust for a short-lived gain, and customers work it out anyway. The moment someone asks for a person, they get one." },
       { q: "Does this replace our support team?", a: "It changes what the queue looks like. The repetitive requests thin out and what remains is the work that needs judgement, which is the part your team is good at and the part customers remember." },
       { q: "How do you decide what to automate first?", a: "By reading three months of your actual tickets rather than working from a category list. Categories flatten everything; the real queue shows which requests are genuinely identical and which only look it." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['ai-agent-development', 'system-data-integration', 'ai-automation'],
+    related: ['ai-workspace-setup', 'ai-automation'],
     stack: [
       { file: 'intercom.png', name: 'Intercom' },
       { file: 'zendesk.png', name: 'Zendesk' },
@@ -950,7 +950,7 @@ export const SERVICES_V2: ServiceContent[] = [
   {
     slug: 'system-data-integration',
     heroBg: '/images/hero/system-data-integration.webp',
-    metaTitle: 'System Integration Company for Mid-Sized Firms | Chronexa',
+    metaTitle: 'System Integration Services for Mid-Sized Firms | Chronexa',
     metaDescription:
       "When two systems do not talk, a person becomes the bridge. See how we connect the tools you already run so the same number stops being typed twice.",
     h1: "System integration for businesses where a person is the bridge between two tools",
@@ -1053,7 +1053,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Will this slow our systems down?", a: "Not meaningfully. Integrations are scheduled around your usage rather than running constantly, and volumes are agreed up front so nothing gets hammered during your busy hours." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the work covers and what it costs, before any build starts." },
     ],
-    related: ['business-process-automation-consulting', 'legacy-system-modernization', 'crm-automation-services'],
+    related: ['business-process-automation-consulting', 'ai-automation', 'crm-automation-services'],
     stack: [
       { file: 'airtable.svg', name: 'Airtable' },
       { file: 'hubspot.png', name: 'HubSpot' },
@@ -1202,7 +1202,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "How long does this take?", a: "The assessment is quick. Building the way in depends entirely on what access exists, which is why we look before quoting rather than after." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the work covers and what it costs, before any build starts." },
     ],
-    related: ['system-data-integration', 'business-process-automation-consulting', 'ai-automation'],
+    related: ['ai-automation', 'business-process-automation-consulting'],
     stack: [
       { file: 'sharepoint.png', name: 'SharePoint' },
       { file: 'excel.svg', name: 'Excel' },
@@ -1247,7 +1247,7 @@ export const SERVICES_V2: ServiceContent[] = [
   {
     slug: 'ai-agent-development',
     heroBg: '/images/hero/ai-agent-development.webp',
-    metaTitle: 'AI Agent Development for Real Business Workflows | Chronexa',
+    metaTitle: 'AI Agent Development Services for Real Work | Chronexa',
     metaDescription:
       "Most agent demos fall over on the second step. See how we build narrow agents that do one job, inside your systems, and stop when they are unsure.",
     h1: "AI agent development for work that has more than one step",
@@ -1350,7 +1350,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Do we need our own model?", a: "Almost never. For the work most businesses want done, the available models are already capable and the difficulty is in the connections, the limits and the failure handling." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['private-rag-knowledge-systems', 'customer-support-automation', 'ai-automation'],
+    related: ['customer-support-automation', 'ai-automation'],
     stack: [
       { file: 'claude.svg', name: 'Claude' },
       { file: 'openai.svg', name: 'OpenAI' },
@@ -1396,7 +1396,7 @@ export const SERVICES_V2: ServiceContent[] = [
   {
     slug: 'private-rag-knowledge-systems',
     heroBg: '/images/hero/private-rag-knowledge-systems.webp',
-    metaTitle: 'Private Knowledge Systems That Answer From Your Own Files | Chronexa',
+    metaTitle: 'Private Knowledge Systems That Cite Your Files | Chronexa',
     metaDescription:
       "Your team searches for documents and then reads them. See how we build a private system that answers from your own files and shows the page it came from.",
     h1: "A private system that answers questions from your own documents",
@@ -1492,14 +1492,14 @@ export const SERVICES_V2: ServiceContent[] = [
     ],
     engagementNote: ENGAGEMENT,
     faqs: [
-      { q: "Is our data used to train a model?", a: "No. The system reads your documents at the moment a question is asked and uses them to answer. Nothing is trained on them, which means removing a document removes it from the answers immediately." },
+      { q: "Is our data used to train a model?", a: "This service uses retrieval, not model training: it finds relevant passages and passes them to the model to answer a question. We review the model provider's data-use and retention terms with you. Document removal must also update the search index and any caches; we test that process before handover." },
       { q: "What stops it inventing an answer?", a: "It answers from retrieved passages and cites them, so an answer with no source is visible as such. Where the documents do not cover the question it is built to say so, and that behaviour is tested rather than assumed." },
       { q: "Can it respect our existing permissions?", a: "Yes, and it should. Answers are drawn only from material the person asking could already open. A system that ignores this will eventually surface something it should not, and that is how these projects get shut down." },
       { q: "Where does it run?", a: "Inside your own environment if confidentiality requires it, so documents never leave systems you control. Where the material is less sensitive there are simpler options, and we would talk through the trade-off rather than assume." },
       { q: "How do you know it is accurate?", a: "We test it against real questions where your experts already know the right answer, and report where it got them wrong. Accuracy claimed without that test is just a claim." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts." },
     ],
-    related: ['ai-agent-development', 'secure-ai-deployment', 'document-processing-automation'],
+    related: ['ai-workspace-setup', 'legal-ai-automation', 'document-processing-automation'],
     stack: [
       { file: 'claude.svg', name: 'Claude' },
       { file: 'sharepoint.png', name: 'SharePoint' },
@@ -1545,14 +1545,14 @@ export const SERVICES_V2: ServiceContent[] = [
   {
     slug: 'secure-ai-deployment',
     heroBg: '/images/hero/secure-ai-deployment.webp',
-    metaTitle: 'On-Premise and Compliant AI Deployment | Chronexa',
+    metaTitle: 'Secure AI Deployment: Private Cloud & On-Premise | Chronexa',
     metaDescription:
-      "Legal, health and finance data cannot go to a public model. See how we deploy AI inside your own environment, with access control and an audit trail.",
+      "Deploy AI in your private cloud or on-premise, with clear access rules, logging and data controls. Talk to Chronexa about your hosting requirements.",
     h1: "AI deployed inside your own environment, because your data cannot leave it",
     heroSub:
       "For firms where client data is the constraint, we build systems that run where your data already sits, with access controls and a record of every action, so compliance is a property of the build rather than a promise about it.",
     answer:
-      "Compliant AI deployment means running the system inside infrastructure the organisation controls, so regulated data never passes to a third party. In practice that involves choosing a hosting arrangement that satisfies the relevant obligation, restricting access to named people, keeping a record of every action for audit, and being able to demonstrate all of it. For sectors under HIPAA, financial regulation or legal privilege, this is usually what decides whether an AI project can proceed at all.",
+      "Secure AI deployment defines where an application, its data and its model run, who can access them and how they are operated. We assess private cloud and on-premise options, document external services and configure access, logging and retention controls. Your security and legal teams review whether those controls meet your requirements; private hosting alone does not establish compliance.",
     callout:
       "In a regulated firm the AI question is rarely whether the technology works. It is whether the data can go where the technology lives. Answer that first and the rest of the project becomes ordinary.",
     serviceName: 'Secure & Compliant AI Deployment',
@@ -1648,7 +1648,7 @@ export const SERVICES_V2: ServiceContent[] = [
       { q: "Does this slow the system down?", a: "Marginally, in some configurations. In the work we do the difference is not noticeable next to the process it replaces, and it is the price of the data staying where it has to stay." },
       { q: "What does it cost?", a: "Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the work covers and what it costs, before any build starts." },
     ],
-    related: ['private-rag-knowledge-systems', 'document-processing-automation', 'ai-automation'],
+    related: ['customer-support-automation', 'document-processing-automation', 'ai-automation'],
     stack: [
       { file: 'aws.svg', name: 'AWS' },
       { file: 'googlecloud.svg', name: 'Google Cloud' },
@@ -1685,150 +1685,7 @@ export const SERVICES_V2: ServiceContent[] = [
         "Every engagement we take in legal, health or financial work starts with this question rather than ending with it. The deployment shape gets settled before anyone discusses what the system will do, because it determines what is possible. Firms that take it in the other order tend to build something they then cannot use.",
     },
   },
-  {
-    slug: 'accounting-automation-services',
-    heroBg: '/images/hero/ai-automation.webp',
-    metaTitle: 'AI & Workflow Automation Services for Accounting Firms | Chronexa',
-    metaDescription:
-      "Stop throwing headcount at manual work. See how we build custom workflow automation and AI systems that eliminate manual GL mapping, data extraction, and system silos for mid-market accounting firms.",
-    h1: "AI and workflow automation services for accounting firms",
-    heroSub:
-      "We design and build the autonomous systems that connect your siloed legacy software, extract data from unstructured client documents, and permanently eliminate the manual labor draining your firm's profitability.",
-    answer:
-      "Workflow automation services for accounting firms mean replacing the manual data bridges built by junior staff with custom, code-driven infrastructure. Whether it is automatically chasing clients for missing K-1s, pulling data from messy W-2s, or mapping 10,000 credit card transactions to the general ledger, we build the systems that do the reading, routing, and keying. We don't just advise on digital transformation; we build the actual plumbing that makes it work.",
-    callout:
-      "You don't have a software problem. You have a gap problem. Your practice management system doesn't talk to your tax software, so you hire junior staff to move data between them. Automation eliminates the gap, not the software.",
-    serviceName: 'Accounting Automation Services',
-    serviceType: 'Workflow Engineering & AI Implementation',
-    schemaDescription:
-      "Custom workflow automation and AI integration services for mid-market CPA and accounting firms. We build systems for tax document data extraction, GL mapping, and legacy software integration.",
-    roi: [
-      { value: 'Eliminate handoffs', label: 'Systems that route data between siloed software automatically' },
-      { value: 'Extract instantly', label: 'Pull structured data from messy, unstructured client tax documents' },
-      { value: 'Deploy securely', label: 'Self-hosted infrastructure options that keep client data strictly inside your cloud' },
-    ],
-    buildHeading: 'What we actually build',
-    sections: [
-      {
-        heading: "SaaS won't fix your firm. Custom integration will.",
-        level: 2,
-        body: [
-          "Most accounting firms try to solve their operational bottlenecks by buying another SaaS product. But off-the-shelf software forces you to change your firm to match the software's assumptions. When it inevitably fails to connect to your legacy systems (like CCH or Thomson Reuters), you end up hiring junior staff just to move data between screens.",
-          "We take a different approach. We build custom integrations—using platforms like n8n and secure LLMs—that fit the way you actually work. We wire your existing systems together so the manual handoffs disappear.",
-        ],
-      },
-    ],
-    failurePoints: [
-      {
-        label: 'Siloed Systems',
-        title: "The software doesn't talk",
-        body: "Your CRM is modern, but your tax software is a decade old. Without proper integration, your team becomes the human API, manually copying data across screens all day.",
-      },
-      {
-        label: 'Unstructured Data',
-        title: "PDFs trapping your time",
-        body: "Clients send K-1s, W-2s, and bank statements in every format imaginable. Relying on humans to read, interpret, and key that data into workpapers is slow, expensive, and error-prone.",
-      },
-      {
-        label: 'Security Constraints',
-        title: "Public AI is a compliance risk",
-        body: "You know AI could extract data from financial records, but you can't put sensitive client information into public ChatGPT prompts. The risk holds the firm back from efficiency.",
-      },
-      {
-        label: 'Consultant Fatigue',
-        title: "Advisors who don't build",
-        body: "You hire a consultancy for 'digital transformation' and get a 60-page PDF recommendation, but no running code. The bottlenecks stay exactly where they were.",
-      },
-    ],
-    beforeAfter: [
-      { before: "Junior staff spend 40 hours mapping transactions to the GL.",
-        after: "An automated workflow maps the transactions; staff only review the exceptions." },
-      { before: "Partners chase clients via email for missing K-1s.",
-        after: "An autonomous system tracks missing documents and follows up." },
-      { before: "You rent off-the-shelf software that doesn't fit.",
-        after: "You own custom infrastructure built entirely around your process." },
-      { before: "Consultants give you advice.",
-        after: "Engineers hand you a running system." },
-    ],
-    process: [
-      { title: "Audit the bottlenecks", body: "We map your actual operations to find the steps where highly paid professionals are doing data-entry work." },
-      { title: "Design for security", body: "We architecture a solution with deployment options designed to keep sensitive financial data within your own cloud boundary." },
-      { title: "Build the plumbing", body: "We connect your siloed systems (CRM, Practice Management, Tax Software) using robust workflow automation." },
-      { title: "Implement review steps", body: "We never automate blindly. If the system is unsure about a tax document or GL code, it pauses for a human to review." },
-    ],
-    whyCustom: [
-      "Built specifically for the exact way your firm operates.",
-      "Connects to legacy accounting software that modern SaaS ignores.",
-      "Deployment options designed to meet your strict data security and compliance requirements.",
-      "A person always reviews edge cases, so your firm's reputation is never risked on a hallucination.",
-    ],
-    included: [
-      "A deep operational audit to identify the most expensive manual processes",
-      "Custom workflow architecture using enterprise-grade automation platforms (like n8n)",
-      "Integration of AI models for unstructured document extraction (OCR/Vision)",
-      "Secure deployment options tailored to your data privacy needs",
-      "Human-in-the-loop review interfaces for exceptions",
-      "Full documentation and a formal handover to your operations team",
-    ],
-    confidence: [
-      { title: "We build, we don't just talk", body: "We aren't a traditional advisory firm. We are engineers who deploy running code that actually eliminates the manual work." },
-      { title: "Security by design", body: "We understand that accounting data is sensitive. We offer self-hosted deployment options so your client data never leaves your environment." },
-      { title: "Fixed outcomes", body: "Scope, timeline, and price are agreed upon before any build starts. We write down what the system has to do and what it costs." },
-      OWNERSHIP,
-    ],
-    notIncluded: [
-      "Buying more SaaS subscriptions. We connect what you already have.",
-      "Offshoring your labor. We eliminate the labor requirement entirely.",
-      "Public AI wrappers. We build secure, private infrastructure.",
-      "Open-ended consulting retainers with no deliverables.",
-    ],
-    engagementNote: ENGAGEMENT,
-    faqs: [
-      { q: "Is our client data safe if we use AI?", a: "Security is the baseline. We design architectures that can run completely within your own cloud (like AWS or Azure). This ensures sensitive client documents are processed privately without being used to train public models." },
-      { q: "Our tax software is archaic. Can you still integrate with it?", a: "Yes. Even if your software lacks a modern API, we can build custom connectors or utilize RPA-style interactions to ensure data flows securely between systems." },
-      { q: "Will this replace our junior accountants?", a: "No. It elevates them. Instead of spending 100 hours doing manual data entry, your staff will spend 10 hours reviewing the system's outputs, freeing them to do actual analytical client work." },
-      { q: "Why shouldn't we just use a SaaS product?", a: "SaaS works well for generic problems. But if your firm has unique workflows or siloed legacy systems, SaaS forces you into their box. Custom automation adapts to your firm, not the other way around." },
-    ],
-    related: ['document-processing-automation', 'cpa-tax-document-automation', 'system-data-integration'],
-    stack: [
-      { file: 'n8n.svg', name: 'n8n' },
-      { file: 'claude.svg', name: 'Claude' },
-      { file: 'airtable.svg', name: 'Airtable' },
-    ],
-    heroPanel: {
-      label: 'The outcome',
-      items: [
-        'Eliminate manual data entry.',
-        'Connect siloed legacy systems.',
-        'Secure client data handling.'
-      ],
-    },
-    coversStrip: {
-      label: 'Typical focus areas',
-      items: [
-        'Tax Document Extraction',
-        'GL Code Mapping',
-        'Audit Prep Automation',
-        'Client Chasing',
-        'Data Reconciliation'
-      ],
-      tail: 'or anywhere your team spends hours acting as a human bridge between systems.',
-    },
-    heroStats: [
-      { value: 100, suffix: '%', label: 'auditability on automated actions' },
-      { value: 0, suffix: ' lock-in', label: 'you own the infrastructure' },
-    ],
-    proofBlock: {
-      metric: {
-        value: '40',
-        label: "percent reduction in audit prep time by extracting and structuring evidence automatically",
-        source: "Mid-market CPA firm implementation. Eliminating manual unstructured data reading.",
-      },
-      mechanism:
-        "The system monitors incoming client documents, extracts the relevant financial data using private vision models, and structures it into the required workpaper formats. If a document is blurry or missing pages, the workflow pauses and alerts a staff member to review it.",
-    },
-  }
-];
+  ];
 
 export const SOLUTIONS_V2: Record<string, SolutionCard[]> = {
   'ai-sales-outreach-engine': [

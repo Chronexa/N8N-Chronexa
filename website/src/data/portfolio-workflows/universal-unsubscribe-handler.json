@@ -1,0 +1,244 @@
+{
+  "name": "Universal Unsubscribe Handler",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "52b22093-6265-4933-a0bf-d9be9558d2d8",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        32
+      ],
+      "parameters": {
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "117bbe9c-5c55-4a88-9e9b-20cdd29666b3",
+      "name": "Extract Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        32
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b3d3d9eb-e605-4577-9ed4-5baecaee2d94",
+      "name": "Loop Through Sheets",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        128,
+        32
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f368084a-a905-4638-9444-bd4644043958",
+      "name": "Find Lead in Current Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        336,
+        128
+      ],
+      "parameters": {},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "174922dc-54ec-46c2-a459-5f86ec41de76",
+      "name": "Check If Found",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        128
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.lead_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "8149df8d-c3fd-45b3-9fa7-7060c07d6f54"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Found"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Not Found - Continue Loop"
+        },
+        "looseTypeValidation": true
+      }
+    },
+    {
+      "id": "44441643-11a4-42f7-a32e-9047a4a96189",
+      "name": "Mark found lead as Unsubscribed",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        784,
+        112
+      ],
+      "parameters": {
+        "operation": "update"
+      }
+    },
+    {
+      "id": "857f8126-9cec-44f1-86b3-c6db6c3fd87a",
+      "name": "Respond - Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        992,
+        112
+      ],
+      "parameters": {
+        "respondWith": "text"
+      }
+    },
+    {
+      "id": "d0f038e7-71bb-4d2f-8803-cd71fc36badf",
+      "name": "Respond - Not Found",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        336,
+        -64
+      ],
+      "parameters": {
+        "respondWith": "text"
+      }
+    },
+    {
+      "id": "b8b18c6b-7734-4ab3-96d7-dd0745c20160",
+      "name": "Sheet Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        32
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email": {
+      "main": [
+        [
+          {
+            "node": "Sheet Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Through Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond - Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Find Lead in Current Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Lead in Current Sheet": {
+      "main": [
+        [
+          {
+            "node": "Check If Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Found": {
+      "main": [
+        [
+          {
+            "node": "Mark found lead as Unsubscribed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Through Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark found lead as Unsubscribed": {
+      "main": [
+        [
+          {
+            "node": "Respond - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Config": {
+      "main": [
+        [
+          {
+            "node": "Loop Through Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

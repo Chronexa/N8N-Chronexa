@@ -1,0 +1,166 @@
+/**
+ * RetypeArtifact — restrained, paper-real. The only colour is the flagged error.
+ * Nothing here animates on load; the single caret pulse is the one live element
+ * and it stops for prefers-reduced-motion.
+ */
+
+.wrap { margin: 0; }
+
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  align-items: stretch;
+}
+
+/* ── Document pane ────────────────────────────────────────────────────── */
+.doc {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.docHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.7rem var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-sunken);
+}
+.docKind {
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+}
+.docFile {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted-light);
+}
+.docBody { padding: var(--spacing-sm); display: grid; gap: 0.45rem; }
+
+/* Grey bars stand in for body text so the eye goes to the fields, not the filler. */
+.docRule {
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--neutral-100);
+}
+.docSpacer { height: 0.4rem; }
+
+.docFields { display: grid; gap: 0.3rem; margin: 0.3rem 0; }
+.docFields > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0.45rem;
+  border-radius: var(--radius-sm);
+}
+.docFields dt { font-size: var(--step--1); color: var(--text-muted-light); }
+.docFields dd { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-light); }
+
+.docHighlight {
+  background-color: var(--brand-green-soft);
+  box-shadow: inset 0 0 0 1px var(--brand-green-line);
+}
+.docHighlight dt { color: var(--brand-green-ink); }
+.docHighlight dd { color: var(--brand-green-ink); font-weight: 600; }
+
+/* ── System pane ──────────────────────────────────────────────────────── */
+.sheet {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.sheetHead {
+  padding: 0.7rem var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-sunken);
+}
+.sheetKind {
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+}
+.sheetGrid { flex: 1; }
+.sheetRow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+.sheetRow:first-child .sheetCol {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+}
+.sheetActive { background-color: var(--bg-sunken); }
+
+.sheetError {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--color-alert);
+  text-decoration: underline wavy var(--color-alert) 1px;
+  text-underline-offset: 3px;
+}
+
+/* The one live element on the page: a text caret, as if mid-keystroke. */
+.caret {
+  display: inline-block;
+  width: 1px;
+  height: 0.95em;
+  background-color: var(--text-light);
+  animation: blink 1.15s steps(1, end) infinite;
+}
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+.flag {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem var(--spacing-sm);
+  font-size: var(--step--1);
+  color: var(--color-alert);
+  border-top: 1px solid var(--border-light);
+}
+.flagDot {
+  flex: 0 0 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-alert);
+}
+
+.caption {
+  margin-top: 0.9rem;
+  font-size: var(--step--1);
+  line-height: var(--leading-normal);
+  color: var(--text-muted-light);
+  max-width: 60ch;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .panes { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none; opacity: 1; }
+}

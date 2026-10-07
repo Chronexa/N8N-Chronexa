@@ -15,7 +15,9 @@ import {
   type PTBlockLike,
 } from '../../../lib/blog-article';
 import { articleCta, pillarFor } from '../../../lib/blog-links';
+import { NOINDEX_POSTS } from '../../../lib/blog-seo';
 import { getBucket, hubPath, labelFor } from '../../../lib/blog-taxonomy';
+import { attributedBookingUrl } from '../../../lib/cal';
 import RelatedServices from '../../../components/RelatedServices';
 import TrackView from '../../../components/TrackView';
 import ScrollDepth from '../../../components/ScrollDepth';
@@ -52,6 +54,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: { absolute: title },
     description,
     alternates: { canonical: `/blog/${slug}` },
+    // Hygiene list (lib/blog-seo.ts): live for people with the link, kept out of Google.
+    ...(NOINDEX_POSTS.has(slug) ? { robots: { index: false, follow: true } } : {}),
     openGraph: { title, description, url: `/blog/${slug}`, type: 'article', siteName: site.name, images: [ogImage] },
     twitter: { card: 'summary_large_image', title, description, images: [ogImage] },
   };
@@ -167,6 +171,27 @@ const components: PortableTextComponents = {
   },
 };
 
+function componentsForArticle(slug: string): PortableTextComponents {
+  return {
+    ...components,
+    marks: {
+      link: ({ children, value }) => {
+        const href = typeof value?.href === 'string' ? value.href : '#';
+        const tracked = attributedBookingUrl(href, {
+          location: 'blog-body',
+          pathname: `/blog/${slug}`,
+        });
+        const external = /^https?:\/\//i.test(tracked);
+        return (
+          <a href={tracked} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            {children}
+          </a>
+        );
+      },
+    },
+  };
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
@@ -194,6 +219,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     : null;
 
   const body = normalizeHeadings(dropDuplicateTitleHeadings(post.body));
+  const articleComponents = componentsForArticle(slug);
   const bodyBlocks = Array.isArray(body) ? (body as unknown[]) : [];
   const inlineCtaAt = midpointBlockIndex(bodyBlocks);
   const headings = extractHeadings(body).filter((h) => h.level === 2);
@@ -204,7 +230,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Human-readable taxonomy labels, reused for the breadcrumb, schema keywords and
   // the keyword-matching helpers below (which take a free-text `category` haystack).
   const industryBucket = getBucket('industry', post.industry);
-  const industryLabel = labelFor('industry', post.industry);
+  // Only link the industry when its hub page exists (non-indexable buckets have no URL and would 404).
+  const industryLabel = getBucket('industry', post.industry)?.indexable ? labelFor('industry', post.industry) : '';
   const topicLabel = labelFor('topic', post.topic);
   const taxonomyHay = [industryLabel, topicLabel].filter(Boolean).join(' ');
 
@@ -215,6 +242,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     slug,
     format: post.format,
     topic: post.topic,
+    industry: post.industry,
   });
   const pillar = pillarFor(post.industry);
 
@@ -390,12 +418,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {post.body ? (
                 inlineCtaAt > 0 ? (
                   <>
-                    <PortableText value={bodyBlocks.slice(0, inlineCtaAt) as never} components={components} />
+                    <PortableText value={bodyBlocks.slice(0, inlineCtaAt) as never} components={articleComponents} />
                     <BlogInlineCta plan={ctaPlan} subject={topicLabel || industryLabel} />
-                    <PortableText value={bodyBlocks.slice(inlineCtaAt) as never} components={components} />
+                    <PortableText value={bodyBlocks.slice(inlineCtaAt) as never} components={articleComponents} />
                   </>
                 ) : (
-                  <PortableText value={body as never} components={components} />
+                  <PortableText value={body as never} components={articleComponents} />
                 )
               ) : (
                 <p>Content coming soon.</p>

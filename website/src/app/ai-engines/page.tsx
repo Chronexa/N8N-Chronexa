@@ -7,9 +7,8 @@ import { ENGINE_ROADMAP, ENGINE_STAGES, HUB_FAQS } from '../../components/engine
 import { site } from '../../lib/site';
 import styles from './ai-engines.module.css';
 
-const TITLE = 'AI Engines — Autonomous AI Systems That Run Your Workflows | Chronexa';
-const DESCRIPTION =
-  'An AI engine is a connected team of specialised AI agents that runs an entire workflow end-to-end inside your stack — not a chatbot. Explore the engines Chronexa builds, starting with the Sales Engine.';
+const TITLE = 'AI Engines: Production AI Systems You Can Watch Run';
+const DESCRIPTION = 'Six production AI systems from Chronexa, each with an interactive demo: sales research, CPA tax, investment research, documents, legal and support.';
 
 export const metadata: Metadata = {
   title: TITLE,

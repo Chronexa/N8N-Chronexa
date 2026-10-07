@@ -314,7 +314,9 @@
 }
 
 @media (max-width: 480px) {
-  .wrap { right: 0.6rem; bottom: 0.6rem; }
+  .wrap { right: 0.55rem; bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
   .fabLabel { display: none; }
-  .fab { width: 56px; padding: 0; }
+  .fab { width: 48px; height: 48px; padding: 0; }
+  .fabAvatarWrap { width: 28px; height: 28px; }
+  .panel { width: calc(100vw - 1.1rem); height: min(560px, calc(100svh - 76px)); border-radius: 12px; }
 }

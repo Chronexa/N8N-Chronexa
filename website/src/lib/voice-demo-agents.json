@@ -1,0 +1,14 @@
+{
+  "dental": {
+    "agent_id": "agent_343d22155ce6fd32924806bb0e",
+    "llm_id": "llm_6c7d6c6822e58cc4d8ec3603e5ae"
+  },
+  "salon": {
+    "agent_id": "agent_29b073a7bcde189e7a2df04f78",
+    "llm_id": "llm_a6d5c039781ff2ece818cd6c478e"
+  },
+  "sales": {
+    "agent_id": "agent_6393913e22f2263ad2fd428b16",
+    "llm_id": "llm_c6c64d88a398c27c47498e4adac4"
+  }
+}

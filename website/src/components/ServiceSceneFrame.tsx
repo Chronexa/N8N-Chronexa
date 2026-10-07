@@ -8,9 +8,18 @@ import { track } from '../lib/analytics';
 
 // Same lazy-mount pattern as EngineShowcase: the scene is heavy client JS, so
 // it only loads once the frame approaches the viewport.
+//
+// All six built scenes are wired (2026-08-19). Only docintel and legal were
+// registered before, which is why eleven of the twelve service pages had no
+// moving proof on them at all — the assets existed, the registry just stopped
+// at two.
 const SCENES = {
   docintel: dynamic(() => import('./engines/docintel-scene/DocIntelScene'), { ssr: false }),
   legal: dynamic(() => import('./engines/legal-scene/LegalScene'), { ssr: false }),
+  sales: dynamic(() => import('./engines/sales-scene/SalesScene'), { ssr: false }),
+  support: dynamic(() => import('./engines/support-scene/SupportScene'), { ssr: false }),
+  cpa: dynamic(() => import('./engines/cpa-scene/CpaTaxScene'), { ssr: false }),
+  invest: dynamic(() => import('./engines/invest-scene/InvestScene'), { ssr: false }),
 } as const;
 
 export type SceneKey = keyof typeof SCENES;

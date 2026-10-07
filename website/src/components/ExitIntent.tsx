@@ -19,7 +19,7 @@ const MIN_TIME_ON_PAGE_MS = 12000;
 export default function ExitIntent() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const isBlogPage = pathname?.startsWith('/blog');
+  const isBlogPage = pathname === '/' || pathname?.startsWith('/blog');
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -84,7 +84,7 @@ export default function ExitIntent() {
         </h2>
         <p className={styles.body}>
           Try one of our free calculators to see what manual work is actually costing your firm, or book a
-          15-minute call if you'd rather just talk it through.
+          15-minute call if you&apos;d rather just talk it through.
         </p>
         <div className={styles.actions}>
           <Link

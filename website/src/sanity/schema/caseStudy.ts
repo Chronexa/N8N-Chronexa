@@ -1,17 +1,56 @@
-import { defineType, defineField } from 'sanity';
+import { defineType, defineField, defineArrayMember } from 'sanity';
+import { DocumentTextIcon } from '@sanity/icons';
 
 /** Case study / portfolio entry — migrated from the Framer "Case Studies" collection. */
 export default defineType({
   name: 'caseStudy',
   title: 'Case Study',
   type: 'document',
+  icon: DocumentTextIcon,
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'metaTitle', title: 'SEO Title', type: 'string', validation: (r) => r.max(60) }),
+    defineField({ name: 'metaDescription', title: 'SEO Description', type: 'text', rows: 3, validation: (r) => r.max(160) }),
     defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title', maxLength: 96 }, validation: (r) => r.required() }),
-    defineField({ name: 'thumb', title: 'Thumbnail', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })] }),
+    defineField({ name: 'thumb', title: 'Thumbnail', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string', validation: (r) => r.required().warning('Alt text is important for search and accessibility') })] }),
     defineField({ name: 'logo', title: 'Client Logo', type: 'image', fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })] }),
     defineField({ name: 'overview', title: 'Overview', type: 'text', rows: 3 }),
+    defineField({ name: 'quickAnswer', title: 'Plain-English Answer', type: 'text', rows: 4, description: 'A direct summary that people, search engines and AI systems can quote.' }),
+    defineField({ name: 'targetKeyword', title: 'Target Search', type: 'string', description: 'The primary query this page answers. Write for the reader, not keyword density.' }),
+    defineField({ name: 'secondaryKeywords', title: 'Related Searches', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.unique().max(8) }),
+    defineField({ name: 'toolsUsed', title: 'Tools and Systems', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.unique() }),
+    defineField({
+      name: 'workflowSteps', title: 'How the Workflow Runs', type: 'array',
+      of: [defineArrayMember({ type: 'object', fields: [
+        defineField({ name: 'name', title: 'Step', type: 'string', validation: (r) => r.required() }),
+        defineField({ name: 'description', title: 'What happens', type: 'text', rows: 2, validation: (r) => r.required() }),
+      ] })],
+    }),
+    defineField({ name: 'safeguards', title: 'Safeguards and Failure Handling', type: 'array', of: [defineArrayMember({ type: 'string' })] }),
+    defineField({ name: 'publishedAt', title: 'Published At', type: 'datetime' }),
     defineField({ name: 'projectType', title: 'Project Type', type: 'string' }),
+    defineField({
+      name: 'evidenceType',
+      title: 'Evidence Type',
+      type: 'string',
+      description: 'Makes the proof basis explicit on the public page.',
+      options: {
+        list: [
+          { title: 'Client deployment', value: 'client' },
+          { title: 'Chronexa internal system', value: 'internal' },
+          { title: 'Reference build', value: 'reference' },
+          { title: 'Market solution story', value: 'market' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
+      name: 'evidenceNote',
+      title: 'Evidence Note',
+      type: 'text',
+      rows: 3,
+      description: 'What is verified, what is anonymised, and which outcome claims are intentionally not made.',
+    }),
     defineField({ name: 'serviceIncluded', title: 'Services Included', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'companyName', title: 'Company Name', type: 'string' }),
     defineField({ name: 'year', title: 'Year', type: 'string' }),
@@ -20,6 +59,7 @@ export default defineType({
     defineField({ name: 'websiteLink', title: 'Website Link', type: 'url' }),
     defineField({ name: 'content1', title: 'Content — Challenge', type: 'array', of: [{ type: 'block' }, { type: 'image' }] }),
     defineField({ name: 'content2', title: 'Content — Results', type: 'array', of: [{ type: 'block' }, { type: 'image' }] }),
+    defineField({ name: 'technicalContent', title: 'Technical Story', type: 'array', of: [defineArrayMember({ type: 'block' }), defineArrayMember({ type: 'image' })] }),
     defineField({ name: 'testimonial', title: 'Testimonial', type: 'text', rows: 3 }),
     defineField({ name: 'client', title: 'Client Name', type: 'string' }),
     defineField({ name: 'clientDetails', title: 'Client Title/Details', type: 'string' }),

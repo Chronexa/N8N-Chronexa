@@ -93,6 +93,16 @@
 }
 .quiet:hover { text-decoration: underline; text-underline-offset: 3px; }
 
+/* Body copy for the `offer` tier, which argues rather than lists steps. */
+.lede {
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-muted-light);
+  max-width: 60ch;
+  margin-bottom: var(--spacing-sm);
+}
+.lede strong { color: var(--text-light); }
+
 @media (max-width: 600px) {
   .block { padding: var(--spacing-md) var(--spacing-sm); }
   .actions > :global(.btn-primary) { width: 100%; }

@@ -1,0 +1,361 @@
+{
+  "name": "Meta Lead Ads → Sheet + WhatsApp",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -660,
+        300
+      ],
+      "parameters": {
+        "httpMethod": [
+          "GET",
+          "POST"
+        ],
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "respond-challenge",
+      "name": "Respond Challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -220,
+        180
+      ],
+      "parameters": {
+        "respondWith": "text"
+      }
+    },
+    {
+      "id": "ack-200",
+      "name": "Ack 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -220,
+        400
+      ],
+      "parameters": {
+        "respondWith": "text"
+      }
+    },
+    {
+      "id": "extract-lead-ids",
+      "name": "Extract Lead IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fetch-lead",
+      "name": "Fetch Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        400
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "normalise",
+      "name": "Normalise",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "google-token",
+      "name": "Google Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://oauth2.googleapis.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "insert-row-at-top",
+      "name": "Insert Row At Top",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "write-newest-lead",
+      "name": "Write Newest Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        400
+      ],
+      "parameters": {
+        "method": "PUT",
+        "url": "https://sheets.googleapis.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "append-campaign-tab",
+      "name": "Append Campaign Tab",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "fan-out-recipients",
+      "name": "Fan Out Recipients",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "send-whatsapp",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "nudge-lead",
+      "name": "Nudge Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "consented-",
+      "name": "Consented?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        560
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        40
+      ],
+      "parameters": {
+        "content": "## Meta Lead Ads → sheet + WhatsApp\n\n1. Meta calls the webhook the moment a form is submitted; the workflow answers immediately so Meta never retries.\n2. The full lead is fetched from Meta and normalised.\n3. It is written to the top of the lead sheet and to its campaign tab.\n4. The sales team gets a WhatsApp alert.\n5. If the lead opted in, they get a WhatsApp message too.\n\nEvery external call retries on failure.",
+        "width": 640,
+        "height": 200
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ack 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ack 200": {
+      "main": [
+        [
+          {
+            "node": "Extract Lead IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Lead IDs": {
+      "main": [
+        [
+          {
+            "node": "Fetch Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Lead": {
+      "main": [
+        [
+          {
+            "node": "Normalise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise": {
+      "main": [
+        [
+          {
+            "node": "Google Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Consented?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consented?": {
+      "main": [
+        [
+          {
+            "node": "Nudge Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Google Token": {
+      "main": [
+        [
+          {
+            "node": "Insert Row At Top",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Row At Top": {
+      "main": [
+        [
+          {
+            "node": "Write Newest Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Newest Lead": {
+      "main": [
+        [
+          {
+            "node": "Append Campaign Tab",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Campaign Tab": {
+      "main": [
+        [
+          {
+            "node": "Fan Out Recipients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fan Out Recipients": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,7 +1,14 @@
 /* ============================================================================
-   Nav — fixed top bar + multi-layout mega-menus.
-   Three dropdown shapes: Services (compact grid), Use Cases (2-col), AI Engines (mega).
-   All share the same .panel shell; inner structure varies per dropdown.
+   Nav — fixed top bar + ONE dropdown shell shared by all four menus.
+
+   The panel is anchored to the header, not to its trigger: same width, same
+   left edge (flush with the logo), flush under the header's bottom rule. Only
+   the contents change between menus. Panels that sized themselves to their own
+   content jumped in width and x-position as you swept the bar — that motion is
+   what read as unserious.
+
+   No icons, no hover pills, no hover-in arrows, no brand-coloured micro-labels.
+   Type weight, column structure and whitespace carry the hierarchy.
    ============================================================================ */
 
 .nav {
@@ -25,188 +32,201 @@
 .logoMark { width: 32px; height: 32px; object-fit: contain; }
 .logoText { color: var(--text-light); }
 
-/* ── Links row ─────────────────────────────────────────────────────────────── */
-.links { display: flex; gap: var(--spacing-md); align-items: center; }
+/* ── Links row ─────────────────────────────────────────────────────────────
+   Items stretch the full header height so there is no dead gap between a
+   trigger and the panel below it — the old 10px gap closed the menu as the
+   cursor crossed it. The CTA opts back out of the stretch. */
+.links {
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.item { position: static; display: inline-flex; align-items: stretch; }
 
 .link, .trigger {
-  color: var(--text-muted-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 100%;
+  color: var(--text-light);
   font-weight: 500;
   font-size: var(--step--1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
+  letter-spacing: -0.002em;
+  transition: box-shadow var(--transition-fast), color var(--transition-fast);
 }
-.link:hover, .trigger:hover { color: var(--text-light); }
 
-.caret { font-size: 0.7em; transition: transform var(--transition-fast); }
+/* Active/hover marker: a 2px rule sitting directly on the header's hairline,
+   the width of the label. (McKinsey, NVIDIA — an indicator, not a chip.) */
+.link:hover,
+.item:hover .trigger,
+.item[data-open="true"] .trigger { box-shadow: inset 0 -2px 0 var(--brand-green-ink); }
+
+.caret { color: var(--text-muted-light); transition: transform var(--transition-fast); }
 .item:hover .caret,
-.item[data-open="true"] .caret { transform: rotate(180deg); }
+.item[data-open="true"] .caret { transform: rotate(180deg); color: var(--text-light); }
 
+/* ── Booking CTA ───────────────────────────────────────────────────────────
+   Flat. No lift, no coloured glow — a header button that jumps on hover is the
+   single loudest "template" tell in the bar. */
 .cta {
-  /* Same ink-green as .btn-primary — one brand green for every booking CTA. */
+  align-self: center;
   background-color: var(--brand-green-ink);
   color: var(--color-white);
-  padding: 0.65rem 1.25rem;
+  padding: 0.62rem 1.15rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: var(--step--1);
-  box-shadow: var(--shadow-sm), 0 4px 12px -4px rgba(103, 176, 53, 0.4);
-  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast);
 }
-.cta:hover { 
-  background-color: var(--brand-green-hover); 
-  transform: translateY(-2px); 
-  color: var(--color-white); 
-  box-shadow: var(--shadow-md), 0 8px 16px -6px rgba(103, 176, 53, 0.5);
+.cta:hover {
+  background-color: color-mix(in srgb, var(--brand-green-ink) 86%, #000);
+  color: var(--color-white);
 }
 
-/* ── Dropdown item wrapper ─────────────────────────────────────────────────── */
-.item { position: relative; display: inline-flex; align-items: center; }
-
-/* ── Panel shell — shared by all dropdowns ─────────────────────────────────── */
+/* ── Panel shell — one full-bleed plane, identical for every menu ──────────
+   Full width, not a card. A contained panel only works over a light page
+   (Atlassian, Notion); over our dark full-bleed hero an 880px white box ended
+   mid-photograph and read as a sticker. McKinsey and NVIDIA both solve this
+   the same way: the panel spans the viewport so it reads as the header
+   continuing downward, and empty columns disappear into the plane instead of
+   sitting on the artwork. */
 .panel {
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   left: 0;
+  right: 0;
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 40px -8px rgba(0,0,0,0.14), 0 2px 8px -2px rgba(0,0,0,0.06);
-  overflow: hidden;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 26px 44px -30px rgba(26, 24, 20, 0.32);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
-  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
   z-index: var(--z-nav);
-  min-width: 320px;
 }
-.item[data-open="true"] > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
+.item[data-open="true"] > .panel { opacity: 1; visibility: visible; }
 
 @media (hover: hover) and (pointer: fine) {
-  .item:hover > .panel { opacity: 1; visibility: visible; transform: translateY(0); }
+  .item:hover > .panel { opacity: 1; visibility: visible; }
 }
 
-/* ── Panel inner content area (with padding) ─────────────────────────────── */
-.panelInner { padding: var(--spacing-sm); }
+/* Bar and panel have to be ONE plane. The bar is normally translucent warm
+   paper over whatever is behind it; against the panel's pure white that seam
+   was visible. While any menu is open the bar goes opaque white and drops its
+   rule, so there is nothing between the logo and the columns. */
+@media (min-width: 921px) {
+  .nav:has(.item[data-open="true"]) { background: var(--bg-card); border-bottom-color: transparent; }
+}
+@media (min-width: 921px) and (hover: hover) and (pointer: fine) {
+  .nav:has(.item:hover) { background: var(--bg-card); border-bottom-color: transparent; }
+}
 
-/* ── Panel footer strip ─────────────────────────────────────────────────── */
+/* ── Panel body — one 12-unit grid ─────────────────────────────────────────
+   Link columns span 3 units, and the Services list splits itself into 4 text
+   columns — so both land on the same quarter-width pitch and every menu reads
+   on one column rhythm. Engine cards are the deliberate exception at span 4
+   (three per row): they carry a descriptor line and need the width, and six
+   cards divide evenly by three, not four. Content aligns to the same left edge
+   as the logo. Columns left empty stay empty — on a uniform plane that reads
+   as space, which is the whole point. */
+.panelBody {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0 2rem;
+  padding: 2.6rem var(--container-pad) 2.3rem;
+}
+
+.col { grid-column: span 3; min-width: 0; }
+.colFull { grid-column: 1 / -1; min-width: 0; }
+
+.colHead {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted-light);
+  margin: 0 0 0.9rem;
+}
+.colHeadSpan { grid-column: 1 / -1; }
+
+.colList { list-style: none; margin: 0; padding: 0; }
+.colList li { break-inside: avoid; }
+
+/* One list read as four columns (down, then across) — not four lists that
+   happen to sit next to each other. */
+.colListSplit { columns: 4; column-gap: 2rem; }
+
+.colLink {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-light);
+}
+.colLink:hover { color: var(--brand-green-ink); }
+
+/* ── AI Engines: name + one-line descriptor, three across ──────────────────── */
+.engine { grid-column: span 4; display: block; padding: 0.35rem 0 1rem; }
+.engineName {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-light);
+  transition: color var(--transition-fast);
+}
+.engineBlurb {
+  display: block;
+  margin-top: 0.22rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-muted-light);
+}
+.workItem { grid-column: span 3; }
+.engine:hover .engineName { color: var(--brand-green-ink); }
+
+
+/* ── Feature column (free audit) — the offer, always one click from any menu ── */
+.feature {
+  grid-column: span 3;
+  align-self: start;
+  padding: 1.3rem 1.3rem 1.4rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+.featureHead {
+  font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--brand-green); margin: 0 0 0.7rem;
+}
+.featureTitle { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.2; margin: 0 0 0.5rem; color: var(--text-dark); }
+.featureBody { font-size: 0.86rem; line-height: 1.5; color: var(--text-muted-dark); margin: 0 0 1rem; }
+.featureCta {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-size: 0.875rem; font-weight: 600; color: var(--brand-green);
+}
+.featureCta:hover { color: var(--color-white); }
+
+/* ── Panel footer strip ────────────────────────────────────────────────────── */
 .panelFooter {
   border-top: 1px solid var(--border-light);
-  padding: 0.55rem var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--neutral-50, var(--bg-sunken));
+  background: var(--bg-sunken);
+  padding: 0.95rem var(--container-pad);
 }
 .panelFooterLink {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted-light);
-  transition: color var(--transition-fast);
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-}
-.panelFooterLink:hover { color: var(--brand-green-ink); }
-
-/* ── Services panel: compact 2-col grid ──────────────────────────────────── */
-.panelGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; min-width: 400px; }
-
-.panelHead {
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
-  color: var(--brand-green-ink); font-weight: 700;
-  padding: 0 0.5rem 0.5rem; margin: 0;
-}
-.panelSub {
-  font-size: 0.72rem; color: var(--text-muted-light);
-  padding: 0 0.5rem 0.4rem; margin: 0 0 0.2rem;
-}
-.panelLink { display: block; padding: 0.45rem 0.55rem; border-radius: var(--radius-sm); color: var(--text-light); }
-.panelLink:hover { background: var(--neutral-100); color: var(--brand-green-ink); }
-.panelLabel { font-size: var(--step--1); font-weight: 500; }
-
-/* ── Use Cases panel: 2-col wide ─────────────────────────────────────────── */
-.itemWide { }
-.panelWide { min-width: 460px; }
-.panelCols { display: flex; gap: var(--spacing-md); }
-.panelCol { min-width: 200px; flex: 1; }
-
-/* ── AI Engines mega-menu ────────────────────────────────────────────────── */
-/* Centered under its trigger, wider than other panels. */
-.itemEngines { }
-
-.enginePanel {
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  min-width: 560px;
-}
-.item[data-open="true"] > .enginePanel { transform: translateX(-50%) translateY(0); }
-@media (hover: hover) and (pointer: fine) {
-  .item:hover > .enginePanel { transform: translateX(-50%) translateY(0); }
-}
-
-.engineGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.1rem 0.5rem;
-  padding: var(--spacing-sm);
-}
-
-/* Live engine card — a clean row: icon + name + one-line descriptor. */
-.engineCard {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  padding: 0.62rem 0.7rem;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  background: transparent;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-  text-decoration: none;
-}
-.engineCard:hover {
-  background: var(--neutral-50, #fafafa);
-  border-color: var(--border-light);
-}
-.engineCardIcon {
-  width: 30px; height: 30px;
-  margin-top: 1px;
-  flex: none;
-  border-radius: var(--radius-sm);
-  background: var(--brand-green-soft);
-  color: var(--brand-green);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.engineCardText {
-  display: flex;
-  flex-direction: column;
-  gap: 0.14rem;
-  min-width: 0;
-}
-.engineCardName {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32rem;
-  font-size: var(--step--1);
+  gap: 0.45rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-light);
-  line-height: 1.25;
 }
-.engineCardArrow {
-  color: var(--brand-green);
-  opacity: 0;
-  transform: translateX(-3px);
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
-}
-.engineCard:hover .engineCardArrow { opacity: 1; transform: translateX(0); }
-.engineCardBlurb {
-  font-size: 0.75rem;
-  color: var(--text-muted-light);
-  line-height: 1.35;
-  margin: 0;
-}
+.panelFooterLink:hover { color: var(--brand-green-ink); }
+.footerArrow { transition: transform var(--transition-fast); }
+.panelFooterLink:hover .footerArrow { transform: translateX(2px); }
 
 /* ── Mobile toggle ─────────────────────────────────────────────────────────── */
 .toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; align-items: center; }
@@ -237,32 +257,39 @@
 
   .link, .item { padding: 0.9rem 0; border-bottom: 1px solid var(--border-light); }
   .item { flex-direction: column; align-items: stretch; }
+  .link, .trigger { height: auto; }
   .trigger { width: 100%; justify-content: space-between; padding: 0; }
 
-  /* Inline accordion panels on mobile */
+  /* The desktop underline marker is meaningless in an accordion. */
+  .link:hover,
+  .item:hover .trigger,
+  .item[data-open="true"] .trigger { box-shadow: none; }
+
+  /* Inline accordion panels */
   .panel {
     position: static;
     opacity: 1;
     visibility: visible;
-    transform: none !important; /* override all transform variants */
     display: none;
     background: transparent;
     border: none;
     box-shadow: none;
-    min-width: 0;
-    overflow: visible;
   }
   .item[data-open="true"] > .panel { display: block; }
 
-  .panelInner { padding: 0.5rem 0 0 0.5rem; }
-  .panelGrid, .panelCols { display: block; min-width: 0; }
-  .panelCol { min-width: 0; margin-top: 0.5rem; }
+  .panelBody { display: block; padding: 0.4rem 0 0 0.75rem; }
+  .col + .col { margin-top: 1.1rem; }
+  .colListSplit { columns: 1; }
+  .colHead { margin: 0 0 0.4rem; }
+  .colLink { padding: 0.5rem 0; }
 
-  /* AI Engines on mobile: single column */
-  .enginePanel { min-width: 0; }
-  .engineGrid { grid-template-columns: 1fr; padding: 0.5rem 0 0 0.5rem; }
+  /* Destinations, not descriptions — the accordion has to stay scannable. */
+  .engine { padding: 0.5rem 0; }
+  .engineBlurb { display: none; }
 
-  .panelFooter { background: transparent; border-top: none; padding: 0.4rem 0 0 0.5rem; }
+  .feature { margin-top: 1.1rem; }
+  .featureBody { display: none; }
+  .panelFooter { background: transparent; border-top: none; padding: 0.65rem 0 0 0.75rem; }
 
-  .cta { margin-top: var(--spacing-sm); text-align: center; }
+  .cta { align-self: stretch; margin-top: var(--spacing-sm); text-align: center; }
 }

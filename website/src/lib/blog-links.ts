@@ -13,28 +13,35 @@ const LABEL = new Map(ALL.map((i) => [i.slug, i.title || i.navLabel]));
 const RULES: [RegExp, string[]][] = [
   // Geo first: a UAE/Dubai post should link its regional money page ahead of the
   // generic vertical pages, then let the vertical rules below fill the remaining slots.
-  [/dubai|\buae\b|emirates|abu dhabi|\bgcc\b|middle east/i, ['ai-automation-agency-dubai']],
-  [/invoice|billing|reconcil|accounts payable|accounts receivable|\bap\b|\bar\b|expense|month-?end|close|ledger|bookkeep/i, ['finance-automation', 'document-processing-automation']],
-  [/\btax\b|cpa|accounting|\b1099\b|w-?2/i, ['cpa-tax-document-automation', 'finance-automation']],
+  [/dubai|\buae\b|emirates|abu dhabi|\bgcc\b|middle east/i, ['ai-automation-agency']],
+  [/invoice|billing|reconcil|accounts payable|accounts receivable|\bap\b|\bar\b|expense|month-?end|close|ledger|bookkeep/i, ['document-processing-automation']],
+  [/\btax\b|cpa|accounting|\b1099\b|w-?2/i, ['cpa-tax-document-automation', 'document-processing-automation']],
   [/legal|law firm|contract|due diligence|clause|litigation|matter intake|imanage|netdocuments/i, ['legal-due-diligence-automation', 'document-processing-automation']],
   [/\bria\b|wealth|advisor|fiduciary|custody|adv form|portfolio.*(report|monitor)|registered investment/i, ['financial-services-automation', 'document-processing-automation']],
   [/insurance|claim|underwrit|fnol|subrogation|guidewire/i, ['insurance-claims-triage-automation', 'document-processing-automation']],
-  [/\bvc\b|private equity|\bpe\b|venture|deal flow|pitch deck|affinity|portfolio compan/i, ['vc-pe-crm-automation', 'sales-revenue-automation']],
+  [/\bvc\b|private equity|\bpe\b|venture|deal flow|pitch deck|affinity|portfolio compan/i, ['vc-pe-crm-automation', 'ai-sales-outreach-engine']],
   [/hoa|reserve study|property manage|real estate|kvcore/i, ['property-management-automation']],
   [/pharma|life scien|clinical|biotech|regulatory (doc|submission)/i, ['pharma-life-sciences-automation', 'document-processing-automation']],
-  [/d2c|e-?commerce|shopify|cart|inventory|stockout|retention|amazon|woocommerce/i, ['d2c-ecommerce-automation', 'marketing-automation']],
+  [/d2c|e-?commerce|shopify|cart|inventory|stockout|retention|amazon|woocommerce/i, ['d2c-ecommerce-automation', 'ai-automation-agency']],
   [/customer support|help ?desk|ticket|\bcx\b|chatbot|customer service|customer quer/i, ['customer-support-automation']],
   [/\bhr\b|recruit|hiring|onboard|resume|talent|employee/i, ['hr-automation']],
-  [/\blead\b|\bsdr\b|outbound|cold email|prospect|\bcrm\b|pipeline|revenue|\bsales\b|gtm|forecast/i, ['sales-revenue-automation']],
-  [/marketing|\bseo\b|content (production|marketing)|newsletter|campaign|\bads?\b|social media/i, ['marketing-automation']],
+  [/\blead\b|\bsdr\b|outbound|cold email|prospect|\bcrm\b|pipeline|revenue|\bsales\b|gtm|forecast/i, ['ai-sales-outreach-engine']],
+  // 'marketing-automation' 308-redirects to 'ai-sales-outreach-engine' (next.config.ts) — link
+  // straight to the real destination so the reader doesn't hit a hop and a mismatched label.
+  [/marketing|\bseo\b|content (production|marketing)|newsletter|campaign|\bads?\b|social media/i, ['ai-sales-outreach-engine']],
   [/compliance|soc ?2|hipaa|\bkyc\b|\baml\b|\baudit\b|regulated/i, ['document-processing-automation', 'financial-services-automation']],
   [/document|\bocr\b|\bpdf\b|extraction|\bidp\b|unstructured|data entry/i, ['document-processing-automation']],
-  [/integrat|\bapi\b|data layer|\betl\b|sync|warehouse|migrat/i, ['system-data-integration', 'n8n-automation-services']],
-  [/n8n|zapier|workflow|\bagent|self-host|automation (platform|tool)|orchestrat/i, ['n8n-automation-services', 'system-data-integration']],
-  [/readiness|assessment|audit your|where to start|roadmap/i, ['ai-readiness-assessment']],
+  [/integrat|\bapi\b|data layer|\betl\b|sync|warehouse|migrat|\bmcp\b/i, ['ai-integration-services', 'custom-mcp-server-development']],
+  [/\bagent|knowledge|\brag\b/i, ['ai-agent-development', 'ai-knowledge-systems']],
+  [/n8n|zapier|workflow|self-host|automation (platform|tool)|orchestrat/i, ['ai-automation', 'ai-automation-agency']],
+  [/report|briefing|dashboard|presentation/i, ['automated-reporting']],
+  [/email|inbox/i, ['ai-email-management']],
+  [/training|adopt|ai-native|team enablement/i, ['ai-training-for-employees']],
+  [/cost|pricing|price|roi|budget/i, ['ai-automation-cost', 'ai-roi-calculator']],
+  [/readiness|assessment|audit your|where to start|roadmap|strategy/i, ['ai-strategy-consulting', 'how-we-work']],
 ];
 
-const FALLBACK = ['n8n-automation-services', 'document-processing-automation', 'sales-revenue-automation'];
+const FALLBACK = ['ai-automation-agency', 'ai-knowledge-systems', 'ai-integration-services'];
 
 /**
  * The pillar page each audience cluster links UP to (hub-and-spoke). The blog
@@ -51,7 +58,26 @@ const PILLAR_BY_INDUSTRY: Record<string, string> = {
   'rias-wealth-management': 'financial-services-automation',
   'private-equity-vc': 'vc-pe-crm-automation',
   'insurance-healthcare': 'insurance-claims-triage-automation',
-  'sales-revenue': 'sales-revenue-automation',
+  'sales-revenue': 'ai-sales-outreach-engine',
+  startups: 'ai-automation-agency',
+};
+
+/**
+ * Industry-scoped service slots, used INSTEAD of the keyword rules for the
+ * audiences listed here.
+ *
+ * Why this exists: the RULES above read a free-text haystack, which is fine when a
+ * post's vocabulary belongs to its audience. It is not fine for the startup
+ * cluster, whose whole vocabulary is money and hiring. "What Does Your Next Hire
+ * Actually Cost? The Headcount Tax, Priced" matches /\btax\b/ on the words
+ * "Headcount Tax" and picks up the two CPA money pages, which is exactly wrong for
+ * a founder. Where an audience has a small, known-correct set of pages, name them.
+ *
+ * Pillar first, so it keeps slot one. Any industry absent from this map falls
+ * through to the keyword rules exactly as before.
+ */
+const SERVICES_BY_INDUSTRY: Record<string, string[]> = {
+  startups: ['ai-automation-agency', 'ai-sales-outreach-engine', 'business-process-automation-consulting'],
 };
 
 /** The pillar page for a post's industry, if it has one. */
@@ -60,17 +86,50 @@ export function pillarFor(industry?: string): { slug: string; label: string } | 
   return slug ? { slug, label: LABEL.get(slug) || slug } : undefined;
 }
 
+/**
+ * The buyer-intent page each post hands its reader to (2026-10 SEO forensics: the
+ * blog never fed the pages that book calls). Reserved as the LAST related-service
+ * slot so a vertical pillar can still lead, but every post ends one click from a
+ * page built to convert. First match wins; the agency page is the default.
+ */
+const BUYER_RULES: [RegExp, string][] = [
+  [/\bmcp\b|model context protocol/i, 'custom-mcp-server-development'],
+  [/migrat|replatform|legacy (system|software)|switch(ing)? from/i, 'tech-stack-migration'],
+  [/integrat|\bapi\b|\betl\b|\bsync\b|data layer|connector|\berp\b/i, 'ai-integration-services'],
+  [/knowledge|\brag\b|semantic search|internal search|policy|playbook/i, 'ai-knowledge-systems'],
+  [/\bagents?\b|copilot|assistant|chatbot|autonomous/i, 'ai-agent-development'],
+  [/report|briefing|dashboard|presentation/i, 'automated-reporting'],
+  [/\bemail\b|inbox/i, 'ai-email-management'],
+  [/training|upskill|ai-native|team enablement/i, 'ai-training-for-employees'],
+  [/cost|pricing|price|budget|per invoice|\broi\b|payback/i, 'ai-automation-cost'],
+  [/strategy|roadmap|readiness|where to start|assessment|maturity/i, 'ai-strategy-consulting'],
+];
+
+export function buyerPageFor(hay: string): string {
+  for (const [re, slug] of BUYER_RULES) if (re.test(hay)) return slug;
+  return 'ai-automation-agency';
+}
+
 export function relatedServices(opts: { title?: string; category?: string; slug?: string; industry?: string }) {
   const hay = `${opts.title || ''} ${opts.category || ''} ${opts.slug || ''}`.toLowerCase();
   const picked: string[] = [];
   // Pillar first — it is the guaranteed link, not a keyword coincidence.
   const pillar = PILLAR_BY_INDUSTRY[opts.industry || ''];
   if (pillar) picked.push(pillar);
+  // An explicit per-audience list wins over keyword matching entirely.
+  const scoped = SERVICES_BY_INDUSTRY[opts.industry || ''];
+  if (scoped) {
+    for (const s of scoped) if (!picked.includes(s)) picked.push(s);
+    return picked.slice(0, 3).map((slug) => ({ slug, label: LABEL.get(slug) || slug }));
+  }
   for (const [re, slugs] of RULES) {
     if (re.test(hay)) for (const s of slugs) if (!picked.includes(s)) picked.push(s);
   }
   for (const s of FALLBACK) { if (picked.length >= 3) break; if (!picked.includes(s)) picked.push(s); }
-  return picked.slice(0, 3).map((slug) => ({ slug, label: LABEL.get(slug) || slug }));
+  // Two vertical/keyword matches at most; the last slot is always the buyer page.
+  const buyer = buyerPageFor(hay);
+  const head = picked.filter((s) => s !== buyer).slice(0, 2);
+  return [...head, buyer].map((slug) => ({ slug, label: LABEL.get(slug) || slug }));
 }
 
 /**
@@ -86,7 +145,21 @@ const CALC_RULES: [RegExp, string][] = [
   [/document|\bocr\b|\bpdf\b|extraction|\bidp\b|unstructured|data entry|paperwork/i, 'document-processing-cost-calculator'],
 ];
 
-export function relatedCalculator(opts: { title?: string; category?: string; slug?: string }): CalculatorDef | undefined {
+/**
+ * Audiences with no calculator that fits them. Without this, the startup cluster's
+ * money vocabulary trips CALC_RULES: "The Headcount Tax" matches /\btax\b/ and a
+ * founder gets offered the CPA tax-season capacity calculator, which is a worse
+ * ask than no calculator at all. These posts fall through to the plain call.
+ */
+const NO_CALCULATOR_INDUSTRIES = new Set(['startups']);
+
+export function relatedCalculator(opts: {
+  title?: string;
+  category?: string;
+  slug?: string;
+  industry?: string;
+}): CalculatorDef | undefined {
+  if (opts.industry && NO_CALCULATOR_INDUSTRIES.has(opts.industry)) return undefined;
   const hay = `${opts.title || ''} ${opts.category || ''} ${opts.slug || ''}`.toLowerCase();
   for (const [re, slug] of CALC_RULES) {
     if (re.test(hay)) return CALCULATORS.find((c) => c.slug === slug);
@@ -113,9 +186,46 @@ export function relatedCalculator(opts: { title?: string; category?: string; slu
    --------------------------------------------------------------------------- */
 
 export type ArticleCtaPlan =
+  | { tier: 'offer' }
   | { tier: 'scope'; calc?: CalculatorDef }
   | { tier: 'calculator'; calc: CalculatorDef }
   | { tier: 'call' };
+
+/**
+ * Agency-shopping posts — a strict subset of comparison intent, and the most
+ * commercially valuable traffic on the site.
+ *
+ * These are the "top/best AI automation agencies" listicles. GSC (May-Aug 2026)
+ * puts eight of them at 58 clicks and ~19k impressions against 17 clicks from
+ * the 67 CPA/legal/wealth pages combined — this reader is not researching a
+ * topic, they are picking a supplier this week.
+ *
+ * They get the `offer` tier rather than `scope` because a shortlisting reader
+ * will compare three vendors before booking anything with any of them. Asking
+ * for a call loses to whichever competitor asked for less; asking for ten
+ * sample documents is a smaller commitment than the shortlist itself, and it
+ * puts our output in front of them while they are still comparing.
+ */
+const AGENCY_SHOPPING_RE =
+  /(?:top|best)[- ].{0,30}(?:ai[- ])?(?:automation|n8n)[- ](?:agenc|consultan|expert|compan|partner|firm)|automation-agencies|n8n-(?:consultants|experts)|best-n8n/i;
+
+export function isAgencyShoppingPost(opts: { title?: string; slug?: string }): boolean {
+  return AGENCY_SHOPPING_RE.test(`${opts.title || ''} ${opts.slug || ''}`);
+}
+
+/**
+ * Outsourcing-vs-AI comparison posts — the same shortlisting-stage reader as
+ * agency-shopping, arrived at from the other real search vocabulary buyers
+ * use ("legal process outsourcing", "data entry outsourcing") rather than
+ * "AI automation agency". A reader comparing "outsource this or build it" is
+ * already sold on getting the work off their plate; the same offer-tier logic
+ * applies — a ten-document sample is a smaller ask than the vendor shortlist.
+ */
+const OUTSOURCING_COMPARISON_RE = /outsourc(?:ing|ed)[- ].{0,40}\bvs\.?\b|\bvs\.?[- ].{0,40}outsourc|outsourcing[- ]alternative/i;
+
+export function isOutsourcingComparisonPost(opts: { title?: string; slug?: string }): boolean {
+  return OUTSOURCING_COMPARISON_RE.test(`${opts.title || ''} ${opts.slug || ''}`);
+}
 
 /**
  * Comparison / vendor-selection signals. `format: 'comparison'` and
@@ -143,8 +253,13 @@ export function articleCta(opts: {
   slug?: string;
   format?: string;
   topic?: string;
+  industry?: string;
 }): ArticleCtaPlan {
   const calc = relatedCalculator(opts);
+  // Checked before comparison: agency-shopping and outsourcing-comparison are
+  // both comparison intent at its most commercial, and earn the offer rather
+  // than the scoping explainer.
+  if (isAgencyShoppingPost(opts) || isOutsourcingComparisonPost(opts)) return { tier: 'offer' };
   if (isComparisonPost(opts)) return { tier: 'scope', calc };
   if (calc) return { tier: 'calculator', calc };
   return { tier: 'call' };

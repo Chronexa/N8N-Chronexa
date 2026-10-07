@@ -1,0 +1,171 @@
+{
+  "name": "Meta Ads Daily Report",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "every-morning-9am-ist",
+      "name": "Every morning 9am IST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "account-insights",
+      "name": "Account Insights",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "summarise-day",
+      "name": "Summarise Day",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "campaign-insights",
+      "name": "Campaign Insights",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "build-message",
+      "name": "Build Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "send-report",
+      "name": "Send Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        40
+      ],
+      "parameters": {
+        "content": "## Meta Ads · daily report\n\nRuns every morning at 9am. Reads the ad account for the last two days, compares them, and sends the founders a WhatsApp summary: spend, leads, cost per lead and which campaigns moved.",
+        "width": 620,
+        "height": 170
+      }
+    }
+  ],
+  "connections": {
+    "Every morning 9am IST": {
+      "main": [
+        [
+          {
+            "node": "Account Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Account Insights": {
+      "main": [
+        [
+          {
+            "node": "Summarise Day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarise Day": {
+      "main": [
+        [
+          {
+            "node": "Campaign Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaign Insights": {
+      "main": [
+        [
+          {
+            "node": "Build Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Message": {
+      "main": [
+        [
+          {
+            "node": "Send Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

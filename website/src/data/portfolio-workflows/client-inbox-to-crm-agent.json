@@ -1,0 +1,532 @@
+{
+  "name": "Client Inbox to CRM Agent",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Client inbox to CRM agent\n\n**Reference architecture.**\n\nEvery client email is matched to the right person and the right open deal, saved against the record, summarised, and classified by intent.\n\nAn AI agent does the matching, and asks for a human when it can't be sure. Intent then drives what happens: interested leads alert the owner, confirmations advance the stage, clear declines get a polite close.\n\nUnknown senders and ambiguous matches go to Slack instead of being guessed.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "new-client-email",
+      "name": "New Client Email",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "normalise-email",
+      "name": "Normalise Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ignore-system-senders-",
+      "name": "Ignore System Senders?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "find-contact-by-sender",
+      "name": "Find Contact by Sender",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "contact-found-",
+      "name": "Contact Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "match-to-open-deal",
+      "name": "Match to Open Deal",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1200,
+        80
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        -180
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "match-schema",
+      "name": "Match Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1392,
+        -180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "save-email-to-crm",
+      "name": "Save Email to CRM",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "extract-key-facts",
+      "name": "Extract Key Facts",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1680,
+        80
+      ],
+      "parameters": {
+        "promptType": "define"
+      }
+    },
+    {
+      "id": "claude-sonnet-facts-",
+      "name": "Claude Sonnet (Facts)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        -180
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "update-deal-summary",
+      "name": "Update Deal Summary",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "classify-intent",
+      "name": "Classify Intent",
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        80
+      ],
+      "parameters": {
+        "categories": {
+          "categories": [
+            {
+              "category": "Interested"
+            },
+            {
+              "category": "Confirmed"
+            },
+            {
+              "category": "Not interested"
+            },
+            {
+              "category": "Other"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "claude-haiku",
+      "name": "Claude Haiku",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2160,
+        340
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "alert-deal-owner",
+      "name": "Alert Deal Owner",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2448,
+        -100
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "advance-deal-stage",
+      "name": "Advance Deal Stage",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2448,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-polite-close",
+      "name": "Send Polite Close",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2448,
+        260
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "reply"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "log-only",
+      "name": "Log Only",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2448,
+        440
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "mark-email-synced",
+      "name": "Mark Email Synced",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2736,
+        80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "addLabels"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "alert-unknown-sender",
+      "name": "Alert: Unknown Sender",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1200,
+        440
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "New Client Email": {
+      "main": [
+        [
+          {
+            "node": "Normalise Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Email": {
+      "main": [
+        [
+          {
+            "node": "Ignore System Senders?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ignore System Senders?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Find Contact by Sender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Contact by Sender": {
+      "main": [
+        [
+          {
+            "node": "Contact Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Found?": {
+      "main": [
+        [
+          {
+            "node": "Match to Open Deal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alert: Unknown Sender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Match to Open Deal",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Match to Open Deal",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match to Open Deal": {
+      "main": [
+        [
+          {
+            "node": "Save Email to CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Email to CRM": {
+      "main": [
+        [
+          {
+            "node": "Extract Key Facts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet (Facts)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Key Facts",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Key Facts": {
+      "main": [
+        [
+          {
+            "node": "Update Deal Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Deal Summary": {
+      "main": [
+        [
+          {
+            "node": "Classify Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classify Intent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Intent": {
+      "main": [
+        [
+          {
+            "node": "Alert Deal Owner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Advance Deal Stage",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Polite Close",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Deal Owner": {
+      "main": [
+        [
+          {
+            "node": "Mark Email Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advance Deal Stage": {
+      "main": [
+        [
+          {
+            "node": "Mark Email Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Polite Close": {
+      "main": [
+        [
+          {
+            "node": "Mark Email Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Only": {
+      "main": [
+        [
+          {
+            "node": "Mark Email Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

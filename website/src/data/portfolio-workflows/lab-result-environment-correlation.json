@@ -1,0 +1,203 @@
+{
+  "name": "Lab Result × Environment Correlation",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "87c67bdc-25d6-4c6f-ba4a-5dbc96ab32d0",
+      "name": "Run Demo: New COA Received",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "6193ba07-53fd-45cf-887a-a875ca17feb2",
+      "name": "Sticky Note: Workflow 1 Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -192
+      ],
+      "parameters": {
+        "content": "## Lab result × environment correlation\n\n**Before:** a lab certificate arrives as a PDF and gets filed. When a batch underperforms, finding out why means an hour or more of pulling climate logs, irrigation data and lab results from separate systems, and the cause often stays a guess.\n\n**After:** each new lab result is joined to the climate history of the room it grew in, and the team gets a plain-English explanation and a recipe recommendation.",
+        "width": 440,
+        "height": 420,
+        "color": 5
+      }
+    },
+    {
+      "id": "cc09ea49-38a0-4f65-b924-4fee15732e7b",
+      "name": "Get Latest COA From Lab",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3c80deda-8290-4782-8ad6-489b91c96bc4",
+      "name": "Sticky Note: COA Source",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -32
+      ],
+      "parameters": {
+        "content": "**Source:** lab results\n\nIn the pilot, a sheet stands in for the lab. In production, the emailed PDF certificate is parsed and its values written here.",
+        "height": 246,
+        "color": 7
+      }
+    },
+    {
+      "id": "e6e53be6-47f7-47fe-a8aa-396412c0e8c5",
+      "name": "Get Env Logs for Room",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        240,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "7abcb28d-8409-4176-a421-add6eb880665",
+      "name": "Sticky Note: Env Source",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -96
+      ],
+      "parameters": {
+        "content": "**Source:** environment logs\n\nIn the pilot, a sheet stands in for the climate controller export. In production, a direct connection pulls VPD, temperature, humidity and CO₂ per room per day.",
+        "height": 310,
+        "color": 7
+      }
+    },
+    {
+      "id": "26d7768b-b851-4157-a720-a2ed989a7f15",
+      "name": "Correlate & Generate Recipe Insight",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8158f00e-d67a-4c50-bbd6-c88adc33350f",
+      "name": "Sticky Note: Intelligence Layer",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -176
+      ],
+      "parameters": {
+        "content": "**The intelligence layer**\n\n1. Joins the lab result to every environment log for that room\n2. Averages VPD, temperature, humidity and CO₂ across the cycle\n3. Compares the outcome to the expected range\n4. Writes a plain-English insight and a recipe recommendation",
+        "height": 404,
+        "color": 4
+      }
+    },
+    {
+      "id": "0ec6c08f-393b-4df5-9ce9-a2d994ad595e",
+      "name": "Write Insight to Recipe Library",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        720,
+        240
+      ],
+      "parameters": {
+        "operation": "append"
+      }
+    },
+    {
+      "id": "0edcbbd4-756d-4256-bcde-904473db730b",
+      "name": "Sticky Note: Recipe Library",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -48
+      ],
+      "parameters": {
+        "content": "**Output:** a recipe library\n\nOver time this builds a record of which conditions produced which results, per strain and per room, which feeds the targets used by the room-monitoring workflow.",
+        "height": 242,
+        "color": 3
+      }
+    },
+    {
+      "id": "7a0db6b6-6a9d-4bf7-af19-a28fe23de1ef",
+      "name": "Notify Cultivation Team",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        240
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Run Demo: New COA Received": {
+      "main": [
+        [
+          {
+            "node": "Get Latest COA From Lab",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Latest COA From Lab": {
+      "main": [
+        [
+          {
+            "node": "Get Env Logs for Room",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Env Logs for Room": {
+      "main": [
+        [
+          {
+            "node": "Correlate & Generate Recipe Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correlate & Generate Recipe Insight": {
+      "main": [
+        [
+          {
+            "node": "Write Insight to Recipe Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Insight to Recipe Library": {
+      "main": [
+        []
+      ]
+    }
+  }
+}

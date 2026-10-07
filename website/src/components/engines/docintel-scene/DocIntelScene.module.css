@@ -41,7 +41,11 @@
 /* ── The stage ─────────────────────────────────────────────── */
 .stage {
   position: relative;
-  height: clamp(560px, 72vh, 760px);
+  /* Host-overridable via --scene-h (ServicePage's hero sets it so the frame
+     sits level with the copy column). The fallback is the original value, so
+     /ai-engines renders exactly as before. Do not go below 560px — the scene's
+     internal composition is designed against that floor. */
+  height: var(--scene-h, clamp(560px, 72vh, 760px));
   border-radius: 20px;
   overflow: hidden;
   background:

@@ -1,0 +1,565 @@
+{
+  "name": "LinkedIn Content Engine",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## LinkedIn content engine\n\n**Reference architecture.**\n\nTwice a week it researches your topics from RSS sources and an AI search, saves the raw material, and classifies what's relevant to your audience.\n\nFor each relevant story it picks a content pillar and drafts a post in your voice from real examples, then scores the draft.\n\nDrafts go to Slack. Reply with approve and it's published. Reply with feedback and it's rewritten and sent back for another look.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "research-schedule",
+      "name": "Research Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        120
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * 1,4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "read-rss-sources",
+      "name": "Read RSS Sources",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "search-with-perplexity",
+      "name": "Search with Perplexity",
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        240,
+        260
+      ],
+      "parameters": {
+        "operation": "message"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "merge-sources",
+      "name": "Merge Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        480,
+        120
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "save-raw-content",
+      "name": "Save Raw Content",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        120
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "classify-relevance",
+      "name": "Classify Relevance",
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        960,
+        120
+      ],
+      "parameters": {
+        "categories": {
+          "categories": [
+            {
+              "category": "Relevant"
+            },
+            {
+              "category": "Not relevant"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "claude-haiku",
+      "name": "Claude Haiku",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        960,
+        380
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "pick-content-pillar",
+      "name": "Pick Content Pillar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        20
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "draft-post-in-our-voice",
+      "name": "Draft Post in Our Voice",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1488,
+        20
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1488,
+        -240
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "draft-schema",
+      "name": "Draft Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        -240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "score-draft",
+      "name": "Score Draft",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1776,
+        20
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "store-draft",
+      "name": "Store Draft",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2016,
+        20
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-draft-for-review",
+      "name": "Send Draft for Review",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        20
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "reviewer-replies",
+      "name": "Reviewer Replies",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        320
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "route-reply",
+      "name": "Route Reply",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2496,
+        320
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.reply }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Approve"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.reply }}",
+                    "rightValue": "revise",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Revise"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "publish-to-linkedin",
+      "name": "Publish to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        220
+      ],
+      "parameters": {
+        "resource": "post",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "log-published-post",
+      "name": "Log Published Post",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2976,
+        220
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "rewrite-with-feedback",
+      "name": "Rewrite with Feedback",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        2736,
+        440
+      ],
+      "parameters": {
+        "promptType": "define"
+      }
+    },
+    {
+      "id": "claude-sonnet-rewrite-",
+      "name": "Claude Sonnet (Rewrite)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2736,
+        700
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Research Schedule": {
+      "main": [
+        [
+          {
+            "node": "Read RSS Sources",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search with Perplexity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read RSS Sources": {
+      "main": [
+        [
+          {
+            "node": "Merge Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search with Perplexity": {
+      "main": [
+        [
+          {
+            "node": "Merge Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Sources": {
+      "main": [
+        [
+          {
+            "node": "Save Raw Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Raw Content": {
+      "main": [
+        [
+          {
+            "node": "Classify Relevance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classify Relevance",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Relevance": {
+      "main": [
+        [
+          {
+            "node": "Pick Content Pillar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Content Pillar": {
+      "main": [
+        [
+          {
+            "node": "Draft Post in Our Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Draft Post in Our Voice",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Draft Post in Our Voice",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Post in Our Voice": {
+      "main": [
+        [
+          {
+            "node": "Score Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Draft": {
+      "main": [
+        [
+          {
+            "node": "Store Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Draft": {
+      "main": [
+        [
+          {
+            "node": "Send Draft for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reviewer Replies": {
+      "main": [
+        [
+          {
+            "node": "Route Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Reply": {
+      "main": [
+        [
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rewrite with Feedback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to LinkedIn": {
+      "main": [
+        [
+          {
+            "node": "Log Published Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet (Rewrite)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Rewrite with Feedback",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rewrite with Feedback": {
+      "main": [
+        [
+          {
+            "node": "Send Draft for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

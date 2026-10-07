@@ -14,6 +14,21 @@
 .facts li { display: flex; flex-direction: column; gap: 0.25rem; font-size: var(--step--1); color: var(--text-light); }
 .facts span { font-size: var(--step--1); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-muted-light); }
 .facts a { color: var(--brand-green-ink); }
+.evidenceNote {
+  margin-top: var(--spacing-md);
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--brand-green);
+  background: var(--brand-green-soft);
+  color: var(--text-muted-light);
+  font-size: var(--step--1);
+  line-height: 1.55;
+}
+
+.coverWrap { margin-top: var(--spacing-xl); }
+.cover { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: #fbfaf6; }
+
+.coverWrap { margin-top: var(--spacing-xl); }
+.cover { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: #f7f5f0; }
 
 .statsRow { display: flex; flex-wrap: wrap; gap: var(--spacing-lg); margin-block: var(--spacing-xl); }
 .stat { border-left: 3px solid var(--brand-green); padding-left: var(--spacing-md); }
@@ -21,6 +36,16 @@
 .statLabel { font-size: var(--step--1); color: var(--text-muted-light); margin-top: 0.4rem; max-width: 24ch; }
 
 .body { max-width: 760px; }
+.answerBox { margin: 0 0 var(--spacing-lg); padding: var(--spacing-md) var(--spacing-lg); border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--brand-green-soft); }
+.answerBox h2 { margin-top: 0 !important; }
+.answerBox p { margin-bottom: 0 !important; color: var(--text-light) !important; }
+.toolList { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-left: 0 !important; list-style: none; }
+.toolList li { padding: 0.35rem 0.7rem; border: 1px solid var(--border-light); border-radius: 999px; background: #fff; font-size: var(--step--1); color: var(--text-light); }
+.steps { counter-reset: workflow-step; margin-left: 0 !important; list-style: none; }
+.steps li { position: relative; padding: 0 0 var(--spacing-md) 3rem; border-left: 1px solid var(--border-light); }
+.steps li::before { counter-increment: workflow-step; content: counter(workflow-step); position: absolute; left: -1rem; top: 0; display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 50%; background: var(--brand-green); color: #fff; font-weight: 700; }
+.steps li:last-child { border-left-color: transparent; }
+.steps p { margin: 0.25rem 0 0 !important; }
 .body :global(h2) { font-size: var(--step-2); margin: var(--spacing-lg) 0 var(--spacing-sm); }
 .body :global(h3) { font-size: var(--step-1); margin: var(--spacing-md) 0 var(--spacing-xs); color: var(--brand-green-ink); }
 .body :global(p) { color: var(--text-muted-light); margin-bottom: var(--spacing-sm); font-size: 1.05rem; line-height: 1.75; }

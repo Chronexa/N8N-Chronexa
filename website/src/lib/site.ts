@@ -10,13 +10,17 @@ export const site = {
   legalName: "Chronexa Intelligence Private Limited",
   // Production origin. Override via NEXT_PUBLIC_SITE_URL in Vercel if needed.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://chronexa.io",
-  title: "Custom Enterprise AI for Law Firms, CPA Practices & Finance Teams | Chronexa",
+  title: "AI Consulting, Automation & Software Development | Chronexa",
   description:
-    "Chronexa is an AI automation agency that builds custom AI infrastructure inside your own environment — intelligent document processing, sales and support automation, secure private-LLM deployments — for financial services, legal, insurance and private equity. Growth without adding headcount: fixed-price scopes, systems you own outright.",
-  tagline: "Custom Enterprise AI for Regulated Industries",
+    "AI consulting and development for growing companies. We audit how you work, connect AI agents to your tools, and build the automations and software. Free audit.",
+  definition:
+    "Chronexa is an AI consulting and development firm for growing companies in the United States and worldwide. We audit how a business runs, connect AI agents to the tools it already uses, and build the automations, integrations and software that let the same team serve more clients, with a person approving every step that matters.",
+  tagline: "AI that does real work. Engineers who know when it’s right.",
   email: "info@chronexa.io",
-  locality: "IXC, India",
-  hours: "Mon–Sat: 9:00am – 8:30pm",
+  // Public-facing location line (2026-10-07: Ankit — never show the India city on buyer-facing pages).
+  locality: "Remote-first · serving the US and global clients",
+  // Registered-entity location, used only where the legal entity must be named (privacy policy).
+  legalLocality: "India",
   // Primary conversion: every "Book/Get a Free Audit" CTA opens this booking.
   booking: "https://calendly.com/ankit-chronexa/30min",
   calLink: "ankit-chronexa/30min",
@@ -50,7 +54,7 @@ export const founders: Founder[] = [
     name: "Abhishek Walia",
     role: "Co-founder & CEO",
     image: "/images/team-abhishek.png",
-    credential: "Chartered Accountant (India)",
+    credential: "Chartered Accountant",
     expertise: ["Business strategy", "Financial technology", "Automation ROI", "Enterprise operations"],
     bio: "Abhishek drives Chronexa's strategic vision and client partnerships. With a background as a Chartered Accountant and tech entrepreneur, he bridges the gap between complex enterprise operations and AI automation. He ensures every system we build translates directly into measurable ROI for our clients.",
     linkedin: "https://www.linkedin.com/in/abhishek-walia-0710/",
@@ -84,7 +88,7 @@ export const company = {
 /** Primary navigation — mirrors the live Framer site. */
 export const navLinks = [
   { label: "Solutions", href: "/solutions" },
-  { label: "Portfolio", href: "/case-studies" },
+  { label: "Portfolio", href: "/n8n-portfolio" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
 ] as const;

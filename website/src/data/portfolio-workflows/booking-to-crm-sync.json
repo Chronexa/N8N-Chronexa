@@ -1,0 +1,597 @@
+{
+  "name": "Booking to CRM Sync",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Booking to CRM sync\n\n**Reference architecture.**\n\nEvery booking event from the scheduling tool is routed by type: new, rescheduled or cancelled.\n\nA new booking finds or creates the contact, records the booking, moves the lead forward and tells sales. A reschedule updates the old booking and the calendar. A cancellation starts a recovery email.\n\nA separate check every 15 minutes finds bookings nobody showed up to and sends a friendly reschedule email.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "booking-event",
+      "name": "Booking Event",
+      "type": "n8n-nodes-base.calendlyTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "events": [
+          "invitee.created",
+          "invitee.canceled"
+        ]
+      }
+    },
+    {
+      "id": "route-event-type",
+      "name": "Route Event Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        240
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "booked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Booked"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "rescheduled",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Rescheduled"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "cancelled",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelled"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "find-contact",
+      "name": "Find Contact",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "contact-found-",
+      "name": "Contact Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "create-contact",
+      "name": "Create Contact",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        -140
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "create-booking-record",
+      "name": "Create Booking Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "advance-lead-stage",
+      "name": "Advance Lead Stage",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        0
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "notify-sales",
+      "name": "Notify Sales",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1680,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "find-original-booking",
+      "name": "Find Original Booking",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        280
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "update-booking-record",
+      "name": "Update Booking Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        280
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "move-calendar-event",
+      "name": "Move Calendar Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        960,
+        280
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "notify-reschedule",
+      "name": "Notify Reschedule",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1200,
+        280
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "find-cancelled-booking",
+      "name": "Find Cancelled Booking",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        560
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "mark-cancelled",
+      "name": "Mark Cancelled",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        560
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "notify-cancellation",
+      "name": "Notify Cancellation",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        960,
+        560
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-recovery-email",
+      "name": "Send Recovery Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        560
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "no-show-check",
+      "name": "No-show Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        840
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "find-overdue-bookings",
+      "name": "Find Overdue Bookings",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        840
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "mark-no-show",
+      "name": "Mark No-show",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        840
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-reschedule-email",
+      "name": "Send Reschedule Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        840
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Booking Event": {
+      "main": [
+        [
+          {
+            "node": "Route Event Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Event Type": {
+      "main": [
+        [
+          {
+            "node": "Find Contact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Find Original Booking",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Find Cancelled Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Contact": {
+      "main": [
+        [
+          {
+            "node": "Contact Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Found?": {
+      "main": [
+        [
+          {
+            "node": "Create Booking Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Contact": {
+      "main": [
+        [
+          {
+            "node": "Create Booking Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Booking Record": {
+      "main": [
+        [
+          {
+            "node": "Advance Lead Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advance Lead Stage": {
+      "main": [
+        [
+          {
+            "node": "Notify Sales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Original Booking": {
+      "main": [
+        [
+          {
+            "node": "Update Booking Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Booking Record": {
+      "main": [
+        [
+          {
+            "node": "Move Calendar Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move Calendar Event": {
+      "main": [
+        [
+          {
+            "node": "Notify Reschedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Cancelled Booking": {
+      "main": [
+        [
+          {
+            "node": "Mark Cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Cancelled": {
+      "main": [
+        [
+          {
+            "node": "Notify Cancellation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Cancellation": {
+      "main": [
+        [
+          {
+            "node": "Send Recovery Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No-show Check": {
+      "main": [
+        [
+          {
+            "node": "Find Overdue Bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Overdue Bookings": {
+      "main": [
+        [
+          {
+            "node": "Mark No-show",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark No-show": {
+      "main": [
+        [
+          {
+            "node": "Send Reschedule Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

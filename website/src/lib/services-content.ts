@@ -1,3 +1,4 @@
+import { SERVICES_V2, SOLUTIONS_V2 } from './services-v2';
 /**
  * Content for Chronexa's commercial service / landing pages.
  * Flat keyword-first slugs (SEO decision D-003). Old /services/* paths
@@ -78,8 +79,132 @@ export type ServiceContent = {
   proof?: { slug: string; label: string };
   /** Related service slugs to cross-link. */
   related: string[];
-  /** Sales-page data — presence switches the route to ServiceSalesPage. */
+  /** Sales-page data — presence switches the route to ServiceSalesPage.
+   *  @deprecated Superseded by ServicePage (2026-08). Retained only while the two
+   *  legacy sales routes are migrated; delete once no route imports ServiceSalesPage. */
   sales?: SalesBlock;
+
+  /* ---- ServicePage fields (2026-08 rebuild) --------------------------------
+     The rebuilt template renders one consistent layout for all 12 services and
+     must look finished when these are absent — the previous system split into a
+     "sales" and an "article" template precisely because optional assets were
+     missing, stranding 45+ entries on the weaker layout. Every field below is
+     optional and its block is skipped when empty. */
+
+  /** Tools the buyer already runs, shown as a logo strip. Files live in /public/logos. */
+  stack?: { file: string; name: string }[];
+  /**
+   * Proof of delivery. `caseStudy` links a real /case-studies/[slug] page.
+   * `mechanism` is the honest fallback when no written-up engagement exists yet —
+   * it describes HOW the system works, never an unverified metric. Pages with
+   * neither still render; the block is simply omitted.
+   * NEVER populate `metric` unless the number traces to a confirmed engagement.
+   *
+   * `research` carries third-party figures for the pages where we have no number
+   * of our own (Ankit, 2026-08-19: "wherever we don't have our own proprietary
+   * numbers to show, we should use industry research"). Every entry MUST name its
+   * report and link to it — the same sourcing rule Evidence.tsx holds to. No
+   * unattributed aggregates, ever.
+   */
+  proofBlock?: {
+    caseStudy?: { slug: string; label: string };
+    mechanism?: string;
+    /**
+     * Our own delivery figure. `value` is the number alone ("1,200", "85"), kept
+     * separate from `unit` so it can count up and so the consequence clause can
+     * carry its own weight instead of running on in one flat line.
+     */
+    metric?: {
+      value: string;
+      unit?: string;
+      label: string;
+      /** The consequence — what that number meant for them. This is the ROI read. */
+      outcome?: string;
+      source: string;
+    };
+    research?: { value: string; label: string; source: string; href: string }[];
+  };
+  /**
+   * The visual that anchors the hero. `scene` mounts a live engine scene
+   * (src/components/engines/*) via ServiceSceneFrame; `heroImage` is the
+   * generated still used where no scene maps. A scene always wins when both
+   * are set.
+   */
+  scene?: import('../components/ServiceSceneFrame').SceneKey;
+  sceneTitle?: string;
+  heroImage?: { src: string; alt: string };
+  /**
+   * Up to three hero stats, matching the homepage Hero pattern. Numbers count up.
+   * Same sourcing rule as `proofBlock.metric` — attributed or absent.
+   */
+  heroStats?: { value: number | string; suffix?: string; label: string }[];
+  /**
+   * One scannable row of the document types this service actually covers.
+   *
+   * Exists to fix a specific failure: the page led on invoices — invoice
+   * artifact, invoice failure story, "a payment chased in March" — so a
+   * compliance, claims or legal buyer read it and concluded it was an accounts
+   * payable page. Naming the nouns across every segment in one row is the
+   * cheapest fix, and it costs about thirty words.
+   *
+   * One row. No icons, no cards, no headings. Keep it segment-plural.
+   */
+  /** Hero background art. Defaults to the shared landscape when unset. */
+  heroBg?: string;
+  coversStrip?: { label: string; items: string[]; tail: string };
+  /**
+   * The hero side panel — three short facts about the engagement, each on an
+   * accent left-rule, sitting opposite the headline.
+   *
+   * This is the highest-value single addition to the hero (competitor spec,
+   * 2026-08-19). It does two jobs at once: it fills the right half of the hero
+   * with something a buyer actually needs, instead of decoration, and it
+   * answers the top three apprehensions before they have scrolled once.
+   * Keep every item to one line. Never more than three.
+   */
+  heroPanel?: { label: string; items: string[] };
+  /**
+   * Confidence & control — accuracy handling, human review, data residency,
+   * account ownership. The deal-decider for regulated buyers.
+   */
+  confidence?: { title: string; body: string }[];
+  /** What the engagement explicitly does NOT cover. Stating this is what makes scope credible. */
+  notIncluded?: string[];
+  /**
+   * The named failure points in the buyer's current process, rendered as a
+   * numbered breakdown written in their words. Modelled on the strongest pattern
+   * found in competitor research (2026-08-17): name a specific COUNT of places
+   * the process breaks, then validate that the reader feels it.
+   */
+  failurePoints?: { label: string; title: string; body: string }[];
+  /**
+   * Key for a concrete 'this is your Tuesday' artifact rendered inside the problem
+   * section - a realistic mock of the work itself, never an icon. Abstract
+   * illustration is what makes a service page read as generic; watching your own
+   * process play out is what makes a buyer say 'finally, someone gets it'.
+   */
+  artifact?: 'retype';
+  /** Overrides the "What the system actually does" heading above the solution cards. */
+  buildHeading?: string;
+  /** Before/after rows: what the week looks like now, and after. */
+  beforeAfter?: { before: string; after: string }[];
+  /**
+   * Engagement shape in words. NO prices, no ranges — pricing is set after a
+   * discovery call (Ankit, 2026-08-17). e.g. "Fixed scope and timeline agreed
+   * before any build starts."
+   */
+  engagementNote?: string;
+  /**
+   * The mid-page offer band (Ankit, 2026-08-19: "there is no offer and nothing
+   * driving sales"). Defaults to the free automation audit. The two document
+   * pages set `form: 'sample'` to run the "send us 10 documents" ask instead,
+   * which is the locked offer from the revenue sprint.
+   */
+  offer?: {
+    heading: string;
+    body: string;
+    form?: 'sample';
+  };
 };
 
 const GUARANTEE =
@@ -88,20 +213,20 @@ const GUARANTEE =
 export const SERVICES: ServiceContent[] = [
   {
     slug: 'legal-due-diligence-automation',
-    metaTitle: 'Legal AI Automation for Regulated Firms | Chronexa',
+    metaTitle: 'AI Document & Contract Review for Law Firms | Chronexa',
     metaDescription:
-      'Custom AI for law firms: regulatory-change monitoring, legal RAG over your matters and precedents, due-diligence and contract review — deployed securely inside your own environment.',
-    h1: 'Legal AI Automation for Regulated Law Firms',
+      'An AI alternative to outsourcing document review, contract review and due diligence: a private system that reads your matters and filings, flags risk, and keeps privileged data inside your own environment.',
+    h1: 'AI Document Review & Due Diligence for Law Firms',
     heroSub:
-      'Regulatory intelligence, legal RAG over your own matters and precedents, and due-diligence automation — built as secure, auditable AI systems that run inside the environment your firm already controls.',
+      'The document review, contract review and due-diligence work firms currently send to outsourced reviewers or an LPO, done instead by a private AI system that runs inside your own environment — plus regulatory intelligence and legal RAG over your matters and precedents.',
     answer:
-      'Legal AI automation puts custom AI to work on a law firm’s highest-volume manual work — monitoring regulators for relevant changes, answering questions across your matters and precedents through a private RAG system, and extracting risk from contracts and filings — all inside a deployment you control, with a full audit trail on every action.',
+      'Legal AI automation puts custom AI to work on a law firm’s highest-volume manual work — document review, contract review and due diligence, monitoring regulators for relevant changes, and answering questions across your matters and precedents through a private RAG system — all inside a deployment you control, with a full audit trail on every action.',
     callout:
       'What works at 20 matters breaks at 200. When analysts manually watch regulators and associates manually review documents, the firm covers fewer matters, a circular gets missed, and a risk clause slips through. The fix is not another SaaS login — it is AI built into your own secure environment, where the data never leaves and every action is logged.',
     serviceName: 'Legal AI Automation',
     serviceType: 'Custom AI systems for legal & regulatory work',
     schemaDescription:
-      'Custom AI for law firms — regulatory-change monitoring, legal RAG over matters and precedents, due-diligence and contract review — deployed securely with full audit trails.',
+      'AI document review, contract review and due diligence for law firms — an alternative to outsourced review, plus regulatory-change monitoring and legal RAG over matters and precedents — deployed securely with full audit trails.',
     roi: [
       { value: '90%', label: 'Less time on manual regulatory monitoring (litigation-firm build)' },
       { value: '5×', label: 'Faster internal response to regulatory changes' },
@@ -146,6 +271,14 @@ export const SERVICES: ServiceContent[] = [
           'The same foundation powers document-heavy work. We deploy OCR and LLM extraction that parses contracts and filings, flags risk and liability clauses, tags metadata, and writes the structured result straight back into iManage or NetDocuments — building on your existing document management system instead of forcing a new platform on your associates. Due-diligence cycles drop from days to hours, and matter intake stops being a re-keying exercise.',
         ],
       },
+      {
+        heading: 'An alternative to outsourced document review',
+        level: 3,
+        body: [
+          'Firms with review volume that outpaces headcount usually have one lever today: send the batch to an outsourced review vendor or an LPO and pay by the document or the hour. That works, but it means privileged material leaves the firm, turnaround depends on someone else\'s staffing, and the cost scales with volume forever.',
+          'This is a different lever, not a request to trust a vendor with client data. The first-pass read — flagging risk clauses, extracting key terms, surfacing what actually needs a lawyer\'s attention — happens inside your own environment, on your own DMS, with nothing sent externally. Associates review what the system flags as uncertain instead of every page of every document. It doesn\'t replace judgment on a matter that needs it; it removes the part of the batch that never needed a person in the first place.',
+        ],
+      },
     ],
     process: [
       { title: 'Discovery & security scoping', body: 'We map the manual workflow — regulatory monitoring, review, intake — and agree the deployment and security model (your tenancy vs. a dedicated instance) before any build.' },
@@ -178,15 +311,17 @@ export const SERVICES: ServiceContent[] = [
       'Human-in-the-loop review on low-confidence items',
     ],
     faqs: [
+      { q: 'Is this the same as legal process outsourcing (LPO)?', a: 'No, and that distinction matters. An LPO sends your documents to a third party\'s staff to review. This keeps document review, contract review and due diligence inside your own environment — a private AI system does the first pass and your own team (or ours, under your supervision) handles anything it flags as uncertain. Nothing privileged leaves the firm.' },
+      { q: 'We currently outsource document review or ediscovery — can this replace that?', a: 'It can reduce how much you need to send out. The system handles the first-pass read — extraction, risk-clause flagging, prioritization — so what actually goes to outside reviewers (or your own associates) is a smaller, better-triaged batch, not the full volume.' },
       { q: 'Where does our data live, and could it leak into a public AI model?', a: 'It lives where you decide — your own cloud tenancy or a dedicated, isolated instance (e.g. OpenAI on Azure, a private model, or your own). Privileged data never leaves that boundary and never trains a public model. We scope this before any build.' },
       { q: 'What is legal RAG, and why not just use ChatGPT?', a: 'RAG (retrieval-augmented generation) means the AI retrieves the exact passage from your own matters or precedents and cites it, instead of guessing. A public chatbot has never seen your work and cannot be trusted with privileged documents — a private RAG system answers from your context, with an audit trail.' },
       { q: 'Can it really track regulatory changes like SEBI and RBI circulars?', a: 'Yes — that is exactly the system we built for a top corporate litigation firm. It monitors regulator and exchange sources continuously, classifies each change by relevance, and maps it to the matters it affects, cutting manual monitoring time by ~90%.' },
       { q: 'Does this work with our existing iManage or NetDocuments setup?', a: 'Yes. We build on top of your current DMS rather than replacing it — your security model, folder structure and access controls stay intact.' },
       { q: 'How accurate is AI extraction on legal documents?', a: 'We pair OCR/LLM extraction with validation rules and human-in-the-loop review for low-confidence items, so accuracy improves over time without taking a lawyer out of the loop.' },
       { q: 'How long does a build take?', a: 'A focused workflow goes live in 4–6 weeks; a full RAG-plus-monitoring system is typically 8–12 weeks depending on the volume of matters to ingest and your security requirements.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['ai-for-large-law-firms', 'ai-for-mid-size-law-firms', 'ai-for-small-law-firms', 'regulatory-filing-monitoring-automation', 'law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
     sales: {
       heroAccent: 'Regulated Law Firms',
@@ -221,7 +356,7 @@ export const SERVICES: ServiceContent[] = [
       pricingLine:
         'Fixed-price, agreed before any code is written. Engagements run $10K–$150K depending on scope — most firms start with a single workflow at the lower end, and the audit that precedes it is free.',
       caseSpotlight: {
-        slug: 'how-leading-law-firm-automated-regulatory-intelligence',
+        slug: 'legal-document-intake-matter-automation',
         label: 'AI research agent · Legal',
         title: 'Regulatory intelligence, on the day it publishes.',
         body: 'Regulatory feeds matched to live matters automatically, with response drafts prepared for lawyer review — so the firm answers in hours, not weeks, and nothing in scope slips past.',
@@ -334,7 +469,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How is ROI measured for claims automation?', a: 'We track FNOL cycle time, touchless triage rate, and recovered subrogation dollars, and report against the targets agreed before the build.' },
       { q: 'How accurate is automated triage?', a: 'Triage runs against rules we tune to your historical claims, with human review for edge cases — accuracy improves as the system sees more of your data.' },
       { q: 'How long does it take to deploy?', a: 'Most builds go live in 4–6 weeks, depending on the number of lines of business and integration points.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['document-processing-automation', 'financial-services-automation', 'legal-due-diligence-automation'],
   },
@@ -385,6 +520,14 @@ export const SERVICES: ServiceContent[] = [
         ],
       },
       {
+        heading: 'Tax workpaper preparation: assembly off your staff, review stays with your reviewers',
+        level: 2,
+        body: [
+          'The return is done and the workpapers are not. The binder is missing a tie-out, the K-1 detail does not foot to the summary, and the person who assembled it has moved to another engagement. Most of a business-return workpaper file is mechanical: source documents indexed against the trial balance, prior-year comparatives pulled forward, standard leadsheets populated, K-1 and 1099 detail reconciled until the open-item list closes. Firms staff it with people whose time is worth more spent reviewing.',
+          'Workpaper automation takes over the assembly. Incoming PDFs are recognised by type, named to your firm’s own convention and filed into the right workpaper section. W-2s, 1099s, K-1s and brokerage statements are read field by field against each form’s schema, with every extracted number staged next to the source image it came from so a reviewer sees the figure and its evidence together. It works inside CCH Axcess or UltraTax CS rather than replacing them, and your reviewers keep every judgment call. The sensible way to start is to run it on twenty returns and compare the result with how your staff would have done them.',
+        ],
+      },
+      {
         heading: 'Alongside your staff, not instead of them',
         level: 2,
         body: [
@@ -397,6 +540,14 @@ export const SERVICES: ServiceContent[] = [
         level: 2,
         body: [
           'After onboarding, the quiet killer is tracking: which documents arrived, what was discussed with whom, which engagement is stuck waiting on the client, which deadline is next. The system keeps that ledger automatically — every document, communication, and status change lands in your practice-management stack, visible to partners and staff alike — so client questions get answered from the record, not from memory, and nothing slips between team members.',
+        ],
+      },
+      {
+        heading: 'When your practice management and tax software will not talk to each other',
+        level: 2,
+        body: [
+          'A lot of firms have good software and still lose hours to it, because the practice management tool and the tax engine were never built to share data. Karbon tracks the work; CCH Axcess or UltraTax prepares the return; nothing moves between them on its own, so a staff member ends up carrying every status update and every document across by hand.',
+          'Where a system offers a modern way in, we connect through it. Where an older tax platform does not — and several of the ones firms rely on most, like legacy CCH or Thomson Reuters installs, do not — we build a connector for it or have the automation operate the software the same way a person would. Either way, the firm keeps every tool it already pays for; the manual bridge between them is what goes away.',
         ],
       },
       {
@@ -418,6 +569,7 @@ export const SERVICES: ServiceContent[] = [
       'Sits alongside your staff: they keep review, judgment and the client relationship; it does the chasing, reading and drafting.',
       'Reads the forms a firm actually handles (W-2, 1099, K-1, brokerage statements) against a defined schema.',
       'Runs behind QuickBooks/Xero/Hubdoc so your team keeps their tools.',
+      'Connects legacy tax software with no modern integration path — CCH Axcess, UltraTax, Drake, Lacerte.',
       'Deploys on your own cloud (OpenAI dedicated, Vertex, AWS, Azure) with audit logging — client data never leaves your environment.',
     ],
     included: [
@@ -428,6 +580,7 @@ export const SERVICES: ServiceContent[] = [
       'PE-fund K-1 line-item breakdown',
       'Return drafting & tax-saving / compliance checks',
       'QuickBooks / Xero / Hubdoc integration',
+      'Practice-management ↔ tax-software bridging (Karbon, Firm360, CCH Axcess, UltraTax)',
       'Automated reconciliation',
       'Engagement-status tracking across the firm',
       'Exception handling & human-in-the-loop review',
@@ -436,15 +589,17 @@ export const SERVICES: ServiceContent[] = [
     faqs: [
       { q: 'Will this replace our staff?', a: 'No — and it isn’t designed to. It does the reading, chasing, filing and first-pass drafting; your accountants keep review, judgment and the client relationship. Firms use the freed hours to serve more clients with the same team, not to cut the team.' },
       { q: 'What does the AI actually do during tax season?', a: 'It chases clients for missing documents, reads what comes back (W-2s, 1099s, K-1s, brokerage statements), extracts the data against each form’s schema, and drafts the return for a preparer to review. For one CPA firm this cut manual follow-up by 84% and tripled documents processed per staff member.' },
+      { q: 'Can you automate tax workpaper preparation?', a: 'Yes. The assembly is the automatable part: indexing source documents, naming and filing them to your convention, extracting figures from W-2s, 1099s, K-1s and statements with the source image alongside, and populating standard leadsheets. Your reviewers still review and decide. It runs inside CCH Axcess or UltraTax CS, and we suggest proving it on twenty returns before relying on it.' },
       { q: 'Can it help outside tax season?', a: 'Yes — that’s the point of automating the lifecycle, not just the season. Onboarding, engagement letters, document collection, reconciliation and engagement tracking run year-round; tax season is simply when the capacity gain is most visible.' },
       { q: 'Can it handle private-equity fund K-1s?', a: 'Yes — K-1s are one of the most manual documents in tax prep, so they are a strong fit. The copilot pulls the line items and routes anything ambiguous to a human.' },
-      { q: 'Which accounting systems do you integrate with?', a: 'QuickBooks Online, Xero and Hubdoc are most common, plus document portals and practice-management tools. If your firm relies on a specific platform, we can almost always connect it.' },
+      { q: 'Which accounting systems do you integrate with?', a: 'QuickBooks Online, Xero and Hubdoc are most common, plus document portals and practice-management tools. Where a system offers no modern way in — older CCH Axcess, UltraTax or Drake installs are the usual case — we build a connector for it or have the automation operate the software the way a person would, so the data still moves without anyone retyping it.' },
       { q: 'Is our clients’ financial data secure?', a: 'Yes. The system deploys on infrastructure you control — dedicated model instances via OpenAI, Google Vertex, AWS or Azure — with role-based access and full audit trails. Client data never leaves your environment or trains a public model, and we work under NDA.' },
       { q: 'Do our accountants need to learn new software?', a: 'No. The automation runs behind the tools they already use; your team focuses on review and advisory.' },
       { q: 'How long does it take to set up?', a: 'Most firms are live in 4–6 weeks — well ahead of peak season if you start early.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
+      { q: 'Why not just buy another practice-management or tax product instead?', a: 'Often you should — if your workflow is standard and your current tools already talk to each other, a packaged product is cheaper and faster than anything custom. Building only makes sense once the actual cost is a gap between two specific systems that no product sold to every firm is going to close for you.' },
     ],
-    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    proof: { slug: 'cpa-client-intake-to-engagement-automation', label: 'CPA client intake to engagement automation' },
     related: ['tax-software-ai-integration', 'k1-tax-form-ocr-extraction', 'bookkeeping-automation-quickbooks-xero', 'safesend-karbon-workflow-automation', 'financial-services-automation', 'document-processing-automation'],
   },
   {
@@ -508,10 +663,10 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Is this a product we buy, or a custom build?', a: "It's a custom build on your stack. You own the workflows — there's no new subscription seat your whole team has to learn." },
       { q: 'Will the reports meet our compliance standards?', a: 'We build report templates to your exact standards and validate output against real studies before go-live.' },
       { q: 'How long does it take?', a: 'Most builds go live in 4–6 weeks depending on the number of data sources and integrations.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-reservestudy-automated-report-production-with-ai', label: 'How ReserveStudy.com cut report creation time from days to minutes' },
-    related: ['vc-pe-crm-automation', 'insurance-claims-triage-automation', 'n8n-automation-services'],
+    proof: { slug: 'how-reservestudy-automated-report-production-with-ai', label: 'How a property-services firm cut report creation from days to minutes' },
+    related: ['vc-pe-crm-automation', 'insurance-claims-triage-automation', 'ai-automation-agency'],
   },
   {
     slug: 'vc-pe-crm-automation',
@@ -593,7 +748,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does the deal-flow automation only work with Affinity?', a: 'Affinity is our most common deployment, but the same patterns apply to other deal CRMs. Inbound decks are detected, key metrics and founder details extracted, and the structured data written into the right fields.' },
       { q: 'Can you monitor our existing portfolio?', a: 'Yes — we track news, executive hires, competitor moves and filings for your portfolio companies and push updates into the CRM so nothing is missed.' },
       { q: 'How long does it take to deploy?', a: 'A focused deal-flow or monitoring build goes live in 4–6 weeks; a full diligence copilot depends on data-room volume and security requirements.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
     related: ['affinity-crm-automation', 'pitch-deck-parsing-software', 'ai-term-sheet-analysis', 'portfolio-company-monitoring-automation', 'financial-services-automation', 'legal-due-diligence-automation'],
@@ -681,10 +836,10 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can you automate content production too?', a: 'Yes. We build AI-assisted content and distribution pipelines, with human review where it matters, so output scales without losing quality.' },
       { q: 'How do you measure marketing ROI?', a: 'We track the metrics you care about — pipeline, conversion, cost per lead — and surface them in automated weekly reports.' },
       { q: 'How long does it take to set up?', a: 'Most builds go live in 4–6 weeks depending on the number of channels and integrations.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
-    related: ['d2c-ecommerce-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
+    related: ['d2c-ecommerce-automation', 'vc-pe-crm-automation', 'ai-automation-agency'],
   },
   {
     slug: 'd2c-ecommerce-automation',
@@ -748,90 +903,252 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How does AI customer support work?', a: 'It handles routine, repetitive queries (order status, returns, FAQs) automatically and escalates anything that needs a human — so your team focuses on the hard cases.' },
       { q: 'Will automation hurt the customer experience?', a: 'Done right it improves it — faster responses, fewer errors, and personalization at scale. Humans stay in the loop where judgment matters.' },
       { q: 'How long does it take to set up?', a: 'Most builds go live in 4–6 weeks depending on channels and integrations.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
-    related: ['marketing-automation', 'n8n-automation-services', 'us-ai-automation-agency'],
+    related: ['crm-automation-services', 'ai-automation-agency'],
   },
   {
     slug: 'document-processing-automation',
-    metaTitle: 'Document Automation for Regulated Industries (IDP) | Chronexa',
+    heroBg: '/images/hero/document-processing-automation.webp',
+    metaTitle: 'Document Processing Automation That Checks Itself | Chronexa',
     metaDescription:
-      'Document automation built for regulated industries — OCR + LLM extraction, RAG grounding, and human-in-the-loop validation, deployed securely with full audit trails. Deep experience across legal, finance, insurance, accounting and pharma.',
-    h1: 'Document Automation & Intelligence for Regulated Industries',
+      'Automation that reads your PDFs, scans and forms, checks the fields against your rules and writes approved data into the systems you already use.',
+    h1: 'An AI alternative to outsourcing your data entry',
     heroSub:
-      'Turn high-volume documents into structured, decision-ready data — context-aware pipelines that run from client onboarding through the full data journey, not one-off AI chats.',
+      'The document reading and keying firms send to an outsourced data-entry or back-office vendor, done instead inside your own systems. Anything uncertain goes to a person, never into your records.',
     answer:
-      'Document processing automation — intelligent document processing (IDP) — turns large volumes of documents into structured, trustworthy data using a pipeline of OCR, LLM extraction against a defined schema, RAG grounding for traceability, and human-in-the-loop validation. Unlike chatting with an AI one file at a time, it is a context-aware system that carries information from client onboarding through the entire data journey.',
-    callout:
-      'Document “chat” breaks the moment you have thousands of documents across hundreds of clients. One-off conversations lose context; real document intelligence carries it across the entire pipeline, every time.',
+      'Most teams with recurring document volume have one lever today: hire more people, or send the batch to a data-entry or back-office outsourcing vendor. This is a third option. A system works out what each document is, finds the values that matter, checks them against the page they came from, and writes them into the software your team already uses, inside your own environment rather than a vendor\'s. Anything it cannot read confidently goes to a person rather than being guessed, which is what keeps the output trustworthy at volume.',
     serviceName: 'Document Processing & Intelligence',
-    serviceType: 'Intelligent document processing',
+    serviceType: 'Document data capture and processing',
     schemaDescription:
-      'Intelligent document processing pipelines (OCR + LLM extraction + RAG grounding + human-in-the-loop validation) for legal, financial services, insurance, accounting, research, and pharma.',
+      'An AI alternative to data-entry and back-office outsourcing: a system that reads recurring business documents, finds the fields that matter, checks them against the page they came from, and writes them into the software a team already uses. Anything it cannot read with confidence is sent to a person rather than guessed.',
     roi: [
-      { value: 'Onboarding → insight', label: 'Context carried across the full client data journey' },
-      { value: 'OCR + LLM + RAG', label: 'Extraction grounded in the source for traceability' },
-      { value: '6+ industries', label: 'Legal, finance, insurance, accounting, pharma & research' },
+      { value: '85%', label: 'Less time per report — reporting-heavy operations firm, 1,200+ produced yearly' },
+      { value: '80%', label: 'Cut in manual invoice entry — fintech accounts-payable team' },
+      { value: '70%', label: 'Faster document review — private-equity due-diligence team' },
     ],
     sections: [
       {
-        heading: 'Document intelligence, not document chat',
+        heading: 'Your team is the reason the data is in the system at all',
         level: 2,
+        /* One paragraph, not two. The second used to explain that firms have
+           already tried a tool and it fell over on the real post — which is
+           word-for-word the point the callout below already makes. */
         body: [
-          'Uploading files into a chatbot does not scale. If you are an accountant with hundreds of clients, you cannot run thousands of separate chats to extract and reconcile information — context is lost the moment each conversation ends.',
-          'Real document intelligence builds and carries context. We engineer a "chain of thought" the system follows across the whole journey — from the moment a client is onboarded, through every document they send, to the decision the data ultimately supports. That context is what lets a CPA file taxes, evaluate strategy, and actually make sense of extracted information, instead of re-explaining the situation on every upload.',
-        ],
-      },
-      {
-        heading: 'How our IDP pipeline works',
-        level: 3,
-        body: [
-          'We capture documents with high-fidelity OCR, classify them, then use LLMs to extract data against a defined schema for each document type. Every extracted field is grounded in the source via retrieval (RAG), so outputs are traceable and audit-ready rather than a black box. Low-confidence items route to a human-in-the-loop review step; high-confidence items flow straight through. The structured result is written into the systems you already run — ERP, DMS, or accounting software — with full audit trails and exception handling.',
-        ],
-      },
-      {
-        heading: 'Where we have deployed document intelligence',
-        level: 3,
-        body: [
-          'Document intelligence has been a core Chronexa capability since day one, in production across legal, financial services, insurance, research, patent review, accounting, and pharma. We work under NDA, so we do not name clients — but the experience is real and hands-on: from reserve-study report generation combining OCR and AI, to document and matter workflows for a law firm, to extensive accounting and pharma deployments.',
+          'Somebody opens the file, reads it, types what it says somewhere else. That person is good at their job. This is not the job.',
         ],
       },
     ],
     process: [
-      { title: 'Map the document journey', body: 'We map every step from client onboarding to the decision the data supports — the context your pipeline must carry.' },
-      { title: 'Build the pipeline', body: 'OCR + classification + schema-based LLM extraction + RAG grounding, tuned to your document types.' },
-      { title: 'Tune accuracy with human-in-the-loop', body: 'We validate against real documents and route exceptions to review until accuracy meets your bar.' },
-      { title: 'Integrate & run', body: 'Straight-through processing where confidence is high, written into your ERP/DMS/accounting stack with audit trails.' },
+      {
+        title: 'Assess representative documents',
+        body: 'Agree a sample covering normal files, poor scans and unusual layouts. Define the fields and checks required.',
+      },
+      {
+        title: 'Set the acceptance criteria',
+        body: 'Review field-level results, errors and review rates. Agree what must pass before records can be written.',
+      },
+      {
+        title: 'We build around your systems',
+        body: 'Connect extraction and review to the agreed destination, with access controls and a record of each update.',
+      },
+      {
+        title: 'We run it in parallel',
+        body: 'Compare the output with the current process. Test exceptions and recovery before your team accepts the handover.',
+      },
     ],
     whyCustom: [
-      'A context-carrying "chain of thought", not stateless one-off chats that forget every session.',
-      'Extraction tuned to your taxonomy and document types — not a generic template.',
-      'Runs inside your environment with access controls — built for NDA and compliance requirements.',
-      'Every field is traceable to its source document, so output is audit-ready.',
+      'Built around your documents and their quirks, not a template that expects tidy inputs.',
+      'Runs inside your own systems, so nothing has to leave a place you control.',
+      'Anything the system is unsure about goes to one of your people instead of into your records.',
+      'Your team keeps the judgement work. The system takes the reading and the typing.',
     ],
     included: [
-      'High-fidelity OCR capture',
-      'Document classification',
-      'Schema-based LLM extraction',
-      'RAG grounding with source citations',
-      'Validation & human-in-the-loop review',
-      'Client-context pipelines (onboarding → data journey)',
-      'ERP / DMS / accounting integration',
-      'Audit trails & exception handling',
+      'A written accuracy report on your own documents, before any build',
+      'One document type, read and checked',
+      'A review queue for anything uncertain',
+      'Values written into the system you already use',
+      'Written handover, and thirty days of support',
     ],
     faqs: [
-      { q: 'Isn’t this just ChatGPT for documents?', a: 'No. Chatting with an AI handles one file at a time and forgets context when the session ends. We build context-carrying pipelines that span a client’s entire data journey, so the system understands the situation, not just the page in front of it — and it scales to thousands of documents.' },
-      { q: 'Can it handle hundreds of clients and thousands of documents?', a: 'Yes — that is exactly the point. Instead of manual chats, documents flow through automated pipelines with classification, extraction, validation, and routing, so volume becomes a strength rather than a bottleneck.' },
-      { q: 'How accurate is it, and can we trust the output?', a: 'We extract against a defined schema, ground every field in the source document with RAG for traceability, and route low-confidence items to human review. Accuracy improves as the system sees more of your documents.' },
-      { q: 'Our documents are confidential — how is that handled?', a: 'Pipelines run inside your environment with role-based access and audit trails; sensitive documents never leave systems you control. We routinely work under NDA.' },
-      { q: 'Which industries have you done this for?', a: 'Legal, financial services, insurance, accounting, pharma, research, and patent review — among others. The same pipeline patterns apply across document-heavy industries.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      {
+        q: 'Is this the same as outsourcing our data entry to a BPO?',
+        a: 'No. A data-entry or back-office outsourcing vendor has their staff key your documents on their infrastructure, and the cost scales with volume forever. This runs inside your own systems, nothing is sent to a third party\'s staff, and the cost is mostly fixed after the build instead of growing with every document.',
+      },
+      {
+        q: 'We already tried a tool for this and it did not work. Why is this different?',
+        a: 'Off-the-shelf tools assume your documents look alike. They rarely do: layouts change, scans come in crooked, a page goes missing. We build around the mess rather than hoping it is not there, and we prove it on your own documents before you commit.',
+      },
+      {
+        q: 'What happens when it reads something wrong?',
+        a: 'Every field comes back with a confidence level. Anything under the line you set stops and waits for one of your people rather than going into your records. That review queue is the point. A system that quietly guesses is worse than the typing, because you stop being able to trust the file.',
+      },
+      {
+        q: 'How accurate is it, honestly?',
+        a: 'We will not give you a number before seeing your documents, because anyone who does is guessing. We run a sample first and publish what we found field by field. That report becomes the standard the work is measured against, in writing.',
+      },
+      {
+        q: 'Our documents are confidential. Where do they go?',
+        a: 'Into your own environment if you want it that way, so they never leave systems you control. Access is restricted to the people you name and there is a record of every document handled. We work under NDA as a matter of course.',
+      },
+      {
+        q: 'Does this mean we need fewer people?',
+        a: 'That is not what firms use it for. The work that disappears is the reading and the keying, which nobody was hired to do. What is left is checking, judgement and the client relationship, which is the work your team is actually good at.',
+      },
+      {
+        q: 'How long before it is running?',
+        a: 'For one document type going into one system, a fortnight from the day your sample documents arrive. A second document type is a separate piece of work, and we would rather do one properly than two badly.',
+      },
+      {
+        q: 'What does it cost?',
+        a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.',
+      },
     ],
-    proof: { slug: 'how-reservestudy-automated-report-production-with-ai', label: 'How ReserveStudy.com cut report creation time from days to minutes' },
+    proof: { slug: 'how-reservestudy-automated-report-production-with-ai', label: 'How a property-services firm cut report creation from days to minutes' },
     related: ['cpa-tax-document-automation', 'legal-due-diligence-automation', 'insurance-claims-triage-automation'],
+
+    /* ---- ServicePage fields (reference implementation) ------------------ */
+    artifact: 'retype',
+    /* Short label + two lines, deliberately. These used to carry a full-sentence
+       title and a four-line body, which is what made the page read as an essay
+       rather than something a buyer can scan. */
+    failurePoints: [
+      {
+        label: 'Chasing',
+        title: 'Chasing the file',
+        body: 'Email, folder, portal, phone photo. Finding the right version is work before the work.',
+      },
+      {
+        label: 'Reading',
+        title: 'Every layout differs',
+        body: 'The value sits somewhere new every time. Someone hunts for it.',
+      },
+      {
+        label: 'Typing',
+        title: 'Read a line, type a line',
+        body: 'A few hundred times a month, by someone capable of more.',
+      },
+      {
+        label: 'Errors',
+        title: 'Errors surface in March',
+        body: 'A digit transposed on Tuesday surfaces months later. The work is done twice.',
+      },
+    ],
+    beforeAfter: [
+      { before: 'Someone opens each document and keys the values in.',
+        after: 'The values are already in your system.' },
+      { before: 'Errors surface weeks later.',
+        after: 'Anything unclear is flagged the same day.' },
+      { before: 'More volume means another pair of hands.',
+        after: 'More volume means the same team, reviewing instead of typing.' },
+    ],
+    stack: [
+      { file: 'sharepoint.png', name: 'SharePoint' },
+      { file: 'gdrive.svg', name: 'Google Drive' },
+      { file: 'box.png', name: 'Box' },
+      { file: 'excel.svg', name: 'Excel' },
+      { file: 'imanage.png', name: 'iManage' },
+      { file: 'netdocuments.png', name: 'NetDocuments' },
+    ],
+    /* Traces to one audited, in-production engagement (a US property-services
+       firm; sprint/04-proof-audit.md grades it STRONG). The client is NOT named:
+       Ankit, 2026-08-19 — "don't mention any of the client name... we can quote
+       that we worked for this company, but giving the exact name is not right."
+       Describe by sector and shape. Do not add numbers that cannot be traced
+       the same way. */
+    proofBlock: {
+      metric: {
+        value: '1,200+',
+        unit: 'reports a year',
+        label: 'finished client reports a year, produced from raw site photos and PDFs.',
+        outcome:
+          'Roughly 85% less time each, same team, nobody hired. Every report still read by a person before it ships.',
+        source: 'US property-services firm, in production',
+      },
+      caseStudy: {
+        slug: 'how-reservestudy-automated-report-production-with-ai',
+        label: 'Read how a property-services firm automated report production',
+      },
+      /* Third-party figures for the part our own engagement cannot speak to —
+         how widespread the problem is. Both name their report and link to it,
+         which is the sourcing rule Evidence.tsx set and this file inherits. */
+      research: [
+        {
+          value: '5 hrs',
+          label: 'a week, per professional, that AI is expected to hand back',
+          source: 'Thomson Reuters, Future of Professionals 2025',
+          href: 'https://www.thomsonreuters.com/en/press-releases/2025/june/the-ai-adoption-reality-check-firms-with-ai-strategies-are-twice-as-likely-to-see-ai-driven-revenue-growth-those-without-risk-falling-behind',
+        },
+      ],
+    },
+    /* The one page where a buyer can start without booking a call — the locked
+       "send us 10 documents" offer from the revenue sprint. */
+    offer: {
+      heading: 'Send us ten documents. We will show you what comes back.',
+      body:
+        'The messy ones, not a tidy sample. We show you field by field what came back right. Free, and the write-up is yours either way.',
+      form: 'sample',
+    },
+
+    heroPanel: {
+      label: 'The engagement',
+      items: [
+        'One document type, one destination system.',
+        'Uncertain values go to your team, not your records.',
+        'Built in your accounts. It stays yours.',
+      ],
+    },
+    coversStrip: {
+      label: 'The documents this runs on',
+      items: [
+        'Invoices and statements',
+        'Claim forms and loss runs',
+        'Tax documents',
+        'Contracts and leases',
+        'Inspection and survey forms',
+        'Filings and attestations',
+        'Medical records',
+        'Shipping paperwork',
+      ],
+      tail: 'or whichever arrives a few hundred times a month.',
+    },
+    heroStats: [
+      { value: 1200, suffix: '+', label: 'client reports a year, automatically' },
+      { value: 85, suffix: '%', label: 'less time per report' },
+    ],
+    confidence: [
+      {
+        title: 'Accuracy proven before you commit',
+        body: 'We write up what came back right, field by field. Anyone quoting a figure unseen is guessing.',
+      },
+      {
+        title: 'Nothing is guessed into your records',
+        body: 'Anything below the line you set waits for one of your people.',
+      },
+      {
+        /* Reframed for the compliance buyer, who does not want time back — they
+           want to produce the source page when an auditor asks. Same mechanism
+           as the accuracy story, different and larger job. */
+        title: 'Every figure can be traced to its page',
+        body: 'Asked where a number came from, you open the page it was read from. Evidence, not recollection.',
+      },
+      {
+        title: 'It stays yours',
+        body: 'Built in your own accounts and environment. It runs whether or not we are involved.',
+      },
+    ],
+    notIncluded: [
+      'A second document type. That is a second engagement.',
+      'Replacing your software. We connect to what you run.',
+      'Free-form handwriting',
+      'Any accuracy promise made before we have seen your documents',
+    ],
+    engagementNote:
+      'Scope, timeline and price are agreed after we have seen your real documents, never before.',
+
     sales: {
-      heroAccent: 'Regulated Industries',
+      heroAccent: 'Document-Heavy Workflows',
       stats: [
         { value: 1200, suffix: '+', label: 'client reports a year, produced automatically — US property-services firm' },
         { value: 85, suffix: '%', label: 'less time per report' },
@@ -973,17 +1290,17 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can you improve our forecasting accuracy?', a: 'Yes. With clean, unified pipeline data and ML-based risk detection, forecasts stop being guesswork — you see which deals are real and which are slipping, early.' },
       { q: 'Do you replace our sales or RevOps team?', a: 'No — we remove the manual admin (data entry, list building, reporting) and give the team better intelligence, so they spend their time selling and deciding.' },
       { q: 'How do you handle messy CRM data?', a: 'Data enrichment, deduplication, and validation pipelines are part of the build — clean data is the foundation everything else depends on.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'ai-outbound-sales-automation-personalisation-case-study', label: 'Scaling a personalized outbound pipeline without increasing sales headcount' },
-    related: ['vc-pe-crm-automation', 'marketing-automation', 'n8n-automation-services'],
+    related: ['vc-pe-crm-automation', 'crm-automation-services', 'ai-automation-agency'],
   },
   {
     slug: 'n8n-automation-services',
-    metaTitle: 'n8n Automation Services & Consulting | Chronexa',
+    metaTitle: 'n8n Agency | Custom n8n Automation Services | Chronexa',
     metaDescription:
       'Custom n8n workflow automation and consulting — fast, lower-cost automation for ops, sales and back-office, self-hosted and owned by you. Built by an expert n8n team.',
-    h1: 'n8n Automation Services & Consulting',
+    h1: 'n8n Agency for Custom Workflow Automation',
     answer:
       'Chronexa designs, builds, self-hosts and maintains custom n8n workflows and AI agents for B2B teams — fast, lower-cost automation for ops, sales and back-office work that you own outright instead of renting per-task SaaS. (For bespoke, security-sensitive enterprise AI, see our regulated-industry builds.)',
     heroSub:
@@ -1041,24 +1358,48 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Do we need n8n experience on our team?', a: 'No. We build, deploy, and maintain everything, and train your team on the parts they want to own. You get full documentation either way.' },
       { q: 'Why n8n instead of Zapier or Make?', a: 'n8n is self-hostable (your data, no per-task fees), handles complex logic and AI agents natively, and produces portable workflows you own rather than rent.' },
       { q: 'How long does an n8n build take?', a: 'Most go live in 4–6 weeks: week 1 discovery and scoping, weeks 2–3 build and integration, week 4 testing — then deploy.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['ai-growth-systems-for-startups', 'us-ai-automation-agency', 'vc-pe-crm-automation', 'legal-due-diligence-automation'],
+
+    heroPanel: {
+      label: 'The engagement',
+      items: [
+        'One clear measurable outcome.',
+        'Built into your existing systems.',
+        'Fixed price, agreed before build.'
+      ],
+    },
+    coversStrip: {
+      label: 'Typical focus areas',
+      items: [
+        'Data extraction',
+        'Lead routing',
+        'Status tracking',
+        'Report generation',
+        'Data reconciliation'
+      ],
+      tail: 'or anywhere your team spends hours doing repetitive data work.',
+    },
+    heroStats: [
+      { value: 85, suffix: '%', label: 'average time saved on manual work' },
+      { value: 100, suffix: '%', label: 'audit and visibility on every action' },
+    ],
+    related: ['ai-growth-systems-for-startups', 'ai-automation-agency', 'vc-pe-crm-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'us-ai-automation-agency',
-    metaTitle: 'AI Automation Agency for Enterprises (US) | Chronexa',
+    metaTitle: 'AI Automation Agency for US Businesses | Chronexa',
     metaDescription:
-      'A US AI automation agency for regulated enterprises — custom, secure AI systems for finance, legal, tax and dealmaking, built on your stack and scoped at a fixed price before any build begins.',
-    h1: 'AI Automation Agency for Regulated US Enterprises',
+      'Chronexa builds AI agents and workflow automation for US businesses using the software and cloud systems they already have.',
+    h1: 'AI Automation Built Around Your Business',
     answer:
-      'Chronexa is an AI automation agency and consultancy for US enterprises in regulated industries. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the environment you already run, scoped and fixed-price, with the success metrics agreed before any build begins.',
+      'Chronexa is an AI automation agency for US businesses. We build AI agents and automate repetitive work in the software your team already uses. You own the system, and we agree the scope, price and success measures before we build.',
     heroSub:
-      'A US AI automation agency for finance, legal, tax and dealmaking teams — custom, secure AI built inside your environment, scoped and fixed-price, with the success metrics agreed up front.',
+      'AI agents and workflow automation built around the tools your team already uses. You own the system, with the scope and price agreed before we build.',
     serviceName: 'AI Automation Agency',
     serviceType: 'AI automation agency & consultancy',
     schemaDescription:
-      'AI automation agency and consultants for US enterprises in regulated industries — custom, secure AI systems across legal, finance, tax, and dealmaking, deployed on the client’s own stack.',
+      'AI automation agency for US businesses. Chronexa builds AI agents and workflow automation using the software and cloud systems clients already have.',
     roi: [
       { value: 'Secure', label: 'Built inside your environment — data stays contained' },
       { value: 'Fixed-price', label: 'Scope, success metrics and price agreed before any build' },
@@ -1069,15 +1410,15 @@ export const SERVICES: ServiceContent[] = [
         heading: 'What to look for in an AI automation agency',
         level: 2,
         body: [
-          'Most AI automation agencies sell off-the-shelf workflows on a vendor’s cloud. That’s fine for low-risk ops work — but if you’re in finance, legal, tax or dealmaking, the agency that fits is the one that can build custom systems inside your own environment, with the security, auditability and domain depth your industry demands. The differentiator isn’t the tooling; it’s whether the work can stand up to a regulator and run on data that can’t leak.',
-          'That’s where Chronexa sits. We’re an engineer-led agency that builds bespoke AI — agentic systems, RAG knowledge engines, document intelligence, even quant/ML — for enterprises where the data is sensitive and the stakes are real, deployed on the stack you already run rather than another SaaS subscription.',
+          'Start with the work, not the technology. A good agency should identify one repetitive process, connect the software you already use and show how the result will save time, reduce cost or increase capacity.',
+          'Chronexa builds around the way your business already works. We agree the outcome, scope and price before the build starts, then hand over a system your team owns.',
         ],
       },
       {
-        heading: 'Built for regulated industries',
+        heading: 'Built for complex business work',
         level: 2,
         body: [
-          'Our work concentrates where generic agencies can’t go: legal AI and regulatory intelligence, AI tax automation for CPA firms, secure AI and compliance for financial services and RIAs, and AI for M&A and private equity. Each is built from real, first-hand engagements, deployed inside your environment with role-based access and full audit trails.',
+          'We automate document processing, sales, support, finance and operations. When a workflow handles sensitive information, we add the access controls, human review and audit records that the work requires.',
         ],
       },
       {
@@ -1096,14 +1437,14 @@ export const SERVICES: ServiceContent[] = [
     ],
     whyCustom: [
       'Custom systems built inside your environment — data stays contained, never trains a public model.',
-      'Domain depth in regulated industries (legal, finance, tax, dealmaking), not generic ops automation.',
+      'Experience across documents, sales, support, finance and operations.',
       'Fixed-price and outcome-scoped, with the success metrics agreed before the build starts.',
       'You own the assets, built on your stack — not another subscription.',
     ],
     included: [
       'Free AI workflow audit',
       'Custom, secure build inside your environment',
-      'Legal, finance, tax & dealmaking AI',
+      'Document, sales, support, finance & operations automation',
       'RAG / agentic systems & document intelligence',
       'CRM, ERP, DMS & API integrations',
       'Security, access control & audit trails',
@@ -1111,14 +1452,14 @@ export const SERVICES: ServiceContent[] = [
       'Ongoing optimization & support',
     ],
     faqs: [
-      { q: 'What kind of AI automation agency is Chronexa?', a: 'An engineer-led agency and consultancy that builds custom, secure AI systems for US enterprises in regulated industries — finance, legal, tax and dealmaking — deployed inside your own environment rather than on a vendor’s cloud.' },
-      { q: 'How is this different from a typical AI automation agency?', a: 'Most agencies resell off-the-shelf workflows on their cloud. We build bespoke systems on your stack with the security, auditability and domain depth regulated industries require — and for lower-risk work we also offer fast n8n workflow automation you own.' },
-      { q: 'How fast can you deliver?', a: 'A focused workflow goes live in a few weeks; a full enterprise system (e.g. a private RAG with regulatory monitoring) is typically a couple of months. You get a written scope and timeline before any build begins.' },
+      { q: 'What kind of AI automation agency is Chronexa?', a: 'We build AI agents and workflow automation around the software a business already uses. Clients own the systems we build rather than paying for another subscription.' },
+      { q: 'How is this different from a typical AI automation agency?', a: 'We start with the repetitive work you need to improve, then build and connect the smallest system that solves it. The scope and price are agreed before we start, and you own the result.' },
+      { q: 'How fast can you deliver?', a: 'A focused workflow goes live in a few weeks; a larger system across several tools is typically a couple of months. You get a written scope and timeline before any build begins.' },
       { q: 'How do we know it will pay off before we commit?', a: 'Two ways. The audit is free — if we cannot find automation worth more than it costs to build, you owe us nothing and you keep the roadmap. And the build itself is fixed-price against success metrics we agree in writing before any code is written, so the cost is known and the target is explicit rather than assumed.' },
       { q: 'Do you build on our existing tools, securely?', a: 'Yes. We build on the stack you already run (CRM, ERP, DMS, accounting) and deploy inside your environment with role-based access and audit trails, so sensitive data never leaves your boundary.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['legal-due-diligence-automation', 'financial-services-automation', 'cpa-tax-document-automation', 'vc-pe-crm-automation', 'n8n-automation-services'],
+    related: ['legal-due-diligence-automation', 'financial-services-automation', 'cpa-tax-document-automation', 'vc-pe-crm-automation', 'ai-automation-agency'],
   },
   {
     slug: 'ai-automation-agency-dubai',
@@ -1182,19 +1523,20 @@ export const SERVICES: ServiceContent[] = [
       'Ongoing support after launch',
     ],
     faqs: [
-      { q: 'Do you only work with regulated industries like finance and legal?', a: 'No. Most of our Dubai and UAE work is for retail, real estate, logistics, hospitality and other everyday businesses. Self-hosted deployment is an option for finance, legal and healthcare teams that specifically need it, not a requirement for everyone.' },
+      { q: 'Do you work across industries?', a: 'Yes. We work with retail, real estate, logistics, hospitality, finance, legal, healthcare and other businesses. We start with the repetitive work your team needs to improve, not the industry label.' },
       { q: 'Do you work with companies based in Dubai and Abu Dhabi?', a: 'Yes, we deliver for clients across Dubai, Abu Dhabi and the wider UAE and GCC. Our working hours already overlap with yours, and everything we build is documented so your team is never dependent on us to run it.' },
       { q: 'Can you work with the tools we already use, like Zoho, HubSpot or WhatsApp?', a: 'Yes. We build around whatever you already run instead of asking you to switch platforms first. That includes your CRM, WhatsApp Business API, accounting software, or a system you built in-house.' },
       { q: 'Can our data stay inside the UAE?', a: 'Yes, if you need it to. We can self-host on infrastructure you control, so you choose where your data sits. This gets settled while we scope the project, not assumed by default.' },
       { q: 'How long does an engagement take?', a: 'A focused workflow usually goes live in two to six weeks. A larger AI system typically takes a couple of months. Either way, you get a written scope and timeline before any work begins.' },
       { q: 'What does it cost?', a: `Engagements are fixed price and scoped to the outcome, quoted in AED or USD. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
     ],
-    related: ['n8n-automation-services', 'sales-revenue-automation', 'document-processing-automation', 'financial-services-automation', 'us-ai-automation-agency'],
+    related: ['ai-automation-agency', 'sales-revenue-automation', 'document-processing-automation', 'financial-services-automation'],
   },
 
   /* ============================ SERVICES (capabilities) ============================ */
   {
     slug: 'system-data-integration',
+    heroBg: '/images/hero/system-data-integration.webp',
     metaTitle: 'AI System & Data Integration Services | Chronexa',
     metaDescription:
       'Connect your CRMs, ERPs, databases, and SaaS tools into one clean, automated data layer — the integration foundation every AI and automation project depends on.',
@@ -1260,9 +1602,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Is this just Zapier?', a: 'No. We build durable, custom integrations on n8n and APIs with proper field mapping, validation, retries, and monitoring — not brittle per-task automations that break silently.' },
       { q: 'Can you clean up our messy data while integrating?', a: 'Yes — deduplication, validation, and enrichment are part of the build, so you end up with one clean source of truth.' },
       { q: 'Do we own the integrations?', a: 'Yes. They run on infrastructure you control and are portable assets, not a vendor lock-in.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['n8n-automation-services', 'sales-revenue-automation', 'document-processing-automation'],
+    related: ['ai-automation-agency', 'sales-revenue-automation', 'document-processing-automation'],
   },
   {
     slug: 'ai-readiness-assessment',
@@ -1333,7 +1675,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What do we get at the end?', a: 'A written, prioritized automation roadmap with the problem, systems, effort, and ROI estimate for each opportunity — plus a recommended starting point.' },
       { q: 'What does it cost?', a: `It is a fixed, scoped fee — far less than a build — and it de-risks everything that follows. ${GUARANTEE} Book a free intro call to scope it.` },
     ],
-    related: ['us-ai-automation-agency', 'n8n-automation-services', 'system-data-integration'],
+    related: ['ai-automation-agency', 'system-data-integration'],
   },
 
   /* ======================== USE CASES — BY FUNCTION ======================== */
@@ -1431,7 +1773,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How much faster can the close get?', a: 'Teams commonly cut the month-end close by half or more by automating reconciliations and consolidations, with live dashboards replacing manually rebuilt reports.' },
       { q: 'Will it pass an audit?', a: 'Yes — segregation-of-duties-aware approvals, human review on material items, and an immutable audit trail on every action are built in, and it runs inside your environment.' },
       { q: 'Does this replace our finance team?', a: 'No — it removes the repetitive processing (keying, matching, ticking and tying) so the team spends its time on analysis, controls and decisions.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
     related: ['cpa-tax-document-automation', 'document-processing-automation', 'financial-services-automation'],
@@ -1518,13 +1860,14 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How is this different from hiring an ops person?', a: 'Automation handles the repetitive volume consistently and 24/7, freeing your people for judgment and exceptions — so you scale output without scaling payroll.' },
       { q: 'What if our process changes?', a: 'Workflows are built on n8n and owned by you; we adjust them as the operation evolves, usually quickly.' },
       { q: 'How long to deploy?', a: 'Most processes go live in 4–6 weeks depending on complexity and integrations.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
-    related: ['finance-automation', 'customer-support-automation', 'n8n-automation-services'],
+    related: ['document-processing-automation', 'customer-support-automation', 'ai-automation-agency'],
   },
   {
     slug: 'customer-support-automation',
+    heroBg: '/images/hero/customer-support-automation.webp',
     metaTitle: 'AI Customer Support Automation | Chronexa',
     metaDescription:
       'Resolve routine customer queries automatically with AI, route the rest to the right person, and give your team context — cutting response times and cost per ticket.',
@@ -1604,9 +1947,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Which helpdesks do you integrate with?', a: 'Zendesk, Intercom, Freshdesk, HubSpot Service, and most major helpdesk and CRM platforms.' },
       { q: 'How do you stop the AI from giving wrong answers?', a: 'Responses are grounded in your knowledge base and policies (RAG), and sensitive cases route to humans — the AI does not improvise policy.' },
       { q: 'How much volume can it deflect?', a: 'It depends on your ticket mix, but routine, repetitive queries — often the majority — are strong candidates for instant resolution.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['operations-automation', 'd2c-ecommerce-automation', 'marketing-automation'],
+    related: ['business-process-automation-consulting', 'd2c-ecommerce-automation', 'crm-automation-services'],
   },
   {
     slug: 'hr-automation',
@@ -1689,9 +2032,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Which HR systems do you integrate with?', a: 'Most major ATS and HRIS platforms, plus the document, email, and scheduling tools around them.' },
       { q: 'Can it speed up onboarding?', a: 'Yes — document collection, account setup, and task orchestration can be largely automated so new hires are productive faster.' },
       { q: 'How long does it take to set up?', a: 'Most HR workflows go live in 4–6 weeks depending on systems and complexity.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['operations-automation', 'document-processing-automation', 'n8n-automation-services'],
+    related: ['business-process-automation-consulting', 'document-processing-automation', 'ai-automation-agency'],
   },
   {
     slug: 'cybersecurity-automation',
@@ -1787,9 +2130,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does the AI get to take action on our systems on its own?', a: 'No. A human approval gate sits on every consequential action, everything runs inside your environment with role-based access, and every step is logged. AI accelerates the team; it does not get unsupervised authority over your infrastructure.' },
       { q: 'Which tools do you integrate with?', a: 'Your SIEM, EDR, ticketing, vulnerability scanners and identity providers — we build on the security stack you already run rather than replacing it.' },
       { q: 'Can it help with SOC 2 / ISO 27001 audits?', a: 'Yes — control monitoring and audit-evidence collection run continuously, so you stay audit-ready instead of scrambling before each assessment.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['secure-ai-deployment', 'operations-automation', 'financial-services-automation'],
+    related: ['legal-ai-automation', 'business-process-automation-consulting', 'financial-services-automation'],
   },
 
   /* ====================== USE CASES — BY INDUSTRY ====================== */
@@ -1852,7 +2195,7 @@ export const SERVICES: ServiceContent[] = [
     ],
     process: [
       { title: 'Map the document journey', body: 'From source documents to the decisions and filings they support.' },
-      { title: 'Build compliant extraction', body: 'OCR + LLM + RAG grounding tuned to your document types and controls.' },
+      { title: 'Build compliant extraction', body: 'Extraction tuned to your document types and controls, with every field traceable back to its source.' },
       { title: 'Validate with experts', body: 'Human-in-the-loop review with full provenance and audit trails.' },
       { title: 'Integrate & govern', body: 'Wire into your systems inside your security and compliance perimeter.' },
     ],
@@ -1871,7 +2214,7 @@ export const SERVICES: ServiceContent[] = [
     ],
     included: [
       'Regulatory & research document extraction',
-      'OCR + LLM + RAG grounding',
+      'Extraction traceable to the source document, field by field',
       'Patent / IP review support',
       'Compliance & quality workflows',
       'Human-in-the-loop expert validation',
@@ -1879,10 +2222,10 @@ export const SERVICES: ServiceContent[] = [
     ],
     faqs: [
       { q: 'Can you meet our compliance and security requirements?', a: 'Yes. Workflows run inside your environment with role-based access and full audit trails, and we scope security and compliance requirements before any build. We work under NDA.' },
-      { q: 'How do you ensure extraction is trustworthy?', a: 'Schema-based extraction with RAG grounding makes every field traceable to its source, and low-confidence items go to expert review.' },
-      { q: 'Do you have pharma experience?', a: 'Yes — document intelligence in pharma and adjacent regulated fields is part of our experience, though client names are protected under NDA.' },
+      { q: 'How do you ensure extraction is trustworthy?', a: 'Every extracted field is checked against the page it came from and stays traceable to its source, and low-confidence items go to expert review rather than being guessed.' },
+      { q: 'Do you have pharma experience?', a: 'Our proven track record is in document-heavy, regulated document processing generally — legal, finance, and operations reporting. We have not yet delivered a named pharma engagement; if regulatory and quality documents are your specific need, we would scope a pilot on your own documents before any commitment, the same way we do for every industry.' },
       { q: 'What systems do you integrate with?', a: 'Document management, quality, and regulatory systems, plus the data stores and tools around them.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['document-processing-automation', 'legal-due-diligence-automation', 'financial-services-automation'],
   },
@@ -1913,7 +2256,7 @@ export const SERVICES: ServiceContent[] = [
         level: 2,
         body: [
           'Financial services runs on documents and rules: onboarding and KYC packs, statements, agreements, reconciliations, and regulatory reporting — all under strict compliance. Manual processing is slow and risky, and the controls rule out generic, uncontrolled AI tools.',
-          'We automate those workflows with AI extraction grounded in source documents, validation, and human review where it matters — inside your environment, with access controls and full audit trails. For a fintech client (LedgerSync), we rebuilt invoice ingestion and validation that had become an internal backlog. Faster turnaround, fewer errors, and a clean compliance record.',
+          'We automate those workflows with AI extraction grounded in source documents, validation, and human review where it matters — inside your environment, with access controls and full audit trails. For a fintech client, we rebuilt invoice ingestion and validation that had become an internal backlog. Faster turnaround, fewer errors, and a clean compliance record.',
         ],
       },
       {
@@ -1973,7 +2316,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Do you actually build quant / ML trading systems?', a: 'Yes — applied machine learning with techniques like XGBoost and LSTM for signal generation, forecasting and risk, engineered for production with proper backtesting. This work is under strict NDA, so we discuss method and stack rather than naming clients.' },
       { q: 'Can you build an equity-research copilot on our data?', a: 'Yes. We ingest filings, transcripts and market data into a private knowledge base and build a copilot that answers with citations, so analysts spend time on judgement instead of gathering.' },
       { q: 'Can you automate KYC and onboarding?', a: 'Yes — document collection, extraction, checks and routing are strong automation candidates that cut onboarding turnaround significantly, with auditable output.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'how-ledgersync-eliminated-invoice-backlogs-using-ai', label: 'How a fintech SaaS eliminated its invoice-ingestion backlog with AI' },
     related: ['ria-crm-automation', 'ria-compliance-automation', 'ai-copilot-financial-advisors', 'cpa-tax-document-automation', 'vc-pe-crm-automation'],
@@ -2059,9 +2402,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How is confidentiality and ethical-wall compliance handled?', a: 'Access mirrors your matter-level permissions and ethical walls, everything runs inside your environment, and every AI action is logged. Documents never leave your boundary or train a public model.' },
       { q: 'Can it back-classify our existing document store?', a: 'Yes — bulk back-classification of legacy documents is a common first project, with human review on low-confidence items.' },
       { q: 'How long does it take?', a: 'A focused profiling/extraction build goes live in 4–6 weeks; adding private RAG search across a large matter store is typically 8–12 weeks depending on volume.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['legal-due-diligence-automation', 'law-firm-knowledge-management-ai', 'contract-review-automation-software', 'document-processing-automation'],
   },
   {
@@ -2143,9 +2486,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How accurate is it, and is it defensible?', a: 'Every extraction is grounded in the source clause so a reviewer can verify it, low-confidence items route to a lawyer, and the system learns from corrections. Output is traceable and audit-logged.' },
       { q: 'Where does our contract data go?', a: 'It stays in your environment with role-based access and audit trails; nothing leaves your boundary or trains a public model. We work under NDA.' },
       { q: 'How long does it take?', a: 'Most builds go live in 6–8 weeks, depending on how much of your playbook we encode up front.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'law-firm-matter-intake-automation'],
   },
   {
@@ -2227,9 +2570,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does data get re-keyed across systems?', a: 'No — that’s the core fix. Intake data is captured once and flows to every system that needs it, eliminating the duplicate entry that causes errors and delay.' },
       { q: 'Is there an audit trail?', a: 'Yes. Every intake and conflict-check decision is logged, inside your environment with role-based access, so the process is defensible.' },
       { q: 'How long does it take?', a: 'Most intake/conflict builds go live in 4–8 weeks depending on the number of systems involved.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
   },
   {
@@ -2311,9 +2654,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Is this proven?', a: 'Yes — it’s the system we built for one of the largest corporate litigation practices in India, which cut manual monitoring time by ~90% and made internal response ~5× faster.' },
       { q: 'How is our data protected?', a: 'Everything runs inside your environment with role-based access and audit trails; matter and client data never leaves your boundary or trains a public model. We work under NDA.' },
       { q: 'How long does it take?', a: 'A focused monitoring build goes live in 6–10 weeks depending on the number of sources and how your matters are mapped.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'law-firm-automated-time-capture', 'financial-services-automation'],
   },
   {
@@ -2405,7 +2748,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How does it know which matter a session belongs to?', a: 'From the matter context the lawyer is already working in — the document open in iManage or NetDocuments, the matter the AI assistant session was started under, or the matter-management record in focus. Ambiguous sessions are flagged for the lawyer to assign rather than guessed.' },
       { q: 'What about work outside AI tools — calls, meetings, email?', a: 'The same capture layer can extend to calendar, email and phone systems if the firm wants full passive capture. Most firms start with the AI-tool gap because it is the leak nothing else on the market closes, then widen the scope once the approval workflow has earned trust.' },
       { q: 'How long does it take to deploy?', a: 'A single-practice-group pilot is typically live in 3–4 weeks: one week to wire the capture layer and billing API, then 2–4 weeks running drafts alongside existing timekeeping to measure recovered hours before firm-wide rollout.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['legal-due-diligence-automation', 'imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai'],
   },
@@ -2498,7 +2841,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can the draft match our report style?', a: 'Yes — we encode your structure and house style from 5–10 past reports during setup. The draft arrives in your format with your section conventions, so associates are editing a familiar document, not reformatting a generic one.' },
       { q: 'What if the AI synthesis gets a finding wrong?', a: 'Every finding carries a citation to its source document, so verification is one click rather than a re-read of the review set. The draft is a starting point that a senior associate reviews and refines — the design assumption is that humans approve everything that reaches a client.' },
       { q: 'How long does deployment take?', a: 'Typically 4–6 weeks: report-format encoding and Relativity wiring in the first two, then calibration against one or two completed matters before going live on new deals.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['legal-due-diligence-automation', 'law-firm-knowledge-management-ai', 'imanage-netdocuments-automation', 'contract-review-automation-software'],
   },
@@ -2592,9 +2935,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does confidential matter data stay protected?', a: 'Yes. The pipeline runs inside your environment, respects your DMS access controls and ethical walls, and pushes into a knowledge base governed by the same permissions. Nothing leaves your boundary or trains a public model.' },
       { q: 'Can it process our historical closed matters, not just new ones?', a: 'Yes — a backfill pass over recent closed matters (say, the last 2–3 years) is the fastest way to seed the index and prove value, with the same partner review on early output.' },
       { q: 'How long does it take?', a: 'The closing-trigger pipeline is typically live in 4–6 weeks; a historical backfill runs in parallel depending on volume.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-automated-time-capture', 'legal-due-diligence-automation', 'rag-knowledge-engines'],
+    related: ['imanage-netdocuments-automation', 'relativity-document-review-automation', 'law-firm-automated-time-capture', 'legal-due-diligence-automation', 'ai-knowledge-systems'],
   },
 
   // ── Law-firm archetype pages — no two firms are alike: content segmented by
@@ -2689,7 +3032,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How does this interact with our AI governance program?', a: 'It strengthens it. The billing-capture workflow produces a complete per-matter log of AI prompts, responses and outputs — which is precisely the audit trail governance committees and, increasingly, clients ask for. AI usage across the firm becomes a report, not a survey.' },
       { q: 'What does a proof of concept look like?', a: 'One workflow, one practice group, built on your environment and integrated with your real systems, typically live within 4–8 weeks depending on integration scope. Success metrics are agreed before the build starts, and results are measured on live matters.' },
       { q: 'Which workflow should we start with?', a: 'It depends on your practice mix — that is what discovery maps. As a pattern: firms with heavy regulatory practices start with alerts; firms pushing AI adoption hardest start with billing capture, because it pays for everything else; M&A-heavy firms start with diligence-to-report.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['law-firm-automated-time-capture', 'relativity-document-review-automation', 'law-firm-knowledge-management-ai', 'regulatory-filing-monitoring-automation', 'imanage-netdocuments-automation', 'ai-for-mid-size-law-firms'],
   },
@@ -2782,7 +3125,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Is this another per-seat subscription?', a: 'No. Builds are fixed-price and scoped to the workflow. There is no per-lawyer licence, so the economics don’t punish you for growing.' },
       { q: 'How is client confidentiality protected at our size?', a: 'Identically to our largest clients: the workflows run inside an environment you control, client data never leaves your boundary or trains a public model, access mirrors your existing permissions, and every AI action is logged. We work under NDA.' },
       { q: 'We honestly don’t know which workflow to start with.', a: 'That is normal, and it is what the free audit is for: a short structured discovery against your practice mix and systems that ends with a one-page recommendation — which workflow first, what it would save, what it costs. No obligation either way.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['law-firm-matter-intake-automation', 'contract-review-automation-software', 'law-firm-automated-time-capture', 'regulatory-filing-monitoring-automation', 'ai-for-large-law-firms', 'ai-for-small-law-firms'],
   },
@@ -2958,9 +3301,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How accurate is it for tax data?', a: 'We extract against a defined schema, ground values in the source document, and route low-confidence items to a preparer — so accuracy climbs over time without removing review.' },
       { q: 'Is our clients’ data secure?', a: 'Yes. It runs inside your environment with role-based access and full logging; data never leaves your boundary or trains a public model. We work under NDA.' },
       { q: 'How long to set up?', a: 'Most firms are live in 4–6 weeks — well ahead of peak season if you start early.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    proof: { slug: 'cpa-client-intake-to-engagement-automation', label: 'CPA client intake to engagement automation' },
     related: ['cpa-tax-document-automation', 'k1-tax-form-ocr-extraction', 'bookkeeping-automation-quickbooks-xero'],
   },
   {
@@ -3041,9 +3384,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How are errors prevented?', a: 'Every value is grounded in the source K-1 for one-click verification, and low-confidence or unusual items route to a preparer rather than being guessed.' },
       { q: 'Which tax software does it feed?', a: 'CCH Axcess, ProConnect, UltraTax and Drake via their supported import paths; we map K-1 data to the right fields.' },
       { q: 'How long to set up?', a: 'Most K-1 builds go live in 4–6 weeks depending on the variety of K-1s you handle.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    proof: { slug: 'cpa-client-intake-to-engagement-automation', label: 'CPA client intake to engagement automation' },
     related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'vc-pe-crm-automation'],
   },
   {
@@ -3124,9 +3467,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Do we lose control of the books?', a: 'No. Low-confidence categorizations route to review, reconciliation surfaces only what needs a decision, and everything is logged per client, so you keep control as volume grows.' },
       { q: 'Is client data secure?', a: 'Yes — it runs in your environment with access controls and audit logging; data never leaves your boundary or trains a public model.' },
       { q: 'How long to set up?', a: 'Most firms are live in 4–6 weeks depending on client count and chart-of-accounts complexity.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    proof: { slug: 'cpa-client-intake-to-engagement-automation', label: 'CPA client intake to engagement automation' },
     related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'safesend-karbon-workflow-automation'],
   },
   {
@@ -3207,9 +3550,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Will managers still have visibility?', a: 'More than before — the system surfaces what’s delivered, signed, stuck and who owns it, end to end, instead of a manager assembling that picture by hand.' },
       { q: 'Is it secure and auditable?', a: 'Yes — it runs in your environment with access controls and logs every delivery, follow-up and status change.' },
       { q: 'How long to set up?', a: 'Most builds go live in 4–6 weeks depending on how your engagement workflow is structured.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'ai-automation-tax-workflow-cpa-case-study', label: 'Scaling tax-season capacity without increasing headcount for a CPA firm' },
+    proof: { slug: 'cpa-client-intake-to-engagement-automation', label: 'CPA client intake to engagement automation' },
     related: ['cpa-tax-document-automation', 'tax-software-ai-integration', 'bookkeeping-automation-quickbooks-xero'],
   },
 
@@ -3292,7 +3635,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How is client financial data protected?', a: 'Everything runs inside your environment with role-based access and audit trails; PII and financial data never leave your boundary or train a public model. We work under NDA.' },
       { q: 'What can it actually automate?', a: 'Cross-system data sync, meeting prep and records, follow-up tasks and notes, and CRM data hygiene — the repetitive upkeep that otherwise eats advisory time.' },
       { q: 'How long does it take?', a: 'Most builds go live in 4–6 weeks depending on the number of systems we connect.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['financial-services-automation', 'ria-compliance-automation', 'ai-copilot-financial-advisors'],
   },
@@ -3374,7 +3717,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Is the output defensible to an examiner?', a: 'Yes — every check and amendment is logged with its basis, inside your environment, so you can produce a complete, retrievable record on request.' },
       { q: 'Where does our data live?', a: 'Inside your environment, with role-based access. Firm and client data never leaves your boundary or trains a public model. We work under NDA.' },
       { q: 'How long does it take?', a: 'Most compliance builds go live in 6–10 weeks depending on the scope of marketing review and your records setup.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['financial-services-automation', 'ria-crm-automation', 'ai-copilot-financial-advisors'],
   },
@@ -3456,7 +3799,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can it automate our Orion reporting?', a: 'Yes — recurring report generation (e.g. Orion) is part of the build, alongside meeting prep and follow-ups, with advisor review before anything goes out.' },
       { q: 'Is client data safe?', a: 'It runs inside your environment with role-based access and audit logging; client financial data never leaves your boundary or trains a public model. We work under NDA.' },
       { q: 'How long does it take?', a: 'Most co-pilot builds go live in 8–12 weeks depending on the data sources we ingest and your security requirements.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     related: ['financial-services-automation', 'ria-crm-automation', 'ria-compliance-automation'],
   },
@@ -3539,7 +3882,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'What gets automated into the CRM?', a: 'Inbound decks and intros are captured and structured into records, contacts and companies are enriched, and pipeline stages and tasks move with deal activity — so the CRM stays current without manual entry.' },
       { q: 'Is our deal data secure?', a: 'Yes — it runs inside your environment with access controls and audit logging; confidential deal and relationship data never leaves your boundary or trains a public model.' },
       { q: 'How long does it take?', a: 'Most Affinity automation builds go live in 4–6 weeks depending on the depth of enrichment and pipeline logic.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
     related: ['vc-pe-crm-automation', 'pitch-deck-parsing-software', 'portfolio-company-monitoring-automation'],
@@ -3622,7 +3965,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can it handle any deck format?', a: 'Slides, PDFs and links are all in scope; the parser is built for the variety of real inbound rather than a single template.' },
       { q: 'Is founder data kept confidential?', a: 'Yes — it runs inside your environment with access controls and logging; confidential materials never leave your boundary or train a public model.' },
       { q: 'How long does it take?', a: 'Most deck-parsing builds go live in 4–6 weeks depending on CRM integration depth.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
     related: ['vc-pe-crm-automation', 'affinity-crm-automation', 'ai-term-sheet-analysis'],
@@ -3705,7 +4048,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does it replace the partner’s review?', a: 'No. It surfaces extracted terms and off-market flags with the clause cited; the partner makes the call. It accelerates judgement, it doesn’t replace it.' },
       { q: 'Is deal data confidential?', a: 'Yes — it runs inside your environment with access controls and audit trails; documents never leave your boundary or train a public model.' },
       { q: 'How long does it take?', a: 'Most term-sheet analysis builds go live in 6–8 weeks depending on how much of your standards we encode.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
     related: ['vc-pe-crm-automation', 'pitch-deck-parsing-software', 'legal-due-diligence-automation'],
@@ -3788,7 +4131,7 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How are variances surfaced?', a: 'The system flags variances against your expectations and raises risk signals, so outliers come to you instead of waiting for the next manual review.' },
       { q: 'Is portfolio data secure?', a: 'Yes — it runs inside your environment with access controls and audit logging; data never leaves your boundary or trains a public model.' },
       { q: 'How long does it take?', a: 'Most monitoring builds go live in 6–8 weeks depending on portfolio size and reporting variety.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
     proof: { slug: 'pe-firm-ai-due-diligence-automation', label: 'How a mid-market PE firm automated due diligence and portfolio monitoring' },
     related: ['vc-pe-crm-automation', 'affinity-crm-automation', 'financial-services-automation'],
@@ -3799,7 +4142,7 @@ export const SERVICES: ServiceContent[] = [
     slug: 'agentic-ai-systems',
     metaTitle: 'Agentic AI Systems Development for Enterprises | Chronexa',
     metaDescription:
-      'Custom agentic AI systems for regulated enterprises — orchestration, tool use, memory and guardrails, deployed in your environment. Built where autonomy earns its cost, not where a workflow would do.',
+      'Custom AI agents that plan, use tools and complete multi-step work, with clear limits, human review and deployment in the systems your business owns.',
     h1: 'Agentic AI Systems',
     heroSub:
       'Custom AI systems that plan, use tools, and complete multi-step work — engineered for reliability and deployed inside your environment, with autonomy reserved for the steps that actually need it.',
@@ -3882,10 +4225,10 @@ export const SERVICES: ServiceContent[] = [
       { q: 'How do you keep an autonomous agent reliable and prevent runaway loops?', a: 'Reliability is engineered, not assumed: durable execution that resumes after failure, retry logic and checkpoints, bounded iteration budgets, and full trajectory tracing so multi-step failures are debuggable.' },
       { q: 'Can it run inside our environment for compliance?', a: 'Yes — agents run inside your boundary as scoped, least-privilege identities, with control-plane authorisation on tool calls, human-approval gates, and immutable audit logs. We build to the OWASP agentic threat model.' },
       { q: 'Single agent or multi-agent — how do you decide?', a: 'By evidence: multi-agent for parallelisable, high-value, large-context work; a single well-engineered agent for tightly interdependent tasks. We start simple and escalate only when a measured quality metric caps out.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['rag-knowledge-engines', 'secure-ai-deployment', 'legal-due-diligence-automation'],
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
+    related: ['ai-knowledge-systems', 'legal-ai-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'rag-knowledge-engines',
@@ -3973,13 +4316,14 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Can it respect who’s allowed to see which documents?', a: 'Yes — permission-aware retrieval is core. We capture permissions at ingest and enforce them at query time from the user’s identity, so the model never surfaces content a user couldn’t see. This maps directly to ethical walls and matter-level confidentiality.' },
       { q: 'Can it handle our scanned PDFs, tables and filings?', a: 'Yes — layout-aware ingestion with table-structure recognition, because naive OCR silently corrupts data (associating figures with the wrong entity). Ingestion quality is where most enterprise RAG quietly fails.' },
       { q: 'How do you measure accuracy?', a: 'We evaluate retrieval and answer quality separately (RAGAS-style context precision/recall + faithfulness) against your own gold questions, so we can tell whether a bad answer is a retrieval or a generation problem and fix the right thing.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
     related: ['agentic-ai-systems', 'document-processing-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'secure-ai-deployment',
+    heroBg: '/images/hero/secure-ai-deployment.webp',
     metaTitle: 'Secure & Compliant AI Deployment | Chronexa',
     metaDescription:
       'Deploy AI inside your environment — enterprise API with no-training, VPC, or self-hosted open models — for HIPAA, SOC 2, GDPR and SEC/FINRA. We match the least-isolated option that satisfies your exposure.',
@@ -4064,10 +4408,10 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Does Azure OpenAI / Bedrock / Vertex train on our data?', a: 'No — their enterprise tiers contractually don’t train on your data and isolate it per customer. The nuance is configuration: features like HIPAA mode or zero-data-retention often must be explicitly enabled, and a single mis-configured call can fall outside your BAA.' },
       { q: 'What’s the difference between data residency and data sovereignty?', a: 'Residency is where the data physically sits; sovereignty is whose laws govern it. A hyperscaler can pin your region (residency) but the US CLOUD Act still reaches it (sovereignty). True sovereignty means provider, infrastructure and operations in one jurisdiction — which can require self-hosting.' },
       { q: 'How do you keep an audit trail without leaking sensitive data into logs?', a: 'We log metadata — who, what, when, model version, status — and keep sensitive payloads out of the logs, with PII redaction, RBAC, and retention set to your obligations (e.g. HIPAA’s 7-year requirement).' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    proof: { slug: 'how-leading-law-firm-automated-regulatory-intelligence', label: 'How a leading corporate law firm automated regulatory intelligence with AI' },
-    related: ['rag-knowledge-engines', 'financial-services-automation', 'legal-due-diligence-automation'],
+    proof: { slug: 'legal-document-intake-matter-automation', label: 'Legal document intake and matter automation' },
+    related: ['ai-knowledge-systems', 'financial-services-automation', 'legal-due-diligence-automation'],
   },
   {
     slug: 'applied-ml-data-science',
@@ -4155,9 +4499,9 @@ export const SERVICES: ServiceContent[] = [
       { q: 'Why does a backtest look better than live performance?', a: 'Because backtests are easy to overfit. Live results typically run 30–50% worse, so we validate out-of-sample with realistic costs and slippage and engineer for that — we never quote trading returns.' },
       { q: 'XGBoost vs LightGBM vs CatBoost — which do you use?', a: 'It depends on the data: LightGBM for speed on large numeric datasets, CatBoost for categorical-heavy or smaller data, XGBoost for maturity and robustness at scale. Often the edge is in feature engineering, not the model.' },
       { q: 'Can an ML model be explainable enough for regulators?', a: 'Yes — SHAP-based explanations make boosted-tree models auditable, supporting FCRA/ECOA adverse-action reasons and Basel III/GDPR transparency, while keeping the accuracy advantage over logistic regression.' },
-      { q: 'What does it cost?', a: `Engagements are fixed-price and scoped to the outcome. ${GUARANTEE} Book a discovery call for a clear price and ROI estimate.` },
+      { q: 'What does it cost?', a: 'Every engagement is priced to its own scope, so there is no list price. After a short discovery call we agree in writing what the system has to do and what it costs, before any build starts.' },
     ],
-    related: ['secure-ai-deployment', 'financial-services-automation', 'document-processing-automation'],
+    related: ['legal-ai-automation', 'financial-services-automation', 'document-processing-automation'],
   },
   {
     // Metadata + JSON-LD source only. StartupGrowthPage.tsx (rendered via this
@@ -4183,12 +4527,15 @@ export const SERVICES: ServiceContent[] = [
     whyCustom: [],
     included: [],
     faqs: [],
-    related: ['n8n-automation-services', 'sales-revenue-automation', 'operations-automation'],
+    related: ['ai-automation-agency', 'sales-revenue-automation', 'business-process-automation-consulting'],
   },
 ];
 
 export function getService(slug: string): ServiceContent | undefined {
-  return SERVICES.find((s) => s.slug === slug);
+  // The 2026-08 twelve-service rebuild lives in services-v2.ts and takes
+  // precedence. Legacy entries below stay live for the use-case and integration
+  // pages that are not part of the service menu.
+  return SERVICES_V2.find((s) => s.slug === slug) ?? SERVICES.find((s) => s.slug === slug);
 }
 
 /**
@@ -4197,7 +4544,15 @@ export function getService(slug: string): ServiceContent | undefined {
  * grid on every service/use-case page. ROI impacts use bold-but-defensible
  * ranges tied to the same outcomes as the page's case studies and roi metrics.
  */
-export type SolutionCard = { title: string; body: string; roiImpact: string };
+/** `icon` labels the card so a scanner can read the grid without reading the
+ *  prose — the reference site puts a line icon on every card for exactly this.
+ *  Optional: cards without one still render, just without the glyph. */
+export type SolutionCard = {
+  title: string;
+  body: string;
+  roiImpact: string;
+  icon?: import('../components/Icon').IconName;
+};
 
 export const SOLUTIONS: Record<string, SolutionCard[]> = {
   'legal-due-diligence-automation': [
@@ -4260,10 +4615,13 @@ export const SOLUTIONS: Record<string, SolutionCard[]> = {
     { title: 'Scheduling & onboarding', body: 'Interview scheduling and onboarding workflows run themselves.', roiImpact: 'Days → hours to onboard' },
     { title: 'HR document workflows', body: 'HR documents generate and route automatically.', roiImpact: 'Paperwork off the team’s plate' },
   ],
+  /* Two lines per card, hard limit. The previous copy ran three and four lines
+     and repeated in the ROI line underneath it. */
   'document-processing-automation': [
-    { title: 'Extraction & classification', body: 'OCR + LLM extract and classify any document against your schema.', roiImpact: '85% less time per document' },
-    { title: 'RAG grounding & traceability', body: 'Every output traces back to its source for trust and audit.', roiImpact: 'Accuracy you can defend' },
-    { title: 'Human-in-the-loop & STP', body: 'Straight-through for clean cases, human review for the rest.', roiImpact: 'Scales without adding headcount' },
+    { icon: 'documents', title: 'Sorts the post', body: 'Invoice, statement, claim form, engagement letter. It knows which is which before anyone opens it.', roiImpact: 'No manual filing' },
+    { icon: 'search', title: 'Finds the fields', body: 'The same few values you would have gone looking for, wherever they sit this time.', roiImpact: 'Layout changes stop mattering' },
+    { icon: 'check', title: 'Shows its working', body: 'Every figure traces back to the spot on the page it came from.', roiImpact: 'Settles a query in seconds' },
+    { icon: 'flag', title: 'Stops when unsure', body: 'Low confidence goes to a person with the document open beside it.', roiImpact: 'Nothing is guessed into your records' },
   ],
   'sales-revenue-automation': [
     { title: 'Lead scoring & enrichment', body: 'AI scores and enriches leads and keeps the CRM clean.', roiImpact: '5x more personalized outreach per rep' },
@@ -4303,7 +4661,7 @@ export const SOLUTIONS: Record<string, SolutionCard[]> = {
 };
 
 export function getSolutions(slug: string): SolutionCard[] | undefined {
-  return SOLUTIONS[slug];
+  return SOLUTIONS_V2[slug] ?? SOLUTIONS[slug];
 }
 
 /**

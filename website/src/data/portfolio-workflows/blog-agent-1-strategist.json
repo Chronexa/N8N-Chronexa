@@ -1,69 +1,303 @@
 {
-  "name": "[DRAFT] Blog Agent 1: SEO Strategist",
+  "name": "Agent 1: GSC Strategist (Baserow)",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "syncedAt": "2026-09-29",
   "nodes": [
     {
-      "id": "a1-trigger",
+      "id": "a1g-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
         240,
-        300
+        304
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a1g-fetch-gsc",
+      "name": "Fetch GSC Striking Distance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        160
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://searchconsole.googleapis.com",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-filter",
+      "name": "Filter Striking Distance",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        160
       ],
       "parameters": {}
     },
     {
-      "id": "a1-perplexity",
+      "id": "a1g-has-keywords",
+      "name": "Has Keywords?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        160
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-claude",
       "name": "Claude Brief Generation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        460,
-        300
+        1408,
+        368
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com",
+        "options": {}
+      }
     },
     {
-      "id": "a1-parse-brief",
+      "id": "a1g-parse",
       "name": "Parse Brief Fields",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        680,
-        300
+        1600,
+        368
       ],
       "parameters": {}
     },
     {
-      "id": "a1-create-record",
-      "name": "Create Pipeline Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a1g-parse-ok",
+      "name": "Parse OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
-        900,
-        300
+        1792,
+        368
       ],
       "parameters": {}
     },
     {
-      "id": "a1-sticky",
-      "name": "⚙️ Agent 1: SEO Strategist",
+      "id": "a1g-create-row",
+      "name": "Create Baserow Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2528,
+        496
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-end-no-keywords",
+      "name": "End: No Keywords Today",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        64
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-end-parse-fail",
+      "name": "End: Parse Failed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        560
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-sticky",
+      "name": "⚙️ Agent 1: GSC Strategist (Baserow)",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        200,
-        160
+        208,
+        0
       ],
       "parameters": {
-        "content": "## Blog Agent 1: SEO Strategist v4\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
-        "width": 420,
-        "height": 180
+        "content": "## Agent 1 — SEO strategist\n\n**Runs:** weekly.\n\n**Primary source:** a curated keyword backlog. The top queued keyword is picked and marked used immediately, so two runs can never claim the same one.\n\n**Fallback:** if the backlog is empty, Search Console keywords in striking distance (positions 5–20).\n\nClaude turns the keyword into a brief, a duplicate check runs against existing posts, and the brief is handed to Agent 2.",
+        "width": 1808,
+        "height": 696
       }
+    },
+    {
+      "id": "a1g-dedup-if",
+      "name": "IF: Already Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2336,
+        400
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-dedup-end",
+      "name": "End: Keyword Already Exists",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-fetch-backlog",
+      "name": "Fetch Keyword Backlog",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        304
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-has-backlog",
+      "name": "Has Backlog Keyword?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        640,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-mark-used",
+      "name": "Mark Backlog Used",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        480
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-extract-backlog",
+      "name": "Extract Backlog Keyword",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        480
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a1g-dedup-http",
+      "name": "Baserow: Check Duplicate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1984,
+        400
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1g-dedup-merge",
+      "name": "Merge Duplicate Flag",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        400
+      ],
+      "parameters": {}
     }
   ],
   "connections": {
     "Schedule Trigger": {
       "main": [
+        [
+          {
+            "node": "Fetch Keyword Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch GSC Striking Distance": {
+      "main": [
+        [
+          {
+            "node": "Filter Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Striking Distance": {
+      "main": [
+        [
+          {
+            "node": "Has Keywords?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Keywords?": {
+      "main": [
+        [
+          {
+            "node": "End: No Keywords Today",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Claude Brief Generation",
@@ -88,7 +322,116 @@
       "main": [
         [
           {
-            "node": "Create Pipeline Record",
+            "node": "Parse OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse OK?": {
+      "main": [
+        [
+          {
+            "node": "End: Parse Failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Baserow: Check Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Already Exists?": {
+      "main": [
+        [
+          {
+            "node": "End: Keyword Already Exists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Baserow Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Keyword Backlog": {
+      "main": [
+        [
+          {
+            "node": "Has Backlog Keyword?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Backlog Keyword?": {
+      "main": [
+        [
+          {
+            "node": "Mark Backlog Used",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch GSC Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Backlog Used": {
+      "main": [
+        [
+          {
+            "node": "Extract Backlog Keyword",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Backlog Keyword": {
+      "main": [
+        [
+          {
+            "node": "Claude Brief Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baserow: Check Duplicate": {
+      "main": [
+        [
+          {
+            "node": "Merge Duplicate Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Duplicate Flag": {
+      "main": [
+        [
+          {
+            "node": "IF: Already Exists?",
             "type": "main",
             "index": 0
           }

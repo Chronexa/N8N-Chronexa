@@ -1,0 +1,74 @@
+/* Light app window on a dark section — same frame as the solution-page hero demos
+   (cream body, ink title bar, ring + deep shadow). Never a terminal. */
+.window {
+  background: #fbfbf4;
+  color: #1a1a17;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(247, 247, 238, 0.22), 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+}
+.bar { display: flex; align-items: center; gap: 6px; padding: 0.7rem 1rem; background: #1b1d1a; }
+.bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3d38; }
+.bar span { margin-left: 0.75rem; font-size: 0.75rem; color: #9aa19a; }
+
+.body { display: grid; grid-template-columns: 240px 1fr; min-height: 430px; }
+
+.tabs { display: flex; flex-direction: column; border-right: 1px solid rgba(26, 24, 20, 0.1); background: #f3f1ea; }
+.tab {
+  position: relative; text-align: left; padding: 1rem 1.15rem; border-bottom: 1px solid rgba(26, 24, 20, 0.08);
+  display: flex; flex-direction: column; gap: 0.2rem; overflow: hidden; cursor: pointer;
+}
+.tab span { font-weight: 600; font-size: 0.92rem; color: #1a1a17; }
+.tab small { font-size: 0.78rem; color: #6b6862; }
+.tab[aria-selected="true"] { background: #fbfbf4; box-shadow: inset 3px 0 0 var(--brand-green-ink); }
+.tab:not([aria-selected="true"]):hover span { color: var(--brand-green-ink); }
+.fill {
+  position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--brand-green-ink);
+  transform-origin: left; animation: fill linear forwards;
+}
+@keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.panel { padding: 1.4rem 1.6rem 1.5rem; min-width: 0; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.agent { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; margin: 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand-green); box-shadow: 0 0 0 3px rgba(103, 176, 53, 0.2); }
+.tools { display: flex; gap: 0.5rem; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.tools li {
+  display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: #4b4943;
+  padding: 0.25rem 0.55rem; border: 1px solid rgba(26, 24, 20, 0.12); border-radius: 999px; background: #fff;
+}
+.tools img { width: 14px; height: 14px; object-fit: contain; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.steps li {
+  display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 0.7rem;
+  padding: 0.62rem 0.8rem; border-radius: 8px; background: #fff; border: 1px solid rgba(26, 24, 20, 0.08);
+  font-size: 0.9rem; line-height: 1.4;
+}
+.icon { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; }
+.done .icon { background: rgba(47, 107, 58, 0.12); color: var(--brand-green-ink); }
+.stop { background: #fdf6ec !important; border-color: rgba(192, 85, 43, 0.25) !important; }
+.stop .icon { background: rgba(192, 85, 43, 0.14); color: #a8481f; }
+.stop em { font-style: normal; font-size: 0.72rem; font-weight: 600; color: #a8481f; letter-spacing: 0.02em; }
+
+.approval {
+  margin-top: 1rem; display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 0.8rem;
+  padding: 0.8rem 0.9rem; border-radius: 10px; background: #1b1d1a; color: #fbfaf7;
+}
+.approval img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.approval small { font-size: 0.72rem; color: #9aa19a; }
+.approval p { margin: 0.1rem 0 0; font-size: 0.92rem; font-weight: 600; }
+.approve { padding: 0.5rem 0.95rem; border-radius: 6px; background: var(--brand-green); color: #0e0f0d; font-size: 0.82rem; font-weight: 700; white-space: nowrap; }
+
+@media (max-width: 760px) {
+  .body { grid-template-columns: 1fr; }
+  .tabs { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid rgba(26, 24, 20, 0.1); }
+  .tab { min-width: 160px; border-bottom: none; border-right: 1px solid rgba(26, 24, 20, 0.08); }
+  .tab[aria-selected="true"] { box-shadow: inset 0 -3px 0 var(--brand-green-ink); }
+  .tab small { display: none; }
+  .panel { padding: 1.1rem; }
+  .steps li { grid-template-columns: 22px 1fr; font-size: 0.86rem; }
+  .stop em { display: none; }
+  .approval { grid-template-columns: 36px 1fr; }
+  .approve { grid-column: 1 / -1; text-align: center; }
+}

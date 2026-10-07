@@ -1,8 +1,11 @@
 {
-  "name": "[DRAFT] Blog Agent 3: Copywriter",
+  "name": "Agent 3: Copywriter (Baserow)",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
   "nodes": [
     {
-      "id": "a3-trigger",
+      "id": "a3b-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -10,24 +13,37 @@
         240,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
     },
     {
-      "id": "a3-get-pending",
-      "name": "Get Pending Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a3b-fetch",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         460,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a3-lock",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a3b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
         680,
         300
@@ -35,10 +51,21 @@
       "parameters": {}
     },
     {
-      "id": "a3-call-claude",
-      "name": "Call Claude - Write Blog Post",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "a3b-end",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3b-extract",
+      "name": "Extract Record",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         900,
         300
@@ -46,62 +73,101 @@
       "parameters": {}
     },
     {
-      "id": "a3-parse-fields",
-      "name": "Parse Blog Fields",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "id": "a3b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         1120,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a3-quality-gate",
-      "name": "Quality Gate",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
+      "id": "a3b-claude",
+      "name": "Call Claude - Write Blog Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         1340,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a3b-parse",
+      "name": "Parse Blog Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
         300
       ],
       "parameters": {}
     },
     {
-      "id": "a3-save-content",
+      "id": "a3b-quality",
+      "name": "Quality Gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a3b-save",
       "name": "Save Content",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1560,
-        200
+        2000,
+        180
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a3-fail",
+      "id": "a3b-fail",
       "name": "Mark Failed",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1560,
-        420
+        2000,
+        440
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a3-sticky",
-      "name": "⚙️ Agent 3: Copywriter",
+      "id": "a3b-sticky",
+      "name": "⚙️ Agent 3: Copywriter (Baserow)",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        200,
-        160
+        240,
+        100
       ],
       "parameters": {
-        "content": "## Blog Agent 3: Copywriter v6 — Delimiter Parsing\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
-        "width": 400,
-        "height": 160
+        "content": "## Agent 3 — Copywriter\n\nPolls for posts whose research is complete → Claude writes the article → **quality gate** (minimum length and required fields) → handed to the designer.\n\nA post that fails the gate is marked failed instead of moving on.",
+        "width": 500,
+        "height": 140
       }
     }
   ],
@@ -110,14 +176,43 @@
       "main": [
         [
           {
-            "node": "Get Pending Record",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Pending Record": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -144,6 +239,13 @@
         [
           {
             "node": "Parse Blog Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Failed",
             "type": "main",
             "index": 0
           }

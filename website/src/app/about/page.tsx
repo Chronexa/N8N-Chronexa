@@ -4,18 +4,25 @@ import Story from '../../components/Story';
 import Team from '../../components/Team';
 import Numbers from '../../components/Numbers';
 import CtaBand from '../../components/CtaBand';
-import { site, company } from '../../lib/site';
+import { site } from '../../lib/site';
 
 export const metadata: Metadata = {
-  title: { absolute: 'About Chronexa — AI Automation for Law Firms, CPA Practices & Finance Teams' },
+  title: { absolute: 'About Chronexa | AI Consulting & Development Firm' },
   description:
-    'Chronexa is an engineer-led AI automation agency for professional services firms. We build custom AI systems — legal RAG, tax workflow automation, document intelligence — deployed inside your environment, not a vendor\'s cloud.',
+    'Meet the founders of Chronexa, an AI consulting and development firm and Anthropic partner that runs its own company on the agents it builds.',
   alternates: { canonical: '/about' },
   openGraph: {
-    title: 'About Chronexa — AI Automation for Professional Services Firms',
-    description: 'An engineer-led AI automation agency for law firms, CPA practices, and finance teams.',
+    title: 'About Chronexa | AI Consulting & Development Firm',
+    description: 'Meet the founders of Chronexa, an AI consulting and development firm and Anthropic partner that runs its own company on the agents it builds.',
     url: '/about',
     type: 'website',
+    images: [site.ogImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Chronexa | AI Consulting & Development Firm',
+    description: 'Meet the founders of Chronexa, an AI consulting and development firm and Anthropic partner that runs its own company on the agents it builds.',
+    images: [site.ogImage],
   },
 };
 
@@ -30,7 +37,7 @@ const schema = {
     name: site.name,
     url: site.url,
     email: site.email,
-    description: site.description,
+    description: site.definition,
     sameAs: [site.socials.linkedin, site.socials.twitter, site.socials.instagram],
     areaServed: ['US', 'GB', 'CA'],
   },
@@ -46,13 +53,13 @@ export default function AboutPage() {
         <div className={`container ${styles.content}`}>
           <p className={styles.eyebrow}>About Chronexa</p>
           <h1 className={styles.headline}>
-            We build the engines that power <span className={styles.gradientText}>regulated enterprises.</span>
+            Engineers who know <span className={styles.gradientText}>when AI is right.</span>
           </h1>
           <p className={styles.subheadline}>
-            Chronexa is an engineer-led automation agency. We architect, build, and deploy custom infrastructure directly into your environment. You own the assets, and your data stays secure.
+            Chronexa is an AI consulting and development firm and Anthropic partner. We run our own company on AI agents, and we bring the same agents, integrations and engineering judgment to growing companies in the US and worldwide.
           </p>
           <a href={site.booking} target="_blank" rel="noopener noreferrer" className={styles.cta}>
-            Book a Discovery Call.
+            Book a free AI audit
           </a>
 
           <div className={styles.grid}>
@@ -65,13 +72,13 @@ export default function AboutPage() {
             <div className={styles.card}>
               <h3 className={styles.cardTitle}>Built for ROI</h3>
               <p className={styles.cardText}>
-                We don't build toys. Every system is scoped at a fixed price and engineered for measurable returns.
+                We don&apos;t build demos. Every build is quoted after a free audit, against the time and revenue it unlocks.
               </p>
             </div>
             <div className={styles.card}>
               <h3 className={styles.cardTitle}>Technical Co-founders</h3>
               <p className={styles.cardText}>
-                We aren't just vendors. We are a senior team of engineers and operators sitting at your side.
+                We aren&apos;t just vendors. We are a senior team of engineers and operators sitting at your side.
               </p>
             </div>
           </div>

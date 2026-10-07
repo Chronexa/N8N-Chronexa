@@ -1,0 +1,152 @@
+/**
+ * ServiceProof — the proof block.
+ *
+ * The point of this file is HIERARCHY. The previous version set the number, its
+ * label and its source at nearly the same weight, so "1,200+" read as body copy
+ * and the buyer had no idea what it was supposed to mean. Here the figure is at
+ * display scale, the consequence sits beside it in near-black, and only the
+ * attribution is muted.
+ */
+
+.wrap {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  overflow: hidden;
+}
+
+/* ── 1 · The lead number ──────────────────────────────────────────────────── */
+.lead {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.leadNum {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 8vw, 6.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--brand-green-ink);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.leadUnit {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-top: 0.5rem;
+}
+
+.leadText { display: grid; gap: 0.4rem; }
+
+/* The consequence, not the caption — this is the line that has to land. */
+.leadLabel {
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+  color: var(--text-light);
+  max-width: 34ch;
+  font-weight: 500;
+}
+.leadOutcome {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  max-width: 46ch;
+}
+.leadSource {
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-top: 0.15rem;
+}
+
+/* ── 2 · Mechanism ────────────────────────────────────────────────────────── */
+.mechanism {
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  color: var(--text-light);
+  max-width: 68ch;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+.mechanismUnderLead { padding-top: var(--spacing-md); }
+
+/* ── 3 · Case-study link ──────────────────────────────────────────────────── */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 var(--spacing-lg) var(--spacing-md);
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--brand-green-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--brand-green-line);
+  padding-bottom: 2px;
+  transition: border-color var(--transition-fast);
+}
+.link:hover { border-color: var(--brand-green-ink); }
+
+/* ── 4 · Third-party research ─────────────────────────────────────────────── */
+.research {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--bg-sunken);
+  border-top: 1px solid var(--border-light);
+}
+.researchLabel {
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-bottom: var(--spacing-sm);
+}
+.researchList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+.researchList li { display: grid; gap: 0.3rem; align-content: start; }
+
+/* Amber, following the sitewide semantic code set in globals.css: amber is the
+   external/human voice (industry research), green is our own delivery. The lead
+   number above is green for exactly that reason. */
+.researchNum {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.1;
+  color: var(--accent-amber);
+}
+.researchText {
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-light);
+}
+.source {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-light-strong);
+  justify-self: start;
+  padding-bottom: 1px;
+}
+.source:hover { color: var(--brand-green-ink); border-color: var(--brand-green-ink); }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .researchList { grid-template-columns: 1fr; gap: var(--spacing-sm); }
+}
+@media (max-width: 720px) {
+  .lead { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm); padding: var(--spacing-md); }
+  .leadNum { font-size: clamp(3rem, 16vw, 4.4rem); }
+  .mechanism, .research { padding: var(--spacing-md); }
+  .link { margin: 0 var(--spacing-md) var(--spacing-md); }
+}

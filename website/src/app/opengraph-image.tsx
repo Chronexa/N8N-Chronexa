@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'Chronexa — Custom Enterprise AI for Regulated Industries';
+export const alt = 'Chronexa — AI consulting, automation and software development';
 
 // Dynamically generated social/SERP preview image (replaces the missing og.png).
 export default function OpengraphImage() {
@@ -28,10 +28,10 @@ export default function OpengraphImage() {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ fontSize: 76, fontWeight: 700, color: '#fff', lineHeight: 1.05, letterSpacing: -2, maxWidth: 1000 }}>
-            Custom Enterprise AI for Regulated Industries
+            Put AI to work. With people who know how.
           </div>
           <div style={{ display: 'flex', fontSize: 32, color: '#9aa19a', marginTop: 28, maxWidth: 900 }}>
-            Secure AI &amp; agentic systems for finance, legal, tax &amp; dealmaking — built inside your environment.
+            AI that does real work. Engineers who know when it’s right.
           </div>
         </div>
 

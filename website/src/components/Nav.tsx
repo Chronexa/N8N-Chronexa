@@ -3,59 +3,99 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { ReactNode } from 'react';
 import styles from './Nav.module.css';
-import { services, useCasesByFunction, useCasesByIndustry } from '../lib/taxonomy';
 import BookButton from './BookButton';
-import { ENGINE_ROADMAP, type IconKey, type RoadmapItem } from './engines/engines-data';
+import { indexableBuckets, hubPath } from '../lib/blog-taxonomy';
+import { AUDIT_OFFER, INDUSTRY_GROUPS, INSIGHT_GROUPS, SERVICE_GROUPS, WORK_LINKS, type NavGroup } from '../lib/nav';
 
-// ─── AI Engines nav items ────────────────────────────────────────────────────
-// Sourced from ENGINE_ROADMAP — the same data the /ai-engines hub page reads —
-// so this list can't go stale the way a separate hardcoded copy did before
-// (it kept marking engines "coming soon" after their pages had already shipped).
+/* ============================================================================
+   Nav — one full-bleed dropdown plane, four menus (2026-10-07 IA).
 
-const ENGINE_ICON_PATHS: Partial<Record<IconKey, ReactNode>> = {
-  send:   <><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></>,
-  doc:    <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></>,
-  chart:  <><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></>,
-  layers: <><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></>,
-  shield: <><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></>,
-  inbox:  <><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5 5h14l3 7v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5l3-7z"/></>,
-};
+   Services · Industries · Work · Insights · About · CTA — the pattern every
+   firm we benchmarked uses (Fractional AI, Simform, Thoughtworks). Content
+   lives in lib/nav.ts so Nav and Footer can't drift. Each menu is one 12-unit
+   grid: link columns span 3, and the right-hand column is either a feature
+   card (the free audit, our primary offer) or empty space.
+   ============================================================================ */
 
-function EngIco({ type }: { type: IconKey }) {
-  const path = ENGINE_ICON_PATHS[type];
-  if (!path) return null;
+function Chevron() {
   return (
-    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
-      {path}
+    <svg className={styles.caret} width="11" height="11" viewBox="0 0 12 12" fill="none"
+      stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+      aria-hidden="true">
+      <path d="M2.75 4.5 6 7.75 9.25 4.5" />
     </svg>
   );
 }
 
-const LIVE_ENGINES = ENGINE_ROADMAP.filter(
-  (e): e is RoadmapItem & { href: string } => e.status === 'live' && !!e.href,
-);
+function ArrowRight() {
+  return (
+    <svg className={styles.footerArrow} width="15" height="15" viewBox="0 0 16 16" fill="none"
+      stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+      aria-hidden="true">
+      <path d="M3 8h9.5M8.75 4.25 12.5 8l-3.75 3.75" />
+    </svg>
+  );
+}
 
-// Tight one-line descriptors for the mega-menu — the full `promise` paragraphs
-// belong on the pages, not the nav (they turned the menu into a wall of text).
-const ENGINE_NAV_BLURB: Record<string, string> = {
-  'Sales Engine': 'AI outbound, human-approved',
-  'CPA & Tax Engine': 'Reviewer-ready returns in hours',
-  'Investment Research Engine': 'Research & execution, human-approved',
-  'Document Intelligence Engine': 'Ask your documents, cited answers',
-  'Legal & Regulatory Engine': 'Regulatory alerts, billing & knowledge',
-  'Customer Support Engine': 'Grounded answers, every channel',
-};
+function PanelFooter({ href, label, onClick }: { href: string; label: string; onClick: () => void }) {
+  return (
+    <div className={styles.panelFooter}>
+      <Link href={href} className={styles.panelFooterLink} onClick={onClick}>
+        {label} <ArrowRight />
+      </Link>
+    </div>
+  );
+}
 
-// ─── Component ───────────────────────────────────────────────────────────────
+function Columns({ groups, onClick }: { groups: NavGroup[]; onClick: () => void }) {
+  return (
+    <>
+      {groups.map((g) => (
+        <div key={g.head} className={styles.col}>
+          <p className={styles.colHead}>{g.head}</p>
+          <ul className={styles.colList}>
+            {g.links.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className={styles.colLink} onClick={onClick}>{l.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </>
+  );
+}
+
+function AuditFeature({ onClick, location }: { onClick: () => void; location: string }) {
+  return (
+    <div className={styles.feature}>
+      <p className={styles.featureHead}>{AUDIT_OFFER.head}</p>
+      <p className={styles.featureTitle}>{AUDIT_OFFER.title}</p>
+      <p className={styles.featureBody}>{AUDIT_OFFER.body}</p>
+      <BookButton className={styles.featureCta} location={location} onClick={onClick}>
+        {AUDIT_OFFER.cta} <ArrowRight />
+      </BookButton>
+    </div>
+  );
+}
+
+function MenuItem({ id, label, open, onToggle, children }: { id: string; label: string; open: boolean; onToggle: (id: string) => void; children: React.ReactNode }) {
+  return (
+    <div className={styles.item} data-open={open}>
+      <button type="button" className={styles.trigger} aria-expanded={open} onClick={() => onToggle(id)}>
+        {label} <Chevron />
+      </button>
+      <div className={styles.panel}>{children}</div>
+    </div>
+  );
+}
 
 export default function Nav() {
-  const [open, setOpen]   = useState(false);
-  const [menu, setMenu]   = useState<string | null>(null);
-  const close             = () => { setOpen(false); setMenu(null); };
-  const toggle            = (key: string) => setMenu((m) => (m === key ? null : key));
+  const [open, setOpen] = useState(false);
+  const [menu, setMenu] = useState<string | null>(null);
+  const close = () => { setOpen(false); setMenu(null); };
+  const toggle = (key: string) => setMenu((m) => (m === key ? null : key));
 
   return (
     <header className={styles.nav}>
@@ -73,100 +113,55 @@ export default function Nav() {
       </button>
 
       <nav id="primary-nav" className={styles.links} data-open={open} aria-label="Primary">
+        <MenuItem id="services" label="Services" open={menu === "services"} onToggle={toggle}>
+          <div className={styles.panelBody}>
+            <Columns groups={SERVICE_GROUPS} onClick={close} />
+            <AuditFeature onClick={close} location="nav-services" />
+          </div>
+          <PanelFooter href="/how-we-work" label="How we work: audit, first workflow, partnership" onClick={close} />
+        </MenuItem>
 
-        {/* ── Services ─────────────────────────────────────────────────── */}
-        <div className={styles.item} data-open={menu === 'services'}>
-          <button type="button" className={styles.trigger}
-            aria-expanded={menu === 'services'} onClick={() => toggle('services')}>
-            Services <span className={styles.caret} aria-hidden="true">▾</span>
-          </button>
-          <div className={styles.panel}>
-            <div className={styles.panelInner}>
-              <p className={styles.panelHead}>What we build</p>
-              <div className={styles.panelGrid}>
-                {services.map((s) => (
-                  <Link key={s.slug} href={`/${s.slug}`} className={styles.panelLink} onClick={close}>
-                    <span className={styles.panelLabel}>{s.navLabel}</span>
-                  </Link>
+        <MenuItem id="industries" label="Industries" open={menu === "industries"} onToggle={toggle}>
+          <div className={styles.panelBody}>
+            <Columns groups={INDUSTRY_GROUPS} onClick={close} />
+            <div className={styles.feature}>
+              <p className={styles.featureHead}>Any industry</p>
+              <p className={styles.featureTitle}>Don&apos;t see yours?</p>
+              <p className={styles.featureBody}>We start from your workflows and tools, not an industry template. Most of what we build is specific to one company.</p>
+            </div>
+          </div>
+          <PanelFooter href="/solutions" label="All solutions" onClick={close} />
+        </MenuItem>
+
+        <MenuItem id="work" label="Work" open={menu === "work"} onToggle={toggle}>
+          <div className={styles.panelBody}>
+            {WORK_LINKS.map((w) => (
+              <Link key={w.href + w.label} href={w.href} className={`${styles.engine} ${styles.workItem}`} onClick={close}>
+                <span className={styles.engineName}>{w.label}</span>
+                <span className={styles.engineBlurb}>{w.blurb}</span>
+              </Link>
+            ))}
+          </div>
+        </MenuItem>
+
+        <MenuItem id="insights" label="Insights" open={menu === "insights"} onToggle={toggle}>
+          <div className={styles.panelBody}>
+            <Columns groups={INSIGHT_GROUPS} onClick={close} />
+            <div className={styles.col}>
+              <p className={styles.colHead}>Articles</p>
+              <ul className={styles.colList}>
+                <li><Link href="/blog" className={styles.colLink} onClick={close}>All articles</Link></li>
+                {indexableBuckets('topic').slice(0, 4).map((b) => (
+                  <li key={b.value}><Link href={hubPath('topic', b.value)} className={styles.colLink} onClick={close}>{b.label}</Link></li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
-        </div>
+        </MenuItem>
 
-        {/* ── Use Cases ────────────────────────────────────────────────── */}
-        <div className={`${styles.item} ${styles.itemWide}`} data-open={menu === 'usecases'}>
-          <button type="button" className={styles.trigger}
-            aria-expanded={menu === 'usecases'} onClick={() => toggle('usecases')}>
-            Use Cases <span className={styles.caret} aria-hidden="true">▾</span>
-          </button>
-          <div className={`${styles.panel} ${styles.panelWide}`}>
-            <div className={styles.panelInner}>
-              <div className={styles.panelCols}>
-                <div className={styles.panelCol}>
-                  <p className={styles.panelHead}>By function</p>
-                  <p className={styles.panelSub}>Automate a department</p>
-                  {useCasesByFunction.map((s) => (
-                    <Link key={s.slug} href={`/${s.slug}`} className={styles.panelLink} onClick={close}>
-                      <span className={styles.panelLabel}>{s.navLabel}</span>
-                    </Link>
-                  ))}
-                </div>
-                <div className={styles.panelCol}>
-                  <p className={styles.panelHead}>By industry</p>
-                  <p className={styles.panelSub}>Built for your sector</p>
-                  {useCasesByIndustry.map((s) => (
-                    <Link key={s.slug} href={`/${s.slug}`} className={styles.panelLink} onClick={close}>
-                      <span className={styles.panelLabel}>{s.navLabel}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className={styles.panelFooter}>
-              <Link href="/use-cases" className={styles.panelFooterLink} onClick={close}>
-                View all use cases <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
+        <Link href="/about" className={styles.link} onClick={close}>About</Link>
 
-        {/* ── AI Engines — mega-menu ────────────────────────────────────── */}
-        <div className={`${styles.item} ${styles.itemEngines}`} data-open={menu === 'engines'}>
-          <button type="button" className={styles.trigger}
-            aria-expanded={menu === 'engines'} onClick={() => toggle('engines')}>
-            AI Engines <span className={styles.caret} aria-hidden="true">▾</span>
-          </button>
-          <div className={`${styles.panel} ${styles.enginePanel}`}>
-            <div className={styles.engineGrid}>
-              {LIVE_ENGINES.map((e) => (
-                <Link key={e.name} href={e.href} className={styles.engineCard} onClick={close}>
-                  <span className={styles.engineCardIcon}><EngIco type={e.icon} /></span>
-                  <span className={styles.engineCardText}>
-                    <span className={styles.engineCardName}>
-                      {e.name}
-                      <span className={styles.engineCardArrow} aria-hidden="true">→</span>
-                    </span>
-                    <span className={styles.engineCardBlurb}>{ENGINE_NAV_BLURB[e.name] ?? e.kicker}</span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-
-            <div className={styles.panelFooter}>
-              <Link href="/ai-engines" className={styles.panelFooterLink} onClick={close}>
-                View all AI Engines <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Simple links ─────────────────────────────────────────────── */}
-        <Link href="/case-studies" className={styles.link} onClick={close}>Case Studies</Link>
-        <Link href="/blog"         className={styles.link} onClick={close}>Blog</Link>
-        <Link href="/about"        className={styles.link} onClick={close}>About</Link>
-
-        <BookButton className={styles.cta} location="nav" onClick={close}>Book a discovery call</BookButton>
+        <BookButton className={styles.cta} location="nav" onClick={close}>Book a strategy call</BookButton>
       </nav>
     </header>
   );

@@ -10,7 +10,6 @@ import dynamic from 'next/dynamic';
 const LiveStores = dynamic(() => import('./LiveStores'));
 import ScrollDepth from '../../components/ScrollDepth';
 import { site } from '../../lib/site';
-import { openBooking, trackBookCta } from '../../lib/cal';
 import { track, identifyAdAttribution } from '../../lib/analytics';
 import { QUOTE, FAQS, TOUR, ANGLES, HERO_SCOPE, LIVE_STORES, FILMS, TESTIMONIALS, PROCESS, services, type AngleId } from './content';
 import { GLOBAL, COUNTRY_CODES, detectCountryCode, type Market } from './markets';
@@ -26,10 +25,6 @@ declare global {
 
 const PHONE = '+917973190226';
 const V = (f: string) => `/videos/shopify-landing/${f}`;
-// 2026-09-22: this page books to a dedicated Calendly, not the sitewide
-// site.booking default — do not change site.ts for this, and do not reuse
-// this constant on any other page.
-const BOOKING_URL = 'https://calendly.com/team-chronexa/30min';
 
 /** Meta's ad/ad-set IDs off the URL, for attaching directly to lead-level
  * events — belt-and-suspenders alongside the session-wide identify in
@@ -61,7 +56,9 @@ function CallLink({ where, className }: { where: string; className: string }) {
 
 type FormStatus = 'idle' | 'submitting' | 'done' | 'error';
 
-/** 2026-09-28: cut to 3 required fields (name, phone, budget) + optional store URL.
+/** 2026-09-28: cut to 3 required fields (name, phone, budget). 2026-10-01: store URL is required too
+ * (a free audit needs the store link); budget stays. No Calendly: we phone every lead, so the
+ * form entry itself is the booking.
  * Amplitude 24–28 Sep: 21 people started the old 6-required-field form, 5 sent it. Email,
  * "what do you sell" and "main problem" are gone; the problem now comes from the ad's
  * ?angle= instead of a question. Country code is pre-picked from the device time zone. */
@@ -86,8 +83,8 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
     const phone = code && localPhone ? `+${code}${localPhone}` : '';
     const storeUrl = String(fd.get('storeUrl') || '').trim();
     const budget = String(fd.get('budget') || '').trim();
-    if (!name || localPhone.length < 6 || !budget) {
-      setError('Please add your name, phone number and budget.');
+    if (!name || localPhone.length < 6 || !budget || !storeUrl) {
+      setError('Please add your name, phone number, budget and store website.');
       return;
     }
 
@@ -129,11 +126,6 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
           window.fbq('track', 'Lead', { content_name: market.pixelName, content_category: angle }, { eventID: eventId });
         }
         track('shopify_landing_lead_success', { source: market.formSource, qualified: !!res.qualified });
-
-        // Every lead is offered a call slot — same hand-off as every other lead form (lib/cal.ts).
-        trackBookCta(`form:${market.formSource}`);
-        const notes = [storeUrl && `Store: ${storeUrl}`, `Phone: ${phone}`, budget && `Budget: ${budget}`].filter(Boolean).join(' · ');
-        openBooking({ name, notes, url: BOOKING_URL });
         setStatus('done');
       })
       .catch(() => { setStatus('error'); setError('Something went wrong. Please call us instead.'); });
@@ -143,14 +135,14 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
     return (
       <div className={`${styles.form} ${fs.formCard}`} id="lead-form" role="status">
         <p className={styles.successText}>Thank you. We&rsquo;ve got your details.</p>
-        <p className={styles.nurtureText}>We&rsquo;ll call or WhatsApp you soon. If you want to pick a time now, we&rsquo;ve opened our calendar in a new tab. <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className={styles.fallbackLink}>Open the calendar</a></p>
+        <p className={styles.nurtureText}>We&rsquo;ll review your store and call or WhatsApp you soon with your free audit.</p>
       </div>
     );
   }
 
   return (
     <div className={`${styles.form} ${fs.formCard}`} id="lead-form">
-      <p className={styles.formLabel}>Your details</p>
+      <p className={styles.formLabel}>Get your free store audit</p>
       <p className={fs.formIntro}>Takes 30 seconds.</p>
       <form onSubmit={onSubmit} noValidate>
         <label className={styles.field}>
@@ -180,8 +172,8 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
           </select>
         </label>
         <label className={styles.field}>
-          <span className={styles.fieldLabel}>Your store website<span className={`${styles.fieldTag} ${fs.tagText}`}>Optional</span></span>
-          <input className={styles.input} name="storeUrl" type="text" inputMode="url" autoComplete="url" placeholder="yourstore.com" />
+          <span className={styles.fieldLabel}>Your store website</span>
+          <input className={styles.input} name="storeUrl" type="text" inputMode="url" autoComplete="url" placeholder="yourstore.com" required />
         </label>
         <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className={styles.honeypot} aria-hidden="true" />
         <label className={styles.consent}>
@@ -189,10 +181,10 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
           <span>You can message me on WhatsApp. I&rsquo;ve read the <a href="/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.</span>
         </label>
         <button className={`${styles.submit} ${fs.submitBig}`} type="submit" disabled={status === 'submitting'}>
-          {status === 'submitting' ? 'Sending…' : <>Contact Us <span aria-hidden="true">→</span></>}
+          {status === 'submitting' ? 'Sending…' : <>Get my free store audit <span aria-hidden="true">→</span></>}
         </button>
         {(error || status === 'error') && <p role="alert" className={styles.errorText}>{error || 'Something went wrong. Please call us instead.'}</p>}
-        <p className={styles.formNote}>Free, no obligation. You get a written plan and a fixed price before any work starts.</p>
+        <p className={styles.formNote}>Free, no obligation. We review your store, then call you. You get a written plan and a fixed price before any work starts.</p>
       </form>
     </div>
   );
@@ -200,9 +192,9 @@ function LeadForm({ market, angle }: { market: Market; angle: AngleId }) {
 
 /** ?angle= on the ad's link picks the hero that matches the ad clicked. */
 const noSubscribe = () => () => {};
-function readAngle(): AngleId {
+function readAngle(fallback: AngleId): AngleId {
   const a = new URLSearchParams(window.location.search).get('angle');
-  return a === 'traffic' || a === 'grew' ? a : 'outgrown';
+  return a && Object.hasOwn(ANGLES, a) ? (a as AngleId) : fallback;
 }
 
 /** Shared by /shopify-store-build (global) and /shopify-store-build-india — only `market` differs.
@@ -210,8 +202,10 @@ function readAngle(): AngleId {
  * CONTACT FORM → client notes → how it works → LUMIQ tour → FAQ → brand & video → closing Contact Us band.
  * Nothing was removed; Ankit moved the form after the scope and the films to the end. */
 export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market }) {
-  // Server renders 'outgrown'; the client swaps to the ad's angle on hydration (same 3-line height, no shift).
-  const angle = useSyncExternalStore(noSubscribe, readAngle, () => 'outgrown' as AngleId);
+  // No ?angle= → the market's default hero: India matches its only live ad (C1, "built for D2C brands"), global keeps 'outgrown'.
+  // Server renders that default; the client swaps to the ad's angle on hydration (same 3-line height, no shift).
+  const defaultAngle: AngleId = market.id === 'india' ? 'd2c' : 'outgrown';
+  const angle = useSyncExternalStore(noSubscribe, () => readAngle(defaultAngle), () => defaultAngle);
   const [chapter, setChapter] = useState(0);
   const [autoAdvance, setAutoAdvance] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -222,7 +216,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
   const finalRef = useRef<HTMLElement>(null);
   useEffect(() => {
     identifyAdAttribution();
-    track('shopify_landing_angle_view', { angle: readAngle(), market: market.id });
+    track('shopify_landing_angle_view', { angle: readAngle(market.id === 'india' ? 'd2c' : 'outgrown'), market: market.id });
   }, [market.id]);
   useEffect(() => {
     const els = [heroRef.current, enquiryRef.current, finalRef.current].filter((x): x is HTMLElement => !!x);
@@ -261,7 +255,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
           <a href="#process" onClick={() => navClick('process')}>How it works</a>
           <a href="#faq" onClick={() => navClick('faq')}>Questions</a>
         </nav>
-        <button type="button" className={fs.headerCta} onClick={() => contactUs('header')}>Contact Us</button>
+        <button type="button" className={fs.headerCta} onClick={() => contactUs('header')}>Free audit</button>
       </header>
 
       {/* 1 — Hero: headline matches the ad clicked; one line on the offer; one big button. */}
@@ -272,10 +266,10 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
           <p className={fs.heroLead}>{hero.lead}</p>
           <ul className={fs.scopeChips} aria-label="What the redesign covers">{HERO_SCOPE.map((x) => <li key={x}>{x}</li>)}</ul>
           <div className={fs.heroActions}>
-            <button type="button" className={fs.ctaBig} onClick={() => contactUs('hero')}>Contact Us <span aria-hidden="true">→</span></button>
+            <button type="button" className={fs.ctaBig} onClick={() => contactUs('hero')}>Get my free store audit <span aria-hidden="true">→</span></button>
             <CallLink where="hero" className={fs.ctaGhostDark} />
           </div>
-          <p className={fs.heroNote}>Free first call. You get a clear plan and a fixed price.</p>
+          <p className={fs.heroNote}>Free store audit, then a call. You get a clear plan and a fixed price.</p>
         </div>
         <div className={fs.heroStage}>
           <VideoFrame id="hero-desktop" frame="laptop" address="lumiq-dev.myshopify.com" src={V('hero-desktop.mp4')} poster={V('hero-desktop.jpg')} label="Screen recording of the LUMIQ Shopify homepage scrolling on desktop" priority className={fs.heroLaptop} />
@@ -317,7 +311,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
           ))}
         </ul>
         <div className={fs.sectionCta}>
-          <button type="button" className={fs.ctaBig} onClick={() => contactUs('services')}>Contact Us <span aria-hidden="true">→</span></button>
+          <button type="button" className={fs.ctaBig} onClick={() => contactUs('services')}>Get my free store audit <span aria-hidden="true">→</span></button>
           <p>Every store is different, so there are no prices here. You get a written plan and a fixed price after the first call.</p>
         </div>
       </section>
@@ -325,9 +319,9 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
       {/* 5 — The form, after the stores and the scope. On phones the form comes before the supporting copy. */}
       <section ref={enquiryRef} className={`${styles.enquiry} ${fs.enquiry}`} aria-labelledby="enquiry-heading">
         <div className={fs.enquiryHead}>
-          <p className={styles.eyebrow}>CONTACT US</p>
-          <h2 id="enquiry-heading">Tell us about your store.<br /><em>We&rsquo;ll call you back.</em></h2>
-          <p>Leave your number. We talk through your store and goals, then send a written plan and a fixed price.</p>
+          <p className={styles.eyebrow}>FREE STORE AUDIT</p>
+          <h2 id="enquiry-heading">Get your free store audit.<br /><em>We&rsquo;ll call you back.</em></h2>
+          <p>Leave your number and your store link. We review your store, call you with what we found, then send a written plan and a fixed price.</p>
         </div>
         <LeadForm market={market} angle={angle} />
         <div className={fs.enquiryMore}>
@@ -382,7 +376,7 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
           ))}
         </ol>
         <div className={fs.sectionCta}>
-          <button type="button" className={fs.ctaBig} onClick={() => contactUs('process')}>Contact Us <span aria-hidden="true">→</span></button>
+          <button type="button" className={fs.ctaBig} onClick={() => contactUs('process')}>Get my free store audit <span aria-hidden="true">→</span></button>
         </div>
       </section>
 
@@ -449,17 +443,17 @@ export default function ShopifyStorePage({ market = GLOBAL }: { market?: Market 
 
       {/* 10 — Closing ask for people who read to the end. */}
       <section ref={finalRef} className={fs.finalCta} aria-labelledby="final-heading">
-        <h2 id="final-heading">Ready to talk about <em>your store?</em></h2>
-        <p>Free first call. No obligation.</p>
+        <h2 id="final-heading">Want a free audit of <em>your store?</em></h2>
+        <p>Free store audit. No obligation.</p>
         <div className={fs.heroActions}>
-          <button type="button" className={fs.ctaBig} onClick={() => contactUs('final')}>Contact Us <span aria-hidden="true">→</span></button>
+          <button type="button" className={fs.ctaBig} onClick={() => contactUs('final')}>Get my free store audit <span aria-hidden="true">→</span></button>
           <CallLink where="final" className={fs.ctaGhostDark} />
         </div>
       </section>
 
-      <footer className={styles.pageFoot}><Link href="/" className={styles.wordmark}>chronexa<span>✳</span></Link><p>{site.legalName}, India. Remote team, working with Shopify brands.<br /><a href="/privacy">Privacy policy</a> · Your store. Your ownership.</p><span>DESIGNED TO SELL. ↗</span></footer>
+      <footer className={styles.pageFoot}><Link href="/" className={styles.wordmark}>chronexa<span>✳</span></Link><p>{market.id === 'india' ? `${site.legalName}, India. Remote team, working with Shopify brands.` : 'Chronexa · remote-first, working with Shopify brands in the US, UK and worldwide.'}<br /><a href="/privacy">Privacy policy</a> · Your store. Your ownership.</p><span>DESIGNED TO SELL. ↗</span></footer>
       <div className={`${styles.stickyBar} ${ctaInView ? fs.stickyHidden : ''}`}>
-        <button className={`${styles.stickyBtn} ${styles.stickyBtnPrimary} ${fs.stickyMain}`} onClick={() => contactUs('sticky')}>Contact Us →</button>
+        <button className={`${styles.stickyBtn} ${styles.stickyBtnPrimary} ${fs.stickyMain}`} onClick={() => contactUs('sticky')}>Get my free store audit →</button>
         <a href={`tel:${PHONE}`} className={styles.stickyBtn} onClick={() => track('shopify_landing_call_click', { where: 'sticky' })}>Call</a>
       </div>
     </div>

@@ -1,0 +1,490 @@
+{
+  "name": "Meeting Transcript to CRM",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Meeting transcript to CRM\n\n**Reference architecture.**\n\nWhen a video call ends, the workflow fetches the transcript, matches it to the booking it belongs to, and works out whether it was a real call or a no-show.\n\nReal calls go to an AI that writes a summary, action items and the customer's pain points, which are saved to the CRM and posted to Slack.\n\nMissing transcripts and unmatched calls raise an alert instead of disappearing.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "meeting-ended",
+      "name": "Meeting Ended",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "verify-signature",
+      "name": "Verify Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "get-transcript",
+      "name": "Get Transcript",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.zoom.us",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "has-transcript-",
+      "name": "Has Transcript?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "log-no-transcript",
+      "name": "Log: No Transcript",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        460
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "match-to-booking",
+      "name": "Match to Booking",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        80
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "booking-found-",
+      "name": "Booking Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "alert-no-matching-booking",
+      "name": "Alert: No Matching Booking",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        340
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "classify-outcome",
+      "name": "Classify Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "real-call-",
+      "name": "Real Call?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "call-intelligence",
+      "name": "Call Intelligence",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1920,
+        -40
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1920,
+        -300
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "call-schema",
+      "name": "Call Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2112,
+        -300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "extract-pain-points",
+      "name": "Extract Pain Points",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        2160,
+        -40
+      ],
+      "parameters": {
+        "promptType": "define"
+      }
+    },
+    {
+      "id": "claude-sonnet-pain-points-",
+      "name": "Claude Sonnet (Pain Points)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2160,
+        -300
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "save-call-record",
+      "name": "Save Call Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2400,
+        -40
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "upsert"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "update-booking-status",
+      "name": "Update Booking Status",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2640,
+        -40
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "post-summary-to-slack",
+      "name": "Post Summary to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2880,
+        -40
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "mark-no-show",
+      "name": "Mark No-show",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        320
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "alert-host-no-show",
+      "name": "Alert Host: No-show",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        320
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Meeting Ended": {
+      "main": [
+        [
+          {
+            "node": "Verify Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Signature": {
+      "main": [
+        [
+          {
+            "node": "Get Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Transcript": {
+      "main": [
+        [
+          {
+            "node": "Has Transcript?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Transcript?": {
+      "main": [
+        [
+          {
+            "node": "Match to Booking",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log: No Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match to Booking": {
+      "main": [
+        [
+          {
+            "node": "Booking Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Booking Found?": {
+      "main": [
+        [
+          {
+            "node": "Classify Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alert: No Matching Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Outcome": {
+      "main": [
+        [
+          {
+            "node": "Real Call?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Real Call?": {
+      "main": [
+        [
+          {
+            "node": "Call Intelligence",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark No-show",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Call Intelligence",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Call Intelligence",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Intelligence": {
+      "main": [
+        [
+          {
+            "node": "Extract Pain Points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet (Pain Points)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Pain Points",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Pain Points": {
+      "main": [
+        [
+          {
+            "node": "Save Call Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Call Record": {
+      "main": [
+        [
+          {
+            "node": "Update Booking Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Booking Status": {
+      "main": [
+        [
+          {
+            "node": "Post Summary to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark No-show": {
+      "main": [
+        [
+          {
+            "node": "Alert Host: No-show",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

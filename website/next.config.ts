@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
+import { MERGED_POSTS } from "./src/lib/blog-seo";
 
 const nextConfig: NextConfig = {
+  // Isolate local review builds from the already-running development server.
+  distDir: process.env.CHRONEXA_PREVIEW_DIST_DIR || ".next",
   // This app is the workspace root (a sibling repo also has a lockfile).
   turbopack: { root: __dirname },
 
@@ -30,6 +33,14 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      /* ── BLOG MERGES 2026-10-08 ── overlapping posts folded into one page (lib/blog-seo.ts). */
+      ...Object.entries(MERGED_POSTS).map(([slug, destination]) => ({ source: `/blog/${slug}`, destination, permanent: true })),
+      /* ── LINK CHECK 2026-10-08 ── old URLs still referenced inside blog bodies. */
+      { source: "/tools/law-firm-billing-leakage-calculator", destination: "/law-firm-billing-leakage-calculator", permanent: true },
+      { source: "/case-studies/ai-automation-tax-workflow-cpa-case-study", destination: "/case-studies/cpa-client-intake-to-engagement-automation", permanent: true },
+      /* ── PORTFOLIO MOVE 2026-09-29 ── /portfolio became /n8n-portfolio. */
+      { source: "/portfolio", destination: "/n8n-portfolio", permanent: true },
+      { source: "/portfolio/:slug", destination: "/n8n-portfolio/:slug", permanent: true },
       /* ── SERVICE REBUILD 2026-08 ──────────────────────────────────────
          The nine nav services became twelve. These folds keep one live URL per
          service; all nine originals had zero clicks in the 90 days before the
@@ -37,20 +48,34 @@ const nextConfig: NextConfig = {
       { source: '/us-ai-automation-agency', destination: '/ai-automation', permanent: true },
       { source: '/ai-automation-agency-dubai', destination: '/ai-automation', permanent: true },
       { source: '/n8n-automation-services', destination: '/ai-automation', permanent: true },
-      { source: '/agentic-ai-systems', destination: '/ai-agent-development', permanent: true },
-      { source: '/rag-knowledge-engines', destination: '/private-rag-knowledge-systems', permanent: true },
+      { source: '/agentic-ai-systems', destination: '/ai-workspace-setup', permanent: true },
+      { source: '/rag-knowledge-engines', destination: '/ai-knowledge-systems', permanent: true },
       { source: '/sales-revenue-automation', destination: '/ai-sales-outreach-engine', permanent: true },
-      { source: '/finance-automation', destination: '/accounts-payable-automation', permanent: true },
+      { source: '/finance-automation', destination: '/document-processing-automation', permanent: true },
       { source: '/ai-readiness-assessment', destination: '/business-process-automation-consulting', permanent: true },
       { source: '/operations-automation', destination: '/business-process-automation-consulting', permanent: true },
       { source: '/applied-ml-data-science', destination: '/solutions', permanent: true },
+
+      /* ── SOLUTION CULL 2026-09-14 ─────────────────────────────────────
+         Five offers nobody had ever paid for. Each was either a software
+         category we do not sell into (accounts payable), a commodity
+         offshore-dev category (legacy modernization), or a capability that
+         only ever sells inside another solution (integration, RAG, secure
+         deployment). Folded into the page where the work actually lives.
+         See docs/research/solution-offers/2026-09-14-demand-screen.md */
+      { source: '/accounts-payable-automation', destination: '/document-processing-automation', permanent: true },
+      { source: '/private-rag-knowledge-systems', destination: '/ai-knowledge-systems', permanent: true },
+      { source: '/secure-ai-deployment', destination: '/legal-ai-automation', permanent: true },
+      { source: '/system-data-integration', destination: '/ai-integration-services', permanent: true },
+      { source: '/legacy-system-modernization', destination: '/ai-integration-services', permanent: true },
       { source: '/ai-growth-systems-for-startups', destination: '/solutions', permanent: true },
       { source: '/marketing-automation', destination: '/ai-sales-outreach-engine', permanent: true },
 
-      // The blog archive lost a page when the lead story and the collection rails
-      // moved onto every page (those ~25 posts left the paginated pool). /blog/page/6
-      // was briefly live and is in the sitemap, so send it somewhere real.
-      { source: "/blog/page/6", destination: "/blog/page/5", permanent: false },
+      /* ── OFFER CONSOLIDATION 2026-09-15 ─────────────────────────────
+         Agent development and pilot hardening are delivery capabilities,
+         not separate buyer problems. Both now live inside the connected AI
+         workspace offer so the public catalogue has no overlapping choices. */
+      { source: '/ai-pilot-production', destination: '/ai-workspace-setup', permanent: true },
 
       // --- Old 3-level /services/* slugs → new flat keyword-first slugs (301) ---
       { source: "/services/legal-due-diligence", destination: "/legal-due-diligence-automation", permanent: true },
@@ -62,8 +87,8 @@ const nextConfig: NextConfig = {
       { source: "/services", destination: "/solutions", permanent: true },
 
       // --- Post-launch GSC recheck (2026-06-07): more old Framer URLs still indexed ---
-      { source: "/services/sales-operations", destination: "/sales-revenue-automation", permanent: true },
-      { source: "/services/custom-workflows", destination: "/n8n-automation-services", permanent: true },
+      { source: "/services/sales-operations", destination: "/ai-sales-outreach-engine", permanent: true },
+      { source: "/services/custom-workflows", destination: "/ai-automation", permanent: true },
       { source: "/services/legal-automation", destination: "/legal-due-diligence-automation", permanent: true },
       // Framer served some posts under /articles/* — send them to the canonical /blog/* path
       { source: "/articles/:slug", destination: "/blog/:slug", permanent: true },
@@ -97,7 +122,7 @@ const nextConfig: NextConfig = {
       { source: "/blog/ai-sdr-engine-lead-research-automation", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/ai-that-qualifies-your-lead-for-high-ticket-clients", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/ai-workflow-automation-agency-owners-complete-guide", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
-      { source: "/blog/automate-legacy-software-anthropic-computer-use", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/automate-legacy-software-anthropic-computer-use", destination: "/ai-automation", permanent: true },
       { source: "/blog/automated-crm-data-hygiene-stale-opportunity-archival", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/automating-lead-degradation-scoring-unresponsive-prospects", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/automating-out-of-office-reply-parsing-b2b-outbound", destination: "/ai-engines/sales-engine", permanent: true },
@@ -113,7 +138,7 @@ const nextConfig: NextConfig = {
       { source: "/blog/d2c-order-fulfillment-automation-from-order-to-shipped-in-4-hours", destination: "/blog", permanent: true },
       { source: "/blog/ecommerce-order-operations-automation-dtc-founders-scale-fulfillment", destination: "/blog", permanent: true },
       { source: "/blog/email-deliverability-subdomain-segmentation-automated-outbound-infrastructure", destination: "/ai-engines/sales-engine", permanent: true },
-      { source: "/blog/enterprise-architecture-build-multi-agent-systems-in-n8n", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/enterprise-architecture-build-multi-agent-systems-in-n8n", destination: "/ai-automation", permanent: true },
       { source: "/blog/fintech-kyc-automation-roi-calculator-calculate-your-savings-in-2-minutes", destination: "/blog", permanent: true },
       { source: "/blog/founder-bottleneck-decisions-costing-growth", destination: "/blog", permanent: true },
       { source: "/blog/gemini-nano-banana-ai-image-gen-automation", destination: "/ai-engines/sales-engine", permanent: true },
@@ -124,19 +149,19 @@ const nextConfig: NextConfig = {
       { source: "/blog/how-d2c-brands-turn-an-18-repeat-rate-into-42-in-90-days-through-automation", destination: "/blog", permanent: true },
       { source: "/blog/how-to-automate-soc2-evidence-collection", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/how-to-build-a-lead-capture-system-that-doesn-t-leak-revenue", destination: "/ai-engines/sales-engine", permanent: true },
-      { source: "/blog/how-to-build-an-ai-powered-lead-generation-machine-in-n8n", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/how-to-build-an-ai-powered-lead-generation-machine-in-n8n", destination: "/ai-automation", permanent: true },
       { source: "/blog/how-to-build-cart-abandonment-automation-that-recovers-28-of-lost-revenue", destination: "/blog", permanent: true },
       { source: "/blog/how-us-d2c-brands-cut-customer-service-response-time-from-8-hours-to-8-minutes", destination: "/blog", permanent: true },
       { source: "/blog/invoice-reconciliation-automation-agency-ar-bottleneck", destination: "/blog", permanent: true },
       { source: "/blog/invoice-reconciliation-automation-saas-founders", destination: "/ai-engines/sales-engine", permanent: true },
-      { source: "/blog/migrate-zapier-to-n8n-enterprise-ai", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/migrate-zapier-to-n8n-enterprise-ai", destination: "/ai-automation", permanent: true },
       { source: "/blog/multi-step-routing-workflows-complex-b2b-sales-cycles", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/n8n-agency-launch-kit-client-acquisition-framework", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
       { source: "/blog/n8n-automation-dubai-replace-manual-ops-30-days", destination: "/blog", permanent: true },
       { source: "/blog/n8n-for-agencies-packaging-pricing-and-selling-automation-retainers", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
-      { source: "/blog/n8n-langchain-integration-complete-rag-workflow-tutorial", destination: "/n8n-automation-services", permanent: true },
-      { source: "/blog/n8n-roi-calculator-calculate-your-savings-vs-zapier", destination: "/n8n-automation-services", permanent: true },
-      { source: "/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-2026", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/n8n-langchain-integration-complete-rag-workflow-tutorial", destination: "/ai-automation", permanent: true },
+      { source: "/blog/n8n-roi-calculator-calculate-your-savings-vs-zapier", destination: "/ai-automation", permanent: true },
+      { source: "/blog/n8n-voice-ai-elevenlabs-twilio-tutorial-2026", destination: "/ai-automation", permanent: true },
       { source: "/blog/n8n-workflow-templates-for-founders-7-automations-to-ship-in-a-weekend", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/nvidia-rubin-10x-cheaper-ai-inference-costs-explained", destination: "/blog", permanent: true },
       { source: "/blog/oracle-ai-infrastructure-50b-raise-signals-new-era", destination: "/blog", permanent: true },
@@ -150,7 +175,7 @@ const nextConfig: NextConfig = {
       { source: "/blog/saas-churn-reduction-automation-data-pipeline", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/saas-revenue-operations-automation-mrr-visibility", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/saas-trial-churn-week-one-how-to-fix", destination: "/ai-engines/sales-engine", permanent: true },
-      { source: "/blog/seo-automation-with-n8n-from-keyword-research-to-publishing", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/seo-automation-with-n8n-from-keyword-research-to-publishing", destination: "/ai-automation", permanent: true },
       { source: "/blog/styleup-fashion-ai-support-cost-reduction", destination: "/blog", permanent: true },
       { source: "/blog/syncing-apollo-intent-data-custom-salesforce-dashboards", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/the-ai-content-engine-how-we-build-high-velocity-b2b-saas-pipelines-in-2026", destination: "/ai-engines/sales-engine", permanent: true },
@@ -160,14 +185,13 @@ const nextConfig: NextConfig = {
       { source: "/blog/top-5-jumio-alternatives-for-mid-market-fintech-companies-in-2025", destination: "/blog", permanent: true },
       { source: "/blog/top-n8n-automation-experts-india", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
       { source: "/blog/vat-compliance-automation-saudi-arabia-n8n-workflows", destination: "/blog", permanent: true },
-      { source: "/blog/what-is-n8n-the-2026-guide-to-open-source-workflow-ai-automation", destination: "/n8n-automation-services", permanent: true },
+      { source: "/blog/what-is-n8n-the-2026-guide-to-open-source-workflow-ai-automation", destination: "/ai-automation", permanent: true },
       { source: "/blog/what-to-do-when-your-hoa-reserve-study-is-outdated", destination: "/blog", permanent: true },
       { source: "/blog/why-scaling-lead-outreach-with-humans-is-financial-suicide", destination: "/ai-engines/sales-engine", permanent: true },
       { source: "/blog/xai-funding-20b-series-e-signals-new-compute-era", destination: "/blog", permanent: true },
-      { source: "/blog/ai-powered-invoice-processing-services-for-mid-market-companies", destination: "/blog/ai-invoice-processing-mid-market-guide", permanent: true },
+      { source: "/blog/ai-powered-invoice-processing-services-for-mid-market-companies", destination: "/blog", permanent: true },
       // (2026-07-25: retargeted — old destination build-vs-buy-ai-automation-costs pruned below)
       { source: "/blog/build-vs-buy-ai-automation-cost-comparison", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
-      { source: "/blog/legal-document-automation-for-regulated-industries", destination: "/blog/legal-contract-review-automation-guide", permanent: true },
       { source: "/blog/n8n-vs-zapier-for-enterprise-automation-a-real-cost-analysis", destination: "/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams", permanent: true },
       { source: "/blog/top-ai-automation-agencies-usa-2025", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
       { source: "/blog/top-ai-automation-agencies-uk-2025", destination: "/blog/how-to-choose-ai-automation-agency-regulated-industries", permanent: true },
@@ -185,7 +209,7 @@ const nextConfig: NextConfig = {
       { source: "/blog/how-fintech-companies-cut-kyc-processing-time-from-14-days-to-2-days", destination: "/blog/reduce-kyc-processing-cost-ai-automation", permanent: true },
       { source: "/blog/how-to-automate-legal-document-processing-without-losing-control", destination: "/document-processing-automation", permanent: true },
       { source: "/blog/legal-tech-automation-12-n8n-workflows-for-law-firms", destination: "/blog/n8n-workflows-law-firms-billing-intake-communication", permanent: true },
-      { source: "/blog/custom-mcp-servers-claude-private-data", destination: "/secure-ai-deployment", permanent: true },
+      { source: "/blog/custom-mcp-servers-claude-private-data", destination: "/legal-ai-automation", permanent: true },
       { source: "/blog/ai-document-processing-why-95-cost-reduction-requires-production-infrastructure", destination: "/document-processing-automation", permanent: true },
       { source: "/blog/ai-powered-ma-due-diligence-case-study", destination: "/blog/ai-for-private-equity-deal-lifecycle", permanent: true },
       { source: "/blog/build-vs-buy-ai-automation-costs", destination: "/blog/ai-for-accounting-firms-build-vs-buy", permanent: true },
@@ -206,6 +230,12 @@ const nextConfig: NextConfig = {
       { source: "/blog/document-automation-tools-regulated-industries-guide", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
       { source: "/blog/document-automation-tools-regulated-industries-cpa-firms", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
       { source: "/blog/legal-document-automation-for-regulated-industries", destination: "/blog/document-automation-tools-for-regulated-industries", permanent: true },
+
+      // --- 2026-08-29: /accounting-automation-services merged into the existing CPA
+      // pillar (/cpa-tax-document-automation) rather than run as a second page
+      // competing for the same buyer — the pillar has 835 impressions and every CPA
+      // blog post's Related Services block already points at it (blog-links.ts). ---
+      { source: "/accounting-automation-services", destination: "/cpa-tax-document-automation", permanent: true },
     ];
   },
 };

@@ -1,5 +1,8 @@
 import { site } from '../../lib/site';
-import { SERVICES } from '../../lib/services-content';
+import { capabilities } from '../../lib/capabilities';
+import { services as solutionPages } from '../../lib/taxonomy';
+import { GROWTH_PAGES } from '../../lib/growth-pages';
+import { PRODUCT_PAGES } from '../../lib/product-pages';
 
 export const dynamic = 'force-static';
 
@@ -9,25 +12,32 @@ export const dynamic = 'force-static';
  * Generated from live service data so it never drifts.
  */
 export function GET() {
-  const services = SERVICES.map(
-    (s) => `- [${s.serviceName}](${site.url}/${s.slug}): ${s.metaDescription}`,
+  const services = solutionPages.map(
+    (s) => `- [${s.title}](${site.url}/${s.slug}): ${s.heroSub}`,
   ).join('\n');
 
   const body = `# ${site.name}
 
-> ${site.description}
+> ${site.definition}
 
-Chronexa is an engineer-led AI automation agency that builds systems adding capacity without adding headcount. Our depth is in regulated industries (finance, legal, tax, insurance, dealmaking) across the US, UK, and Canada, but we take on any operation with a bottleneck worth removing — client acquisition, onboarding, document operations, service, back office. We build custom, secure AI systems — agentic workflows, RAG knowledge engines, document intelligence — deployed inside the client's own environment, scoped and fixed-price, with success metrics agreed in writing before any build begins. We build automation assets clients own, not software subscriptions. For high-volume, lower-risk work we also build fast n8n workflow automation.
+Chronexa is an Anthropic partner. Services: AI strategy consulting, AI automation, AI agent development, AI integration and custom MCP servers, AI knowledge systems, AI voice agents, custom software and SaaS development, UX and product design, e-commerce and D2C brand building on Shopify, dedicated AI engineers and AI training for teams. Every engagement starts with a free AI audit; the first workflow is built free, usually within a week; later builds are quoted against the time and revenue they unlock (no packages, no hourly billing). Clients own the code, data and accounts. Chronexa runs its own company on the same agents it builds, with a person approving anything that publishes, spends or sends. It is a services firm and long-term implementation partner, not a SaaS product.
 
-## Services
+## Core services
+${capabilities.map(s => `- [${s.searchTitle}](${site.url}/${s.slug}): ${s.description}`).join("\n")}
+
+## Specialist solutions
 ${services}
 
+## How we work, guides and tools
+${GROWTH_PAGES.map(p => `- [${p.crumb}](${site.url}/${p.slug}): ${p.description}`).join('\n')}
+${['shopify-seo-services', 'shopify-migration-services', 'custom-shopify-store-cost'].map(k => PRODUCT_PAGES[k].p).map(p => `- [${p.crumb}](${site.url}/${p.slug}): ${p.description}`).join('\n')}
+
 ## Key pages
-- [Solutions / all services](${site.url}/solutions): Overview of every AI automation service and the industries we serve.
-- [Case studies](${site.url}/case-studies): Quantified outcomes (e.g. reserve-study reports cut from 6 hours to 11 minutes).
-- [Blog](${site.url}/blog): Deep-dive articles on n8n, AI agents, and workflow automation for B2B teams.
+- [All solutions](${site.url}/solutions): AI automation systems for documents, sales, support, finance, professional services and operations.
+- [Case studies](${site.url}/case-studies): What Chronexa built and the time, cost or capacity it saved.
+- [Blog](${site.url}/blog): Clear guides to AI agents and workflow automation, including cost and build-versus-buy decisions.
 - [About](${site.url}/about): Who Chronexa is and how we work.
-- [Contact](${site.url}/contact): Book a free automation audit.
+- [Contact](${site.url}/contact): Discuss a project or engineering engagement.
 
 ## Contact
 - Email: ${site.email}

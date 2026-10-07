@@ -57,9 +57,15 @@
   .liveDot { animation: none; }
 }
 
-.stage { min-height: clamp(560px, 72vh, 760px); }
+/* Height comes from an inherited custom property so a host can shrink the frame
+   without knowing this module's hashed class names. ServicePage's hero sets
+   --scene-h to keep the visual roughly level with the copy column beside it.
+   The fallback below is the full-bleed size used on /ai-engines — it must stay
+   in the var() fallback rather than being declared on .frame, or it would
+   shadow whatever the host inherits down. */
+.stage { min-height: var(--scene-h, clamp(560px, 72vh, 760px)); }
 .placeholder {
-  height: clamp(560px, 72vh, 760px);
+  height: var(--scene-h, clamp(560px, 72vh, 760px));
   background: var(--neutral-900);
 }
 

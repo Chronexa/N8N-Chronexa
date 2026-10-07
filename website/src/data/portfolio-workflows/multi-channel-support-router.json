@@ -1,0 +1,544 @@
+{
+  "name": "Multi-Channel Customer Support Router",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Multi-channel support router\n\n**Reference architecture.**\n\nEmail, web chat and WhatsApp messages are normalised into one ticket shape. A classifier sorts each ticket: urgent, how-to, billing or other.\n\nHow-to questions go to an agent that answers from the help centre — but only a confident answer is sent. Everything else lands with the right team in Slack.\n\nEvery ticket is logged with its SLA clock, and a scheduled check escalates anything about to breach.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "support-inbox",
+      "name": "Support Inbox",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -40
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "web-chat",
+      "name": "Web Chat",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        160
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "whatsapp-message",
+      "name": "WhatsApp Message",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        360
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "normalise-email",
+      "name": "Normalise Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        -40
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "normalise-chat",
+      "name": "Normalise Chat",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        160
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "normalise-whatsapp",
+      "name": "Normalise WhatsApp",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        360
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "merge-channels",
+      "name": "Merge Channels",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        480,
+        160
+      ],
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 3
+      }
+    },
+    {
+      "id": "classify-ticket",
+      "name": "Classify Ticket",
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        720,
+        160
+      ],
+      "parameters": {
+        "categories": {
+          "categories": [
+            {
+              "category": "Urgent"
+            },
+            {
+              "category": "How-to question"
+            },
+            {
+              "category": "Billing"
+            },
+            {
+              "category": "Other"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "claude-haiku",
+      "name": "Claude Haiku",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        420
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "answer-from-help-centre",
+      "name": "Answer from Help Centre",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1080,
+        20
+      ],
+      "parameters": {
+        "promptType": "define"
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1008,
+        -220
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "help-centre-search",
+      "name": "Help Centre Search",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        1176,
+        -220
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "confident-answer-",
+      "name": "Confident Answer?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1368,
+        20
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "reply-to-customer",
+      "name": "Reply to Customer",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1632,
+        -100
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "reply"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "escalate-urgent",
+      "name": "Escalate Urgent",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        120
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "billing-queue",
+      "name": "Billing Queue",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "hand-to-support-agent",
+      "name": "Hand to Support Agent",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        480
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "log-ticket-sla-clock",
+      "name": "Log Ticket + SLA Clock",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        180
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "sla-watch",
+      "name": "SLA Watch",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1080,
+        720
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "find-tickets-near-breach",
+      "name": "Find Tickets Near Breach",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1368,
+        720
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Support Inbox": {
+      "main": [
+        [
+          {
+            "node": "Normalise Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Chat": {
+      "main": [
+        [
+          {
+            "node": "Normalise Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Message": {
+      "main": [
+        [
+          {
+            "node": "Normalise WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Email": {
+      "main": [
+        [
+          {
+            "node": "Merge Channels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Chat": {
+      "main": [
+        [
+          {
+            "node": "Merge Channels",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalise WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Merge Channels",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge Channels": {
+      "main": [
+        [
+          {
+            "node": "Classify Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classify Ticket",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Ticket": {
+      "main": [
+        [
+          {
+            "node": "Escalate Urgent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Answer from Help Centre",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Billing Queue",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hand to Support Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer from Help Centre",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Help Centre Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Answer from Help Centre",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer from Help Centre": {
+      "main": [
+        [
+          {
+            "node": "Confident Answer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confident Answer?": {
+      "main": [
+        [
+          {
+            "node": "Reply to Customer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hand to Support Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply to Customer": {
+      "main": [
+        [
+          {
+            "node": "Log Ticket + SLA Clock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate Urgent": {
+      "main": [
+        [
+          {
+            "node": "Log Ticket + SLA Clock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Billing Queue": {
+      "main": [
+        [
+          {
+            "node": "Log Ticket + SLA Clock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hand to Support Agent": {
+      "main": [
+        [
+          {
+            "node": "Log Ticket + SLA Clock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SLA Watch": {
+      "main": [
+        [
+          {
+            "node": "Find Tickets Near Breach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Tickets Near Breach": {
+      "main": [
+        [
+          {
+            "node": "Escalate Urgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

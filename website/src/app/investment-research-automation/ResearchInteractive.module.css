@@ -1,0 +1,52 @@
+/* Research desk. A light workflow record on the dark ink hero, so the card
+   separates from the background instead of blending into it. */
+.desk { border-radius:12px; background:#fbfbf4; color:#173a2d; overflow:hidden; box-shadow:0 0 0 1px rgba(247,247,238,.22), 0 30px 70px -24px rgba(0,0,0,.6); }
+.bar { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:13px 18px; background:#173a2d; color:#dbfa80; font-size:11px; font-weight:700; letter-spacing:.07em; }
+.bar span:last-child { color:#9fb79d; font-weight:600; }
+
+.picker { display:grid; grid-template-columns:repeat(4,1fr); background:#eeeee3; border-bottom:1px solid #173a2d1a; }
+.picker button { min-height:52px; padding:11px 7px; border:0; border-bottom:3px solid transparent; color:#5c685e; background:none; font:500 12px/1.35 var(--font-sans); cursor:pointer; transition:background .15s, color .15s; }
+.picker button + button { border-left:1px solid #173a2d14; }
+.picker button[aria-pressed='true'] { border-bottom-color:#173a2d; color:#173a2d; background:#fbfbf4; font-weight:650; }
+.picker button:last-child[aria-pressed='true'] { border-bottom-color:#9a4b2c; }
+.picker button:hover { color:#173a2d; background:#ffffff90; }
+.picker button:focus-visible { outline:2px solid #173a2d; outline-offset:-2px; }
+
+.ask { margin:0; padding:18px 20px; border-bottom:1px solid #173a2d14; font-size:15.5px; line-height:1.5; }
+
+.body { padding:18px 20px 20px; background:#f0f1e6; }
+.label { margin:0 0 8px; color:#6b7a6c; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+
+.inputs { list-style:none; margin:0 0 18px; padding:0; display:grid; gap:5px; }
+.inputs li { display:flex; flex-wrap:wrap; align-items:baseline; gap:9px; padding:8px 11px; border:1px solid #173a2d14; border-radius:5px; background:#fbfbf4; font-size:12.5px; }
+.inputs b { font-weight:650; white-space:nowrap; }
+.inputs span { color:#6b7a6c; font-size:11.5px; }
+
+.computed, .refusedList { list-style:none; margin:0 0 18px; padding:0; display:grid; gap:7px; }
+.computed li, .refusedList li { position:relative; padding-left:20px; font-size:13px; line-height:1.55; }
+.computed li::before { content:'→'; position:absolute; left:0; color:#2f6b45; font-weight:700; }
+.refusedList li::before { content:'✕'; position:absolute; left:2px; color:#9a4b2c; font-size:11px; font-weight:700; }
+
+.human { margin:0 0 16px; padding-left:14px; border-left:3px solid #dbfa80; font-size:13.5px; line-height:1.62; }
+
+.record { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; margin:0; padding-top:14px; border-top:1px solid #173a2d18; color:#5c685e; font-size:11.5px; line-height:1.6; }
+.record b { padding:4px 9px; border-radius:4px; background:#173a2d; color:#dbfa80; font-size:9.5px; font-weight:700; letter-spacing:.07em; }
+.recordRefused b { background:#9a4b2c; color:#fbfbf4; }
+
+@media(max-width:700px) {
+ .picker { grid-template-columns:1fr 1fr; }
+ .picker button:nth-child(odd) { border-left:0; }
+ .picker button:nth-child(n+3) { border-top:1px solid #173a2d14; }
+ .ask, .body { padding-inline:16px; }
+}
+
+/* ---------- auto-play indicator ----------
+   The demo plays itself until the visitor picks a tab (see useAutoCycle). The
+   active tab carries a fill bar so it is visibly a player, which also signals
+   the tabs are clickable. When the visitor takes over the bar simply sits full. */
+.picker button { position:relative; }
+.picker button[aria-pressed='true'] { border-bottom-color:#173a2d26; }
+.progress { position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#173a2d; transform-origin:left; }
+.progressRun { animation:fillBar linear forwards; }
+@keyframes fillBar { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@media(prefers-reduced-motion:reduce) { .progressRun { animation:none; } }

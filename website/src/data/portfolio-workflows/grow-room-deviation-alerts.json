@@ -1,0 +1,252 @@
+{
+  "name": "Grow Room Deviation Alerts",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "6635c86c-57c8-4984-ad8b-01e469796fb7",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -192,
+        304
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c2a409b2-2fa2-44f8-8eba-7cba3b2acbce",
+      "name": "Sticky Note: Workflow 2 Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -160
+      ],
+      "parameters": {
+        "content": "## Room monitoring & deviation alerts\n\n**Before:** morning walk-throughs and manual climate checks. A VPD spike in week 6 goes unnoticed until harvest, when it's too late to fix.\n\n**After:** every 15 minutes, every room is checked against its strain- and week-specific targets, and any deviation raises an alert straight away.",
+        "width": 440,
+        "height": 404,
+        "color": 5
+      }
+    },
+    {
+      "id": "25449dc7-3bbf-4b61-9d30-9bca21b2faaa",
+      "name": "Get All Room Readings",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0f277d86-fd80-45f9-98a3-ca1a72883d72",
+      "name": "Sticky Note: Room Readings",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        16
+      ],
+      "parameters": {
+        "content": "**Source:** live room readings\n\nIn the pilot, a sheet simulates the sensors. In production, readings come from the climate controller every 15 minutes.",
+        "width": 230,
+        "height": 252,
+        "color": 7
+      }
+    },
+    {
+      "id": "f23c04d5-43f6-4347-9505-c8441b8f148d",
+      "name": "Get Recipe Targets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        480,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8fc43ae6-2658-4f81-9ab9-76dc5e7390df",
+      "name": "Sticky Note: Recipe Targets",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        432,
+        -16
+      ],
+      "parameters": {
+        "content": "**Source:** recipe targets\n\nWeek-by-week targets per strain, set by hand at first and later filled in automatically from the correlation workflow's recipe library.",
+        "width": 230,
+        "height": 300,
+        "color": 7
+      }
+    },
+    {
+      "id": "a66f4ec9-9d9d-4640-b20f-ba7f0f9a9d95",
+      "name": "Analyze All Rooms vs Recipe Targets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "01c61efa-7879-4cda-88ba-dfb7851fa9be",
+      "name": "Sticky Note: Analysis Logic",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -64
+      ],
+      "parameters": {
+        "content": "**The intelligence layer**\n\nFor each room: match its strain and week to the target, compare live VPD and temperature to tolerance, give it a green, yellow or red status, and write an alert with the exact deviation.",
+        "height": 346,
+        "color": 4
+      }
+    },
+    {
+      "id": "ac0a29b8-eeec-4234-8716-539b62634f87",
+      "name": "Log to Monitoring History",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        960,
+        304
+      ],
+      "parameters": {
+        "operation": "append"
+      }
+    },
+    {
+      "id": "f579fada-83ed-44b8-af67-dfeaa8a82012",
+      "name": "Any Deviations Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        304
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fc4c265c-578c-4740-af1e-d239370f934e",
+      "name": "Send Deviation Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        208
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0ca2a11a-58e2-4399-b7de-addf7fd7305c",
+      "name": "Sticky Note: Alert Value",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        128
+      ],
+      "parameters": {
+        "content": "**True branch:** a deviation\n\nThe alert fires before the batch is damaged. Catching it in week 6 instead of at harvest is where the money is.",
+        "width": 220,
+        "height": 120
+      }
+    },
+    {
+      "id": "fdc2b014-200e-4c7c-9a3e-40d1c18f29bc",
+      "name": "Sticky Note: All Clear",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        432
+      ],
+      "parameters": {
+        "content": "**False branch:** all rooms on target\n\nNothing to do. The check is logged and runs again in 15 minutes.",
+        "width": 220,
+        "height": 132,
+        "color": 3
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Get All Room Readings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Room Readings": {
+      "main": [
+        [
+          {
+            "node": "Get Recipe Targets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Recipe Targets": {
+      "main": [
+        [
+          {
+            "node": "Analyze All Rooms vs Recipe Targets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze All Rooms vs Recipe Targets": {
+      "main": [
+        [
+          {
+            "node": "Log to Monitoring History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Monitoring History": {
+      "main": [
+        [
+          {
+            "node": "Any Deviations Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any Deviations Detected?": {
+      "main": [
+        []
+      ]
+    }
+  }
+}

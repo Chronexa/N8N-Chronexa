@@ -54,7 +54,7 @@ export default function Story() {
               When we realized the sheer volume of time and capital we had unlocked for ourselves, we launched Chronexa to do it for others. But our approach remains the same. We don’t sell AI hype. We care about one thing: <strong>Unit Economics.</strong>
             </p>
             <p style={{ fontSize: 'var(--step--1)' }}>
-              Rookie influencers don't understand business. We do. We bring real industry insights to the table. We sit with your team, audit every touchpoint of your operations, and only then do we map out the exact system you need to scale.
+              Most AI advice comes from people who have never run a business on it. We have. We sit with your team, audit every touchpoint of your operations, and only then do we map out the exact system you need to scale.
             </p>
           </div>
           <div>

@@ -1,0 +1,280 @@
+{
+  "name": "Newsletter: Weekly Content Engine",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "nl-weekly-trigger",
+      "name": "Every Monday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nl-exa-1",
+      "name": "Exa: AI Automation News",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        180
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      }
+    },
+    {
+      "id": "nl-exa-2",
+      "name": "Exa: Workflow Automation Tips",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      }
+    },
+    {
+      "id": "nl-exa-3",
+      "name": "Exa: AI Thought Leadership",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      }
+    },
+    {
+      "id": "nl-merge-exa",
+      "name": "Merge Research",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "nl-claude",
+      "name": "Claude: Generate Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com",
+        "options": {}
+      }
+    },
+    {
+      "id": "nl-parse-claude",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "nl-gmail-approval",
+      "name": "Email Draft to Ankit",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        300
+      ],
+      "parameters": {
+        "operation": "send"
+      }
+    },
+    {
+      "id": "nl-wait-approval",
+      "name": "Wait for Approval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        300
+      ],
+      "parameters": {
+        "resume": "webhook"
+      }
+    },
+    {
+      "id": "nl-launch",
+      "name": "Create + Launch Campaign",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "nl-weekly-done",
+      "name": "Campaign Launched",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Every Monday 9am": {
+      "main": [
+        [
+          {
+            "node": "Exa: AI Automation News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Exa: Workflow Automation Tips",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Exa: AI Thought Leadership",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa: AI Automation News": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa: Workflow Automation Tips": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa: AI Thought Leadership": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Research": {
+      "main": [
+        [
+          {
+            "node": "Claude: Generate Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Generate Draft": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Email Draft to Ankit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Draft to Ankit": {
+      "main": [
+        [
+          {
+            "node": "Wait for Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Approval": {
+      "main": [
+        [
+          {
+            "node": "Create + Launch Campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create + Launch Campaign": {
+      "main": [
+        [
+          {
+            "node": "Campaign Launched",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

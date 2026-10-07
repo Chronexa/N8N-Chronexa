@@ -43,7 +43,7 @@ const SERVICES: Service[] = [
   { title: 'Tax & Accounting AI', description: 'An AI copilot for CPA firms that chases client documents, reads W-2s, 1099s and K-1s, and drafts returns — so preparers do advisory, not data entry.', href: '/cpa-tax-document-automation', icon: I.assess },
   { title: 'Financial Services & Quant', description: 'Compliance and KYC automation, equity-research copilots, and quant/ML systems (XGBoost, LSTM) — built inside your security perimeter.', href: '/financial-services-automation', icon: I.sales },
   { title: 'M&A, PE & Investment Banking', description: 'Due-diligence and data-room analysis, deal-flow parsing into your CRM, and portfolio monitoring — where confidential deal data can’t leak.', href: '/vc-pe-crm-automation', icon: I.integrate },
-  { title: 'Document Intelligence for Regulated Industries', description: 'OCR + LLM extraction with RAG grounding and human-in-the-loop validation — auditable document automation across legal, finance and pharma.', href: '/document-processing-automation', icon: I.custom },
+  { title: 'Document Automation for Complex Workflows', description: 'Extract, check and route information from documents, with source links and human review when the system is unsure.', href: '/document-processing-automation', icon: I.custom },
   { title: 'Custom AI Agents & Workflow Automation', description: 'Bespoke agentic systems for the work that doesn’t fit a package — plus fast, lower-cost workflow automation for ops and sales.', href: '/n8n-automation-services', icon: I.marketing },
 ];
 
@@ -51,7 +51,7 @@ export default function ServiceShowcase() {
   return (
     <>
       <p className="eyebrow">What we build</p>
-      <h2 className={styles.heading}>Enterprise AI for the work that can’t leak</h2>
+      <h2 className={styles.heading}>AI automation for the work your team does every day</h2>
 
       <div className={styles.grid}>
         {SERVICES.map((service, i) => (

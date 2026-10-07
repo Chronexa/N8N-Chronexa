@@ -1,0 +1,1035 @@
+{
+  "name": "Speed-to-Lead Intake & Routing",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "84140eb1-22b9-4b25-b0de-f188f99db836",
+      "name": "Lead Intake Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "f24ddfc2-823a-456d-b2eb-0d8cace3ff14",
+      "name": "Normalize & Validate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "90870b76-c570-4b74-9013-8db4e3431b7a",
+      "name": "Is Lead Usable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8647704b-dda2-48ca-b08f-5c172c42eef4",
+      "name": "Find Existing Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        96
+      ],
+      "parameters": {
+        "method": "GET",
+        "options": {}
+      }
+    },
+    {
+      "id": "76ef66a4-b1fc-445d-9f06-992d5b02197f",
+      "name": "Insert Dead Letter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        288
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "aff1d2e5-8020-439a-8acc-3afd98fc96c4",
+      "name": "Respond 422 Invalid",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        896,
+        288
+      ],
+      "parameters": {
+        "respondWith": "json"
+      }
+    },
+    {
+      "id": "9ce46a4f-3f78-4797-b5c3-6d9ed280ff6e",
+      "name": "Is Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        96
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "98f8680b-1a57-4e18-92eb-579dd1cdb40c",
+      "name": "Respond Duplicate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1120,
+        48
+      ],
+      "parameters": {
+        "respondWith": "json"
+      }
+    },
+    {
+      "id": "a7d5027b-2014-43f6-84a4-9bb00f7e24a0",
+      "name": "Insert Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "3278595a-ce82-431f-8347-283b9aeb467f",
+      "name": "Find Matching Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1344,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "options": {}
+      }
+    },
+    {
+      "id": "8fda09fe-c0fc-4379-8a69-8acbdbb259d0",
+      "name": "Decide Contact Match",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c04e9e7c-828b-4d6a-8dfa-6d02bb78e684",
+      "name": "Contact Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3781c32a-3d90-4073-83a1-142170f3596e",
+      "name": "Update Matching Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        96
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "0ede3423-36d6-4637-b1b1-34733313640b",
+      "name": "Create New Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        288
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "c637c3ee-f51d-4d75-a97e-1782fd8c7953",
+      "name": "Normalize Contact Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0ccea165-bff5-4a89-b1a2-52c8aa74adb8",
+      "name": "GHL Upsert Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2464,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "93ce4eb8-bc35-4e18-adc8-603c0568adb0",
+      "name": "Get Active Reps",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2688,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "f96482af-e73b-41fc-8f4c-3b45064eefa5",
+      "name": "Get Config",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2912,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "ecc4b6f5-a486-4b61-8575-de8147314d3a",
+      "name": "Get Rep Load",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3136,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "67660d70-dd49-415f-93a0-9d60c944b131",
+      "name": "Build Runtime",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "997d05cd-9210-4263-a1c1-ea0e7a1b54f0",
+      "name": "Enrich & Build AI Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3584,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2c47058a-5390-4259-af1a-0e422ae0d46f",
+      "name": "AI Qualify v2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3808,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com",
+        "options": {}
+      },
+      "onError": "continueErrorOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "bc28483a-590a-432e-ad54-e8b3677f0dcb",
+      "name": "Parse AI Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4032,
+        96
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8a5ba88c-40f5-4b1e-869a-37db0d6b1723",
+      "name": "Score, Tier & Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4256,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fdd4e718-5716-498d-aa4f-fc4a211b3264",
+      "name": "Fallback Classifier (rules)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4032,
+        288
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f131025d-a3d4-45a4-82b2-72714ce6a025",
+      "name": "Update Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4480,
+        192
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "2db7b0a1-a698-493a-91b3-c55f53bbdf58",
+      "name": "Write Opportunity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4704,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "de5db256-4a30-4647-b511-cf7cd369325d",
+      "name": "Write Messages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4928,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "2af863d2-9fff-4057-b4fb-77ddcfb74f2c",
+      "name": "Write Notifications",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5152,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "02469ded-ce33-4e95-bb76-cbbf5d8839a3",
+      "name": "Write Events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5376,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "3b59dfe9-0c86-4728-b714-4e1ae7c00a3a",
+      "name": "GHL Update Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5600,
+        192
+      ],
+      "parameters": {
+        "method": "PUT",
+        "url": "https://services.leadconnectorhq.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "f8907d61-a733-4fd2-9f7f-82da195fdaa5",
+      "name": "GHL Create Opportunity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5824,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "30daf986-4121-42e1-a487-1c2210ec25ed",
+      "name": "Send Holding SMS?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6048,
+        192
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "d5ac2eb8-96f6-4f92-9788-f2a3838e1198",
+      "name": "GHL Send Holding SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        6272,
+        128
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "5c8746c0-7bd3-4525-891e-357981d5eae7",
+      "name": "GHL Post Routing Note",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        6496,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "9d9d8917-9589-4430-8446-af510f5addd6",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        6720,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json"
+      }
+    },
+    {
+      "id": "f1544a4b-f902-4cd3-85a2-a7c42e6572a4",
+      "name": "Sticky Note 8ae6afd5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -80
+      ],
+      "parameters": {
+        "content": "## 1 · One door for every lead source\n\nMeta Lead Ads, Google Local Services, the website form, Angi and inbound or missed calls all post to one webhook. Each payload is mapped to one lead shape, the phone number is normalised, a usable contact method is required, and an idempotency key is built so a retry never creates a second lead.",
+        "width": 1180,
+        "height": 540,
+        "color": 4
+      }
+    },
+    {
+      "id": "d7a1138d-6c7f-444e-9c9c-91c1a19d3d7c",
+      "name": "Sticky Note dda7e12e",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        -112
+      ],
+      "parameters": {
+        "content": "## 2 · Idempotent by lookup, not by luck\n\nEvery inbound lead is checked against its idempotency key before anything is created. A replay is caught here and returns the original decision.",
+        "width": 652,
+        "height": 572,
+        "color": 5
+      }
+    },
+    {
+      "id": "0f64aea6-a08f-4785-a9f3-c4fceb691d60",
+      "name": "Sticky Note cfe66171",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        -112
+      ],
+      "parameters": {
+        "content": "## 3 · One person, one record\n\nThe person is matched by phone and email before a new contact is created, even across sources, then created or matched in GoHighLevel, the CRM the sales team works in.",
+        "width": 828,
+        "height": 604,
+        "color": 3
+      }
+    },
+    {
+      "id": "6f32e809-b60f-47cd-9ce2-38158337e63d",
+      "name": "Sticky Note f812ebca",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        -64
+      ],
+      "parameters": {
+        "content": "## 4 · Live context in one hop\n\nActive reps, the tunable config (service area, hours, SLA targets, scoring weights) and each rep's open-lead count are pulled right before qualification, so routing always sees the current state.",
+        "width": 668,
+        "height": 556,
+        "color": 6
+      }
+    },
+    {
+      "id": "da66a9a9-3127-421c-967f-470cc345bd0e",
+      "name": "Sticky Note b22aca7b",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3520,
+        -48
+      ],
+      "parameters": {
+        "content": "## 5 · The AI proposes\n\nAn LLM reads the free-text enquiry into a strict JSON schema. If the model call fails or times out, a rules-based keyword classifier takes over at low confidence. The pipeline degrades, it doesn't stop.",
+        "width": 652,
+        "height": 500,
+        "color": 2
+      }
+    },
+    {
+      "id": "c8170a33-1cf1-4f68-b325-211c374a2e2e",
+      "name": "Sticky Note eb97039b",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4208,
+        -48
+      ],
+      "parameters": {
+        "content": "## 6 · The rules decide\n\nA transparent weighted rubric gives a 0–100 score, an A/B/C/D tier and a plain-English reason. Low confidence, unclear intent or an existing customer goes to a review queue. Routing is region-, skill- and capacity-aware; emergencies skip the capacity check and go to the on-call rep.",
+        "width": 668,
+        "height": 508,
+        "color": 7
+      }
+    },
+    {
+      "id": "6ee0327b-f0e9-4200-b13c-63277370dbcf",
+      "name": "Sticky Note 994f1a22",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5104,
+        -32
+      ],
+      "parameters": {
+        "content": "## 7 · Write the decision once\n\nOne update writes the whole decision to the lead. The opportunity, holding SMS, notifications and audit trail are written idempotently, so SLA state and rep load sit alongside the CRM, not inside it.",
+        "width": 1308,
+        "height": 444,
+        "color": 5
+      }
+    },
+    {
+      "id": "6f151be4-94f0-4e6f-b936-39eaaf965334",
+      "name": "Sticky Note 9705d081",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6448,
+        -96
+      ],
+      "parameters": {
+        "content": "## 8 · Hand over in the CRM\n\nGoHighLevel gets the enriched, tagged contact, an opportunity at the right pipeline stage, a plain-English routing note and, only when the lead is actually routed, the holding text message. Review-queue and spam leads get the record and the note, never an automated text.",
+        "width": 444,
+        "height": 500,
+        "color": 4
+      }
+    }
+  ],
+  "connections": {
+    "Lead Intake Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize & Validate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize & Validate": {
+      "main": [
+        [
+          {
+            "node": "Is Lead Usable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Lead Usable?": {
+      "main": [
+        [
+          {
+            "node": "Find Existing Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert Dead Letter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Existing Lead": {
+      "main": [
+        [
+          {
+            "node": "Is Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Dead Letter": {
+      "main": [
+        [
+          {
+            "node": "Respond 422 Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Respond Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Lead": {
+      "main": [
+        [
+          {
+            "node": "Find Matching Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Matching Contact": {
+      "main": [
+        [
+          {
+            "node": "Decide Contact Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide Contact Match": {
+      "main": [
+        [
+          {
+            "node": "Contact Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Exists?": {
+      "main": [
+        [
+          {
+            "node": "Update Matching Contact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create New Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Matching Contact": {
+      "main": [
+        [
+          {
+            "node": "Normalize Contact Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create New Contact": {
+      "main": [
+        [
+          {
+            "node": "Normalize Contact Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Contact Result": {
+      "main": [
+        [
+          {
+            "node": "GHL Upsert Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL Upsert Contact": {
+      "main": [
+        [
+          {
+            "node": "Get Active Reps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Reps": {
+      "main": [
+        [
+          {
+            "node": "Get Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Config": {
+      "main": [
+        [
+          {
+            "node": "Get Rep Load",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Rep Load": {
+      "main": [
+        [
+          {
+            "node": "Build Runtime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Runtime": {
+      "main": [
+        [
+          {
+            "node": "Enrich & Build AI Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich & Build AI Request": {
+      "main": [
+        [
+          {
+            "node": "AI Qualify v2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Qualify v2": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fallback Classifier (rules)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Result": {
+      "main": [
+        [
+          {
+            "node": "Score, Tier & Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score, Tier & Route": {
+      "main": [
+        [
+          {
+            "node": "Update Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback Classifier (rules)": {
+      "main": [
+        [
+          {
+            "node": "Score, Tier & Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Lead": {
+      "main": [
+        [
+          {
+            "node": "Write Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Write Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Messages": {
+      "main": [
+        [
+          {
+            "node": "Write Notifications",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Notifications": {
+      "main": [
+        [
+          {
+            "node": "Write Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Events": {
+      "main": [
+        [
+          {
+            "node": "GHL Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL Update Contact": {
+      "main": [
+        [
+          {
+            "node": "GHL Create Opportunity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL Create Opportunity": {
+      "main": [
+        [
+          {
+            "node": "Send Holding SMS?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Holding SMS?": {
+      "main": [
+        [
+          {
+            "node": "GHL Send Holding SMS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GHL Post Routing Note",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL Send Holding SMS": {
+      "main": [
+        [
+          {
+            "node": "GHL Post Routing Note",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL Post Routing Note": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

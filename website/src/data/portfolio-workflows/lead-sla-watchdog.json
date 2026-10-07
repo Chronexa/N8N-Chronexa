@@ -1,0 +1,273 @@
+{
+  "name": "Speed-to-Lead SLA Watchdog",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "9048cd41-6e1c-4c58-964d-931189f6bc1f",
+      "name": "Every 5 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "214b8876-fcab-4c3c-9579-85baf8750f98",
+      "name": "Find Overdue Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "76504854-c1d2-45e9-bf8e-5c9017ef1b5f",
+      "name": "Get Active Reps",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "0c138eef-c248-4534-ae8e-85f1f6c92852",
+      "name": "Get Config",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "26974ac2-9565-4471-a6c1-3d55707354d7",
+      "name": "Get Rep Load",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "6079de35-ef75-467e-b0ef-3402a276cbf7",
+      "name": "Build Runtime",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "d26683fd-4de3-4e3e-9ad2-4d6cbc382260",
+      "name": "Build Escalations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c8332973-458e-4e2f-9c96-c08245c282a5",
+      "name": "Escalate Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        0
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "0ffa60ff-2f7d-4a0b-b086-c221253795fe",
+      "name": "Notify Manager",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1792,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "f29eb15b-886a-47d7-b00e-79bad79be757",
+      "name": "Log Escalation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "b4fc1952-faac-4699-8ef9-8be9a7b867f2",
+      "name": "Sticky Note 438bd37d",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        64
+      ],
+      "parameters": {
+        "content": "## SLA watchdog · every 5 minutes\n\nThe piece most lead-routing builds skip. Finds assigned leads whose response deadline has passed with no first reply, then escalates them, reassigns A-tier and emergency leads to the least-loaded rep, tells the manager, and logs the breach.\n\nIf nothing is overdue, the run does nothing.",
+        "width": 2320,
+        "height": 280,
+        "color": 2
+      }
+    }
+  ],
+  "connections": {
+    "Every 5 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Find Overdue Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Overdue Leads": {
+      "main": [
+        [
+          {
+            "node": "Get Active Reps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Reps": {
+      "main": [
+        [
+          {
+            "node": "Get Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Config": {
+      "main": [
+        [
+          {
+            "node": "Get Rep Load",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Rep Load": {
+      "main": [
+        [
+          {
+            "node": "Build Runtime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Runtime": {
+      "main": [
+        [
+          {
+            "node": "Build Escalations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Escalations": {
+      "main": [
+        [
+          {
+            "node": "Escalate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate Lead": {
+      "main": [
+        [
+          {
+            "node": "Notify Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Manager": {
+      "main": [
+        [
+          {
+            "node": "Log Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

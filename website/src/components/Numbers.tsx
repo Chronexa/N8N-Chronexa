@@ -17,9 +17,9 @@ const STATS = [
     detail: 'What one person produces with AI vs without',
   },
   {
-    big: '4 wks',
-    label: 'Average time to go live',
-    detail: 'Fixed price, scoped upfront, no surprises',
+    big: '1 wk',
+    label: 'To your first workflow live',
+    detail: 'Free audit first, then a quote sized on ROI',
   },
 ];
 

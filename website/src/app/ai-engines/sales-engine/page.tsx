@@ -12,9 +12,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/sales-engine`;
-const TITLE = 'AI Sales Engine — Automated Outbound, Lead Research & Sequences | Chronexa';
-const DESCRIPTION =
-  'The AI Sales Engine runs the top of your outbound: it sources buyers, researches and qualifies each account, and drafts personalised sequences that send through your own stack — with a human approving every send. Dedicated sending domains, SPF/DKIM/DMARC and CRM suppression are set up first, so volume never costs you your inbox placement. Live in 2–4 weeks.';
+const TITLE = 'AI Sales Engine: Lead Research & Human-Approved Outreach';
+const DESCRIPTION = 'An AI sales engine that researches every lead, drafts a first message in your voice and waits for a person to approve before anything is sent.';
 
 export const metadata: Metadata = {
   title: TITLE,

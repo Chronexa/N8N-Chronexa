@@ -1,0 +1,157 @@
+/* Offer page. Uses the global tokens and section classes — no new design system. */
+
+.hero { padding-block: var(--spacing-2xl) var(--spacing-xl); }
+.h1 {
+  font-size: var(--step-5);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+  margin-bottom: var(--spacing-md);
+}
+.sub {
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-muted-dark);
+  max-width: 62ch;
+  margin-bottom: var(--spacing-md);
+}
+.section-light .sub { color: var(--text-muted-light); }
+
+.h2 {
+  font-size: var(--step-3);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 24ch;
+  margin-bottom: var(--spacing-md);
+}
+.h3 { font-size: var(--step-2); margin-bottom: var(--spacing-sm); }
+
+/* --- price row ----------------------------------------------------------- */
+.priceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-block: var(--spacing-lg) var(--spacing-md);
+}
+.priceBox {
+  display: flex;
+  flex-direction: column;
+  padding-right: var(--spacing-md);
+  border-right: 1px solid var(--border-dark);
+}
+.priceBox:last-child { border-right: 0; }
+.priceNum { font-size: var(--step-3); font-weight: 600; letter-spacing: -0.02em; color: var(--brand-green); }
+.priceLabel { font-size: var(--step--1); color: var(--text-muted-dark); }
+.heroFine { font-size: var(--step--1); color: var(--text-muted-dark); margin-top: var(--spacing-sm); }
+
+/* --- proof --------------------------------------------------------------- */
+.proofGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+.proofCard {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.proofStat { display: flex; flex-direction: column; margin-bottom: 0.4rem; }
+.proofStat span:last-child { font-size: var(--step--1); color: var(--text-muted-light); }
+.proofCard h3 { font-size: var(--step-1); }
+.proofCard p { font-size: var(--step--1); line-height: 1.6; color: var(--text-muted-light); }
+.proofResult { font-weight: 600; color: var(--text-light) !important; }
+
+/* --- steps --------------------------------------------------------------- */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-md);
+  counter-reset: step;
+}
+.steps li { border-top: 2px solid var(--brand-green); padding-top: var(--spacing-sm); }
+.stepN {
+  display: block;
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-green);
+  margin-bottom: 0.4rem;
+}
+.steps h3 { font-size: var(--step-1); margin-bottom: 0.4rem; }
+.steps p { font-size: var(--step--1); line-height: 1.6; color: var(--text-muted-light); }
+
+/* --- scope --------------------------------------------------------------- */
+.scopeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+.list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.list li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--text-muted-light);
+}
+.list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--brand-green);
+  font-weight: 700;
+}
+.listOut li::before { content: '×'; color: var(--neutral-500); }
+.scopeNote {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-light);
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  max-width: 70ch;
+}
+
+/* --- faq ----------------------------------------------------------------- */
+.faq { display: flex; flex-direction: column; max-width: 78ch; }
+.faq details { border-bottom: 1px solid var(--border-light); padding-block: var(--spacing-sm); }
+.faq summary {
+  cursor: pointer;
+  font-size: var(--step-0);
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--brand-green); font-weight: 400; }
+.faq details[open] summary::after { content: '−'; }
+.faq details p {
+  margin-top: 0.7rem;
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-muted-light);
+  max-width: 68ch;
+}
+
+/* --- cta ----------------------------------------------------------------- */
+.cta .h2 { max-width: none; }
+.ctaGrid {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 460px);
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+@media (max-width: 860px) { .ctaGrid { grid-template-columns: 1fr; } }
+.formPanel {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  background: var(--surface-glass);
+}

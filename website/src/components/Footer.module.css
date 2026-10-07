@@ -7,14 +7,21 @@
 
 .content {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr 1.1fr;
-  gap: var(--spacing-md) var(--spacing-lg);
+  /* brand row on top, then five link columns: 3 service groups · industries · work+company */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--spacing-md) var(--spacing-md);
   padding-bottom: var(--spacing-lg);
 }
 
 .logo { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
 .logoMark { width: 36px; height: 36px; object-fit: contain; }
 
+.brand {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 2.5rem;
+  padding-bottom: var(--spacing-md); margin-bottom: var(--spacing-xs); border-bottom: 1px solid var(--border-dark);
+}
+.brand .logo { margin-bottom: 0; }
+.brand p { margin-bottom: 0 !important; }
 .brand p { color: var(--text-muted-dark); max-width: 36ch; margin-bottom: 1rem; font-size: var(--step--1); }
 .email { color: var(--brand-green); font-weight: 600; }
 .email:hover { color: var(--brand-green-hover); }
@@ -22,6 +29,8 @@
 .col { display: flex; flex-direction: column; gap: 0.6rem; }
 .col h2:not(:first-child) { margin-top: 0.9rem; }
 .col h2 {
+  font-family: var(--font-sans);
+  font-size: 0.72rem !important;
   font-size: var(--step--1);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
@@ -45,6 +54,12 @@
   border-top: 1px solid var(--border-dark);
   color: var(--text-muted-dark);
   font-size: var(--step--1);
+}
+
+/* Six columns get cramped below full desktop width — drop to three before the
+   two-column mobile layout takes over. */
+@media (max-width: 1000px) {
+  .content { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 820px) {

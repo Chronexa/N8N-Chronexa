@@ -5,6 +5,8 @@ import { site } from '../lib/site';
 import { getService, getSolutions, getPains, type ServiceContent } from '../lib/services-content';
 import { getCategoryLabel } from '../lib/taxonomy';
 import BookButton from './BookButton';
+import TrackView from './TrackView';
+import ScrollDepth from './ScrollDepth';
 
 // Same standard outcomes as the service template, so the brand reads consistently.
 const STANDARD_IMPACTS = [
@@ -52,6 +54,8 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
 
   return (
     <>
+      <TrackView event="service_view" props={{ slug: data.slug, name: data.serviceName, category: categoryLabel, template: 'usecase' }} />
+      <ScrollDepth pageType="usecase" slug={data.slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />

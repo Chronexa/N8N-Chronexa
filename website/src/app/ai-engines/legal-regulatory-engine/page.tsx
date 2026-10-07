@@ -15,9 +15,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/legal-regulatory-engine`;
-const TITLE = 'AI Workflow Orchestration for Law Firms — Legal & Regulatory Engine | Chronexa';
-const DESCRIPTION =
-  'Your firm already has AI — the engine connects it to daily work. Regulatory changes matched to live matters the day they publish, AI-tool time captured into billing as it happens, closed-matter precedents fed back into your knowledge base, and diligence reports drafted from completed document review. Privileged content stays in your tenant, never goes to public AI, and every citation links back to the source document.';
+const TITLE = 'Legal & Regulatory AI Engine for Law Firms';
+const DESCRIPTION = 'AI for law firms that monitors regulators, captures billable time and searches matter knowledge, inside your own tenant with partners approving.';
 
 export const metadata: Metadata = {
   title: TITLE,

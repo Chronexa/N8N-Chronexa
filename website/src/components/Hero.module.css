@@ -173,3 +173,19 @@
       color-mix(in srgb, var(--bg-dark) 82%, transparent) 100%);
   }
 }
+
+/* Enterprise homepage: cinematic footage, architectural type, quiet credentials. */
+.hero { min-height: min(960px, 100svh); padding-top: calc(var(--nav-height) + 65px); padding-bottom: 55px; }
+.heroContent { max-width: 660px; }
+.heroBadge { border:0; border-radius:0; padding:0; background:transparent; backdrop-filter:none; font:10px/1.5 var(--font-mono); letter-spacing:.16em; color:#c5d5b9; margin-bottom:27px; }
+.heroBadge svg { display:none; }
+.heroTitle { font-family:var(--font-sans); font-weight:500; font-size:clamp(60px,7.6vw,108px); line-height:.97; letter-spacing:-.055em; max-width:none; margin-bottom:28px; }
+.heroAccent { color:#b4d792; }
+.heroDescription { max-width:43ch; font-size:17px; line-height:1.65; color:#e0e4dc; margin-bottom:30px; }
+.heroActions :global(.btn-primary),.heroActions :global(.btn-outline) { border-radius:0; box-shadow:none; font-size:13px; }
+.heroActions :global(.btn-primary) { background:#bbdba2; border-color:#bbdba2; color:#14210d; }
+.heroStats { margin-top:48px; padding-top:22px; max-width:580px; }
+.heroStatNum { font:500 14px/1.3 var(--font-sans); color:#e4ebdf; }
+.heroStatLabel { font-size:11px; color:#b6bfb0; text-wrap:initial; }
+@media(max-width:860px) { .hero { min-height:800px; } }
+@media(max-width:620px) { .hero { min-height:0; padding-top:calc(var(--nav-height) + 45px); padding-bottom:35px; } .heroTitle { font-size:clamp(58px,15vw,84px); } .heroDescription { font-size:15px; } .heroStats { margin-top:35px; gap:12px; } .heroStat + .heroStat { padding-left:12px; } .heroStatNum { font-size:12px; } .heroStatLabel { font-size:10px; } .heroBadge { font-size:9px; } }

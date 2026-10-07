@@ -1,0 +1,107 @@
+{
+  "name": "Retell AI — Real Estate Voice Agent Demo (Post-Call → Airtable)",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "60a5d40e-5614-40e1-95fc-06d376d9ffbd",
+      "name": "Setup Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        96,
+        352
+      ],
+      "parameters": {
+        "content": "## Retell AI — real-estate voice agent (demo)\n\n**What this shows:** the post-call → structured-record pattern we run live for a voice agent in another industry, rebuilt on Retell AI for real-estate enquiries.\n\nWhen a call ends, Retell sends its analysis. Only finished analyses are processed; property type, budget range, preferred area and appointment request become one Airtable record, with the summary and transcript, for the agent to follow up.",
+        "width": 460,
+        "height": 524,
+        "color": 4
+      }
+    },
+    {
+      "id": "1b040845-eb45-49ba-ab03-d6eb2773e823",
+      "name": "Retell Post-Call Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "bea19879-d61c-41a6-92bb-6bc7e8ff98d7",
+      "name": "Only Process call_analyzed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "d486db8a-b5f7-462e-a053-f64c49724085",
+      "name": "Parse Real Estate Call Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a9be99cc-678e-412b-bfe5-1ed001e89413",
+      "name": "Create Real Estate Call Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "operation": "create"
+      }
+    }
+  ],
+  "connections": {
+    "Retell Post-Call Webhook": {
+      "main": [
+        [
+          {
+            "node": "Only Process call_analyzed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only Process call_analyzed": {
+      "main": [
+        [
+          {
+            "node": "Parse Real Estate Call Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Real Estate Call Data": {
+      "main": [
+        [
+          {
+            "node": "Create Real Estate Call Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

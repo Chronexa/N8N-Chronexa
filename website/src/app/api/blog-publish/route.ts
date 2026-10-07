@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@sanity/client';
 import { htmlToPortableText } from '../../../lib/html-to-portable-text';
+import { classifyPost, TAXONOMY_VALUES } from '../../../lib/blog-taxonomy';
 
 /**
  * POST /api/blog-publish — publish endpoint for the n8n blog pipeline (Agent 5).
@@ -35,10 +36,6 @@ function secretOk(req: NextRequest): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-function sanitizeId(slug: string): string {
-  return `post-${slug.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/-+/g, '-').slice(0, 120)}`;
-}
-
 /** cdn.sanity.io/images/<proj>/<ds>/<hash>-<dims>.<ext> → image-<hash>-<dims>-<ext> */
 function assetRefFromCdnUrl(url: string): string | null {
   const m = url.match(/cdn\.sanity\.io\/images\/[^/]+\/[^/]+\/([A-Za-z0-9]+-\d+x\d+)\.(\w+)/);
@@ -58,6 +55,11 @@ export async function POST(req: NextRequest) {
     cover_image_url?: string;
     published_date?: string;
     category?: string;
+    /** Blog taxonomy — see src/lib/blog-taxonomy.ts. Drives the /blog filters and hubs. */
+    industry?: string;
+    topic?: string;
+    format?: string;
+    region?: string;
     key_takeaways?: string | string[];
   };
   try {
@@ -66,7 +68,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid JSON body' }, { status: 400 });
   }
 
-  const { title, slug, meta_title, meta_description, html_body, cover_image_url, published_date, category, key_takeaways } = payload;
+  const { title, slug, meta_title, meta_description, html_body, cover_image_url, published_date, industry, topic, format, region, key_takeaways } = payload;
   if (!title || !slug || !html_body) {
     return NextResponse.json({ error: 'title, slug and html_body are required' }, { status: 400 });
   }
@@ -115,23 +117,41 @@ export async function POST(req: NextRequest) {
       .slice(0, 5);
 
     // Re-publishing an existing post is a real content revision → dateModified.
-    const docId = sanitizeId(slug);
-    const exists = await client.fetch<string | null>('*[_id == $id][0]._id', { id: docId });
+    const existing = await client.fetch<{ _id: string; publishedAt?: string } | null>(
+      '*[_type == "post" && slug.current == $slug && !(_id in path("drafts.**"))][0]{ _id, publishedAt }',
+      { slug: slug.trim() },
+    );
 
-    const doc = {
-      _id: docId,
-      _type: 'post',
+    // Blog taxonomy. Caller-supplied values win when they are valid; otherwise the
+    // post is classified from its own slug/title/excerpt. Never leave these blank:
+    // an unclassified post would silently drop
+    // out of every hub page and filter.
+    const seeded = classifyPost({ slug: slug.trim(), title: title.trim(), excerpt: meta_description ?? '' });
+    const pick = (supplied: string | undefined, allowed: readonly string[], fallback?: string) => {
+      const v = supplied?.trim();
+      return v && allowed.includes(v) ? v : fallback;
+    };
+    const taxonomy = {
+      industry: pick(industry, TAXONOMY_VALUES.industry, seeded.industry),
+      topic: pick(topic, TAXONOMY_VALUES.topic, seeded.topic),
+      format: pick(format, TAXONOMY_VALUES.format, seeded.format),
+      ...(pick(region, TAXONOMY_VALUES.region, seeded.region)
+        ? { region: pick(region, TAXONOMY_VALUES.region, seeded.region) }
+        : {}),
+    };
+
+    const fields = {
       title: title.trim(),
       slug: { _type: 'slug', current: slug.trim() },
-      category: (category || 'Resources').trim(),
+      ...taxonomy,
       featured: false,
       excerpt: meta_description?.trim() || undefined,
       ...(metaTitleOk ? { metaTitle } : {}),
       metaDescription: meta_description?.trim() || undefined,
       ...(takeaways.length >= 3 ? { keyTakeaways: takeaways } : {}),
       readingTime: Math.max(2, Math.round(bodyWords / 200)),
-      publishedAt: published_date || new Date().toISOString(),
-      ...(exists ? { updatedAt: new Date().toISOString() } : {}),
+      publishedAt: published_date || existing?.publishedAt || new Date().toISOString(),
+      ...(existing ? { updatedAt: new Date().toISOString() } : {}),
       body,
       ...(heroRef
         ? { hero: { _type: 'image', asset: { _type: 'reference', _ref: heroRef }, alt: `Abstract line illustration representing ${title.trim()}` } }
@@ -139,13 +159,23 @@ export async function POST(req: NextRequest) {
       author: { _type: 'reference', _ref: 'author-ankit-dhiman' },
     };
 
-    const created = await client.createOrReplace(doc);
+    // Ordinary Sanity documents keep generated IDs. Idempotency comes from the
+    // unique slug lookup: update the matching document or create a new one.
+    const created = existing
+      ? await client.patch(existing._id).set(fields).commit()
+      : await client.create({ _type: 'post', ...fields });
 
     // Surface the post immediately instead of waiting out the 1h ISR window.
     try {
       revalidatePath('/blog');
       revalidatePath(`/blog/${slug}`);
       revalidatePath('/sitemap.xml');
+      revalidatePath('/blog/rss.xml');
+      // The new post changes its hub pages' contents and counts too, and may push
+      // the corpus over a pagination boundary — refresh those alongside the index.
+      if (taxonomy.industry) revalidatePath(`/blog/industries/${taxonomy.industry}`);
+      if (taxonomy.topic) revalidatePath(`/blog/topics/${taxonomy.topic}`);
+      revalidatePath('/blog/page/[n]', 'page');
     } catch {
       /* best-effort */
     }

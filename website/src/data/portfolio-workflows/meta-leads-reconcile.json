@@ -1,0 +1,225 @@
+{
+  "name": "Meta Leads — Reconcile",
+  "active": true,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "every-15-minutes",
+      "name": "Every 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-token",
+      "name": "Google Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -500,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://oauth2.googleapis.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "read-sheet-ids",
+      "name": "Read Sheet IDs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "get-forms",
+      "name": "Get Forms",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -60,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "pick-active-forms",
+      "name": "Pick Active Forms",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "get-recent-leads",
+      "name": "Get Recent Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "find-missing",
+      "name": "Find Missing",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "replay-through-webhook",
+      "name": "Replay Through Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        820,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.chronexa.io",
+        "options": {}
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -740,
+        20
+      ],
+      "parameters": {
+        "content": "## Meta leads — reconcile (safety net)\n\nEvery 15 minutes: compare the lead IDs in Meta with the lead IDs already logged, and replay any missing lead through the live capture workflow.\n\n**Why it exists:** Meta silently stops delivering webhooks in some app states. A real lead was lost that way once. This makes sure it can't happen twice.\n\nSafe to run repeatedly — a lead that is already logged is never written again.",
+        "width": 700,
+        "height": 190
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 minutes": {
+      "main": [
+        [
+          {
+            "node": "Google Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Token": {
+      "main": [
+        [
+          {
+            "node": "Read Sheet IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sheet IDs": {
+      "main": [
+        [
+          {
+            "node": "Get Forms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Forms": {
+      "main": [
+        [
+          {
+            "node": "Pick Active Forms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Active Forms": {
+      "main": [
+        [
+          {
+            "node": "Get Recent Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Recent Leads": {
+      "main": [
+        [
+          {
+            "node": "Find Missing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Missing": {
+      "main": [
+        [
+          {
+            "node": "Replay Through Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

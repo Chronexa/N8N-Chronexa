@@ -1,8 +1,11 @@
 {
-  "name": "[DRAFT] Blog Agent 4: Image Designer",
+  "name": "Agent 4: Image Designer (Baserow)",
+  "active": false,
+  "hasErrorWorkflow": false,
+  "syncedAt": "2026-09-29",
   "nodes": [
     {
-      "id": "a4-trigger",
+      "id": "a4b-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -10,24 +13,37 @@
         240,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
     },
     {
-      "id": "a4-get-pending",
-      "name": "Get Pending Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a4b-fetch",
+      "name": "Fetch Pending Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         460,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a4-lock",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a4b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
         680,
         300
@@ -35,10 +51,21 @@
       "parameters": {}
     },
     {
-      "id": "a4-gen-prompt",
-      "name": "Generate Image Prompt",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "a4b-end",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4b-extract",
+      "name": "Extract Record",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         900,
         300
@@ -46,74 +73,152 @@
       "parameters": {}
     },
     {
-      "id": "a4-extract-prompt",
-      "name": "Extract Image Prompt",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "id": "a4b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         1120,
         300
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a4-gen-image",
-      "name": "Generate Image with Gemini",
+      "id": "a4b-gen-prompt",
+      "name": "Generate Image Prompt",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
         1340,
         300
       ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a4b-extract-prompt",
+      "name": "Extract Image Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
+        300
+      ],
       "parameters": {}
     },
     {
-      "id": "a4-upload-imgbb",
-      "name": "Upload Image to Imgbb",
+      "id": "a4b-gen-image",
+      "name": "Generate Image with OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a4b-save-image-success",
+      "name": "Save Image URL (With Image)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2220,
+        200
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a4b-save-image-no",
+      "name": "Save Image URL (No Image)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        440
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a4b-fail",
+      "name": "Mark Failed",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
         1560,
-        220
+        460
       ],
-      "parameters": {}
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
     },
     {
-      "id": "a4-save-image-success",
-      "name": "Save Image URL (With Image)",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        1780,
-        220
-      ],
-      "parameters": {}
-    },
-    {
-      "id": "a4-save-image",
-      "name": "Save Image URL (No Image)",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        1560,
-        400
-      ],
-      "parameters": {}
-    },
-    {
-      "id": "a4-sticky",
-      "name": "⚙️ Agent 4: Image Designer",
+      "id": "a4b-sticky",
+      "name": "⚙️ Agent 4: Image Designer (Baserow)",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        200,
-        160
+        240,
+        100
       ],
       "parameters": {
-        "content": "## Blog Agent 4: Image Designer v2\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
-        "width": 380,
-        "height": 180
+        "content": "## Agent 4 — Image designer\n\nPolls for finished copy → Claude writes an image brief in the blog's fixed house style → OpenAI generates the cover → the file is uploaded to the CMS.\n\nIf image generation fails, the post still moves on without a cover rather than blocking the pipeline.",
+        "width": 560,
+        "height": 140
       }
+    },
+    {
+      "id": "a4-convert-binary",
+      "name": "Convert Image to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        200
+      ],
+      "parameters": {
+        "operation": "toBinary"
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a4-upload-sanity",
+      "name": "Upload Cover to Sanity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2192,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://up57bpxm.api.sanity.io",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
     }
   ],
   "connections": {
@@ -121,14 +226,43 @@
       "main": [
         [
           {
-            "node": "Get Pending Record",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Pending Record": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -158,6 +292,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Mark Failed",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -165,18 +306,18 @@
       "main": [
         [
           {
-            "node": "Generate Image with Gemini",
+            "node": "Generate Image with OpenAI",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Generate Image with Gemini": {
+    "Convert Image to File": {
       "main": [
         [
           {
-            "node": "Upload Image to Imgbb",
+            "node": "Upload Cover to Sanity",
             "type": "main",
             "index": 0
           }
@@ -190,11 +331,29 @@
         ]
       ]
     },
-    "Upload Image to Imgbb": {
+    "Upload Cover to Sanity": {
       "main": [
         [
           {
             "node": "Save Image URL (With Image)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Image URL (No Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image with OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Convert Image to File",
             "type": "main",
             "index": 0
           }

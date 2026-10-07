@@ -1,0 +1,50 @@
+/* Pipeline bench. Light app-window on the dark ink hero, same language as the
+   other solution demos; shaped like a run through a pipeline. */
+.bench { border-radius:12px; background:#fbfbf4; color:#173a2d; overflow:hidden; box-shadow:0 0 0 1px rgba(247,247,238,.22), 0 30px 70px -24px rgba(0,0,0,.6); }
+.bar { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:13px 18px; background:#173a2d; color:#dbfa80; font-size:11px; font-weight:700; letter-spacing:.07em; }
+.bar span:last-child { color:#9fb79d; font-weight:600; }
+
+.picker { display:grid; grid-template-columns:repeat(4,1fr); background:#eeeee3; border-bottom:1px solid #173a2d1a; }
+.picker button { min-height:52px; padding:11px 7px; border:0; border-bottom:3px solid transparent; color:#5c685e; background:none; font:500 12px/1.35 var(--font-sans); cursor:pointer; transition:background .15s, color .15s; position:relative; }
+.picker button + button { border-left:1px solid #173a2d14; }
+.picker button[aria-pressed='true'] { border-bottom-color:#173a2d26; color:#173a2d; background:#fbfbf4; font-weight:650; }
+.picker button:hover { color:#173a2d; background:#ffffff90; }
+.picker button:focus-visible { outline:2px solid #173a2d; outline-offset:-2px; }
+.progress { position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#173a2d; transform-origin:left; }
+.progressRun { animation:fillBar linear forwards; }
+@keyframes fillBar { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@media(prefers-reduced-motion:reduce) { .progressRun { animation:none; } }
+
+.head { display:flex; flex-direction:column; gap:4px; padding:15px 20px; border-bottom:1px solid #173a2d14; }
+.head b { font-size:14px; font-weight:650; }
+.head span { color:#6b7a6c; font-size:11.5px; }
+
+/* The run. A horizontal rail on desktop, a vertical list on a phone. */
+.rail { list-style:none; display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin:0; padding:16px 20px; border-bottom:1px solid #173a2d14; background:#f0f1e6; }
+.rail li { display:flex; flex-direction:column; align-items:center; gap:5px; text-align:center; }
+.rail li i { display:block; width:100%; height:4px; border-radius:2px; background:#173a2d1f; }
+.rail b { font-size:11px; font-weight:650; }
+.rail span { font-size:9.5px; letter-spacing:.03em; color:#8a968a; }
+.ok i { background:#a9c77f; }
+.flag i { background:#e0b062; }
+.stop i { background:#9a4b2c; }
+.stop b { color:#9a4b2c; }
+.stop span { color:#9a4b2c; font-weight:650; }
+
+.detail { padding:18px 20px 20px; }
+.label { margin:0 0 7px; color:#6b7a6c; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.breaks, .fix { margin:0 0 16px; padding-left:14px; font-size:13.5px; line-height:1.62; }
+.breaks { border-left:3px solid #9a4b2c; }
+.fix { border-left:3px solid #dbfa80; }
+.out { margin:0; padding-top:14px; border-top:1px solid #173a2d18; color:#5c685e; font-size:12.5px; font-style:italic; line-height:1.6; }
+
+@media(max-width:700px) {
+ .picker { grid-template-columns:1fr 1fr; }
+ .picker button:nth-child(odd) { border-left:0; }
+ .picker button:nth-child(n+3) { border-top:1px solid #173a2d14; }
+ .head, .detail, .rail { padding-inline:16px; }
+ .rail { grid-template-columns:1fr; gap:2px; }
+ .rail li { flex-direction:row; align-items:center; gap:10px; text-align:left; padding:5px 0; }
+ .rail li i { width:5px; height:20px; flex:none; }
+ .rail span { margin-left:auto; }
+}

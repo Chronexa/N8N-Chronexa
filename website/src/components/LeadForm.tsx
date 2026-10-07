@@ -8,7 +8,7 @@ import { site } from '../lib/site';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-export default function LeadForm({ source = 'website', compact = false, submitLabel = 'Book my free audit', note = 'Free 30-min call. No spam, no sales pitch — just actionable insights.' }: { source?: string; compact?: boolean; submitLabel?: string; note?: string }) {
+export default function LeadForm({ source = 'website', compact = false, submitLabel = 'Book my free audit', note = 'Free 30-min call. No spam, no sales pitch — just actionable insights.', fieldLabel = 'What do you want to automate?', fieldPlaceholder = 'e.g. CRM enrichment, claims triage', fieldNote = 'Wants to automate' }: { source?: string; compact?: boolean; submitLabel?: string; note?: string; fieldLabel?: string; fieldPlaceholder?: string; fieldNote?: string }) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
   const startedRef = useRef(false);
@@ -43,13 +43,13 @@ export default function LeadForm({ source = 'website', compact = false, submitLa
 
     // Best-effort lead record (non-blocking). Captures the moment CONTACT_WEBHOOK_URL
     // is set; either way the visitor is handed straight to booking below.
-    const notes = [company && `Company: ${company}`, usecase && `Wants to automate: ${usecase}`]
+    const notes = [company && `Company: ${company}`, usecase && `${fieldNote}: ${usecase}`]
       .filter(Boolean)
       .join(' · ');
     fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, company, usecase, source }),
+      body: JSON.stringify({ name, email, company, usecase, source, page: window.location.pathname }),
     }).catch(() => {});
 
     // Hand off to Cal.com, prefilled, so booking is one step.
@@ -88,11 +88,11 @@ export default function LeadForm({ source = 'website', compact = false, submitLa
         </div>
       )}
       <div className={styles.group}>
-        <label htmlFor={`${source}-usecase`}>What do you want to automate?</label>
+        <label htmlFor={`${source}-usecase`}>{fieldLabel}</label>
         {compact ? (
-          <input id={`${source}-usecase`} name="usecase" type="text" placeholder="e.g. CRM enrichment, claims triage" />
+          <input id={`${source}-usecase`} name="usecase" type="text" placeholder={fieldPlaceholder} />
         ) : (
-          <textarea id={`${source}-usecase`} name="usecase" rows={4} placeholder="e.g. automate our claims triage / CRM enrichment" />
+          <textarea id={`${source}-usecase`} name="usecase" rows={4} placeholder={fieldPlaceholder} />
         )}
       </div>
       <button type="submit" className={`btn-primary ${styles.btn}`} disabled={status === 'submitting'}>

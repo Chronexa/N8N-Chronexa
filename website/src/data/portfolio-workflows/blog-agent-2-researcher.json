@@ -1,85 +1,147 @@
 {
-  "name": "[DRAFT] Blog Agent 2: Researcher",
+  "name": "Agent 2: Researcher (Baserow)",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "syncedAt": "2026-09-29",
   "nodes": [
     {
-      "id": "a2-trigger",
+      "id": "a2b-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        240,
-        300
-      ],
-      "parameters": {}
-    },
-    {
-      "id": "a2-get-pending",
-      "name": "Get Pending Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
         460,
-        300
+        260
       ],
-      "parameters": {}
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 * * * *"
+            }
+          ]
+        }
+      }
     },
     {
-      "id": "a2-lock",
-      "name": "Lock Record",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        680,
-        300
-      ],
-      "parameters": {}
-    },
-    {
-      "id": "a2-perplexity",
-      "name": "Exa Deep Research",
+      "id": "a2b-fetch",
+      "name": "Fetch Pending Record",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
+        680,
+        260
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-check",
+      "name": "Has Pending Record?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
         900,
-        300
+        260
       ],
       "parameters": {}
     },
     {
-      "id": "a2-extract-research",
-      "name": "Extract Research",
+      "id": "a2b-end-empty",
+      "name": "End: No Pending Records",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a2b-extract",
+      "name": "Extract Record",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
         1120,
-        300
+        400
       ],
       "parameters": {}
     },
     {
-      "id": "a2-save-research",
-      "name": "Save Research",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
+      "id": "a2b-lock",
+      "name": "Lock Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         1340,
-        300
+        400
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-exa",
+      "name": "Exa Deep Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "a2b-brief",
+      "name": "Build Research Brief",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1780,
+        280
       ],
       "parameters": {}
     },
     {
-      "id": "a2-sticky",
-      "name": "⚙️ Agent 2: Researcher",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "id": "a2b-save",
+      "name": "Save Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        200,
-        160
+        2000,
+        280
       ],
       "parameters": {
-        "content": "## Blog Agent 2: Researcher v3\n\nPublic architecture preview. Operational parameters, credentials, endpoints, and prompts are intentionally omitted.",
-        "width": 380,
-        "height": 200
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "a2b-error",
+      "name": "Handle Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        540
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
       }
     }
   ],
@@ -88,14 +150,43 @@
       "main": [
         [
           {
-            "node": "Get Pending Record",
+            "node": "Fetch Pending Record",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Pending Record": {
+    "Fetch Pending Record": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Record?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Record?": {
+      "main": [
+        [
+          {
+            "node": "Extract Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End: No Pending Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Record": {
       "main": [
         [
           {
@@ -121,14 +212,21 @@
       "main": [
         [
           {
-            "node": "Extract Research",
+            "node": "Build Research Brief",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Error",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extract Research": {
+    "Build Research Brief": {
       "main": [
         [
           {

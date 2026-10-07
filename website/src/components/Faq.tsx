@@ -41,8 +41,8 @@ export const FAQS = [
     a: 'A focused workflow is typically live in 3–5 weeks; a full multi-agent system across a department is usually a couple of months. Every engagement is fixed-price, with the scope, the success metrics and the price agreed in writing before any code is written. The audit that precedes it is free.',
   },
   {
-    q: 'We are not in finance, legal or insurance. Do you still work with us?',
-    a: 'Yes. Our depth is in regulated industries — financial services, legal, insurance, private equity — because that is where the constraints are hardest. But the work is defined by the bottleneck, not the sector: if you have repetitive, high-volume work in documents, sales, support or operations, the same engineering applies.',
+    q: 'Do you work across industries?',
+    a: 'Yes. The best projects usually involve repetitive, high-volume work in documents, sales, support, finance or operations. We start with the work your team needs to improve, not the industry label.',
   },
 ];
 

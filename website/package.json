@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit:positioning": "node scripts/audit-positioning-copy.mjs",
+    "audit:blog": "node scripts/audit-blog-discovery.mjs"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.43.0",
@@ -22,6 +24,7 @@
     "next-sanity": "^13.0.8",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "retell-client-js-sdk": "^3.0.2",
     "sanity": "^5.28.0",
     "styled-components": "^6.4.2"
   },

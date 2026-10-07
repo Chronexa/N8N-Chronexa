@@ -1,0 +1,71 @@
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: var(--step--1);
+  color: var(--text-muted-light);
+  margin-bottom: var(--spacing-md);
+}
+.crumbs a:hover { color: var(--brand-green-ink); }
+.crumbs [aria-current] { color: var(--text-light); }
+
+.head { padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light); }
+
+/* The definitional passage — the unit an AI answer engine can quote. Set at a
+   comfortable reading measure rather than full grid width. */
+.intro { max-width: 68ch; margin-top: var(--spacing-sm); }
+.intro p { color: var(--text-muted-light); line-height: 1.65; margin: 0; }
+.intro p + p { margin-top: var(--spacing-sm); }
+
+.countRow { margin: var(--spacing-md) 0; }
+.count {
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-weight: 600;
+  color: var(--text-muted-light);
+}
+
+/* ------------------------- Cross-axis + siblings ------------------------- */
+.cross { margin-top: var(--spacing-xl); }
+.crossHead { font-size: var(--step-1); margin-bottom: var(--spacing-sm); }
+.crossList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.crossList a {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-light-strong);
+  padding-bottom: 1px;
+}
+.crossList a:hover { color: var(--brand-green-ink); border-bottom-color: var(--brand-green); }
+
+.siblings { margin-top: var(--spacing-lg); padding-top: var(--spacing-md); border-top: 1px solid var(--border-light); }
+
+/* -------------------------------- The CTA -------------------------------- */
+/* Highest-intent surface on the blog — the reader has self-identified a vertical,
+   so this names it rather than offering a generic "book a call". */
+.cta {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--brand-green);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.ctaTitle { font-size: var(--step-2); margin: 0 0 var(--spacing-xs); text-wrap: balance; }
+.ctaBody { color: var(--text-muted-light); line-height: 1.6; max-width: 60ch; margin: 0 0 var(--spacing-md); }
+.ctaRow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm) var(--spacing-md); }
+.ctaSecondary { font-size: var(--step--1); font-weight: 600; color: var(--brand-green-ink); }
+.ctaSecondary:hover { text-decoration: underline; }
+
+@media (max-width: 620px) {
+  .cta { padding: var(--spacing-md); }
+}

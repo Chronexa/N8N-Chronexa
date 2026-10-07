@@ -13,9 +13,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/investment-research-engine`;
-const TITLE = 'AI Investment Research & Portfolio Operations — Human-Approved, Audit-Logged | Chronexa';
-const DESCRIPTION =
-  'Chronexa\'s Investment Research Engine unifies your book across every custodian, runs your research and your own models on live data, and turns what the PM approves into logged orders — every trade human-authorised, every position private to you and never sent to public AI. It removes the hours between signal and action; it makes no promise about returns.';
+const TITLE = 'AI Investment Research Engine, Human-Approved';
+const DESCRIPTION = 'AI investment research for licensed firms: one live book across asset classes, screening and risk alerts, with a person approving every decision.';
 
 export const metadata: Metadata = {
   title: TITLE,

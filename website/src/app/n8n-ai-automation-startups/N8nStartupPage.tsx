@@ -263,7 +263,7 @@ export default function N8nStartupPage() {
               ))}
             </div>
             <p className={styles.stripMeta}>
-              Chronexa, India. We reply on WhatsApp within the hour, 9am to 9pm IST.{' '}
+              We reply on WhatsApp within the hour.{' '}
               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={styles.stripLink}>
                 +91 79731 90226
               </a>

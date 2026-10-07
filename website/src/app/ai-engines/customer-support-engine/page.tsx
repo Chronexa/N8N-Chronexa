@@ -13,9 +13,8 @@ import { site } from '../../../lib/site';
 import styles from '../ai-engines.module.css';
 
 const URL = `${site.url}/ai-engines/customer-support-engine`;
-const TITLE = 'AI Customer Support Engine — Resolves Tickets, Escalates With Context | Chronexa';
-const DESCRIPTION =
-  'Chronexa\'s Customer Support Engine answers email, chat and voice from your own knowledge base and live system data, takes real actions like applying a credit, and escalates to a human with full context when it is not confident. Answers are grounded and source-attached, it writes in your brand voice, and a customer can always reach a person.';
+const TITLE = 'AI Customer Support Engine That Escalates With Context';
+const DESCRIPTION = 'An AI support engine that answers from your own knowledge, resolves routine tickets and hands the rest to a person with full context.';
 
 export const metadata: Metadata = {
   title: TITLE,

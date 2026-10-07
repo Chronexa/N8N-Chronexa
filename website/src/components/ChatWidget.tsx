@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import styles from './ChatWidget.module.css';
 import { openBooking, trackBookCta } from '../lib/cal';
 import { track, identifyByEmail } from '../lib/analytics';
+import { LANDING_PREFIXES } from './ChromeGate';
 
 type Turn = { role: 'user' | 'assistant'; text: string };
 type Option = { id: string; label: string };
@@ -54,6 +57,7 @@ export default function ChatWidget() {
   const listRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const freeTextRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -182,6 +186,12 @@ export default function ChatWidget() {
 
   const flowInProgress = step !== 'done';
 
+  // Paid landing pages pitch one specific offer with their own lead form — a
+  // generic "what do you want to automate" widget contradicts the page and
+  // would tag leads source=chatbot:*, bypassing that page's own qualifiers.
+  if (pathname === '/') return null;
+  if (LANDING_PREFIXES.some((p) => pathname === p || pathname?.startsWith(p + '/'))) return null;
+
   return (
     <div className={styles.wrap} ref={panelRef}>
       {open && (
@@ -189,8 +199,8 @@ export default function ChatWidget() {
           <div className={styles.header}>
             <div className={styles.headerIdentity}>
               <span className={styles.headerAvatarWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className={styles.headerAvatar} src={ANKIT_AVATAR} alt="Ankit Dhiman" />
+                { }
+                <Image className={styles.headerAvatar} src={ANKIT_AVATAR} width={48} height={48} sizes="48px" alt="Ankit Dhiman" />
                 <span className={styles.onlineDot} aria-hidden="true" />
               </span>
               <span className={styles.headerText}>
@@ -207,8 +217,8 @@ export default function ChatWidget() {
             {turns.map((t, i) =>
               t.role === 'assistant' ? (
                 <div key={i} className={styles.msgRow}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={styles.msgAvatar} src={ANKIT_AVATAR} alt="" aria-hidden="true" />
+                  { }
+                  <Image className={styles.msgAvatar} src={ANKIT_AVATAR} width={32} height={32} sizes="32px" alt="" aria-hidden="true" />
                   <div className={styles.bubbleBot}>{t.text}</div>
                 </div>
               ) : (
@@ -219,8 +229,8 @@ export default function ChatWidget() {
             )}
             {step === 'submitting' && (
               <div className={styles.msgRow}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className={styles.msgAvatar} src={ANKIT_AVATAR} alt="" aria-hidden="true" />
+                { }
+                <Image className={styles.msgAvatar} src={ANKIT_AVATAR} width={32} height={32} sizes="32px" alt="" aria-hidden="true" />
                 <div className={styles.bubbleBot}>
                   <span className={styles.typingDot} />
                   <span className={styles.typingDot} />
@@ -339,8 +349,8 @@ export default function ChatWidget() {
           '×'
         ) : (
           <span className={styles.fabAvatarWrap}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className={styles.fabAvatar} src={ANKIT_AVATAR} alt="" aria-hidden="true" />
+            { }
+            <Image className={styles.fabAvatar} src={ANKIT_AVATAR} width={48} height={48} sizes="48px" alt="" aria-hidden="true" />
             <span className={styles.onlineDot} aria-hidden="true" />
           </span>
         )}

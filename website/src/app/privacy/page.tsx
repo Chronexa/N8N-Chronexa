@@ -51,7 +51,7 @@ export default function PrivacyPage() {
 
           <h2>1. Who we are and how to reach us</h2>
           <p>
-            {site.legalName} (trading as {site.name}) operates from {site.locality} and serves clients
+            {site.legalName} (trading as {site.name}) operates from {site.legalLocality} and serves clients
             internationally. For the
             personal information described in Section 3 we act as the <strong>controller</strong> — we
             decide why and how it is used. For personal information inside systems we build or run on
@@ -263,7 +263,7 @@ export default function PrivacyPage() {
           <div className={styles.contact}>
             <p><strong>Privacy questions, requests or complaints</strong></p>
             <p><a href={`mailto:${site.email}`}>{site.email}</a> — subject line &quot;Privacy&quot;</p>
-            <p>{site.legalName}, {site.locality}</p>
+            <p>{site.legalName}, {site.legalLocality}</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,406 @@
+{
+  "name": "VC Deal Flow — CRM Auto-Enrichment",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## VC deal flow enrichment\n\n**Reference architecture.**\n\nWhen a deal enters the CRM, four research calls run side by side: company data, recent news, competitors and filings.\n\nClaude writes a structured deal memo from the merged research, a scoring step checks it against the fund's thesis, and the memo is written to a Google Doc.\n\nThe CRM record gets the score and the memo link, and the deal team sees it in Slack.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "new-deal-in-affinity",
+      "name": "New Deal in Affinity",
+      "type": "n8n-nodes-base.affinityTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "get-deal-details",
+      "name": "Get Deal Details",
+      "type": "n8n-nodes-base.affinity",
+      "typeVersion": 1,
+      "position": [
+        240,
+        180
+      ],
+      "parameters": {
+        "resource": "organization",
+        "operation": "get"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "crunchbase-company-data",
+      "name": "Crunchbase: Company Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        -60
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.crunchbase.com",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "exa-recent-news",
+      "name": "Exa: Recent News",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "exa-competitors",
+      "name": "Exa: Competitors",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        260
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "sec-filings",
+      "name": "SEC Filings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        420
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://efts.sec.gov",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "merge-research",
+      "name": "Merge Research",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        720,
+        180
+      ],
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 4
+      }
+    },
+    {
+      "id": "write-deal-memo",
+      "name": "Write Deal Memo",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        960,
+        180
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        888,
+        420
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "memo-schema",
+      "name": "Memo Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1056,
+        420
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "score-against-thesis",
+      "name": "Score Against Thesis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        180
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "create-memo-doc",
+      "name": "Create Memo Doc",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        180
+      ],
+      "parameters": {
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "write-memo-into-doc",
+      "name": "Write Memo into Doc",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        180
+      ],
+      "parameters": {
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "update-affinity-fields",
+      "name": "Update Affinity Fields",
+      "type": "n8n-nodes-base.affinity",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        180
+      ],
+      "parameters": {
+        "resource": "organization",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "post-to-deal-channel",
+      "name": "Post to Deal Channel",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        180
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "New Deal in Affinity": {
+      "main": [
+        [
+          {
+            "node": "Get Deal Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Deal Details": {
+      "main": [
+        [
+          {
+            "node": "Crunchbase: Company Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Exa: Recent News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Exa: Competitors",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SEC Filings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crunchbase: Company Data": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa: Recent News": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Exa: Competitors": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "SEC Filings": {
+      "main": [
+        [
+          {
+            "node": "Merge Research",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge Research": {
+      "main": [
+        [
+          {
+            "node": "Write Deal Memo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write Deal Memo",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memo Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Write Deal Memo",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Deal Memo": {
+      "main": [
+        [
+          {
+            "node": "Score Against Thesis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Against Thesis": {
+      "main": [
+        [
+          {
+            "node": "Create Memo Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Memo Doc": {
+      "main": [
+        [
+          {
+            "node": "Write Memo into Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Memo into Doc": {
+      "main": [
+        [
+          {
+            "node": "Update Affinity Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Affinity Fields": {
+      "main": [
+        [
+          {
+            "node": "Post to Deal Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

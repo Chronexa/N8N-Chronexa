@@ -1,0 +1,268 @@
+{
+  "name": "Chronexa Feeder: Apollo CSV to V2 Engine",
+  "active": true,
+  "hasErrorWorkflow": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "9638bbf0-eec2-4975-a3be-ae1893104ffb",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "f8ab663a-1c84-4b3e-b04f-e9e5ec83e2a3",
+      "name": "Resolve Source Tab ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        176
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "43274244-41c5-448d-bbf9-18a68dce827d",
+      "name": "Fetch New Leads from Master DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        176
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "ce1ecd82-8ffe-4df4-a203-99ec0d042515",
+      "name": "Split Into Lead Items",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        672,
+        176
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8ce5683c-f52e-47bb-935e-e53a6579f501",
+      "name": "Has Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        176
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "85c321e2-082f-4d22-9231-59cfca7454e2",
+      "name": "Mark Stage Processing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "de1b3212-1c2a-4ef9-a2f3-1145c6a63ed0",
+      "name": "Send to V2 Engine",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.chronexa.io",
+        "options": {}
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "ae25acfc-e3db-487e-be9e-c648ef8cf0af",
+      "name": "Loop Over Leads",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f3b4c032-15cc-4fc5-acf9-1fbfe9e4b2c8",
+      "name": "Rollback Stage to New",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1792,
+        80
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "765cad1c-38db-482c-b214-be4305373ce8",
+      "name": "Mark Missing-Email Lead as DLQ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        272
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://api.baserow.io",
+        "options": {}
+      }
+    },
+    {
+      "id": "c8575564-378a-4a67-88a6-6a09fed71803",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        272
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Resolve Source Tab ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Source Tab ID": {
+      "main": [
+        [
+          {
+            "node": "Fetch New Leads from Master DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch New Leads from Master DB": {
+      "main": [
+        [
+          {
+            "node": "Split Into Lead Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Lead Items": {
+      "main": [
+        [
+          {
+            "node": "Has Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Email?": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Leads",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Missing-Email Lead as DLQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Stage Processing": {
+      "main": [
+        [
+          {
+            "node": "Send to V2 Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to V2 Engine": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Leads",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rollback Stage to New",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Leads": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Mark Stage Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Resolve Source Tab ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

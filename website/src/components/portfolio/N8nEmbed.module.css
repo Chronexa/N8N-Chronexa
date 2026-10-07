@@ -1,0 +1,24 @@
+/* A light app-window around n8n's canvas: cream body, ink title bar — the
+   same frame the solution-page demos use, so the embed reads as ours. */
+.window { margin:0; border-radius:10px; overflow:hidden; background:#fbfbf4; box-shadow:0 0 0 1px rgba(247,247,238,.22), 0 30px 80px -20px rgba(0,0,0,.55); }
+.bar { display:flex; align-items:center; gap:14px; height:42px; padding:0 16px; background:#173a2d; color:#f7f7ee; font-size:12.5px; }
+.dots { display:flex; gap:6px; }
+.dots i { width:9px; height:9px; border-radius:50%; background:#f7f7ee30; }
+.file { font-weight:500; letter-spacing:.01em; opacity:.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.live, .idle { margin-left:auto; display:inline-flex; align-items:center; gap:8px; flex:none; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+.live { color:#dbfa80; }
+.live::before { content:''; width:7px; height:7px; border-radius:50%; background:#dbfa80; box-shadow:0 0 0 4px #dbfa8030; }
+.idle { color:#f7f7ee90; }
+
+.stage { position:relative; height:460px; --canvas-h:460px; }
+.tall .stage { height:640px; --canvas-h:640px; }
+.placeholder { position:absolute; inset:0; padding:48px; opacity:.55; }
+/* n8n's component sizes its canvas from this custom property, and only an
+   absolute length works (a % resolves against an auto-height wrapper). The
+   other properties put our colours on its "click to interact" overlay. */
+.demo { position:relative; display:block; --n8n-workflow-min-height:var(--canvas-h); --n8n-overlay-background:rgba(23,58,45,.14); --n8n-overlay-background-color:#173a2d; --n8n-interact-button-color:#dbfa80; }
+
+@media(max-width:700px) {
+  .stage, .tall .stage { height:380px; --canvas-h:380px; }
+  .placeholder { padding:24px; }
+}

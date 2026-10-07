@@ -1,0 +1,499 @@
+{
+  "name": "Approval-Gated Contract & E-Sign",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## Approval-gated contract and e-sign\n\n**Reference architecture.**\n\nA request builds the document from a template and the deal's pricing, then stops. A person approves it in Slack before anything is sent.\n\nOnce approved, an e-signature request goes out with a covering email. When it's signed, the deal is updated, the customer gets next steps and the team is told.\n\nA sweep every hour nudges stale approvals and escalates the ones nobody has answered.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "request-contract",
+      "name": "Request Contract",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "load-deal-and-pricing",
+      "name": "Load Deal and Pricing",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        200
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "get"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "generate-contract-pdf",
+      "name": "Generate Contract PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pdf-service.example",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "ask-owner-to-approve",
+      "name": "Ask Owner to Approve",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        200
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "wait-for-approval",
+      "name": "Wait for Approval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        200
+      ],
+      "parameters": {
+        "resume": "webhook"
+      }
+    },
+    {
+      "id": "approved-",
+      "name": "Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "create-e-sign-envelope",
+      "name": "Create E-Sign Envelope",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        60
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.docusign.net",
+        "options": {}
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-contract-email",
+      "name": "Send Contract Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        60
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "mark-deal-contract-sent",
+      "name": "Mark Deal: Contract Sent",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        60
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "log-activity",
+      "name": "Log Activity",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2160,
+        60
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "tell-owner-rejected",
+      "name": "Tell Owner: Rejected",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        360
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "envelope-signed",
+      "name": "Envelope Signed",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        -240
+      ],
+      "parameters": {
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "mark-deal-signed",
+      "name": "Mark Deal: Signed",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        -240
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "send-welcome-and-next-steps",
+      "name": "Send Welcome and Next Steps",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        -240
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "tell-team-signed",
+      "name": "Tell Team: Signed",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        -240
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "hourly-sweep",
+      "name": "Hourly Sweep",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        640
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "find-stale-approvals",
+      "name": "Find Stale Approvals",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        640
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "nudge-or-escalate-",
+      "name": "Nudge or Escalate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        640
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "nudge-approver",
+      "name": "Nudge Approver",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        580
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "escalate-to-manager",
+      "name": "Escalate to Manager",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        760
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Request Contract": {
+      "main": [
+        [
+          {
+            "node": "Load Deal and Pricing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Deal and Pricing": {
+      "main": [
+        [
+          {
+            "node": "Generate Contract PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Contract PDF": {
+      "main": [
+        [
+          {
+            "node": "Ask Owner to Approve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask Owner to Approve": {
+      "main": [
+        [
+          {
+            "node": "Wait for Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Approval": {
+      "main": [
+        [
+          {
+            "node": "Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved?": {
+      "main": [
+        [
+          {
+            "node": "Create E-Sign Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tell Owner: Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create E-Sign Envelope": {
+      "main": [
+        [
+          {
+            "node": "Send Contract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Contract Email": {
+      "main": [
+        [
+          {
+            "node": "Mark Deal: Contract Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Deal: Contract Sent": {
+      "main": [
+        [
+          {
+            "node": "Log Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envelope Signed": {
+      "main": [
+        [
+          {
+            "node": "Mark Deal: Signed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Deal: Signed": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome and Next Steps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome and Next Steps": {
+      "main": [
+        [
+          {
+            "node": "Tell Team: Signed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hourly Sweep": {
+      "main": [
+        [
+          {
+            "node": "Find Stale Approvals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Stale Approvals": {
+      "main": [
+        [
+          {
+            "node": "Nudge or Escalate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nudge or Escalate?": {
+      "main": [
+        [
+          {
+            "node": "Nudge Approver",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate to Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

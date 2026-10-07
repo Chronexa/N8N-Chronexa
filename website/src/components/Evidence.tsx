@@ -40,14 +40,14 @@ const DELIVERED: Delivered[] = [
     suffix: '%',
     label: 'less manual regulatory monitoring, and 5× faster internal response',
     client: 'Corporate law firm',
-    slug: 'how-leading-law-firm-automated-regulatory-intelligence',
+    slug: 'legal-document-intake-matter-automation',
   },
   {
     value: 84,
     suffix: '%',
     label: 'less client follow-up and document chasing, 3× documents per staff member',
     client: 'CPA firm',
-    slug: 'ai-automation-tax-workflow-cpa-case-study',
+    slug: 'cpa-client-intake-to-engagement-automation',
   },
 ];
 

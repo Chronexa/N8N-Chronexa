@@ -166,7 +166,7 @@ savings     = annual cost × 40–60%   (midpoint 50% shown)`}
                 calculator cites.
               </p>
             </Link>
-            <Link href="/finance-automation" className={styles.fixCard}>
+            <Link href="/document-processing-automation" className={styles.fixCard}>
               <p className={styles.fixKicker}>For finance teams</p>
               <p className={styles.fixTitle}>Invoice &amp; AP automation</p>
               <p className={styles.fixBody}>

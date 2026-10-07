@@ -1,0 +1,541 @@
+{
+  "name": "AI Contract Review Pipeline",
+  "active": false,
+  "hasErrorWorkflow": true,
+  "reference": true,
+  "syncedAt": "2026-09-29",
+  "nodes": [
+    {
+      "id": "sticky-overview",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -504,
+        -280
+      ],
+      "parameters": {
+        "content": "## AI contract review\n\n**Reference architecture.**\n\nContracts arrive by email or a shared Drive folder. The text is split into clauses, Claude extracts the key terms into a fixed schema, and a scoring step flags non-standard or high-risk language.\n\nHigh-risk contracts get a redline summary before routing. Every contract is routed to the right reviewer by type, logged in Airtable, and the requester gets a reply.\n\n**A lawyer reviews every contract.** The workflow does the first pass.",
+        "width": 420,
+        "height": 560,
+        "color": 7
+      }
+    },
+    {
+      "id": "contract-email-in",
+      "name": "Contract Email In",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "contract-uploaded-to-drive",
+      "name": "Contract Uploaded to Drive",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "event": "fileCreated"
+      }
+    },
+    {
+      "id": "merge-intake",
+      "name": "Merge Intake",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        240,
+        120
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "extract-contract-text",
+      "name": "Extract Contract Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        480,
+        120
+      ],
+      "parameters": {
+        "operation": "pdf"
+      }
+    },
+    {
+      "id": "split-into-clauses",
+      "name": "Split Into Clauses",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "extract-key-clauses",
+      "name": "Extract Key Clauses",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        960,
+        120
+      ],
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true
+      }
+    },
+    {
+      "id": "claude-sonnet",
+      "name": "Claude Sonnet",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        888,
+        360
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "clause-schema",
+      "name": "Clause Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1056,
+        360
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "score-risk",
+      "name": "Score Risk",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "high-risk-",
+      "name": "High Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        120
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "draft-redline-summary",
+      "name": "Draft Redline Summary",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1680,
+        -40
+      ],
+      "parameters": {
+        "promptType": "define"
+      }
+    },
+    {
+      "id": "claude-sonnet-redline-",
+      "name": "Claude Sonnet (Redline)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        -260
+      ],
+      "parameters": {},
+      "retryOnFail": true
+    },
+    {
+      "id": "route-by-contract-type",
+      "name": "Route by Contract Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1920,
+        120
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.contract_type }}",
+                    "rightValue": "sales",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sales"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.contract_type }}",
+                    "rightValue": "vendor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vendor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.contract_type }}",
+                    "rightValue": "employment",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Employment"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "notify-commercial-counsel",
+      "name": "Notify Commercial Counsel",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        -80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "notify-procurement",
+      "name": "Notify Procurement",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        120
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "notify-hr-counsel",
+      "name": "Notify HR Counsel",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        320
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "log-review-in-airtable",
+      "name": "Log Review in Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2400,
+        120
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "create"
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "reply-to-requester",
+      "name": "Reply to Requester",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2640,
+        120
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "reply"
+      },
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Contract Email In": {
+      "main": [
+        [
+          {
+            "node": "Merge Intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contract Uploaded to Drive": {
+      "main": [
+        [
+          {
+            "node": "Merge Intake",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Intake": {
+      "main": [
+        [
+          {
+            "node": "Extract Contract Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Contract Text": {
+      "main": [
+        [
+          {
+            "node": "Split Into Clauses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Clauses": {
+      "main": [
+        [
+          {
+            "node": "Extract Key Clauses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Key Clauses",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clause Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Extract Key Clauses",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Key Clauses": {
+      "main": [
+        [
+          {
+            "node": "Score Risk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Risk": {
+      "main": [
+        [
+          {
+            "node": "High Risk?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Risk?": {
+      "main": [
+        [
+          {
+            "node": "Draft Redline Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route by Contract Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet (Redline)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Draft Redline Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Redline Summary": {
+      "main": [
+        [
+          {
+            "node": "Route by Contract Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Contract Type": {
+      "main": [
+        [
+          {
+            "node": "Notify Commercial Counsel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Procurement",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify HR Counsel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Commercial Counsel": {
+      "main": [
+        [
+          {
+            "node": "Log Review in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Procurement": {
+      "main": [
+        [
+          {
+            "node": "Log Review in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify HR Counsel": {
+      "main": [
+        [
+          {
+            "node": "Log Review in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Review in Airtable": {
+      "main": [
+        [
+          {
+            "node": "Reply to Requester",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
