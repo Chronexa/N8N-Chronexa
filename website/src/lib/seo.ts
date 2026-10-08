@@ -7,9 +7,12 @@ import { site } from './site';
  * a page-specific Twitter card (otherwise these pages inherit the generic homepage
  * card from layout.tsx). Single source of truth so every service page stays in sync.
  */
+/** Google cuts titles near 60 characters; the brand suffix is the first thing to go (it adds the site name itself). */
+const fitTitle = (t: string) => (t.length > 60 ? t.replace(/\s*\|\s*Chronexa$/i, '') : t);
+
 export function serviceMetadata(slug: string): Metadata {
   const data = getService(slug);
-  const title = data!.metaTitle;
+  const title = fitTitle(data!.metaTitle);
   const description = data!.metaDescription;
   return {
     title: { absolute: title },
