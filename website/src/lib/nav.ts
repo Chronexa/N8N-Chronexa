@@ -17,6 +17,7 @@ export const SERVICE_GROUPS: NavGroup[] = [
     links: [
       { label: 'AI automation services', href: '/ai-automation-agency' },
       { label: 'AI workflow automation', href: '/ai-automation' },
+      { label: 'AI consultant', href: '/ai-consultant' },
       { label: 'AI strategy consulting', href: '/ai-strategy-consulting' },
       { label: 'AI agent development', href: '/ai-agent-development' },
       { label: 'AI integration services', href: '/ai-integration-services' },
@@ -95,6 +96,7 @@ export const INSIGHT_GROUPS: NavGroup[] = [
     head: 'Start here',
     links: [
       { label: 'How we work', href: '/how-we-work' },
+      { label: 'Delivery & security', href: '/delivery-and-security' },
       { label: 'What is AI automation?', href: '/what-is-ai-automation' },
       { label: 'What AI automation costs', href: '/ai-automation-cost' },
       { label: 'What a Shopify store costs', href: '/custom-shopify-store-cost' },
@@ -114,6 +116,6 @@ export const INSIGHT_GROUPS: NavGroup[] = [
 export const AUDIT_OFFER = {
   head: 'Free AI audit',
   title: 'Not sure where to start?',
-  body: 'We map how your team works and find the one workflow worth automating first. The audit is free, and so is the first workflow.',
+  body: 'We map how your team works and find the one workflow worth automating first. The audit and first workflow are free, with the scope agreed before we build.',
   cta: 'Book a free AI audit',
 };

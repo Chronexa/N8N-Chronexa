@@ -10,9 +10,9 @@ import st from '../../styles/studio.module.css';
 import c from './doc.module.css';
 
 const SLUG = 'document-processing-automation';
-const TITLE = 'Document Data Extraction & Document Intelligence | Chronexa';
+const TITLE = 'Document Processing & Data Extraction Services | Chronexa';
 const DESCRIPTION =
-  'Documents turned into usable data: classification, layout-aware extraction, validation, confidence scoring, citations and human review — not just OCR.';
+  'Document processing services that turn PDFs, scans and forms into checked data: classification, extraction, validation, confidence scores and human review.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -74,6 +74,14 @@ const OUTSIDE = [
 ];
 
 const FAQS = [
+  {
+    q: 'What is document processing, and what is intelligent document processing?',
+    a: 'Document processing is turning incoming documents (invoices, forms, contracts, statements, scans) into data a business can use: sorting them, reading the fields, checking them and filing the result in the right system. Intelligent document processing adds AI so it can cope with layouts it has not seen before, and with documents that mix text, tables and handwriting. What matters in practice is not the reading but the checking: confidence scores, validation against your rules and a person reviewing anything uncertain.',
+  },
+  {
+    q: 'How is this different from outsourced data entry?',
+    a: 'Outsourced data entry sends documents to a vendor whose staff key the values by hand. Here the reading is done by software inside your own systems, every field is checked against your rules, and only uncertain items go to a person. It is usually faster and keeps your documents in your environment, but a team of people can still be the better answer for rare or highly irregular documents, and we will say so.',
+  },
   {
     q: 'Is this just OCR with a nicer wrapper?',
     a: 'No, and the distinction is the entire point of this page. OCR turns pixels into characters, which is the part that has largely been solved. What has not been solved is turning a document into data you can rely on: working out what the document is, whether it is a duplicate or a superseded draft, whether the table on page four continues from page three, whether the totals actually reconcile, which fields are uncertain enough to need a person, and how to keep provenance so a number can be defended a year later. In our experience the extraction step is rarely where a document pipeline fails. It fails at classification, validation or structure — all of which sit either side of OCR.',

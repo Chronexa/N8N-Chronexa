@@ -52,7 +52,7 @@ const nextConfig: NextConfig = {
       { source: '/rag-knowledge-engines', destination: '/ai-knowledge-systems', permanent: true },
       { source: '/sales-revenue-automation', destination: '/ai-sales-outreach-engine', permanent: true },
       { source: '/finance-automation', destination: '/document-processing-automation', permanent: true },
-      { source: '/ai-readiness-assessment', destination: '/business-process-automation-consulting', permanent: true },
+      { source: '/ai-readiness-assessment', destination: '/ai-strategy-consulting', permanent: true },
       { source: '/operations-automation', destination: '/business-process-automation-consulting', permanent: true },
       { source: '/applied-ml-data-science', destination: '/solutions', permanent: true },
 

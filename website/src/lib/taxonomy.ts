@@ -16,6 +16,7 @@ type Meta = { kind: NavKind; navLabel: string; order: number; title?: string; he
 const CLASSIFY: Record<string, Meta> = {
   // Growth pages 2026-10-07: the AI-integration-partner positioning (lib/growth-pages.ts).
   'ai-automation-agency': { kind: 'service', navLabel: 'AI Automation Agency', order: -6, title: 'AI Automation Agency', heroSub: 'Your AI integration partner: free audit, first workflow free, live in a week.' },
+  'ai-consultant': { kind: 'service', navLabel: 'AI Consultant', order: -5.5, title: 'AI Consultant', heroSub: 'An AI consultant who audits first and builds the first workflow free.' },
   'ai-strategy-consulting': { kind: 'service', navLabel: 'AI Strategy Consulting', order: -5, title: 'AI Strategy Consulting', heroSub: 'An ROI-ranked AI roadmap, with the first item built free.' },
   'ai-knowledge-systems': { kind: 'service', navLabel: 'AI Knowledge Systems', order: -4, title: 'AI Knowledge Systems', heroSub: 'A company brain agents can read, so they act like your experienced staff.' },
   'ai-integration-services': { kind: 'service', navLabel: 'AI Integration Services', order: -3, title: 'AI Integration Services', heroSub: 'Connect every tool you already use, legacy systems included.' },

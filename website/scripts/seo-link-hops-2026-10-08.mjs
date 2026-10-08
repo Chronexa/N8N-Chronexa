@@ -22,6 +22,8 @@ const FIELDS = ['body', 'content1', 'content2', 'technicalContent'];
 // Pages merged in this cleanup are not redirecting on production yet; resolve them locally.
 const MERGED = {
   '/blog/blog-top-automation-agencies-uae-dubai': '/blog/top-ai-automation-agencies-b2b-saas-2026',
+  '/blog/ai-automation-consultant': '/ai-consultant',
+  '/blog/generative-ai-consulting-services': '/ai-consultant',
   '/blog/make-vs-n8n-vs-zapier': '/blog/n8n-vs-make-vs-zapier-which-automation-tool-is-best-for-technical-teams',
   '/blog/what-is-hyperautomation': '/what-is-ai-automation',
   '/blog/what-is-intelligent-automation': '/what-is-ai-automation',

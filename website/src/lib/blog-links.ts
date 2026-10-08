@@ -102,6 +102,7 @@ const BUYER_RULES: [RegExp, string][] = [
   [/\bemail\b|inbox/i, 'ai-email-management'],
   [/training|upskill|ai-native|team enablement/i, 'ai-training-for-employees'],
   [/cost|pricing|price|budget|per invoice|\broi\b|payback/i, 'ai-automation-cost'],
+  [/consultant|consulting|advisor|advisory/i, 'ai-consultant'],
   [/strategy|roadmap|readiness|where to start|assessment|maturity/i, 'ai-strategy-consulting'],
 ];
 

@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'ai-workspace-setup',
     'industrial-data-predictive-maintenance',
     // Growth pages 2026-10-07 (lib/growth-pages.ts)
-    'how-we-work', 'ai-automation-agency', 'ai-strategy-consulting', 'ai-knowledge-systems',
+    'how-we-work', 'ai-automation-agency', 'ai-strategy-consulting', 'ai-consultant', 'ai-knowledge-systems',
     'ai-integration-services', 'custom-mcp-server-development', 'ai-agent-development',
     'ai-roi-calculator', 'automated-reporting', 'ai-email-management', 'ai-training-for-employees',
     'tech-stack-migration', 'what-is-ai-automation', 'ai-automation-cost', 'document-pipeline',

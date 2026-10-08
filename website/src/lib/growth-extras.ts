@@ -63,6 +63,15 @@ export const EXTRAS: Record<string, Extra> = {
       result: [{ k: 'Ideas cut from the list', v: '13' }, { k: 'First result', v: 'Day 7' }, { k: 'Hours back per month', v: '220' }] },
     buildsStyle: 'list',
   },
+  'ai-consultant': {
+    accent: '#f6c1d9',
+    visual: { type: 'chat', title: 'ASK AN AI CONSULTANT', q: 'We have 25 AI ideas from a workshop. Where do we start?', steps: ['Mapped hours by team and task', 'Scored each idea on return and risk', 'Checked tools and data access'], a: 'Start with weekly client reporting: it frees the most hours and uses data you already have. The website chatbot can wait.', sources: ['Time map', 'Roadmap v1', 'Tool review'] },
+    tools: ['Slack', 'Gmail', 'HubSpot', 'Notion', 'Google Sheets', 'QuickBooks', 'Claude'],
+    story: { label: 'EXAMPLE ENGAGEMENT', who: 'A 45-person professional services firm', situation: 'Leadership had a long list of AI ideas from an offsite and two earlier vendor proposals that never shipped. Nobody could say which idea would pay back first.',
+      built: ['A two-session audit mapping hours by team and task', 'A roadmap ranked by return, with the risky ideas parked', 'The top item, automated client reporting, built free inside the first week'],
+      result: [{ k: 'Ideas parked', v: '14' }, { k: 'First live workflow', v: 'Day 7' }, { k: 'Hours back per month', v: '180' }] },
+    buildsStyle: 'list',
+  },
   'ai-knowledge-systems': {
     accent: '#b8f2c8',
     visual: { type: 'chat', title: 'ASK THE COMPANY BRAIN', q: 'What did we charge the last three clients for a full audit, and what discount rules apply?', steps: ['Searched 412 past proposals', 'Read pricing policy v7', 'Checked who may approve discounts'], a: '$18k, $22k and $19.5k. Discounts above 10% need a partner. One of the three had a multi-year rate.', sources: ['Proposal_Acme_2026.pdf', 'Pricing policy v7', 'Approval matrix'] },

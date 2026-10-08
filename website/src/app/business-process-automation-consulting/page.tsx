@@ -10,8 +10,8 @@ import st from '../../styles/studio.module.css';
 import c from './bpa.module.css';
 
 const SLUG = 'business-process-automation-consulting';
-const TITLE = 'Business Process Automation Consulting | Chronexa';
-const DESCRIPTION = 'Find and build the business automations worth doing: approvals, reconciliation, onboarding, document review, reporting and cross-system workflows.';
+const TITLE = 'Business Process Automation Consulting & Services | Chronexa';
+const DESCRIPTION = 'Business process automation consultants and services: we map the process, recommend what to automate, then build it. Assessment first, fixed-scope build.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE }, description: DESCRIPTION,
@@ -58,6 +58,10 @@ const FAQS = [
   { q: 'Do you replace our existing software?', a: 'Usually no. Most business-process problems live between systems: the email before the CRM update, the spreadsheet between billing and finance, or the approval after a form submission. We connect and clarify the systems you already operate. Replacement is recommended only when the system itself is the constraint.' },
   { q: 'Where does AI belong in a workflow?', a: 'Where an input varies but the output can still be checked: classifying a request, extracting fields, drafting a response, summarising context or identifying a likely exception. Deterministic rules handle exact decisions. People retain ambiguous, high-impact judgement. Calling the whole workflow AI usually hides these useful boundaries.' },
   { q: 'Can you automate a system with no API?', a: 'Sometimes. Scheduled exports, database access, email interfaces and controlled browser automation are possible fallbacks. They are less reliable than a supported API and must be assessed honestly. We will not present a fragile screen-clicking robot as a durable integration without documenting that dependency.' },
+  { q: 'What does a business process automation consultant do?', a: 'A business process automation consultant studies how a piece of work really gets done, finds the steps that are repetitive, rule-based and slow, and recommends which to automate, which to simplify and which to leave with people. A good one then helps build or oversee the implementation and measures whether it worked. Our assessment produces the process map and a written recommendation you keep.' },
+  { q: 'How much does business process automation consulting cost?', a: 'It depends on how many processes, systems and exceptions are involved. We scope the assessment first, then give a fixed price for the first build. Because the recommendation is yours either way, you can compare our scope with anyone else’s. Our page on what AI automation costs explains what moves the price.' },
+  { q: 'What is the difference between business process automation and RPA?', a: 'Business process automation is the goal: moving work through a process with less manual effort. Robotic process automation (RPA) is one technique, software robots that imitate clicks on a screen. Many processes are better served by direct integrations, workflow tools and AI that reads documents, with RPA kept for systems that offer no other way in.' },
+  { q: 'How long does a business process automation project take?', a: 'A single well-understood process can be mapped in a working session or two and a first automation built within weeks. Larger programmes are delivered in increments so you see working results regularly rather than at the end.' },
   { q: 'How do we know the automation worked?', a: 'Before building, we agree what a correct completion looks like: the record created, the amounts reconciled, the decision logged, the exception routed or the report delivered. Production measures are attached to that outcome, alongside failure rate and manual exceptions—not to the number of workflow runs.' },
 ];
 
@@ -83,6 +87,8 @@ export default function Page() {
         <div className={st.heroActions}><BookButton location={`bpa-hero:${SLUG}`} className={st.primary}>Audit one process <span aria-hidden="true">↗</span></BookButton><a href="#recognise" className={st.ghost}>See the patterns <span aria-hidden="true">↓</span></a></div>
         <p className={st.heroNote}>Assessment first. Implementation when the evidence says build.<span>You own the process map and recommendation whether or not we implement it.</span></p>
       </div><ProcessAudit /></section>
+
+      <section className={st.band} aria-labelledby="s0"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />THE SHORT ANSWER</p><h2 id="s0">What business process automation<br /><em>consulting actually is.</em></h2></div><p>Business process automation consulting is the work of finding which of your repeated processes should be automated, designing how, and making sure it keeps working. It starts with the process, not the software.</p></div><div className={c.decision}><article><h3>Consulting</h3><p>We map one real process, including its exceptions, and write a recommendation: automate, assist, simplify first or leave human.</p></article><article><h3>Services</h3><p>If a build is justified, we implement it on the systems you already run, with approvals, failure handling and logs, for a fixed price.</p></article><article><h3>Company, not just a tool</h3><p>The same team maps, builds and supports it, so the process knowledge is never lost between a consultant and an implementer.</p></article></div></section>
 
       <div className={st.strip} aria-label="Typical workflow surfaces"><span>THE WORK.<br /><b>WHERE IT HIDES.</b></span><b>Email</b><span>Spreadsheets</span><span>Approvals</span><span>Documents</span><span>APIs</span><span>Queues</span></div>
 
