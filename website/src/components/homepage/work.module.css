@@ -24,21 +24,11 @@
 
 /* ── Stage (right, pinned) ── */
 .stageCol { position: relative; }
-.stage { position: sticky; top: calc(50vh - 300px); height: 600px; }
+.stage { position: sticky; top: calc(50vh - 250px); height: 500px; }
 .slide { position: absolute; inset: 0; display: flex; align-items: center; opacity: 0; transform: translateY(14px) scale(0.985); transition: opacity 520ms ease, transform 620ms cubic-bezier(.2,.7,.2,1); pointer-events: none; }
 .slide.on { opacity: 1; transform: none; }
 .counter { position: absolute; right: 0; bottom: -2.4rem; margin: 0; font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--h-ink); font-weight: 600; }
 .counter span { color: var(--h-muted); font-weight: 400; }
-
-/* ── Scene: the demo window floats on its painting, collage-style ── */
-.scene { position: relative; width: 100%; height: 100%; }
-.scene > .sceneArt { position: absolute; top: 0; right: 0; width: 70%; height: 100%; border-radius: 26px; box-shadow: 0 40px 100px -40px rgba(0,0,0,.8); }
-.scene > .sceneArt::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(200deg, transparent 45%, rgba(10,12,10,.45)); pointer-events: none; }
-.sceneDemo { position: absolute; left: 0; bottom: 34px; width: 80%; z-index: 2; }
-.slide .scene { transform: translateX(18px); transition: transform 900ms cubic-bezier(.2,.7,.2,1); }
-.slide.on .scene { transform: none; }
-.slide .sceneArt > img { transform: scale(1.08); transition: transform 2.4s cubic-bezier(.2,.7,.2,1); }
-.slide.on .sceneArt > img { transform: scale(1); }
 
 /* ── Window chrome ── */
 .window {
@@ -197,9 +187,6 @@
   .showcase { grid-template-columns: 1fr; gap: 0; }
   .stageCol { display: none; }
   .inline { display: block; margin-bottom: 1.8rem; }
-  .inline .scene { height: auto; }
-  .inline .scene > .sceneArt { position: relative; width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 20px; }
-  .inline .sceneDemo { position: relative; left: auto; bottom: auto; width: 92%; margin: -22% auto 0; }
   .chapter { min-height: 0; opacity: 1; padding-block: 0 4.5rem; }
   .pane { padding: 1rem; }
   .report, .doc, .sales { grid-template-columns: 1fr; }

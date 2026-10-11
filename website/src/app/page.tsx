@@ -9,7 +9,6 @@ import RoiEstimator from '../components/homepage/RoiEstimator';
 import ServicesExplorer from '../components/homepage/ServicesExplorer';
 import RevealRoot from '../components/homepage/RevealRoot';
 import ArtPlate from '../components/visual/ArtPlate';
-import IndustryIndex from '../components/homepage/IndustryIndex';
 import type { ArtName } from '../lib/art';
 import { INDUSTRY_GROUPS, SERVICE_GROUPS } from '../lib/nav';
 import { founders, site } from '../lib/site';
@@ -46,12 +45,6 @@ const GROUP_LINES: Record<string, string> = {
   'AI & automation': 'AI that does the work inside your business.',
   'Business solutions': 'Systems built for one team or one industry, end to end.',
   'Engineering & teams': 'Software, brands and the people who keep AI working.',
-};
-
-const GROUP_ART: Record<string, ArtName> = {
-  'AI & automation': 'human-machine',
-  'Business solutions': 'ocean-city',
-  'Engineering & teams': 'desert-explorer',
 };
 
 const SERVICE_LINES: Record<string, string> = {
@@ -103,10 +96,10 @@ const COMPARE = {
 };
 
 const STEPS = [
-  ['Free AI audit', 'We map how your company works and show you where AI pays back first, in numbers.', 'light-door'],
-  ['First build', 'One system in production on your tools and data, usually within weeks, so you judge us on results.', 'phone-portal'],
-  ['Ongoing partner', 'We become your AI engineering team. Each next build is quoted against what it unlocks.', 'astronaut-clouds'],
-] as const satisfies readonly (readonly [string, string, ArtName])[];
+  ['Free AI audit', 'We map how your company works and show you where AI pays back first, in numbers.'],
+  ['First build', 'One system in production on your tools and data, usually within weeks, so you judge us on results.'],
+  ['Ongoing partner', 'We become your AI engineering team. Each next build is quoted against what it unlocks.'],
+] as const;
 
 const FAQS: [string, string][] = [
   ['We already use ChatGPT, Claude and Cursor. Why do we need you?', 'Those tools make one person faster. They don’t make a company run on AI. That takes choosing the right model for each task, connecting AI to your systems and data, building the checks that catch wrong output, and designing for compliance. That engineering is what we do, so your people can run the business instead of the plumbing.'],
@@ -117,18 +110,6 @@ const FAQS: [string, string][] = [
   ['Why don’t you name your clients?', 'Most of our work runs under NDA. We describe each system by sector, what we built and the outcome, and we are happy to walk you through the engineering on a call.'],
   ['Who owns what you build?', 'You do: the code, the workflows, the data and the accounts they run in.'],
 ];
-
-const INDUSTRY_ART: Record<string, ArtName> = {
-  '/legal-ai-automation': 'doorways',
-  '/cpa-accounting-automation': 'glitter-figure',
-  '/insurance-claims-triage-automation': 'astronaut-drift',
-  '/financial-services-automation': 'galaxy-reach',
-  '/investment-research-automation': 'spiral-sky',
-  '/vc-pe-crm-automation': 'floating-islands',
-  '/d2c-ecommerce-automation': 'pink-smoke',
-  '/property-management-automation': 'watermill',
-  '/industrial-data-predictive-maintenance': 'golden-train',
-};
 
 const INSIGHT_SLUGS = ['ai-sales-agent', 'ai-agents-for-business', 'fine-tuning-vs-rag', 'generative-ai-consulting-services'];
 
@@ -195,7 +176,7 @@ export default async function Home() {
             <p className={s.lead}>Strategy, engineering and the people to run it. Pick a practice, or let the free audit tell you where to start.</p>
           </div>
           <div data-reveal>
-            <ServicesExplorer groups={SERVICE_GROUPS} groupLines={GROUP_LINES} serviceLines={SERVICE_LINES} groupArt={GROUP_ART} />
+            <ServicesExplorer groups={SERVICE_GROUPS} groupLines={GROUP_LINES} serviceLines={SERVICE_LINES} />
           </div>
         </div>
       </section>
@@ -224,13 +205,13 @@ export default async function Home() {
           </div>
           <ol className={s.reasons}>
             {WHY.map(([h, p, art, pos], i) => (
-              <li key={h} data-reveal style={{ ['--i' as string]: i }}>
-                <div className={s.reasonArt}>
-                  <ArtPlate name={art} position={pos} className={s.reasonPlate} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 20vw" decorative />
-                  <span>{String(i + 1).padStart(2, '0')}</span>
+              <li key={h} style={{ ['--i' as string]: i }}>
+                <ArtPlate name={art} position={pos} className={s.reasonPlate} unveil={false} still sizes="(max-width: 760px) 100vw, 40vw" decorative />
+                <div className={s.reasonText}>
+                  <span>{String(i + 1).padStart(2, '0')} <small>/ 05</small></span>
+                  <h3>{h}</h3>
+                  <p>{p}</p>
                 </div>
-                <h3>{h}</h3>
-                <p>{p}</p>
               </li>
             ))}
           </ol>
@@ -260,7 +241,6 @@ export default async function Home() {
 
       {/* 05 What it's worth — a calculator floating on the green band */}
       <section className={s.worth}>
-        <ArtPlate name="sunflower-sun" className={s.worthFilm} unveil={false} sizes="100vw" decorative />
         <div className="container">
           <div className={s.worthCard} data-reveal>
             <div className={s.worthIntro}>
@@ -279,9 +259,9 @@ export default async function Home() {
           <Label n="06">Solutions by industry</Label>
           <h2>Built for how <em>your industry</em> already works.</h2>
         </div>
-        <div className="container">
-          <IndustryIndex links={industries.map((l) => ({ ...l, art: INDUSTRY_ART[l.href] }))} />
-        </div>
+        <nav className={`container ${s.industryLinks}`} aria-label="Choose your industry">
+          {industries.map(l => <Link key={l.href} href={l.href}>{l.label}<span aria-hidden="true">↗</span></Link>)}
+        </nav>
       </section>
 
       {/* 07 How we work — three nodes on one thread */}
@@ -295,10 +275,9 @@ export default async function Home() {
             <p className={s.lead}>No packages and no hourly rates. You see us work before you pay us, and every quote is sized against what it saves you.</p>
           </div>
           <ol className={s.path} data-reveal>
-            {STEPS.map(([t, b, art], i) => (
+            {STEPS.map(([t, b], i) => (
               <li key={t}>
                 <span className={s.node}>{String(i + 1).padStart(2, '0')}</span>
-                <ArtPlate name={art} className={s.stepPlate} sizes="(max-width: 900px) 100vw, 30vw" decorative />
                 <h3>{t}</h3>
                 <p>{b}</p>
               </li>
@@ -362,7 +341,6 @@ export default async function Home() {
             <h2>What leaders <em>ask us first.</em></h2>
             <p className={s.lead}>Still deciding? Ask us directly. You’ll talk to a senior engineer, not a sales rep.</p>
             <BookButton location="home-faq" className={s.textLink}>Book a strategy call →</BookButton>
-            <ArtPlate name="blooming-horn" className={s.faqPlate} position="62% 50%" sizes="(max-width: 900px) 100vw, 34vw" caption="Ask anything. A senior engineer answers." decorative />
           </div>
           <div>
             {FAQS.map(([q, a]) => (
@@ -377,7 +355,7 @@ export default async function Home() {
 
       {/* Close — back into the film */}
       <section className={s.close}>
-        <ArtPlate name="cloud-tram" className={s.closeArt} unveil={false} sizes="100vw" decorative />
+        <ArtPlate name="cloud-tram" className={s.closeArt} position="30% 50%" unveil={false} sizes="100vw" decorative />
         <div className={`container ${s.closeInner}`} data-reveal>
           <h2>Let AI do the work. <em>We’ll make sure it’s right.</em></h2>
           <p>30 minutes with a senior engineer. You’ll leave knowing where AI pays back first in your business, whether or not you hire us.</p>
