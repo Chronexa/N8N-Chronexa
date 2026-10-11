@@ -263,3 +263,13 @@
   .heroStat + .heroStat { border-left: none; padding-left: 0; }
   .spotStats { flex-wrap: wrap; gap: var(--spacing-md); }
 }
+
+/* Art beside the hero copy (2026-10-11): a framed painting from the art library, chosen by topic. */
+.heroGrid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.heroGrid > :not(:first-child):not(.heroArt) { grid-column: 1 / -1; }
+.heroArt { aspect-ratio: 4 / 5; border-radius: 28px; box-shadow: 0 50px 110px -50px rgba(0, 0, 0, 0.85); }
+.h1 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.022em; }
+@media (max-width: 960px) {
+  .heroGrid { grid-template-columns: 1fr; }
+  .heroArt { aspect-ratio: 16 / 10; order: -1; }
+}

@@ -1,43 +1,43 @@
 /* Workspace console. A light app-window on the dark ink hero — matches the
    command-centre / triage-bench pattern on every other solution page, so the
    hero element separates from the background instead of sinking into it. */
-.console { border-radius:12px; background:#fbfbf4; color:#173a2d; overflow:hidden; box-shadow:0 0 0 1px rgba(247,247,238,.22), 0 30px 70px -24px rgba(0,0,0,.6); }
-.top { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:13px 18px; background:#173a2d; color:#dbfa80; font-size:11px; font-weight:700; letter-spacing:.08em; }
-.top span:last-child { color:#9fb79d; font-weight:600; }
+.console { border-radius:12px; background:#ffffff; color:#121311; overflow:hidden; box-shadow:0 0 0 1px rgba(247,247,238,.22), 0 30px 70px -24px rgba(0,0,0,.6); }
+.top { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:13px 18px; background:#121311; color:#67b035; font-size:11px; font-weight:700; letter-spacing:.08em; }
+.top span:last-child { color:#9aa19a; font-weight:600; }
 
-.tabs { display:grid; grid-template-columns:repeat(4,1fr); background:#eeeee3; border-bottom:1px solid #173a2d1a; }
-.tabs button { position:relative; min-height:48px; padding:10px 8px; border:0; border-bottom:3px solid transparent; color:#5c685e; background:none; font:600 11px/1.25 var(--font-sans); cursor:pointer; transition:background .15s, color .15s; }
-.tabs button + button { border-left:1px solid #173a2d14; }
-.tabs button[aria-pressed='true'] { border-bottom-color:#173a2d26; color:#173a2d; background:#fbfbf4; }
-.tabs button:hover { color:#173a2d; background:#ffffff90; }
-.tabs button:focus-visible { outline:2px solid #173a2d; outline-offset:-2px; }
-.progress { position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#173a2d; transform-origin:left; }
+.tabs { display:grid; grid-template-columns:repeat(4,1fr); background:#f3f1ea; border-bottom:1px solid #1213111a; }
+.tabs button { position:relative; min-height:48px; padding:10px 8px; border:0; border-bottom:3px solid transparent; color:#6b6862; background:none; font:600 11px/1.25 var(--font-sans); cursor:pointer; transition:background .15s, color .15s; }
+.tabs button + button { border-left:1px solid #12131114; }
+.tabs button[aria-pressed='true'] { border-bottom-color:#12131126; color:#121311; background:#ffffff; }
+.tabs button:hover { color:#121311; background:#ffffff90; }
+.tabs button:focus-visible { outline:2px solid #121311; outline-offset:-2px; }
+.progress { position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#121311; transform-origin:left; }
 .progressRun { animation:fillBar linear forwards; }
 @keyframes fillBar { from { transform:scaleX(0); } to { transform:scaleX(1); } }
 @media(prefers-reduced-motion:reduce) { .progressRun { animation:none; } }
 
-.panel { padding:20px; background:#f0f1e6; }
-.prompt { display:flex; gap:10px; padding:14px; border:1px solid #173a2d1f; border-radius:6px; background:#fbfbf4; }
-.prompt span { color:#2f6b45; font-size:16px; font-weight:700; }
-.prompt p { margin:0; color:#173a2d; font:500 13px/1.5 var(--font-mono); }
+.panel { padding:20px; background:#f3f1ea; }
+.prompt { display:flex; gap:10px; padding:14px; border:1px solid #1213111f; border-radius:6px; background:#ffffff; }
+.prompt span { color:#2f6b3a; font-size:16px; font-weight:700; }
+.prompt p { margin:0; color:#121311; font:500 13px/1.5 var(--font-mono); }
 
 .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
-.grid section { padding:14px; border:1px solid #173a2d1a; border-radius:6px; background:#fbfbf4; }
-.grid small { display:block; margin-bottom:11px; color:#6b7a6c; font-size:9px; font-weight:700; letter-spacing:.1em; }
-.grid p { display:flex; align-items:center; gap:8px; margin:8px 0; color:#41564a; font-size:11.5px; line-height:1.4; }
-.grid b { display:grid; place-items:center; width:18px; height:18px; flex:none; border:1px solid #173a2d33; border-radius:4px; color:#173a2d; background:#dbfa8033; font:700 8px/1 var(--font-mono); }
+.grid section { padding:14px; border:1px solid #1213111a; border-radius:6px; background:#ffffff; }
+.grid small { display:block; margin-bottom:11px; color:#6b6862; font-size:9px; font-weight:700; letter-spacing:.1em; }
+.grid p { display:flex; align-items:center; gap:8px; margin:8px 0; color:#6b6862; font-size:11.5px; line-height:1.4; }
+.grid b { display:grid; place-items:center; width:18px; height:18px; flex:none; border:1px solid #12131133; border-radius:4px; color:#121311; background:#67b03533; font:700 8px/1 var(--font-mono); }
 
-.gate { display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; margin-top:12px; padding:12px 14px; border-radius:6px; background:#dfe3be; color:#173a2d; }
+.gate { display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; margin-top:12px; padding:12px 14px; border-radius:6px; background:#e3efd6; color:#121311; }
 .gate span { font-size:9px; font-weight:800; letter-spacing:.09em; }
 .gate strong { font-size:12px; }
-.gate button { padding:7px 10px; border:1px solid #173a2d55; border-radius:4px; color:#173a2d; background:transparent; font:700 9px/1 var(--font-sans); cursor:default; }
-.gateNote { margin:10px 0 0; padding:0; color:#6b7a6c; font-size:11px; line-height:1.55; }
-.note { margin:0; padding:14px 20px 17px; color:#6b7a6c; font-size:10px; }
+.gate button { padding:7px 10px; border:1px solid #12131155; border-radius:4px; color:#121311; background:transparent; font:700 9px/1 var(--font-sans); cursor:default; }
+.gateNote { margin:10px 0 0; padding:0; color:#6b6862; font-size:11px; line-height:1.55; }
+.note { margin:0; padding:14px 20px 17px; color:#6b6862; font-size:10px; }
 
 @media(max-width:700px) {
  .tabs { grid-template-columns:1fr 1fr; }
  .tabs button:nth-child(odd) { border-left:0; }
- .tabs button:nth-child(n+3) { border-top:1px solid #173a2d14; }
+ .tabs button:nth-child(n+3) { border-top:1px solid #12131114; }
  .grid { grid-template-columns:1fr; }
  .gate { grid-template-columns:1fr; }
  .gate button { justify-self:start; }

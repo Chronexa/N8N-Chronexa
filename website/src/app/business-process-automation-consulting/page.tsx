@@ -1,24 +1,40 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { site } from '../../lib/site';
-import BookButton from '../../components/BookButton';
-import LeadForm from '../../components/LeadForm';
 import TrackView from '../../components/TrackView';
 import ScrollDepth from '../../components/ScrollDepth';
+import ArtPlate from '../../components/visual/ArtPlate';
+import {
+  AlsoExplore, AnswerCard, Deliverables, DemoStage, Label, ServiceClose, ServiceFaq, ServiceHero, ServiceSchema,
+  Story, Title, WontBuild, serviceMetadata, svc,
+} from '../../components/service/ServiceParts';
+import { ART } from '../../lib/art';
 import ProcessAudit from './ProcessAudit';
-import st from '../../styles/studio.module.css';
 import c from './bpa.module.css';
+
+/**
+ * Business process automation consulting (rebuilt 2026-10-11 on the service design system). All the
+ * studio version's arguments stay: the six patterns, the six-answer map, the layers around the happy
+ * path, the honest recommendation and the method's origin. Art: the doorway of light in the river.
+ */
 
 const SLUG = 'business-process-automation-consulting';
 const TITLE = 'Business Process Automation Consulting & Services | Chronexa';
 const DESCRIPTION = 'Business process automation consultants and services: we map the process, recommend what to automate, then build it. Assessment first, fixed-scope build.';
+const HERO = ART['light-door'];
 
-export const metadata: Metadata = {
-  title: { absolute: TITLE }, description: DESCRIPTION,
-  alternates: { canonical: `/${SLUG}` },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: `/${SLUG}`, type: 'website', images: [site.ogImage] },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [site.ogImage] },
-};
+export const metadata = serviceMetadata({ slug: SLUG, title: TITLE, description: DESCRIPTION, art: HERO.kind === 'image' ? HERO.src : HERO.poster });
+
+const SHORT = [
+  ['Consulting', 'We map one real process, including its exceptions, and write a recommendation: automate, assist, simplify first or leave human.'],
+  ['Services', 'If a build is justified, we implement it on the systems you already run, with approvals, failure handling and logs, for a fixed price.'],
+  ['Company, not just a tool', 'The same team maps, builds and supports it, so the process knowledge is never lost between a consultant and an implementer.'],
+] as const;
+
+const VERDICTS = [
+  ['Automate', 'High frequency, digital inputs, stable rules, expensive repetition and a clear exception owner.'],
+  ['Assist', 'Let the system collect and prepare the evidence, then put a named person at the decision boundary.'],
+  ['Leave human', 'Rare, ambiguous, relationship-heavy or high-impact work where judgement is the value rather than the delay.'],
+] as const;
+
+const SURFACES = ['Email', 'Spreadsheets', 'Approvals', 'Documents', 'APIs', 'Queues'];
 
 const PATTERNS = [
   ['01', 'The inbox is the queue', 'Work arrives as email, then somebody reads it, decides what it is, forwards it and updates a separate tracker.'],
@@ -66,48 +82,105 @@ const FAQS = [
 ];
 
 export default function Page() {
-  const schema = { '@context': 'https://schema.org', '@graph': [
-    { '@type': 'Service', '@id': `${site.url}/${SLUG}#service`, name: 'Business Process Automation Consulting and Implementation', serviceType: 'Business process assessment, workflow automation and systems integration', description: DESCRIPTION, url: `${site.url}/${SLUG}`, provider: { '@type': 'Organization', name: site.name, url: site.url }, areaServed: 'Worldwide' },
-    { '@type': 'BreadcrumbList', itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url }, { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${site.url}/solutions` },
-      { '@type': 'ListItem', position: 3, name: 'Business Process Automation', item: `${site.url}/${SLUG}` },
-    ] },
-    { '@type': 'FAQPage', mainEntity: FAQS.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
-  ] };
-
   return (
-    <div className={st.page}>
-      <TrackView event="service_view" props={{ slug: SLUG, name: 'Business Process Automation', design: 'studio-v1' }} />
+    <main className={svc.svc}>
+      <TrackView event="service_view" props={{ slug: SLUG, name: 'Business Process Automation', design: 'service-world-v1' }} />
       <ScrollDepth pageType="service" slug={SLUG} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
-      <section className={st.hero} aria-labelledby="h"><div>
-        <p className={st.eyebrow}><i />BUSINESS PROCESS AUTOMATION</p>
-        <h1 id="h">Do not automate the mess.<br /><em>Find the work worth fixing.</em></h1>
-        <p className={st.heroCopy}>The useful first question is not which tool to buy. It is which repeated work has a clear trigger, trustworthy inputs, a boundary for judgement and somebody who owns the exceptions. We map that first—then build only what survives the test.</p>
-        <div className={st.heroActions}><BookButton location={`bpa-hero:${SLUG}`} className={st.primary}>Audit one process <span aria-hidden="true">↗</span></BookButton><a href="#recognise" className={st.ghost}>See the patterns <span aria-hidden="true">↓</span></a></div>
-        <p className={st.heroNote}>Assessment first. Implementation when the evidence says build.<span>You own the process map and recommendation whether or not we implement it.</span></p>
-      </div><ProcessAudit /></section>
+      <ServiceSchema slug={SLUG} name="Business Process Automation Consulting and Implementation"
+        serviceType={['Business process assessment', 'Workflow automation', 'Systems integration']} description={DESCRIPTION} faqs={FAQS} />
 
-      <section className={st.band} aria-labelledby="s0"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />THE SHORT ANSWER</p><h2 id="s0">What business process automation<br /><em>consulting actually is.</em></h2></div><p>Business process automation consulting is the work of finding which of your repeated processes should be automated, designing how, and making sure it keeps working. It starts with the process, not the software.</p></div><div className={c.decision}><article><h3>Consulting</h3><p>We map one real process, including its exceptions, and write a recommendation: automate, assist, simplify first or leave human.</p></article><article><h3>Services</h3><p>If a build is justified, we implement it on the systems you already run, with approvals, failure handling and logs, for a fixed price.</p></article><article><h3>Company, not just a tool</h3><p>The same team maps, builds and supports it, so the process knowledge is never lost between a consultant and an implementer.</p></article></div></section>
+      <ServiceHero
+        slug={SLUG} eyebrow="BUSINESS PROCESS AUTOMATION" h1={['Do not automate the mess.', 'Find the work worth fixing.']}
+        sub="The useful first question is not which tool to buy. It is which repeated work has a clear trigger, trustworthy inputs, a boundary for judgement and somebody who owns the exceptions. We map that first, then build only what survives the test."
+        art={HERO.kind === 'image' ? HERO.src : HERO.poster} artAlt={HERO.alt} artPos="50% 45%" tall
+        cta="Audit one process" seeLabel="Test a process"
+        offer={['Assessment first', 'You own the map', 'Fixed-scope build']}
+      />
+      <AnswerCard items={[
+        ['What it is', 'Consultants who map one real process, recommend what to automate, then build it.'],
+        ['Who it’s for', 'Operations, finance and delivery leaders whose teams run work through inboxes, spreadsheets and approval threads.'],
+        ['What you get', 'A process map and written recommendation you keep, and a fixed-scope build if the evidence says build.'],
+        ['How it’s priced', 'Assessment scoped first. Any build fixed-price, agreed in writing.'],
+        ['How fast', 'One process mapped in a working session or two. A first automation within weeks.'],
+      ]} />
 
-      <div className={st.strip} aria-label="Typical workflow surfaces"><span>THE WORK.<br /><b>WHERE IT HIDES.</b></span><b>Email</b><span>Spreadsheets</span><span>Approvals</span><span>Documents</span><span>APIs</span><span>Queues</span></div>
+      <section className={svc.band} aria-labelledby="a-h">
+        <div className={svc.head}>
+          <div><Label n="01">THE SHORT ANSWER</Label><h2 id="a-h"><Title t={['What business process automation consulting', 'actually is.']} /></h2></div>
+          <p className={svc.lead}>Business process automation consulting is the work of finding which of your repeated processes should be automated, designing how, and making sure it keeps working. It starts with the process, not the software.</p>
+        </div>
+        <div className={svc.tiles}>{SHORT.map(([h, p]) => <article key={h} className={svc.tile}><h3>{h}</h3><p>{p}</p></article>)}</div>
+        <div className={c.surfaces} aria-label="Typical workflow surfaces"><span>The work. <b>Where it hides.</b></span><ul>{SURFACES.map((x) => <li key={x}>{x}</li>)}</ul></div>
+      </section>
 
-      <section id="recognise" className={st.band} aria-labelledby="s1"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />01 / RECOGNISE THE PROCESS</p><h2 id="s1">Six signs the work is<br /><em>already asking for a system.</em></h2></div><p>These are not departments or software categories. They are the shapes manual work takes across finance, operations, sales, compliance and client delivery.</p></div><div className={c.patterns}>{PATTERNS.map(([n,h,p]) => <article className={c.pattern} key={h}><span>{n}</span><h3>{h}</h3><p>{p}</p></article>)}</div></section>
+      <DemoStage n="02" eyebrow="TEST A PROCESS" h2={['Put one process', 'through the audit.']}
+        intro="Pick a process. See which checks it passes, what the system would take over, and what stays with a person. Assessment first, implementation when the evidence says build."
+        note="You own the process map and recommendation whether or not we implement it.">
+        <ProcessAudit />
+      </DemoStage>
 
-      <section className={`${st.band} ${st.sunken}`} aria-labelledby="s2"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />02 / MAP BEFORE SOFTWARE</p><h2 id="s2">A process is six answers,<br /><em>not a flowchart.</em></h2></div><p>If any one of these is missing, the automation will eventually improvise, stall or create a second manual queue nobody planned for.</p></div><ol className={c.map}>{MAP.map(([n,h,p],i) => <li key={h}><span>{n}</span><h3>{h}</h3><p>{p}</p>{i < MAP.length - 1 ? <i aria-hidden="true" /> : null}</li>)}</ol></section>
+      <section id="recognise" className={svc.band} aria-labelledby="r-h">
+        <div className={svc.head}>
+          <div><Label n="03">RECOGNISE THE PROCESS</Label><h2 id="r-h"><Title t={['Six signs the work is', 'already asking for a system.']} /></h2></div>
+          <p className={svc.lead}>These are not departments or software categories. They are the shapes manual work takes across finance, operations, sales, compliance and client delivery.</p>
+        </div>
+        <div className={c.patterns}>
+          <ArtPlate name="pigeon-rush" className={c.patternsArt} position="50% 35%" sizes="(max-width: 1080px) 100vw, 30vw" decorative />
+          {PATTERNS.map(([n, h, p]) => <article key={h}><span>{n}</span><h3>{h}</h3><p>{p}</p></article>)}
+        </div>
+      </section>
 
-      <section className={st.band} aria-labelledby="s3"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />03 / WHAT GETS BUILT</p><h2 id="s3">The workflow around<br /><em>the happy path.</em></h2></div><p>The diagram that sells automation usually shows the normal run. Production work is the intake, ownership, recovery and evidence around it.</p></div><div className={c.layers}>{LAYERS.map(([n,h,p]) => <article className={c.layer} key={h}><span>{n}</span><div><h3>{h}</h3><p>{p}</p></div></article>)}</div></section>
+      <section className={`${svc.band} ${svc.sunken}`} aria-labelledby="m-h">
+        <div className={c.mapWrap}>
+          <div>
+            <Label n="04">MAP BEFORE SOFTWARE</Label>
+            <h2 id="m-h"><Title t={['A process is six answers,', 'not a flowchart.']} /></h2>
+            <p className={svc.lead} style={{ marginTop: '1.2rem' }}>If any one of these is missing, the automation will eventually improvise, stall or create a second manual queue nobody planned for.</p>
+            <ArtPlate name="floating-islands" className={c.mapArt} caption="Six answers, each one joined to the next." sizes="(max-width: 1080px) 100vw, 40vw" />
+          </div>
+          <ol className={c.map}>{MAP.map(([n, h, p]) => <li key={h}><span>{n}</span><div><h3>{h}</h3><p>{p}</p></div></li>)}</ol>
+        </div>
+      </section>
 
-      <section className={`${st.band} ${st.sunken}`} aria-labelledby="s4"><div className={st.sectionHead}><div><p className={st.eyebrow}><i />04 / THE HONEST RECOMMENDATION</p><h2 id="s4">Build, assist,<br /><em>or leave it alone.</em></h2></div><p>A useful assessment can conclude that software is not the answer. That is a feature of the engagement, not a failed sales call.</p></div><div className={c.decision}><article><h3>Automate</h3><p>High frequency, digital inputs, stable rules, expensive repetition and a clear exception owner.</p></article><article><h3>Assist</h3><p>Let the system collect and prepare the evidence, then put a named person at the decision boundary.</p></article><article><h3>Leave human</h3><p>Rare, ambiguous, relationship-heavy or high-impact work where judgement is the value rather than the delay.</p></article></div></section>
+      <Deliverables n="05" eyebrow="WHAT GETS BUILT" h2={['The workflow around', 'the happy path.']}
+        intro="The diagram that sells automation usually shows the normal run. Production work is the intake, ownership, recovery and evidence around it."
+        items={LAYERS.map(([, h, p]) => ({ h, p }))} />
 
-      <section className={st.band} aria-labelledby="s5"><div className={st.scope}><div><p className={st.eyebrow}><i />05 / THE ENGAGEMENT</p><h2 id="s5">One real process.<br /><em>Mapped to production.</em></h2><p className={st.lede}>We begin with the work as it actually happens, including the spreadsheet, workaround and person everyone forgot to mention. The assessment stands alone. A justified build continues into a separately agreed implementation.</p><div className={st.stamp}>Recommendation first.<br /><strong>No software quota.</strong><span aria-hidden="true">↗</span></div></div><div><ul className={st.scopeList}>{SCOPE.map((item,i) => <li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}<b aria-hidden="true">↗</b></li>)}</ul><details className={st.outside}><summary>What we will not automate <span aria-hidden="true">+</span></summary><ul><li>A broken policy whose owner will not clarify it</li><li>A decision whose risk cannot be assigned to a person</li><li>A one-off task with no reusable pattern</li><li>A fragile workaround presented as permanent architecture</li></ul></details></div></div></section>
+      <section className={`${svc.band} ${svc.sunken}`} aria-labelledby="v-h">
+        <div className={svc.head}>
+          <div><Label n="06">THE HONEST RECOMMENDATION</Label><h2 id="v-h"><Title t={['Build, assist,', 'or leave it alone.']} /></h2></div>
+          <p className={svc.lead}>A useful assessment can conclude that software is not the answer. That is a feature of the engagement, not a failed sales call.</p>
+        </div>
+        <div className={c.verdicts}>{VERDICTS.map(([h, p], i) => <article key={h} data-v={i}><small>{String(i + 1).padStart(2, '0')}</small><h3>{h}</h3><p>{p}</p></article>)}</div>
+      </section>
 
-      <section className={st.band} aria-labelledby="sp"><div className={st.proof}><div><p className={st.eyebrow}><i />RELEVANT WORK</p><h2 id="sp">Where this method came from.</h2></div><div><h3>The same six answers, run on a dozen different processes</h3><p>This is not a workshop framework. It is the map we draw before every real build: an invoice matched against a payment, a lead handed from a form into a CRM, a report assembled from photographs and PDFs more than 1,200 times a year for one client. Every one of those started as this exercise — trigger, input, decision, exception, owner, evidence — written down before a line of automation existed.</p><p>Most of what this kind of engagement finds is not a build opportunity. It is a missing owner or an undocumented exception. Saying that plainly, even when it means recommending nothing gets built, is what makes the recommendation worth trusting the next time.</p><Link className={st.proofLink} href="/case-studies">See the case-study library <span aria-hidden="true">↗</span></Link></div></div></section>
+      <section className={svc.band} aria-labelledby="e-h">
+        <div className={svc.head}>
+          <div><Label n="07">THE ENGAGEMENT</Label><h2 id="e-h"><Title t={['One real process.', 'Mapped to production.']} /></h2></div>
+          <p className={svc.lead}>We begin with the work as it actually happens, including the spreadsheet, workaround and person everyone forgot to mention. The assessment stands alone. A justified build continues into a separately agreed implementation. Recommendation first. No software quota.</p>
+        </div>
+        <ol className={c.scope}>{SCOPE.map((item, i) => <li key={item}><span>{String(i + 1).padStart(2, '0')}</span>{item}</li>)}</ol>
+      </section>
 
-      <section className={st.close} id="talk" aria-labelledby="s6"><div><p className={st.eyebrow}><i />BRING THE REAL WORK</p><h2 id="s6">Show us the process<br /><em>everyone works around.</em></h2><p>Not the policy diagram—the inbox, tracker, export and approval thread people actually use. We will tell you where the system belongs and where it does not.</p><ol className={st.closeList}><li>The normal path and every known exception</li><li>The systems, records and people it touches</li><li>A written recommendation and scoped next move</li></ol><p className={st.direct}>You will speak with the people who would map and build it.<a href={`mailto:${site.email}`}>{site.email}</a></p></div><div className={st.formWrap}><p>Describe the process in your own words.</p><LeadForm source={`solution:${SLUG}`} compact submitLabel="Send the process" note="Include what starts it, who touches it, and where it usually stalls." /></div></section>
+      <WontBuild n="08" intro="Some work should not be automated, and we will say so."
+        items={['A broken policy whose owner will not clarify it', 'A decision whose risk cannot be assigned to a person', 'A one-off task with no reusable pattern', 'A fragile workaround presented as permanent architecture']} />
 
-      <section className={st.faq} aria-labelledby="s7"><div><p className={st.eyebrow}><i />BEFORE THE ASSESSMENT</p><h2 id="s7">Questions worth asking.</h2></div><div>{FAQS.map(f => <details key={f.q}><summary>{f.q}</summary><p>{f.a}</p></details>)}</div></section>
-      <nav className={st.related} aria-label="Related solutions"><span>Related solutions</span><Link href="/ai-automation">AI Workflow Automation ↗</Link><Link href="/document-processing-automation">Document Data Extraction ↗</Link><Link href="/ai-workspace-setup">AI Workspace Setup ↗</Link></nav>
-    </div>
+      <Story n="09" label="WHERE THIS METHOD CAME FROM"
+        who="The same six answers, run on a dozen different processes"
+        situation="This is not a workshop framework. It is the map we draw before every real build. Most of what this kind of engagement finds is not a build opportunity: it is a missing owner or an undocumented exception. Saying that plainly, even when it means recommending nothing gets built, is what makes the recommendation worth trusting the next time."
+        built={['An invoice matched against a payment', 'A lead handed from a form into a CRM', 'A report assembled from photographs and PDFs more than 1,200 times a year for one client']}
+        result={[{ v: '6', k: 'answers written down before any build' }, { v: '12+', k: 'processes mapped this way' }, { v: '1,200+', k: 'reports a year from one mapped process' }]}
+        link={['/case-studies', 'See the case-study library']}
+        media={<ArtPlate name="knight-poppies" className={svc.storyMedia} unveil={false} position="62% 60%" sizes="(max-width:1080px) 100vw, 50vw" />} />
+
+      <ServiceClose slug={SLUG} h2={['Show us the process', 'everyone works around.']}
+        p="Not the policy diagram: the inbox, tracker, export and approval thread people actually use. We will tell you where the system belongs and where it does not."
+        next={['The normal path and every known exception', 'The systems, records and people it touches', 'A written recommendation and scoped next move']}
+        formTitle="Describe the process in your own words."
+        form={{ submitLabel: 'Send the process', note: 'Include what starts it, who touches it, and where it usually stalls.' }} />
+
+      <ServiceFaq h2={['Questions', 'worth asking.']} faqs={FAQS} link={['/ai-automation-cost', 'What AI automation costs']} />
+      <AlsoExplore links={[['/ai-automation', 'AI workflow automation'], ['/document-processing-automation', 'Document data extraction'], ['/ai-workspace-setup', 'AI workspace setup'], ['/ai-consultant', 'Hire an AI consultant']]} />
+    </main>
   );
 }

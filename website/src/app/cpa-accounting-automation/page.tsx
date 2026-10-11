@@ -8,6 +8,7 @@ import ScrollDepth from '../../components/ScrollDepth';
 import { DocumentChase } from './CpaInteractive';
 import st from '../../styles/studio.module.css';
 import c from './cpa.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'cpa-accounting-automation';
 const TITLE = 'CPA Firm Automation & Tax Workflow Systems | Chronexa';
@@ -207,7 +208,7 @@ export default function Page() {
             <span>Client names below are invented. The forms, thresholds and failure modes are real.</span>
           </p>
         </div>
-        <DocumentChase />
+        <HeroStage art="glitter-figure" position="50% 35%"><DocumentChase /></HeroStage>
       </section>
 
       <div className={st.strip} aria-label="Systems we connect">
@@ -383,7 +384,7 @@ export default function Page() {
         <div className={st.proof}>
           <div>
             <p className={st.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s7">Where this came from.</h2>
+            <h2 id="s7">Where this came from.</h2><ProofArt art="reader-daisies" />
           </div>
           <div>
             <h3>Document-heavy professional work, repeatedly</h3>

@@ -5,6 +5,8 @@ import { site } from '../lib/site';
 import { getService, getSolutions, getPains, type ServiceContent } from '../lib/services-content';
 import { getCategoryLabel } from '../lib/taxonomy';
 import BookButton from './BookButton';
+import ArtPlate from './visual/ArtPlate';
+import { topicArt } from '../lib/art';
 import TrackView from './TrackView';
 import ScrollDepth from './ScrollDepth';
 
@@ -62,7 +64,8 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
 
       {/* Hero */}
       <section className={styles.hero}>
-        <div className="container">
+        <div className={`container ${styles.heroGrid}`}>
+          <div>
           <nav className={styles.crumbs} aria-label="Breadcrumb">
             <Link href="/">Home</Link><span aria-hidden="true">/</span>
             <Link href="/use-cases">Use Cases</Link><span aria-hidden="true">/</span>
@@ -76,6 +79,8 @@ export default function UseCaseArticle({ data }: { data: ServiceContent }) {
             <BookButton location="usecase-hero">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
             <Link href="/case-studies" className="btn-outline">See Case Studies</Link>
           </div>
+          </div>
+          <ArtPlate name={topicArt(data.slug)} className={styles.heroArt} priority unveil={false} sizes="(max-width: 960px) 100vw, 36vw" />
         </div>
       </section>
 

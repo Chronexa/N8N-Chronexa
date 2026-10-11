@@ -1,0 +1,50 @@
+/* Industry studio extras, layered on crm.module.css (ink / paper / lime). */
+
+/* ROI table: the use cases, today vs with Chronexa, and the typical impact. */
+.roi { width:100%; border-collapse:collapse; background:var(--paper); border:1px solid var(--rule); border-radius:8px; overflow:hidden; font-size:15px; }
+.roi th, .roi td { padding:18px 20px; text-align:left; vertical-align:top; line-height:1.55; border-bottom:1px solid var(--rule); }
+.roi thead th { font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; background:#f3f1ea; }
+.roi tbody tr:last-child td { border-bottom:0; }
+.roi td:first-child { font-weight:600; width:22%; }
+.roi td:nth-child(2) { color:#6b6862; }
+.roi td:last-child { width:18%; }
+.roi td:last-child b { display:block; font-family:var(--font-display); font-style:italic; font-weight:450; font-size:28px; letter-spacing:-.02em; line-height:1.05; }
+.roi td:last-child span { display:block; margin-top:4px; font-size:12px; opacity:.7; }
+.roiNote { margin:14px 0 0; font-size:13px; opacity:.7; }
+
+/* Big numbers band */
+.numbers { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--ink); border-bottom:1px solid var(--rule); }
+.numbers div { padding:26px 22px 24px 0; }
+.numbers div + div { padding-left:22px; border-left:1px solid var(--rule); }
+.numbers dt { font-family:var(--font-display); font-style:italic; font-size:clamp(34px,3.6vw,52px); line-height:1; letter-spacing:-.03em; }
+.numbers dd { margin:10px 0 0; font-size:14px; line-height:1.5; opacity:.8; }
+
+/* Systems we connect */
+.systems { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.system { padding:18px; border-radius:8px; background:var(--paper); border:1px solid var(--rule); }
+.system strong { display:block; font-size:16px; font-weight:650; letter-spacing:-.3px; }
+.system span { display:block; margin-top:6px; font-size:13px; line-height:1.5; opacity:.75; }
+
+/* Guardrails */
+.guards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.guard { padding:24px; border-top:3px solid var(--ink); background:#f3f1ea; }
+.guard h3 { margin-bottom:10px; font-size:19px; font-weight:600; letter-spacing:-.4px; }
+.guard p { margin:0; font-size:15px; line-height:1.65; }
+
+@media(max-width:1040px) {
+  .systems { grid-template-columns:1fr 1fr; }
+  .guards { grid-template-columns:1fr; }
+  .numbers { grid-template-columns:1fr 1fr; }
+  .numbers div:nth-child(3) { padding-left:0; border-left:0; }
+  .numbers div:nth-child(n+3) { border-top:1px solid var(--rule); }
+}
+@media(max-width:700px) {
+  .roi thead { display:none; }
+  .roi, .roi tbody, .roi tr, .roi td { display:block; width:auto !important; }
+  .roi tr { padding:16px 18px; border-bottom:1px solid var(--rule); }
+  .roi td { padding:4px 0; border:0; }
+  .roi td:nth-child(2)::before { content:'Today: '; font-weight:600; color:var(--ink); }
+  .roi td:nth-child(3)::before { content:'With Chronexa: '; font-weight:600; }
+  .roi td:last-child { margin-top:8px; }
+  .systems { grid-template-columns:1fr; }
+}

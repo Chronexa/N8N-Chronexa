@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BookButton from '../BookButton';
 import LeadForm from '../LeadForm';
+import AmbientVideo from '../visual/AmbientVideo';
 import { Logo } from '../growth/HeroVisual';
 import { founders, site } from '../../lib/site';
 import s from './service.module.css';
@@ -53,13 +54,21 @@ export function Title({ t }: { t: [string, string] }) {
 
 export const OFFER = ['Audit free', 'First workflow free', 'Live in a week'];
 
-export function ServiceHero({ slug, eyebrow, h1, sub, art, artAlt, artPos, cta = 'Book a free AI audit', seeHref = '#see-it', seeLabel = 'See it work', offer = OFFER, split }: {
+export function ServiceHero({ slug, eyebrow, h1, sub, art, artAlt, artPos, cta = 'Book a free AI audit', seeHref = '#see-it', seeLabel = 'See it work', offer = OFFER, split, tall, video }: {
   slug: string; eyebrow: string; h1: [string, string]; sub: string; art: string; artAlt: string; artPos?: string;
   cta?: string; seeHref?: string; seeLabel?: string; offer?: string[]; split?: boolean;
+  /** Portrait art: framed tall beside the copy instead of cropped to a landscape. */
+  tall?: boolean;
+  /** A film loop over the art (the art is its poster frame). */
+  video?: string;
 }) {
+  const framed = split || tall;
   return (
-    <section className={`${s.hero} ${split ? s.heroSplit : ''}`} aria-labelledby="h" style={artPos ? ({ '--art-pos': artPos } as React.CSSProperties) : undefined}>
-      <figure className={s.heroArt}><Image src={art} alt={artAlt} fill priority sizes={split ? '(max-width:820px) 100vw, 52vw' : '100vw'} /></figure>
+    <section className={`${s.hero} ${framed ? s.heroSplit : ''} ${tall ? s.heroTall : ''}`} aria-labelledby="h" style={artPos ? ({ '--art-pos': artPos } as React.CSSProperties) : undefined}>
+      <figure className={s.heroArt}>
+        <Image src={art} alt={artAlt} fill priority sizes={framed ? '(max-width:820px) 100vw, 52vw' : '100vw'} />
+        {video && <AmbientVideo src={video} poster={art} />}
+      </figure>
       <div className={s.heroWash} aria-hidden="true" />
       <div className={s.heroCopy}>
         <Label>{eyebrow}</Label>

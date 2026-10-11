@@ -8,6 +8,9 @@ import WorkShowcase from '../components/homepage/WorkShowcase';
 import RoiEstimator from '../components/homepage/RoiEstimator';
 import ServicesExplorer from '../components/homepage/ServicesExplorer';
 import RevealRoot from '../components/homepage/RevealRoot';
+import ArtPlate from '../components/visual/ArtPlate';
+import IndustryIndex from '../components/homepage/IndustryIndex';
+import type { ArtName } from '../lib/art';
 import { INDUSTRY_GROUPS, SERVICE_GROUPS } from '../lib/nav';
 import { founders, site } from '../lib/site';
 import { getAllPosts, urlFor } from '../sanity/client';
@@ -45,6 +48,12 @@ const GROUP_LINES: Record<string, string> = {
   'Engineering & teams': 'Software, brands and the people who keep AI working.',
 };
 
+const GROUP_ART: Record<string, ArtName> = {
+  'AI & automation': 'human-machine',
+  'Business solutions': 'ocean-city',
+  'Engineering & teams': 'desert-explorer',
+};
+
 const SERVICE_LINES: Record<string, string> = {
   '/ai-strategy-consulting': 'A ranked roadmap of where AI pays back first, with the business case for each.',
   '/ai-automation-agency': 'End-to-end automation of the work your team repeats every day.',
@@ -74,39 +83,52 @@ const SERVICE_LINES: Record<string, string> = {
   '/automated-reporting': 'Reports and dashboards that build themselves and land where leaders look.',
 };
 
-const WHY = [
-  ['Someone has to judge the output.', 'AI answers confidently whether it is right or wrong. We define what “correct” means for your work, test against it, and route anything uncertain to a person.'],
-  ['The model is an engineering decision.', 'Opus, Sonnet, GPT, Gemini, open-weight models: the wrong choice costs ten times more or fails quietly. We pick per task, on accuracy and cost per output.'],
-  ['Not everything should be automated.', 'Some processes aren’t ready and some tools can’t be connected. We start where automation pays back first and tell you what to leave alone.'],
-  ['Your data has rules.', 'Client PII, financial records and privileged documents can’t go into just any model. Residency, redaction, access and audit are designed in from the first day.'],
-  ['AI needs context to be useful.', 'Data schemas, clean pipelines and orchestration across every tool your people use. Without them, chat windows and connectors are a clever intern with no memory.'],
-] as const;
+const WHY: readonly (readonly [string, string, ArtName, string])[] = [
+  ['Someone has to judge the output.', 'AI answers confidently whether it is right or wrong. We define what “correct” means for your work, test against it, and route anything uncertain to a person.', 'chrome-face', '50% 30%'],
+  ['The model is an engineering decision.', 'Opus, Sonnet, GPT, Gemini, open-weight models: the wrong choice costs ten times more or fails quietly. We pick per task, on accuracy and cost per output.', 'light-rings', '50% 40%'],
+  ['Not everything should be automated.', 'Some processes aren’t ready and some tools can’t be connected. We start where automation pays back first and tell you what to leave alone.', 'knight-poppies', '62% 60%'],
+  ['Your data has rules.', 'Client PII, financial records and privileged documents can’t go into just any model. Residency, redaction, access and audit are designed in from the first day.', 'glass-bloom', '50% 25%'],
+  ['AI needs context to be useful.', 'Data schemas, clean pipelines and orchestration across every tool your people use. Without them, chat windows and connectors are a clever intern with no memory.', 'painted-mind', '50% 30%'],
+];
 
 const COMPARE = {
-  cols: ['Full-time AI hire', 'Freelancer', 'Traditional IT agency', 'DIY with AI tools', 'Chronexa'],
+  cols: ['In-house team', 'Independent specialist', 'Delivery agency', 'Build with AI tools', 'Chronexa'],
   rows: [
-    ['Time to first result', '3–6 months to hire and ramp', 'Weeks', 'Months of discovery', 'Days, usually a demo', 'Days, in production'],
-    ['How you pay', '$150k+ a year, per person', 'Low, unpredictable', 'By the hour', 'Your team’s hidden time', 'Quoted against ROI'],
-    ['Breadth', 'One person’s skills', 'Narrow', 'Broad, slow', 'Whatever you know', 'Models, data, software, compliance'],
-    ['Checks the AI is right', 'Sometimes', 'Rarely', 'Rarely', 'No', 'Evals and human review, built in'],
-    ['Owns the outcome', 'Yes', 'No', 'Contract-bound', 'You do', 'Yes, measured on it'],
+    ['Best fit', 'Long-term core capability', 'A well-defined specialist task', 'A scoped delivery programme', 'Experiments your team can own', 'Connected AI systems and ongoing engineering'],
+    ['Your responsibility', 'Hiring and engineering management', 'Scope and integration ownership', 'Vendor selection and governance', 'Architecture, testing and operations', 'Process expertise and business approvals'],
+    ['Cost to plan for', 'Compensation, tools and recruiting', 'Project fee and ongoing maintenance', 'Build scope and support agreement', 'Subscriptions and internal engineering time', 'Agreed build scope, usage and support'],
+    ['Quality to verify', 'Test coverage and operational readiness', 'Handover, tests and support', 'Acceptance criteria and delivery evidence', 'Evals, security and recovery', 'Evals, review gates and agreed acceptance tests'],
+    ['After launch', 'Your team operates it', 'Agree support separately', 'Defined by the contract', 'Your team operates it', 'Ownership handover; support scoped with you'],
   ],
 };
 
 const STEPS = [
-  ['Free AI audit', 'We map how your company works and show you where AI pays back first, in numbers.'],
-  ['First build', 'One system in production on your tools and data, usually within weeks, so you judge us on results.'],
-  ['Ongoing partner', 'We become your AI engineering team. Each next build is quoted against what it unlocks.'],
-] as const;
+  ['Free AI audit', 'We map how your company works and show you where AI pays back first, in numbers.', 'light-door'],
+  ['First build', 'One system in production on your tools and data, usually within weeks, so you judge us on results.', 'phone-portal'],
+  ['Ongoing partner', 'We become your AI engineering team. Each next build is quoted against what it unlocks.', 'astronaut-clouds'],
+] as const satisfies readonly (readonly [string, string, ArtName])[];
 
 const FAQS: [string, string][] = [
   ['We already use ChatGPT, Claude and Cursor. Why do we need you?', 'Those tools make one person faster. They don’t make a company run on AI. That takes choosing the right model for each task, connecting AI to your systems and data, building the checks that catch wrong output, and designing for compliance. That engineering is what we do, so your people can run the business instead of the plumbing.'],
   ['What does an AI-native IT services firm do differently?', 'We build with AI agents ourselves every day, so we ship in days what traditional firms quote in months. And we measure work by business outcome, the hours, cost per output and revenue it moves, not by hours billed.'],
+  ['What is included in the free first workflow?', 'We agree one bounded workflow, its connected tools, test data and acceptance criteria during the free audit. You approve that written scope before work starts. Any provider usage, additional integrations and ongoing support are identified separately; further work requires a separate quote.'],
   ['How do you price?', 'There are no packages. The audit is free. After it, every build is quoted against the time and revenue it unlocks, and you approve the scope and price before we start.'],
   ['Can you work with regulated data?', 'Yes. We have built for legal, tax, financial-services and regulated-advisory teams. We choose models and hosting by where your data is allowed to go, redact what must not leave, keep access scoped, and keep a person approving anything that sends, pays or publishes.'],
   ['Why don’t you name your clients?', 'Most of our work runs under NDA. We describe each system by sector, what we built and the outcome, and we are happy to walk you through the engineering on a call.'],
   ['Who owns what you build?', 'You do: the code, the workflows, the data and the accounts they run in.'],
 ];
+
+const INDUSTRY_ART: Record<string, ArtName> = {
+  '/legal-ai-automation': 'doorways',
+  '/cpa-accounting-automation': 'glitter-figure',
+  '/insurance-claims-triage-automation': 'astronaut-drift',
+  '/financial-services-automation': 'galaxy-reach',
+  '/investment-research-automation': 'spiral-sky',
+  '/vc-pe-crm-automation': 'floating-islands',
+  '/d2c-ecommerce-automation': 'pink-smoke',
+  '/property-management-automation': 'watermill',
+  '/industrial-data-predictive-maintenance': 'golden-train',
+};
 
 const INSIGHT_SLUGS = ['ai-sales-agent', 'ai-agents-for-business', 'fine-tuning-vs-rag', 'generative-ai-consulting-services'];
 
@@ -136,21 +158,22 @@ export default async function Home() {
 
       <Hero />
 
-      {/* 01 Who we are — asymmetric: the statement inks in on the left, a ledger of facts on the right */}
+      {/* 01 Who we are — a tall film holds the left while the statement inks in, facts set in large type below */}
       <section className={s.who}>
         <div className={`container ${s.whoGrid}`}>
-          <div>
+          <div className={s.whoArt}>
+            <ArtPlate name="galaxy-meditation" className={s.whoFilm} position="50% 50%" sizes="(max-width: 900px) 100vw, 40vw" caption="Systems keep the routine. People keep the judgment." />
+          </div>
+          <div className={s.whoText}>
             <Label n="01">Who we are</Label>
             <Manifesto text={WHO} />
-          </div>
-          <aside className={s.ledger} data-reveal>
-            <dl>
+            <dl className={s.facts} data-reveal>
               <div><dt>10+</dt><dd>years building software for growing companies</dd></div>
               <div><dt>20+</dt><dd>engineers, designers and AI specialists</dd></div>
               <div><dt>35+</dt><dd>AI systems running in production</dd></div>
               <div><dt>9</dt><dd>industries we build for</dd></div>
             </dl>
-            <div className={s.leaders}>
+            <div className={s.leaders} data-reveal>
               <ul>
                 {founders.map((f) => (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -159,7 +182,7 @@ export default async function Home() {
               </ul>
               <p>Led by {founders.map((f) => f.name.split(' ')[0]).join(', ').replace(/, ([^,]*)$/, ' and $1')}. <Link href="/about">Meet the firm →</Link></p>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -168,11 +191,11 @@ export default async function Home() {
         <div className="container">
           <div className={s.centerHead} data-reveal>
             <Label n="02">What we do</Label>
-            <h2>{SERVICE_GROUPS.reduce((n, g) => n + g.links.length, 0)} services. <em>One team that owns the result.</em></h2>
+            <h2>Choose the work you need done. <em>One team that owns the result.</em></h2>
             <p className={s.lead}>Strategy, engineering and the people to run it. Pick a practice, or let the free audit tell you where to start.</p>
           </div>
           <div data-reveal>
-            <ServicesExplorer groups={SERVICE_GROUPS} groupLines={GROUP_LINES} serviceLines={SERVICE_LINES} />
+            <ServicesExplorer groups={SERVICE_GROUPS} groupLines={GROUP_LINES} serviceLines={SERVICE_LINES} groupArt={GROUP_ART} />
           </div>
         </div>
       </section>
@@ -200,9 +223,12 @@ export default async function Home() {
             <p className={s.lead}>The cost of output has collapsed, yet most companies aren’t growing any faster. With hundreds of people, dozens of tools and years of data, the prompt is the easy part. Everything around it is the work.</p>
           </div>
           <ol className={s.reasons}>
-            {WHY.map(([h, p], i) => (
+            {WHY.map(([h, p, art, pos], i) => (
               <li key={h} data-reveal style={{ ['--i' as string]: i }}>
-                <span>{String(i + 1).padStart(2, '0')}</span>
+                <div className={s.reasonArt}>
+                  <ArtPlate name={art} position={pos} className={s.reasonPlate} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 20vw" decorative />
+                  <span>{String(i + 1).padStart(2, '0')}</span>
+                </div>
                 <h3>{h}</h3>
                 <p>{p}</p>
               </li>
@@ -234,6 +260,7 @@ export default async function Home() {
 
       {/* 05 What it's worth — a calculator floating on the green band */}
       <section className={s.worth}>
+        <ArtPlate name="sunflower-sun" className={s.worthFilm} unveil={false} sizes="100vw" decorative />
         <div className="container">
           <div className={s.worthCard} data-reveal>
             <div className={s.worthIntro}>
@@ -252,18 +279,8 @@ export default async function Home() {
           <Label n="06">Solutions by industry</Label>
           <h2>Built for how <em>your industry</em> already works.</h2>
         </div>
-        <div className={s.marquee} aria-label="Industries">
-          {[industries.slice(0, 5), industries.slice(5)].map((row, r) => (
-            <div key={r} className={r ? `${s.track} ${s.reverse}` : s.track}>
-              {[0, 1].map((copy) => (
-                <ul key={copy} aria-hidden={copy === 1 || undefined}>
-                  {row.map((l) => (
-                    <li key={l.href}><Link href={l.href} tabIndex={copy === 1 ? -1 : undefined}>{l.label}<i aria-hidden="true">↗</i></Link></li>
-                  ))}
-                </ul>
-              ))}
-            </div>
-          ))}
+        <div className="container">
+          <IndustryIndex links={industries.map((l) => ({ ...l, art: INDUSTRY_ART[l.href] }))} />
         </div>
       </section>
 
@@ -278,9 +295,10 @@ export default async function Home() {
             <p className={s.lead}>No packages and no hourly rates. You see us work before you pay us, and every quote is sized against what it saves you.</p>
           </div>
           <ol className={s.path} data-reveal>
-            {STEPS.map(([t, b], i) => (
+            {STEPS.map(([t, b, art], i) => (
               <li key={t}>
                 <span className={s.node}>{String(i + 1).padStart(2, '0')}</span>
+                <ArtPlate name={art} className={s.stepPlate} sizes="(max-width: 900px) 100vw, 30vw" decorative />
                 <h3>{t}</h3>
                 <p>{b}</p>
               </li>
@@ -289,6 +307,7 @@ export default async function Home() {
           <div className={s.howCta}>
             <BookButton location="home-how" className={s.btn}>Start with the free audit</BookButton>
             <Link href="/how-we-work" className={s.textLink}>How an engagement runs →</Link>
+            <Link href="/delivery-and-security" className={s.textLink}>Delivery, ownership and security →</Link>
           </div>
         </div>
       </section>
@@ -343,6 +362,7 @@ export default async function Home() {
             <h2>What leaders <em>ask us first.</em></h2>
             <p className={s.lead}>Still deciding? Ask us directly. You’ll talk to a senior engineer, not a sales rep.</p>
             <BookButton location="home-faq" className={s.textLink}>Book a strategy call →</BookButton>
+            <ArtPlate name="blooming-horn" className={s.faqPlate} position="62% 50%" sizes="(max-width: 900px) 100vw, 34vw" caption="Ask anything. A senior engineer answers." decorative />
           </div>
           <div>
             {FAQS.map(([q, a]) => (
@@ -357,8 +377,7 @@ export default async function Home() {
 
       {/* Close — back into the film */}
       <section className={s.close}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={s.closeArt} src="/images/home/close-field.webp" alt="" loading="lazy" />
+        <ArtPlate name="cloud-tram" className={s.closeArt} unveil={false} sizes="100vw" decorative />
         <div className={`container ${s.closeInner}`} data-reveal>
           <h2>Let AI do the work. <em>We’ll make sure it’s right.</em></h2>
           <p>30 minutes with a senior engineer. You’ll leave knowing where AI pays back first in your business, whether or not you hire us.</p>

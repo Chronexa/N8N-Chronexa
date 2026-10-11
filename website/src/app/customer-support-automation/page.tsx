@@ -7,6 +7,7 @@ import TrackView from '../../components/TrackView';
 import ScrollDepth from '../../components/ScrollDepth';
 import { TriageBench } from './SupportInteractive';
 import s from './support.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'customer-support-automation';
 const TITLE = 'Customer Service Automation & AI Support Agents | Chronexa';
@@ -190,7 +191,7 @@ export default function Page() {
             <span>We are not replacing your helpdesk, and we will tell you when the built-in AI is the better buy.</span>
           </p>
         </div>
-        <TriageBench />
+        <HeroStage art="blooming-horn" position="60% 50%"><TriageBench /></HeroStage>
       </section>
 
       <div className={s.strip} aria-label="Systems we work with">
@@ -364,7 +365,7 @@ export default function Page() {
         <div className={s.proof}>
           <div>
             <p className={s.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s6">Where this came from.</h2>
+            <h2 id="s6">Where this came from.</h2><ProofArt art="crt-head" />
           </div>
           <div>
             <h3>Retrieval that has to cite, because the answers had consequences</h3>

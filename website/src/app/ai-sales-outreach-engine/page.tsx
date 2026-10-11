@@ -7,6 +7,7 @@ import TrackView from '../../components/TrackView';
 import ScrollDepth from '../../components/ScrollDepth';
 import { OutreachBench } from './SalesInteractive';
 import s from './sales.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'ai-sales-outreach-engine';
 const TITLE = 'AI SDR & Outbound Sales Engine Development | Chronexa';
@@ -222,7 +223,7 @@ export default function Page() {
             <span>Companies in the example are invented. The mechanism is what we are showing you.</span>
           </p>
         </div>
-        <OutreachBench />
+        <HeroStage art="frame-walk" position="50% 40%"><OutreachBench /></HeroStage>
       </section>
 
       <div className={s.strip} aria-label="Tools we work with">
@@ -362,7 +363,7 @@ export default function Page() {
         <div className={s.proof}>
           <div>
             <p className={s.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s6">We run this on ourselves.</h2>
+            <h2 id="s6">We run this on ourselves.</h2><ProofArt art="pigeon-rush" />
           </div>
           <div>
             <h3>Our own outbound engine is the architecture on this page</h3>

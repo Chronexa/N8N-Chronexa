@@ -8,6 +8,7 @@ import ScrollDepth from '../../components/ScrollDepth';
 import { GovernanceGate } from './LegalInteractive';
 import st from '../../styles/studio.module.css';
 import c from './legal.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'legal-ai-automation';
 const TITLE = 'Legal AI & Automation for Law Firms | Chronexa';
@@ -225,7 +226,7 @@ export default function Page() {
             <span>Not a wrapper around a consumer chatbot, and not a tool that learns from your matters.</span>
           </p>
         </div>
-        <GovernanceGate />
+        <HeroStage art="doorways" position="64% 50%"><GovernanceGate /></HeroStage>
       </section>
 
       <div className={st.strip} aria-label="Systems we work with">
@@ -379,7 +380,7 @@ export default function Page() {
         <div className={st.proof}>
           <div>
             <p className={st.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s6">Where this came from.</h2>
+            <h2 id="s6">Where this came from.</h2><ProofArt art="glass-bloom" />
           </div>
           <div>
             <h3>Retrieval where an unsupported answer was a liability</h3>

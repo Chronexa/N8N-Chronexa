@@ -8,6 +8,7 @@ import ScrollDepth from '../../components/ScrollDepth';
 import { ResearchDesk } from './ResearchInteractive';
 import st from '../../styles/studio.module.css';
 import c from './research.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'investment-research-automation';
 const TITLE = 'Investment Research & Portfolio Data Automation | Chronexa';
@@ -221,7 +222,7 @@ export default function Page() {
             <span>Built so every output can be reproduced later — which regulation increasingly requires.</span>
           </p>
         </div>
-        <ResearchDesk />
+        <HeroStage art="spiral-sky" position="62% 45%"><ResearchDesk /></HeroStage>
       </section>
 
       <div className={st.strip} aria-label="Data sources we work with">
@@ -358,7 +359,7 @@ export default function Page() {
         <div className={st.proof}>
           <div>
             <p className={st.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s6">Where this came from.</h2>
+            <h2 id="s6">Where this came from.</h2><ProofArt art="light-rings" />
           </div>
           <div>
             <h3>Financial data integration across two markets</h3>

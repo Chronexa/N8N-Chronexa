@@ -6,6 +6,8 @@ import { getCategoryLabel, getKind } from '../lib/taxonomy';
 import BookButton from './BookButton';
 import TrackView from './TrackView';
 import ScrollDepth from './ScrollDepth';
+import ArtPlate from './visual/ArtPlate';
+import { topicArt } from '../lib/art';
 import LogoChip from './LogoChip';
 import CountUp from './CountUp';
 import ServiceSceneFrame from './ServiceSceneFrame';
@@ -89,7 +91,8 @@ export default function ServiceSalesPage({ data }: { data: ServiceContent }) {
 
       {/* ── Hero: keyword h1 + real numbers + the buyer's own stack ───────── */}
       <section className={styles.hero}>
-        <div className="container">
+        <div className={`container ${styles.heroGrid}`}>
+          <div>
           <nav className={styles.crumbs} aria-label="Breadcrumb">
             <Link href="/">Home</Link><span aria-hidden="true">/</span>
             <Link href={hub.href}>{hub.name}</Link><span aria-hidden="true">/</span>
@@ -106,6 +109,8 @@ export default function ServiceSalesPage({ data }: { data: ServiceContent }) {
             <BookButton location="service-hero">Book a Discovery Call. <span aria-hidden="true">→</span></BookButton>
             {sales.scene && <a href="#see-it-run" className="btn-outline">See it run ↓</a>}
           </div>
+          </div>
+          <ArtPlate name={topicArt(data.slug)} className={styles.heroArt} priority unveil={false} sizes="(max-width: 960px) 100vw, 36vw" />
 
           <div className={styles.heroStats}>
             {sales.stats.map((s) => (

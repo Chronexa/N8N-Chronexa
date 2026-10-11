@@ -71,7 +71,9 @@
   background: #dfe9ee;
 }
 .heroArt { position: absolute; inset: 0; z-index: -2; margin: 0; }
-.heroArt img { object-fit: cover; object-position: var(--art-pos, 70% center); }
+.heroArt img, .heroArt video { object-fit: cover; object-position: var(--art-pos, 70% center); }
+.heroArt video { position: absolute; inset: 0; width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) { .heroArt video { display: none; } }
 .heroWash {
   position: absolute; inset: 0; z-index: -1;
   background:
@@ -99,6 +101,9 @@
 .heroSplit .heroWash { display: none; }
 .heroSplit .heroCopy { width: auto; }
 .heroSplit .heroSub { color: var(--text-muted-light); }
+.heroTall { grid-template-columns: minmax(0, 1.1fr) auto; }
+.heroTall .heroArt { height: min(72vh, 700px); width: auto; aspect-ratio: 4 / 5; justify-self: end; border-radius: 28px; }
+.heroTall .heroArt img { object-position: var(--art-pos, center 35%); }
 
 /* Answer card: the five things a buyer needs before anything else ---------- */
 .answer {
@@ -149,7 +154,7 @@
 .thread p { margin: 0; grid-column: 2; line-height: 1.6; color: var(--text-muted-light); }
 
 /* Example engagement --------------------------------------------------------- */
-.story { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+.story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
 .storyMedia { position: relative; aspect-ratio: auto; min-height: 520px; margin: 0; background: #d9e4e8; }
 .storyMedia img, .storyMedia video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .storyMedia figcaption { display: none; }
@@ -159,8 +164,8 @@
 .built { margin: 0; padding: 0; list-style: none; }
 .built li { display: grid; grid-template-columns: 26px 1fr; gap: 0.6rem; padding: 0.55rem 0; line-height: 1.5; }
 .built li::before { content: '✓'; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-green-soft); color: var(--brand-green-ink); font-size: 0.78rem; font-weight: 800; }
-.results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.8rem; padding-top: 1.6rem; border-top: 1px solid var(--border-light); }
-.results b { display: block; white-space: nowrap; font-family: var(--font-display); font-weight: 500; font-size: var(--step-4); line-height: 1; letter-spacing: -0.02em; color: var(--brand-green-ink); }
+.results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.8rem; padding-top: 1.6rem; border-top: 1px solid var(--border-light); }
+.results b { display: block; text-wrap: balance; font-family: var(--font-display); font-weight: 500; font-size: clamp(1.6rem, 1.1rem + 1.4vw, 2.5rem); line-height: 1; letter-spacing: -0.02em; color: var(--brand-green-ink); }
 .results span { display: block; margin-top: 0.5rem; font-size: 0.84rem; line-height: 1.4; color: var(--text-muted-light); }
 .fine { margin: 1.4rem 0 0; font-size: 0.78rem; color: var(--neutral-400); }
 .storyLink { display: inline-block; margin-top: 1.2rem; }
@@ -257,6 +262,7 @@ a.tile:hover { border-color: var(--brand-green-line); box-shadow: var(--shadow-m
 @media (max-width: 820px) {
   .hero { display: block; min-height: 0; padding: 0; background: var(--bg-light); }
   .heroArt, .heroSplit .heroArt { position: relative; inset: auto; aspect-ratio: 4 / 3; order: 0; border-radius: 0; box-shadow: none; }
+  .heroTall .heroArt { height: auto; width: 100%; aspect-ratio: 4 / 3.4; }
   .heroSplit { display: block; }
   .heroWash { display: none; }
   .heroCopy { width: auto; padding: 2rem 20px 6.5rem; }
@@ -277,4 +283,24 @@ a.tile:hover { border-color: var(--brand-green-line); box-shadow: var(--shadow-m
   .roi { font-size: 0.86rem; }
   .ladder li { grid-template-columns: 30px 1fr; }
   .ladder b { grid-column: 2; }
+}
+
+/* Story art from the library sits flush inside the story card. */
+.story > .storyMedia { border-radius: 0; }
+
+/* Guides (growth pages of kind 'guide'): the explainer leads, art holds the left margin. */
+.guide { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+.guideArt { position: sticky; top: calc(var(--nav-height, 72px) + 2rem); }
+.guidePlate { aspect-ratio: 4 / 5; border-radius: 28px; box-shadow: var(--shadow-lg); }
+.guide h2 { margin-bottom: 1rem; }
+.guideBlock { padding-top: 2.2rem; margin-top: 2.2rem; border-top: 1px solid var(--border-light); max-width: 64ch; }
+.guideBlock h3 { margin: 0 0 0.9rem; font-family: var(--font-display); font-weight: 500; font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.015em; }
+.guideBlock a { color: var(--brand-green-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.guideBlock p { margin: 0 0 1rem; font-size: 1.06rem; line-height: 1.75; color: var(--text-muted-light); }
+.guideBlock ul { margin: 0.4rem 0 0; padding-left: 1.2rem; display: grid; gap: 0.55rem; color: var(--text-muted-light); line-height: 1.6; }
+.guideBlock li::marker { color: var(--brand-green); }
+@media (max-width: 1080px) {
+  .guide { grid-template-columns: 1fr; }
+  .guideArt { position: static; }
+  .guidePlate { aspect-ratio: 16 / 10; }
 }

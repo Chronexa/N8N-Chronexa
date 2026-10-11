@@ -7,6 +7,7 @@ import TrackView from '../../components/TrackView';
 import ScrollDepth from '../../components/ScrollDepth';
 import { CommandCentre, BuildTabs } from './CrmInteractive';
 import s from './crm.module.css';
+import HeroStage, { ProofArt } from '../../components/visual/HeroStage';
 
 const SLUG = 'crm-automation-services';
 const TITLE = 'CRM Automation, Custom CRM & Airtable Builds | Chronexa';
@@ -128,7 +129,7 @@ export default function Page() {
             <span>The platform call is part of the work, not a decision we make before meeting you.</span>
           </p>
         </div>
-        <CommandCentre />
+        <HeroStage art="paper-birds" position="60% 50%"><CommandCentre /></HeroStage>
       </section>
 
       <div className={s.strip} aria-label="Tools we work with">
@@ -271,7 +272,7 @@ export default function Page() {
         <div className={s.proof}>
           <div>
             <p className={s.eyebrow}><i />RELEVANT WORK</p>
-            <h2 id="s5">We run this ourselves.</h2>
+            <h2 id="s5">We run this ourselves.</h2><ProofArt art="wired-head" />
           </div>
           <div>
             <h3>Our own CRM is an Airtable base with n8n around it</h3>
