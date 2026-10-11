@@ -46,6 +46,30 @@ const salesCards: Record<string, SalesCard> = {
     fit: 'For companies that want Claude, Codex, connectors, reusable skills and training delivered together.',
     steps: ['Configure the workspace', 'Connect company tools', 'Train on real work'], accent: 'violet',
   },
+  'ai-strategy-consulting': {
+    label: 'Decide what to fund',
+    outcome: 'Turn a long list of AI ideas into a sequenced, evidence-backed roadmap.',
+    fit: 'For leaders who need to compare value, readiness and risk before commissioning software.',
+    steps: ['Map the real work', 'Rank value and risk', 'Define the first test'], accent: 'violet',
+  },
+  'ai-agent-development': {
+    label: 'Give AI a defined job',
+    outcome: 'Build an agent that works from your knowledge, tools and approval rules.',
+    fit: 'For repeated jobs that need language, judgement and access to several systems.',
+    steps: ['Define the job', 'Set knowledge and limits', 'Evaluate before autonomy'], accent: 'coral',
+  },
+  'ai-integration-services': {
+    label: 'Connect tools and data',
+    outcome: 'Remove retyping and give every workflow a trusted path between systems.',
+    fit: 'For operations split across SaaS, databases, documents and legacy software.',
+    steps: ['Name the source of truth', 'Connect the critical path', 'Monitor every failure'], accent: 'blue',
+  },
+  'ai-voice-agent-development': {
+    label: 'Complete work by phone',
+    outcome: 'Answer, qualify, book and update the systems behind the conversation.',
+    fit: 'For teams losing bookings or service capacity to unanswered and repetitive calls.',
+    steps: ['Map real calls', 'Connect business tools', 'Test and operate'], accent: 'amber',
+  },
   'document-processing-automation': {
     label: 'Documents and data',
     outcome: 'Turn PDFs, scans and forms into checked, structured records.',
@@ -67,14 +91,15 @@ const salesCards: Record<string, SalesCard> = {
  * customer support automation KD 15. Search opportunity is balanced against
  * buyer intent and the proof Chronexa can credibly show on-page.
  */
-const priority = ['ai-automation', 'ai-workspace-setup', 'document-processing-automation', 'customer-support-automation', 'crm-automation-services'];
+const priority = ['ai-strategy-consulting', 'ai-automation', 'ai-agent-development', 'ai-integration-services', 'ai-voice-agent-development'];
 const orderedServices = [...services].sort((a, b) => {
   const ai = priority.indexOf(a.slug);
   const bi = priority.indexOf(b.slug);
   return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
 });
-const featured = orderedServices.filter((service) => salesCards[service.slug]);
-const additional = orderedServices.filter((service) => !salesCards[service.slug]);
+const featured = orderedServices.filter((service) => priority.includes(service.slug));
+const featuredSlugs = new Set(featured.map((service) => service.slug));
+const additional = orderedServices.filter((service) => !featuredSlugs.has(service.slug));
 
 const schema = {
   '@context': 'https://schema.org',
@@ -148,7 +173,7 @@ export default function SolutionsPage() {
             <div className={styles.sectionHead}>
               <p className="eyebrow">Choose the problem</p>
               <h2>What should change after we leave?</h2>
-              <p>Choose a finished workflow, a team capable of working through AI, or a specialist system for a known operational problem.</p>
+              <p>Five primary AI services cover the buying decision. Specialist pages remain available below for narrower systems, industries and search needs.</p>
             </div>
             <div className={styles.featuredGrid}>
               {featured.map((service, index) => {

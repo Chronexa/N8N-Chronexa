@@ -1,5 +1,6 @@
 import { site } from './site';
 import { track } from './analytics';
+import { captureAttribution } from './attribution';
 
 type Prefill = { name?: string; email?: string; notes?: string; url?: string };
 
@@ -18,12 +19,12 @@ export function attributedBookingUrl(
   try {
     const url = new URL(href);
     if (!BOOKING_HOSTS.has(url.hostname)) return href;
-    const isBlog = pathname === '/blog' || pathname.startsWith('/blog/');
-    url.searchParams.set('utm_source', isBlog ? 'chronexa-blog' : 'chronexa-website');
-    url.searchParams.set('utm_medium', 'organic');
-    url.searchParams.set('utm_campaign', isBlog ? 'blog-conversion' : 'website-conversion');
-    url.searchParams.set('utm_content', pathname || 'unknown-path');
-    url.searchParams.set('utm_term', location);
+    // Attribution is only available in the visitor's browser. Never invent an organic source.
+    const latest = captureAttribution().latest;
+    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+      if (latest[key] && !url.searchParams.has(key)) url.searchParams.set(key, latest[key]);
+    }
+    void location; void pathname; // placement belongs in click analytics, not campaign fields
     return url.toString();
   } catch {
     return href;
@@ -39,7 +40,7 @@ export function attributedBookingUrl(
  * caller — e.g. the Shopify landing page uses its own Calendly link without
  * changing the link every other page on the site still opens.
  */
-export function openBooking(prefill: Prefill = {}) {
+export function bookingUrl(prefill: Prefill = {}) {
   const u = new URL(attributedBookingUrl(prefill.url || site.booking, {
     location: 'form-success',
     pathname: window.location.pathname,
@@ -47,10 +48,14 @@ export function openBooking(prefill: Prefill = {}) {
   if (prefill.name) u.searchParams.set('name', prefill.name);
   if (prefill.email) u.searchParams.set('email', prefill.email);
   if (prefill.notes) u.searchParams.set('notes', prefill.notes);
-  window.open(u.toString(), '_blank', 'noopener,noreferrer');
+  return u.toString();
 }
 
 /** Fire the booking-CTA click event to Amplitude (`location` = which CTA: hero/nav/footer/form). */
 export function trackBookCta(location: string, pathname?: string) {
   track('book_cta_click', { location, pathname });
+}
+
+export function openBooking(prefill: Prefill = {}) {
+  window.location.assign(bookingUrl(prefill));
 }

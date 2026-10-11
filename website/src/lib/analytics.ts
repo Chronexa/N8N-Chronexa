@@ -1,3 +1,4 @@
+import { analyticsAllowed, captureAttribution } from './attribution';
 import * as amplitude from '@amplitude/analytics-browser';
 
 /**
@@ -6,9 +7,9 @@ import * as amplitude from '@amplitude/analytics-browser';
  * events fired before init are queued by the SDK.
  */
 export function track(event: string, props?: Record<string, unknown>) {
-  if (typeof window === 'undefined') return;
+  if (!analyticsAllowed()) return;
   try {
-    amplitude.track(event, props);
+    amplitude.track(event, { hostname: window.location.hostname, pathname: window.location.pathname, first_touch: captureAttribution().first, latest_touch: captureAttribution().latest, ...props });
   } catch {
     /* ignore */
   }
@@ -21,7 +22,7 @@ export function track(event: string, props?: Record<string, unknown>) {
  * Amplitude user — so we get one unbroken journey: anon visit → form → booking.
  */
 export function identifyByEmail(email: string) {
-  if (typeof window === 'undefined' || !email) return;
+  if (!analyticsAllowed() || !email) return;
   try {
     const e = email.trim().toLowerCase();
     amplitude.setUserId(e);
@@ -38,7 +39,7 @@ export function identifyByEmail(email: string) {
  * still carry its real source instead of showing up as untraceable.
  */
 export function identifyFirstTouch(props: Record<string, string>) {
-  if (typeof window === 'undefined') return;
+  if (!analyticsAllowed()) return;
   try {
     const identify = new amplitude.Identify();
     for (const [k, v] of Object.entries(props)) {
@@ -61,7 +62,7 @@ export function identifyFirstTouch(props: Record<string, string>) {
  * page, before other events fire, so every event in the session inherits it.
  */
 export function identifyAdAttribution() {
-  if (typeof window === 'undefined') return;
+  if (!analyticsAllowed()) return;
   try {
     const params = new URLSearchParams(window.location.search);
     const adId = params.get('utm_content') || '';

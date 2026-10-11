@@ -1,0 +1,45 @@
+/* AI strategy consulting: page-only pieces. Everything shared lives in components/service. */
+
+.tryGrid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 1.25rem; align-items: stretch; }
+
+/* The idea lab */
+.lab { display: grid; grid-template-columns: 1fr 0.85fr; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+.exampleTabs { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); background: var(--bg-sunken); }
+.exampleTabs::before { content: 'Try an example'; margin-right: 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted-light); }
+.exampleTabs button { padding: 0.55rem 0.9rem; border: 1px solid var(--border-light-strong); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-light); font: 600 0.88rem var(--font-sans); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+.exampleTabs button:hover { border-color: var(--brand-green-line); }
+.exampleTabs button[aria-pressed='true'] { border-color: var(--brand-green-ink); background: var(--brand-green-soft); color: var(--brand-green-ink); }
+.controls { display: grid; gap: 1.6rem; padding: 1.8rem 1.6rem; }
+.controls label { display: block; font-size: 0.92rem; font-weight: 650; }
+.controls label strong { float: right; font-variant-numeric: tabular-nums; color: var(--brand-green-ink); }
+.controls input { display: block; width: 100%; margin-top: 0.75rem; accent-color: var(--brand-green-ink); }
+.labResult { display: flex; flex-direction: column; justify-content: center; padding: 1.8rem 1.6rem; border-left: 1px solid var(--border-light); transition: background 0.3s; }
+.labResult > span { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted-light); }
+.labResult > strong { margin: 0.9rem 0 0.7rem; font-family: var(--font-display); font-weight: 500; font-size: clamp(2.4rem, 1.6rem + 2.4vw, 3.6rem); line-height: 1; letter-spacing: -0.02em; }
+.labResult p { margin: 0; line-height: 1.55; }
+.labResult small { margin-top: 1.4rem; font-size: 0.82rem; line-height: 1.5; color: var(--text-muted-light); }
+.build { background: linear-gradient(180deg, #eef7e6, #f8fcf4); }
+.build > strong { color: var(--brand-green-ink); }
+.pilot { background: linear-gradient(180deg, #fdf3dc, #fffaf0); }
+.pilot > strong { color: #8a5a00; }
+.defer { background: var(--bg-sunken); }
+.defer > strong { color: var(--text-muted-light); }
+
+/* The ranked roadmap the audit produces */
+.roadmap { display: flex; flex-direction: column; padding: 1.6rem; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+.roadmap > span { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted-light); }
+.roadmap > strong { margin: 0.6rem 0 1.2rem; font-family: var(--font-display); font-weight: 500; font-size: var(--step-2); line-height: 1.2; }
+.roadmap ol { margin: 0; padding: 0; list-style: none; }
+.roadmap li { padding: 0.75rem 0; border-top: 1px solid var(--border-light); }
+.roadmap li div { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.9rem; font-weight: 600; }
+.roadmap li b { color: var(--brand-green-ink); white-space: nowrap; }
+.roadmap li i { display: block; height: 6px; margin-top: 0.5rem; border-radius: 3px; background: linear-gradient(90deg, var(--brand-green), #a6d86f); }
+.roadmap li.not b { color: var(--text-muted-light); }
+.roadmap li.not i { background: var(--neutral-100); }
+.roadmap p { margin: auto 0 0; padding-top: 1rem; font-size: 0.82rem; color: var(--text-muted-light); }
+
+@media (max-width: 1080px) { .tryGrid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) {
+  .lab { grid-template-columns: 1fr; }
+  .labResult { border-left: 0; border-top: 1px solid var(--border-light); min-height: 240px; }
+}

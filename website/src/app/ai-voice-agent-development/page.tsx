@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import AIServicesRail from '../../components/AIServicesRail';
+import { AnswerCard, RailGap, svc } from '../../components/service/ServiceParts';
 import BookButton from '../../components/BookButton';
 import LeadForm from '../../components/LeadForm';
 import ScrollDepth from '../../components/ScrollDepth';
@@ -66,17 +68,29 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
 
       <ImmersiveVoiceHero />
+      <div className={svc.svc}>
+        <AnswerCard flush items={[
+          ['What it is', 'An AI phone agent that answers, qualifies, books and updates your systems while the caller talks.'],
+          ['Who it’s for', 'Clinics, salons, home services and sales teams losing bookings to missed or repetitive calls.'],
+          ['What you get', 'A working agent on your line, connected to your calendar and CRM, with clear transfer rules.'],
+          ['How it’s priced', 'A pilot on one call type first. Then priced on call volume, languages and integrations.'],
+          ['How fast', 'A test line your team can challenge within days. Live once it passes your calls.'],
+        ]} />
+        <RailGap />
+        <AIServicesRail current="ai-voice-agent-development" />
+      </div>
 
       <section className={s.statement} aria-labelledby="statement-title">
         <p>THE DIFFERENCE</p>
-        <h2 id="statement-title">A beautiful voice is the beginning.<br /><em>The implementation is the product.</em></h2>
+        <h2 id="statement-title">A beautiful voice is the beginning.{' '}<br /><em>The implementation is the product.</em></h2>
+        <figure className={s.statementArt}><Image src="/images/service-art/voice-blooming-horn.webp" alt="A giant brass gramophone horn rising from a poppy meadow, releasing a spiral of butterflies into the sky" fill sizes="(max-width:760px) 100vw, 1250px" /></figure>
         <div className={s.statementRail}><span>Conversation</span><i /><span>Decision</span><i /><span>Action</span><i /><span>Business result</span></div>
       </section>
 
       <section className={s.orchestration} aria-labelledby="orchestration-title">
         <div className={s.orchestrationHead}>
           <p>LIVE ORCHESTRATION</p>
-          <h2 id="orchestration-title">While the caller talks,<br /><em>the business moves.</em></h2>
+          <h2 id="orchestration-title">While the caller talks,{' '}<br /><em>the business moves.</em></h2>
         </div>
         <div className={s.orchestrationStage}>
           <div className={s.callCard}>
@@ -100,8 +114,13 @@ export default function Page() {
         <p className={s.providerLine}>Built across the stack that fits the deployment <span>Retell</span><span>ElevenLabs</span><span>Twilio</span><span>OpenAI</span><span>n8n</span><span>Your APIs</span></p>
       </section>
 
+      <section className={s.proofLedger} aria-labelledby="voice-proof-title">
+        <div><p>PROOF / BEFORE RELEASE</p><h2 id="voice-proof-title">Hear the demo.<br /><em>Inspect the system.</em></h2><span>Talk to the agent above, then inspect the workflow behind one: availability checks, booking logic and the handoff to your team.</span><Link href="/case-studies/voice-agent-availability-and-booking-orchestration">Inspect the voice workflow ↗</Link></div>
+        <div className={s.proofChecks}><article><span>01</span><strong>Conversation</strong><p>Intent, interruptions, clarification and language are tested with real scenarios.</p></article><article><span>02</span><strong>Business action</strong><p>Calendar, CRM, messaging and transfer actions are validated independently.</p></article><article><span>03</span><strong>Release evidence</strong><p>Successful, ambiguous and prohibited calls form the acceptance set.</p></article><article><span>04</span><strong>Operation</strong><p>Transcripts, outcomes, latency, cost and failures stay visible after launch.</p></article></div>
+      </section>
+
       <section className={s.worlds} aria-labelledby="worlds-title">
-        <div className={s.worldsIntro}><p>BUILT FOR THE CALLS THAT RUN LOCAL BUSINESS</p><h2 id="worlds-title">Two businesses.<br /><em>Two completely different agents.</em></h2></div>
+        <div className={s.worldsIntro}><p>BUILT FOR THE CALLS THAT RUN LOCAL BUSINESS</p><h2 id="worlds-title">Two businesses.{' '}<br /><em>Two completely different agents.</em></h2></div>
         <article className={s.world}>
           <Image src="/images/voice-v3/dental-practice.webp" alt="Reception desk inside a modern dental practice" fill sizes="100vw" />
           <div className={s.worldShade} />
@@ -117,7 +136,7 @@ export default function Page() {
       </section>
 
       <section className={s.roles} aria-labelledby="roles-title">
-        <div><p>ONE VOICE SYSTEM / MANY JOBS</p><h2 id="roles-title">Give the agent<br /><em>a finish line.</em></h2></div>
+        <div><p>ONE VOICE SYSTEM / MANY JOBS</p><h2 id="roles-title">Give the agent{' '}<br /><em>a finish line.</em></h2></div>
         <ol>
           <li><span>01</span><h3>Reception</h3><p>Answer, understand, book, reschedule and route.</p></li>
           <li><span>02</span><h3>Inbound sales</h3><p>Qualify urgency, value and fit before the handoff.</p></li>
@@ -129,7 +148,7 @@ export default function Page() {
       <section className={s.capabilities} aria-labelledby="capabilities-title">
         <div className={s.capabilitiesHead}>
           <p>AI VOICE AGENT DEVELOPMENT SERVICES</p>
-          <h2 id="capabilities-title">Every layer required<br /><em>for a production call.</em></h2>
+          <h2 id="capabilities-title">Every layer required{' '}<br /><em>for a production call.</em></h2>
           <p>Chronexa designs, builds and operates custom AI voice agents. We combine conversational AI with the telephony, business data, integrations and quality controls required to complete work reliably.</p>
         </div>
         <div className={s.capabilityGrid}>{CAPABILITIES.map(([title, body], index) => <article key={title}><span>{String(index + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{body}</p></article>)}</div>
@@ -138,7 +157,7 @@ export default function Page() {
       <section className={s.industrySection} aria-labelledby="industries-title">
         <div className={s.industryHead}>
           <p>AI RECEPTIONISTS BY INDUSTRY</p>
-          <h2 id="industries-title">One architecture.<br /><em>Your operating reality.</em></h2>
+          <h2 id="industries-title">One architecture.{' '}<br /><em>Your operating reality.</em></h2>
           <p>An effective AI receptionist must know what your team can promise, which system holds the truth and when a person should take over. That configuration changes by industry.</p>
         </div>
         <div className={s.industryGallery}>
@@ -161,7 +180,7 @@ export default function Page() {
       <section className={s.stackSection} aria-labelledby="stack-title">
         <div className={s.stackCopy}>
           <p>PLATFORM-AGNOSTIC IMPLEMENTATION</p>
-          <h2 id="stack-title">The right voice stack.<br /><em>Connected to yours.</em></h2>
+          <h2 id="stack-title">The right voice stack.{' '}<br /><em>Connected to yours.</em></h2>
           <p>We can implement Retell AI or ElevenLabs for conversational voice, Twilio or an existing carrier for telephony, and OpenAI or another approved model for reasoning. The value comes from connecting that stack to the systems where your team already works.</p>
           <div className={s.stackLinks}><Link href="/ai-integration-services">AI integration services ↗</Link><Link href="/business-process-automation-consulting">Workflow automation consulting ↗</Link><Link href="/custom-software-development">Custom software development ↗</Link></div>
         </div>
@@ -175,15 +194,15 @@ export default function Page() {
       </section>
 
       <section className={s.roi} aria-labelledby="roi-title">
-        <div className={s.roiHead}><p>YOUR NUMBERS / NOT A SALES CLAIM</p><h2 id="roi-title">Model the calls<br /><em>before you automate them.</em></h2><span>Adjust volume, duration, booking value and conversion potential. We replace these planning assumptions with your call data during discovery.</span></div>
+        <div className={s.roiHead}><p>YOUR NUMBERS / NOT A SALES CLAIM</p><h2 id="roi-title">Model the calls{' '}<br /><em>before you automate them.</em></h2><span>Adjust volume, duration, booking value and conversion potential. We replace these planning assumptions with your call data during discovery.</span></div>
         <VoiceRoi />
       </section>
 
       <section className={s.release} aria-labelledby="release-title">
-        <div className={s.releaseCopy}><p>FROM DEMO TO PHONE LINE</p><h2 id="release-title">A production agent<br /><em>is operated, not launched.</em></h2></div>
+        <div className={s.releaseCopy}><p>FROM DEMO TO PHONE LINE</p><h2 id="release-title">A production agent{' '}<br /><em>is operated, not launched.</em></h2></div>
         <div className={s.operationsVisual}>
           <Image src="/images/voice-v3/voice-operations.webp" alt="Voice operations team reviewing call analytics and agent performance" fill sizes="100vw" />
-          <div><span>MANAGED VOICE OPERATIONS</span><strong>Listen to failures.<br />Improve the system.</strong><p>We review conversations, evaluate outcomes, identify new caller intents and adjust prompts, knowledge and workflows over time.</p></div>
+          <div><span>MANAGED VOICE OPERATIONS</span><strong>Listen to failures.{' '}<br />Improve the system.</strong><p>We review conversations, evaluate outcomes, identify new caller intents and adjust prompts, knowledge and workflows over time.</p></div>
         </div>
         <div className={s.releaseTimeline}>
           <article><span>01</span><div><h3>Listen</h3><p>Real call reasons, policies, edge cases and measures of success.</p></div><b>Call map</b></article>
@@ -196,14 +215,14 @@ export default function Page() {
       <section className={s.close} aria-labelledby="close-title">
         <div>
           <p>BRING US THE CALL FLOW</p>
-          <h2 id="close-title">We’ll build the agent<br /><em>and everything behind it.</em></h2>
+          <h2 id="close-title">We’ll build the agent{' '}<br /><em>and everything behind it.</em></h2>
           <div className={s.closeActions}><BookButton location="voice-v3-close" className={s.primary}>Design my voice system <span>↗</span></BookButton><a href={`mailto:${site.email}`}>{site.email}</a></div>
         </div>
-        <div className={s.form}><p>What should happen after “hello”?</p><LeadForm source="voice-agent-immersive-v3" compact submitLabel="Send my call flow" note="Tell us the business, call volume, systems and the result the agent should complete." /></div>
+        <div className={s.form}><p>What should happen after “hello”?</p><LeadForm source="voice-agent-immersive-v3" fieldLabel="Which calls should your agent handle?" fieldPlaceholder="Business type, monthly calls, booking or CRM tools" fieldNote="Voice workflow" compact submitLabel="Send my call flow" note="Tell us the business, call volume, systems and the result the agent should complete." /></div>
       </section>
 
       <section className={s.faq} aria-labelledby="faq-title">
-        <div><p>BEFORE WE BUILD</p><h2 id="faq-title">Questions that<br />change the system.</h2><Link href="/case-studies/voice-agent-availability-and-booking-orchestration">See a voice workflow ↗</Link></div>
+        <div><p>BEFORE WE BUILD</p><h2 id="faq-title">Questions that{' '}<br />change the system.</h2><Link href="/case-studies/voice-agent-availability-and-booking-orchestration">See a voice workflow ↗</Link></div>
         <div>{FAQS.map(([q, a]) => <details key={q}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
       </section>
     </main>

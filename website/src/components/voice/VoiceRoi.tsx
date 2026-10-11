@@ -1,83 +1,49 @@
 'use client';
-
 import { useState } from 'react';
+import { calculateVoiceRoi, type VoiceRoiInputs } from '../../lib/voice-roi';
 import s from './voice.module.css';
-
-/**
- * Receptionist vs answering service vs AI voice agent, monthly.
- * Assumptions (sources linked on the page):
- *  - Receptionist: $19.00/h (BLS, healthcare receptionists, May 2025) × 173 h/month × 1.3 planning load for payroll costs; covers ~45 of 168 weekly hours.
- *  - Answering service: a user-editable $2.00/call planning assumption; typically takes a message rather than completing the workflow.
- *  - AI voice agent: $0.13/min planning configuration within Retell's published $0.07–$0.31/min range. Build and support quoted separately.
- *  - 30% of calls arrive outside staffed hours; 20% of in-hours calls are missed when the desk is busy (dental studies: 20–38%).
- *  - 40% of calls are bookable.
- */
-const HUMAN_MONTHLY = 19 * 173 * 1.3;
-const AFTER_HOURS = 0.3;
-const BUSY_MISS = 0.2;
-const HUMAN_COMPLETION = 0.85;
-const SERVICE_COMPLETION = 0.45;
-const AI_COMPLETION = 0.85;
-const usd = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
-const pct = (n: number) => Math.round(n * 100) + '%';
-
+const usd = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+const defaults: VoiceRoiInputs = { calls: 1200, minutes: 3, minuteRate: .13, setup: 6000, support: 500, bookingValue: 200, margin: 40, currentCompletion: 20, targetCompletion: 25, capacity: 40, avoidedCash: 0 };
+const fields: { key: keyof VoiceRoiInputs; label: string; step?: number; max?: number }[] = [
+  { key: 'calls', label: 'Calls per month', step: 100 },
+  { key: 'minutes', label: 'Minutes per call', step: .5 },
+  { key: 'bookingValue', label: 'Revenue per completed appointment ($)' },
+  { key: 'margin', label: 'Contribution margin after service costs (%)', max: 100 },
+  { key: 'currentCompletion', label: 'Current completed appointments / all calls (%)', max: 100 },
+  { key: 'targetCompletion', label: 'Planned completed appointments / all calls (%)', max: 100 },
+  { key: 'capacity', label: 'Capacity for additional appointments / month' },
+  { key: 'minuteRate', label: 'All-in provider and telephony cost ($ / min)', step: .01 },
+  { key: 'setup', label: 'One-time implementation budget ($)', step: 500 },
+  { key: 'support', label: 'Monthly support and other platform costs ($)', step: 50 },
+  { key: 'avoidedCash', label: 'Actual monthly spending you can stop ($)', step: 100 },
+];
 export default function VoiceRoi() {
-  const [calls, setCalls] = useState(1200);
-  const [minutes, setMinutes] = useState(3);
-  const [value, setValue] = useState(200);
-  const [bookable, setBookable] = useState(40);
-
-  const rows = [
-    { name: 'Receptionist (1 full-time)', cost: HUMAN_MONTHLY, answered: (1 - AFTER_HOURS) * (1 - BUSY_MISS), hours: '~45 of 168', completion: HUMAN_COMPLETION },
-    { name: 'Answering service', cost: calls * 2, answered: 0.95, hours: '24/7', completion: SERVICE_COMPLETION },
-    { name: 'AI voice agent', cost: calls * minutes * 0.13, answered: 0.95, hours: '24/7 + concurrent', completion: AI_COMPLETION },
-  ].map((r) => {
-    const bookings = calls * r.answered * (bookable / 100) * r.completion;
-    return { ...r, perCall: r.cost / calls, bookings, revenue: bookings * value };
-  });
-  const [human, , ai] = rows;
-  const extraRevenue = ai.revenue - human.revenue;
-  const saved = human.cost - ai.cost;
-
-  return (
-    <div className={s.roi}>
-      <div className={s.roiInputs}>
-        <label>Calls per month <b>{calls.toLocaleString('en-US')}</b>
-          <input type="range" min={200} max={6000} step={100} value={calls} onChange={(e) => setCalls(+e.target.value)} /></label>
-        <label>Average call length <b>{minutes} min</b>
-          <input type="range" min={1} max={8} step={0.5} value={minutes} onChange={(e) => setMinutes(+e.target.value)} /></label>
-        <label>Value of one booking <b>{usd(value)}</b>
-          <input type="range" min={50} max={1500} step={25} value={value} onChange={(e) => setValue(+e.target.value)} /></label>
-        <label>Calls that can become bookings <b>{bookable}%</b>
-          <input type="range" min={10} max={80} step={5} value={bookable} onChange={(e) => setBookable(+e.target.value)} /></label>
-      </div>
-
-      <p className={s.swipeHint}>Swipe to compare all three options →</p>
-      <div className={s.tableWrap} tabIndex={0} aria-label="Scrollable comparison of receptionist, answering service and AI voice agent">
-        <table className={s.roiTable}>
-          <thead><tr><th scope="col">Per month</th>{rows.map((r) => <th scope="col" key={r.name} className={r === ai ? s.us : ''}>{r.name}</th>)}</tr></thead>
-          <tbody>
-            <tr><th scope="row">Cost</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{usd(r.cost)}</td>)}</tr>
-            <tr><th scope="row">Cost per call</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>${r.perCall.toFixed(2)}</td>)}</tr>
-            <tr><th scope="row">Hours covered per week</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{r.hours}</td>)}</tr>
-            <tr><th scope="row">Calls answered</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{pct(r.answered)}</td>)}</tr>
-            <tr><th scope="row">Workflow completion rate</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{pct(r.completion)}</td>)}</tr>
-            <tr><th scope="row">Bookings captured</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{Math.round(r.bookings).toLocaleString('en-US')}</td>)}</tr>
-            <tr><th scope="row">Revenue from those bookings</th>{rows.map((r) => <td key={r.name} className={r === ai ? s.us : ''}>{usd(r.revenue)}</td>)}</tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className={s.roiSum}>
-        <div><b>{usd(saved)}</b><span>lower monthly cost than a full-time receptionist</span></div>
-        <div><b>{usd(extraRevenue)}</b><span>more booked revenue a month from calls that used to be missed</span></div>
-        <div><b>{usd((saved + extraRevenue) * 12)}</b><span>a year, before your team’s time freed up</span></div>
-      </div>
-      <p className={s.roiNote}>
-        Planning assumptions: receptionist at $19.00/hour (<a href="https://www.bls.gov/ooh/office-and-administrative-support/receptionists.htm" target="_blank" rel="noreferrer">US Bureau of Labor Statistics, healthcare, May 2025</a>) plus a 30% payroll-cost allowance;
-        answering service at $2 per call; AI usage at $0.13/minute within <a href="https://www.retellai.com/pricing" target="_blank" rel="noreferrer">Retell’s published $0.07–$0.31 range</a>. We model 30% of calls after hours, 20% of staffed-hour calls missed at busy times,
-        85% workflow completion for a receptionist and configured AI agent, and 45% for message-taking. Changeable inputs appear above. Provider usage only; our build and support are quoted separately. Illustrative, not a client result or savings guarantee.
-      </p>
+  const [input, setInput] = useState(defaults);
+  const [hourly, setHourly] = useState(19);
+  const [serviceRate, setServiceRate] = useState(2);
+  const result = calculateVoiceRoi(input);
+  const field = ({ key, label, step = 1, max }: typeof fields[number]) => <label key={key}>{label}<input type="number" min={0} max={max} step={step} value={input[key]} onChange={e => setInput(v => ({ ...v, [key]: Math.min(max ?? Infinity, Math.max(0, Number(e.target.value))) }))} /></label>;
+  return <div className={s.roi}>
+    <p>Start with your call logs and available appointment capacity. These editable defaults illustrate the calculation; they are not quoted prices or promised results.</p>
+    <div className={s.roiInputs}>{fields.slice(0, 4).map(field)}</div>
+    <details open><summary>Business assumptions and full implementation costs</summary><div className={s.roiInputs}>{fields.slice(4).map(field)}
+      <label>Receptionist hourly wage ($)<input type="number" min={0} value={hourly} onChange={e => setHourly(Math.max(0, +e.target.value))} /></label>
+      <label>Answering service cost per call ($)<input type="number" min={0} step={.1} value={serviceRate} onChange={e => setServiceRate(Math.max(0, +e.target.value))} /></label>
+    </div></details>
+    <p className={s.swipeHint}>Swipe to compare costs →</p>
+    <div className={s.tableWrap} tabIndex={0} role="region" aria-label="Scrollable monthly cost comparison">
+      <table className={s.roiTable}><caption>Monthly planning costs — these services cover different responsibilities</caption><thead><tr><th scope="col">Cost basis</th><th scope="col">Full-time receptionist</th><th scope="col">Answering service</th><th scope="col">AI voice system</th></tr></thead><tbody>
+        <tr><th scope="row">Recurring cost</th><td>{usd(hourly * 173 * 1.3)}</td><td>{usd(input.calls * serviceRate)}</td><td>{usd(result.monthlyCost)}</td></tr>
+        <tr><th scope="row">What this includes</th><td>173 hours + 30% payroll allowance</td><td>{input.calls.toLocaleString()} calls at your rate</td><td>{usd(result.usage)} usage + {usd(input.support)} support/platform costs</td></tr>
+        <tr><th scope="row">One-time implementation</th><td>Recruitment and training extra</td><td>Check provider quote</td><td>{usd(input.setup)}</td></tr>
+        <tr><th scope="row">Coverage and scope</th><td>Staffed hours; calls and in-person work</td><td>Provider plan and agreed call handling</td><td>Configured call workflows; human fallback required</td></tr>
+      </tbody></table>
     </div>
-  );
+    <div className={s.roiSum} aria-live="polite">
+      <div><b>{usd(result.monthlyNet)}</b><span>estimated monthly net benefit after recurring costs</span></div>
+      <div><b>{usd(result.firstYearNet)}</b><span>estimated first-year net benefit, including implementation</span></div>
+      <div><b>{result.paybackMonths === null ? 'No payback' : `${result.paybackMonths.toFixed(1)} months`}</b><span>estimated implementation payback at these assumptions</span></div>
+    </div>
+    <p className={s.roiNote}>{result.additionalCompleted.toLocaleString('en-US', { maximumFractionDigits: 1 })} additional completed appointments × {usd(input.bookingValue)} × {input.margin}% contribution margin = {usd(result.contribution)} monthly contribution. Add only spending you can actually stop, then subtract usage and support. Staff cost is not automatically counted as savings. Completion rates include eligibility, attendance and cancellations; added appointments are capped by your capacity. Check total usage pricing with <a href="https://www.retellai.com/pricing" target="_blank" rel="noreferrer">Retell</a> or your chosen provider. Implementation and ongoing support are scoped and quoted individually.</p>
+  </div>;
 }

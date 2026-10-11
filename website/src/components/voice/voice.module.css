@@ -170,3 +170,5 @@
   .roiSum b { font-size: 28px; }
   .roiNote { font-size: 11.5px; line-height: 1.7; }
 }
+.roiInputs input[type=number]{display:block;width:100%;min-height:48px;margin-top:8px;padding:10px 12px;border:1px solid #9da99c;border-radius:6px;background:#fff;color:#172018;font:inherit;font-size:16px}
+.roi details{margin:24px 0}.roi summary{cursor:pointer;padding:14px 0;font-weight:600}.roiTable caption{text-align:left;padding:14px 0;line-height:1.5}.roiInputs label{min-width:0}

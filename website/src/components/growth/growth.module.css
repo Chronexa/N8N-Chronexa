@@ -37,6 +37,8 @@
 .flip .art { order:2; }
 .art { margin:0; border-radius:16px; overflow:hidden; background:#f7f7ee; box-shadow:0 30px 70px #00000055; }
 .art img { display:block; width:100%; height:auto; }
+.art.storyMotion { aspect-ratio:3 / 2; }
+.art.storyMotion img,.art.storyMotion video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .story h2 { font-size:clamp(30px,3vw,44px) !important; color:var(--paper); }
 .story .situation { margin:0 0 26px; max-width:52ch; font-size:17px; line-height:1.75; color:#d6e0d3; }
 .built { list-style:none; margin:0 0 30px; padding:0; counter-reset:b; }

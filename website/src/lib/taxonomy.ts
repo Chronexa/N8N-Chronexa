@@ -21,6 +21,7 @@ const CLASSIFY: Record<string, Meta> = {
   'ai-knowledge-systems': { kind: 'service', navLabel: 'AI Knowledge Systems', order: -4, title: 'AI Knowledge Systems', heroSub: 'A company brain agents can read, so they act like your experienced staff.' },
   'ai-integration-services': { kind: 'service', navLabel: 'AI Integration Services', order: -3, title: 'AI Integration Services', heroSub: 'Connect every tool you already use, legacy systems included.' },
   'ai-agent-development': { kind: 'service', navLabel: 'AI Agent Development', order: -2, title: 'AI Agent Development', heroSub: 'Agents that research, draft, review and escalate what needs a person.' },
+  'ai-voice-agent-development': { kind: 'service', navLabel: 'AI Voice Agents', order: -1, title: 'AI Voice Agent Development', heroSub: 'Voice agents that answer, qualify, book and update the systems behind the call.' },
   'custom-mcp-server-development': { kind: 'integration', navLabel: 'Custom MCP Server Development', order: 30, title: 'Custom MCP Server Development', heroSub: 'Secure AI access to internal and legacy systems.' },
   'automated-reporting': { kind: 'integration', navLabel: 'Automated Reporting', order: 31, title: 'Automated Reporting', heroSub: 'Reports, decks and a daily briefing that write themselves.' },
   'ai-email-management': { kind: 'integration', navLabel: 'AI Email Management', order: 32, title: 'AI Email Management', heroSub: 'Inbox triage and drafted replies that know your clients.' },

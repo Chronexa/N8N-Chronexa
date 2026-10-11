@@ -15,17 +15,11 @@ export const SERVICE_GROUPS: NavGroup[] = [
   {
     head: 'AI & automation',
     links: [
-      { label: 'AI automation services', href: '/ai-automation-agency' },
-      { label: 'AI workflow automation', href: '/ai-automation' },
-      { label: 'AI consultant', href: '/ai-consultant' },
       { label: 'AI strategy consulting', href: '/ai-strategy-consulting' },
+      { label: 'AI workflow automation', href: '/ai-automation' },
       { label: 'AI agent development', href: '/ai-agent-development' },
       { label: 'AI integration services', href: '/ai-integration-services' },
-      { label: 'Business process automation', href: '/business-process-automation-consulting' },
-      { label: 'Custom MCP servers', href: '/custom-mcp-server-development' },
-      { label: 'AI knowledge systems', href: '/ai-knowledge-systems' },
       { label: 'AI voice agents', href: '/ai-voice-agent-development' },
-      { label: 'Document data extraction', href: '/document-processing-automation' },
     ],
   },
   {
@@ -33,6 +27,9 @@ export const SERVICE_GROUPS: NavGroup[] = [
     head: 'Business solutions',
     links: [
       { label: 'AI sales & outreach engine', href: '/ai-sales-outreach-engine' },
+      { label: 'Document data extraction', href: '/document-processing-automation' },
+      { label: 'AI knowledge systems', href: '/ai-knowledge-systems' },
+      { label: 'Business process automation', href: '/business-process-automation-consulting' },
       { label: 'CRM automation', href: '/crm-automation-services' },
       { label: 'Customer support automation', href: '/customer-support-automation' },
       { label: 'CPA & accounting automation', href: '/cpa-accounting-automation' },
@@ -53,6 +50,7 @@ export const SERVICE_GROUPS: NavGroup[] = [
       { label: 'Dedicated AI engineers', href: '/dedicated-ai-engineers' },
       { label: 'AI training for employees', href: '/ai-training-for-employees' },
       { label: 'AI workspace setup', href: '/ai-workspace-setup' },
+      { label: 'Custom MCP servers', href: '/custom-mcp-server-development' },
     ],
   },
 ];

@@ -1,16 +1,19 @@
 'use client';
+import { contactRequest } from '../lib/contact-request';
 
 import { useRef, useState, type FormEvent } from 'react';
 import styles from './LeadForm.module.css';
-import { openBooking, trackBookCta } from '../lib/cal';
+import { bookingUrl, trackBookCta } from '../lib/cal';
 import { track, identifyByEmail } from '../lib/analytics';
 import { site } from '../lib/site';
+import { captureAttribution } from '../lib/attribution';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
 export default function LeadForm({ source = 'website', compact = false, submitLabel = 'Book my free audit', note = 'Free 30-min call. No spam, no sales pitch — just actionable insights.', fieldLabel = 'What do you want to automate?', fieldPlaceholder = 'e.g. CRM enrichment, claims triage', fieldNote = 'Wants to automate' }: { source?: string; compact?: boolean; submitLabel?: string; note?: string; fieldLabel?: string; fieldPlaceholder?: string; fieldNote?: string }) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
+  const [calendar, setCalendar] = useState<string>(site.booking);
   const startedRef = useRef(false);
 
   // Fire once when the visitor first engages the form — the top of the form funnel.
@@ -20,7 +23,7 @@ export default function LeadForm({ source = 'website', compact = false, submitLa
     track('lead_form_start', { source });
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError('');
     const form = e.currentTarget;
@@ -37,33 +40,34 @@ export default function LeadForm({ source = 'website', compact = false, submitLa
     }
 
     setStatus('submitting');
-    identifyByEmail(email); // stitch this device to the email → merges with the Cal booking event
-    track('lead_form_submit', { source });
-    trackBookCta(`form:${source}`);
-
-    // Best-effort lead record (non-blocking). Captures the moment CONTACT_WEBHOOK_URL
-    // is set; either way the visitor is handed straight to booking below.
-    const notes = [company && `Company: ${company}`, usecase && `${fieldNote}: ${usecase}`]
-      .filter(Boolean)
-      .join(' · ');
-    fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, company, usecase, source, page: window.location.pathname }),
-    }).catch(() => {});
-
-    // Hand off to Cal.com, prefilled, so booking is one step.
-    openBooking({ name, email, notes: notes || usecase });
-    setStatus('success');
+    track('lead_form_attempt', { source });
+    try {
+      const response = await contactRequest({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, company, usecase, source, page: window.location.pathname, attribution: captureAttribution() }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error('We couldn’t save your details. Please try again or email us.');
+      identifyByEmail(email);
+      track('lead_form_submit', { source, lead_id: result.leadId });
+      const notes = [company && `Company: ${company}`, usecase && `${fieldNote}: ${usecase}`].filter(Boolean).join(' · ');
+      setCalendar(bookingUrl({ name, email, notes }));
+      setStatus('success');
+    } catch {
+      setStatus('error');
+      setError('We couldn’t save your details. Please try again, or email info@chronexa.io.');
+      track('lead_form_error', { source });
+    }
   }
 
   if (status === 'success') {
     return (
       <div className={styles.success} role="status">
-        <strong>Opening your booking…</strong>
+        <strong>Your details are saved. Choose a time.</strong>
         <p>
-          Pick a time and we&apos;ll come prepped on your workflows. Didn&apos;t see it?{' '}
-          <a href={site.booking} target="_blank" rel="noopener noreferrer" className={styles.successLink}>
+          Your consultation is booked only after you select and confirm a time.{' '}
+          <a href={calendar} onClick={() => trackBookCta(`form:${source}`)} className={styles.successLink}>
             Open the calendar
           </a>.
         </p>
@@ -96,7 +100,7 @@ export default function LeadForm({ source = 'website', compact = false, submitLa
         )}
       </div>
       <button type="submit" className={`btn-primary ${styles.btn}`} disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Opening booking…' : (
+        {status === 'submitting' ? 'Saving your details…' : (
           <>
             {submitLabel}{' '}
             <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor"
